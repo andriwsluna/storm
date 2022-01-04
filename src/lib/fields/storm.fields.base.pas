@@ -30,10 +30,10 @@ Type
       Function  IsAssigned() : Boolean;
       Procedure Clear();
       Function  StormValue() : IStormValue;
-      Function JSONName() : String;
+      Function  JSONName() : String;
 
-      Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONPair>;
-      Function FromJSON(Value : TJSONPair) : Boolean;
+      Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONPair>;
+      Function  FromJSON(Value : TJSONPair) : Boolean;
 
 
   End;
