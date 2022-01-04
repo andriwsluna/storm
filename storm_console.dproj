@@ -97,6 +97,8 @@
         <DCCReference Include="src\lib\entity\storm.entity.interfaces.pas"/>
         <DCCReference Include="src\lib\entity\storm.entity.base.pas"/>
         <DCCReference Include="src\teste\uEntityProduto.pas"/>
+        <DCCReference Include="src\lib\model\storm.model.interfaces.pas"/>
+        <DCCReference Include="src\lib\model\storm.model.base.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

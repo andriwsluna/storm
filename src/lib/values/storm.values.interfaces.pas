@@ -29,6 +29,8 @@ Type
 
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONValue>;
     Function FromJSON(Value : TJSONValue) : Boolean;
+
+    Function Clone(Target : IStormValue) : Boolean;
   end;
 
 

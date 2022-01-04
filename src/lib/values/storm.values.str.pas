@@ -24,9 +24,10 @@ type
       Procedure Inititalize();  Override;
     public
 
-
       Function  SetValue(value : String) : Boolean;
       Function  GetValue() :  Maybe<String>;
+
+      Function  Clone(target : IStormValue) : Boolean;
 
       Function  ToString : Maybe<String>; Reintroduce;
       Function  FromString(value : String) : Boolean;
@@ -49,6 +50,18 @@ implementation
 { TIntegerValue }
 
 
+
+function TStringValue.Clone(target: IStormValue): Boolean;
+begin
+  if Assigned(target) then
+  begin
+    Result := target.ToString.Bind(SetValue);
+  end
+  else
+  begin
+    Result := false;
+  end;
+end;
 
 function TStringValue.FromBool(Value: Boolean): Boolean;
 begin

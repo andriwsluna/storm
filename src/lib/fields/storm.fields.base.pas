@@ -17,6 +17,7 @@ Type
     private
 
     protected
+      FFieldName : String;
       FJSONName : String;
       FStormValue : IStormValue;
       Procedure Initialize();  Virtual;
@@ -31,9 +32,12 @@ Type
       Procedure Clear();
       Function  StormValue() : IStormValue;
       Function  JSONName() : String;
+      Function  FieldName() : String;
 
       Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONPair>;
       Function  FromJSON(Value : TJSONPair) : Boolean;
+
+      Function Clone(Target : IStormField) : Boolean;
 
 
   End;
@@ -49,12 +53,30 @@ end;
 
 
 
+function TStormField.Clone(Target: IStormField): Boolean;
+begin
+  if Assigned(Target) then
+  BEGIN
+    Result := StormValue.Clone(Target.StormValue);
+  END
+  else
+  begin
+    Result := False;
+  end;
+end;
+
 constructor TStormField.Create(name: String);
 begin
   inherited Create();
+  FFieldName := name;
   FJSONName := name;
   _AddRef();
   Initialize();
+end;
+
+function TStormField.FieldName: String;
+begin
+  Result:= FFieldName;
 end;
 
 function TStormField.FromJSON(Value: TJSONPair): Boolean;
@@ -98,7 +120,7 @@ function TStormField.ToJSON(ConvertNulls: Boolean): Maybe<TJSONPair>;
 VAR
   pair : TJSONPair;
 begin
-  StormValue.ToJSON(ConvertNulls).Map
+  StormValue.ToJSON(ConvertNulls).Bind
   (
     procedure(val : TJSONValue)
     begin

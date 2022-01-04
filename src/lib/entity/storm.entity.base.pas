@@ -29,6 +29,9 @@ type
 
     Function StormFields() : TList<IStormField>;
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONObject>;
+    Function FieldByName(Name : String) : Maybe<IStormField>;
+
+    Function Clone(Target : IStormEntity) : Boolean;
   end;
 
 implementation
@@ -37,14 +40,47 @@ implementation
 
 procedure TStormEntity.AddStormField(Field: IStormField);
 begin
-  FFieldDictionary.Add(field.JSONName,Field);
+  FFieldDictionary.Add(field.FieldName,Field);
   FFieldList.Add(Field);
+end;
+
+function TStormEntity.Clone(Target: IStormEntity): Boolean;
+var
+  field : IStormField;
+begin
+  if Assigned(Target) then
+  BEGIN
+    Result := true;
+    for field in FFieldList do
+    begin
+      Result := Result and Target.FieldByName(field.FieldName).Bind
+      (
+        function(targetField : IStormField) : Boolean
+        begin
+          result := field.Clone(targetField);
+        end
+      );
+    end;
+  END
+  else
+  begin
+    Result := False;
+  end;
 end;
 
 constructor TStormEntity.Create;
 begin
   inherited;
+  _AddRef();
   Initialize;
+end;
+
+function TStormEntity.FieldByName(Name: String): Maybe<IStormField>;
+begin
+  if FFieldDictionary.ContainsKey(Name) then
+  begin
+    Result := FFieldDictionary.Items[Name];
+  end;
 end;
 
 procedure TStormEntity.Initialize;
@@ -67,7 +103,7 @@ begin
 
   for field in FFieldList do
   begin
-    field.ToJSON(ConvertNulls).Map
+    field.ToJSON(ConvertNulls).Bind
     (
       procedure(pair : TJSONPair)
       begin
@@ -76,7 +112,16 @@ begin
     );
   end;
 
-  result := obj;
+  if obj.Count > 0 then
+  begin
+    result := obj;
+  end
+  else
+  begin
+    obj.free;
+  end;
+
+
 end;
 
 end.

@@ -7,9 +7,11 @@ uses
   SysUtils;
 type
   Maybe<T> = record
-  public
-    type TSomeProc = reference to procedure(some : T);
-    type TNoneProc = reference to procedure();
+  private
+    type TSomeProc      = reference to procedure(some : T);
+    type TSomeBoolFunc  = reference to function(some : T) : Boolean;
+    type TNoneProc      = reference to procedure();
+    type TNoneBoolFunc  = reference to function() : Boolean;
   strict private
     fValue: T;
     fHasValue: string;
@@ -27,10 +29,29 @@ type
     function GetEnumerator: TEnumerator;
     function Any: Boolean; inline;
     function GetValueOrDefault(const default: T): T;
-    procedure Map(Left : TSomeProc ; Rigth : TNoneProc = nil);
+    Function Bind(Left : TSomeProc ; Rigth : TNoneProc = nil) : Maybe<T>; Overload;
+    Function Bind(Left : TSomeBoolFunc ; Rigth : TNoneBoolFunc = nil) : Boolean; Overload;
     class operator Implicit(const value: T): Maybe<T>;
   end;
 implementation
+function Maybe<T>.Bind(Left: TSomeBoolFunc; Rigth: TNoneBoolFunc): Boolean;
+begin
+  if self.Any then
+  BEGIN
+    Result := Left(fValue);
+  END
+  else
+  if assigned(Rigth) then
+  begin
+    Result := Rigth();
+  end
+  else
+  begin
+    result := false;
+  end;
+
+end;
+
 constructor Maybe<T>.Create(const value: T);
 begin
  case GetTypeKind(T) of
@@ -60,7 +81,7 @@ class operator Maybe<T>.Implicit(const value: T): Maybe<T>;
 begin
   Result := Maybe<T>.Create(value);
 end;
-procedure Maybe<T>.Map(Left: TSomeProc; Rigth: TNoneProc);
+Function Maybe<T>.Bind(Left: TSomeProc; Rigth: TNoneProc) : Maybe<T>;
 begin
   if self.Any then
   BEGIN
@@ -71,6 +92,8 @@ begin
   begin
     Rigth();
   end;
+
+  Result := self;
 
 end;
 

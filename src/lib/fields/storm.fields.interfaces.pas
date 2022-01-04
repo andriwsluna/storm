@@ -13,10 +13,13 @@ Type
     Procedure Clear();
 
     Function JSONName() : String;
+    Function FieldName() : String;
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONPair>;
     Function FromJSON(Value : TJSONPair) : Boolean;
 
     Function StormValue() : IStormValue;
+
+    Function Clone(Target : IStormField) : Boolean;
   end;
 
 implementation
