@@ -3,6 +3,7 @@ unit storm.schema.register;
 interface
 
 USES
+  storm.entity.base,
   storm.schema.interfaces,
   storm.entity.interfaces,
   storm.additional.maybe,

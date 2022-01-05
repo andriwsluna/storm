@@ -28,6 +28,8 @@ Type
     Function GetColumnName() : String;
     Function GetFieldName() : String;
     Function GetColumnType() : IStormSchemaType;
+
+    Function IsPrimaryKey() : Boolean;
   public
     property ColumnName       : String            read GetColumnName;
     property FieldName        : String            read GetFieldName;
@@ -74,6 +76,11 @@ end;
 function TStormColumnSchema.GetFieldName: String;
 begin
   Result := FFieldName;
+end;
+
+function TStormColumnSchema.IsPrimaryKey: Boolean;
+begin
+  Result := (PrimaryKey in ColumnAtributes);
 end;
 
 end.

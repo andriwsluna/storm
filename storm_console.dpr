@@ -24,22 +24,9 @@ uses
   storm.schema.types.varchar in 'src\lib\schema\storm.schema.types.varchar.pas',
   storm.schema.interfaces in 'src\lib\schema\storm.schema.interfaces.pas',
   uSchemaProduto in 'src\teste\uSchemaProduto.pas',
-  storm.schema.register in 'src\lib\schema\storm.schema.register.pas';
-
-procedure PrintField(field : IStormField);
-begin
-  field.ToJSON(true).Bind
-  (
-    procedure(json : TJSONPair)
-    begin
-      writeln(json.ToString);
-    end,
-    procedure
-    begin
-      writeln('no json');
-    end
-  );
-end;
+  storm.schema.register in 'src\lib\schema\storm.schema.register.pas',
+  storm.query.interfaces in 'src\lib\query\storm.query.interfaces.pas',
+  storm.query in 'src\lib\query\storm.query.pas';
 
 procedure WriteJson(obj : TJSONObject);
 begin
@@ -51,34 +38,25 @@ begin
   writeln(obj.ToString);
 end;
 
-procedure EntityToJson(entity : IStormEntity);
-begin
-  entity
-    .ToJSON(false)
-      .Bind(WriteJson);
-end;
 
 VAR
+  query : TStormQuery;
   stop : string;
+  sql : string;
 begin
   ReportMemoryLeaksOnShutdown := true;
   try
     SchemaRegister.RegisterSchema(TProduto, TSchemaProduto.Create);
 
-    SchemaRegister.GetSchemaInstance(TProduto).Bind
-    (
-      procedure(sch : IStormTableSchema)
-      var
-        col : IStormSchemaColumn;
-      begin
-        writeln(format('[%s].[%s]',[sch.GetSchemaName, sch.GetEntityName]));
+    query := TStormQuery.Create;
 
-        for col in sch.GetColumns do
-        begin
-          Writeln(col.GetColumnName + ' ' + col.GetColumnType.GetType);
-        end;
-      end
-    );
+    sql :=
+    query
+    .Select(TProduto)
+    .All
+    .WherePkIs;
+
+    writeln(sql);
 
     Readln(stop);
   except
