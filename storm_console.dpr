@@ -17,7 +17,14 @@ uses
   storm.entity.base in 'src\lib\entity\storm.entity.base.pas',
   uEntityProduto in 'src\teste\uEntityProduto.pas',
   storm.model.interfaces in 'src\lib\model\storm.model.interfaces.pas',
-  storm.model.base in 'src\lib\model\storm.model.base.pas';
+  storm.model.base in 'src\lib\model\storm.model.base.pas',
+  storm.schema.table in 'src\lib\schema\storm.schema.table.pas',
+  storm.schema.column in 'src\lib\schema\storm.schema.column.pas',
+  storm.schema.types.base in 'src\lib\schema\storm.schema.types.base.pas',
+  storm.schema.types.varchar in 'src\lib\schema\storm.schema.types.varchar.pas',
+  storm.schema.interfaces in 'src\lib\schema\storm.schema.interfaces.pas',
+  uSchemaProduto in 'src\teste\uSchemaProduto.pas',
+  storm.schema.register in 'src\lib\schema\storm.schema.register.pas';
 
 procedure PrintField(field : IStormField);
 begin
@@ -51,40 +58,29 @@ begin
       .Bind(WriteJson);
 end;
 
-
-
-type TFunctPrintJson = reference to procedure(json : Tjsonobject);
 VAR
   stop : string;
-  produto : TProduto;
-  produto2 : TProduto;
-  model : TStormModel<TProduto>;
-  p: TProduto;
 begin
   ReportMemoryLeaksOnShutdown := true;
   try
-    produto := TProduto.Create;
+    SchemaRegister.RegisterSchema(TProduto, TSchemaProduto.Create);
 
-    produto.Codigo.Value.SetValue('SKU0897');
-    produto.Descricao.value.SetValue('Mamadeira de negação');
+    SchemaRegister.GetSchemaInstance(TProduto).Bind
+    (
+      procedure(sch : IStormTableSchema)
+      var
+        col : IStormSchemaColumn;
+      begin
+        writeln(format('[%s].[%s]',[sch.GetSchemaName, sch.GetEntityName]));
 
-    produto2 := TProduto.Create;
-    produto2.Clone(produto);
-
-    model := TStormModel<TProduto>.Create;
-    model.AddRecord(produto);
-    model.AddRecord(produto2);
-
-
-    for p in  model.Records do
-    begin
-      p
-        .ToJSON(true)
-          .Bind(WriteJson);
-    end;
+        for col in sch.GetColumns do
+        begin
+          Writeln(col.GetColumnName + ' ' + col.GetColumnType.GetType);
+        end;
+      end
+    );
 
     Readln(stop);
-
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
