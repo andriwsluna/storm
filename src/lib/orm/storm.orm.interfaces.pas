@@ -3,6 +3,8 @@ unit storm.orm.interfaces;
 interface
 
 uses
+  System.Generics.Collections,
+  storm.orm.query,
   storm.additional.maybe,
 
   System.Sysutils, System.Classes;
@@ -10,6 +12,7 @@ uses
 Type
   IStormQueryPartition = interface['{1453EBB4-0723-418F-BA9F-16528086EFBD}']
     Function GetSQL() : String;
+    Function GetParameters : TList<TQueryParameter>;
   end;
 
   IWhereNode<T : IStormQueryPartition> = interface['{A8E49DE9-6183-4464-881C-DF090693E627}']
@@ -20,6 +23,7 @@ Type
     Function And_() : T;
     Function Or_()  : T;
     Function GetSQL() : String;
+    Function GetParameters : TList<TQueryParameter>;
     Function OpenParentheses() : IStormWhereCompositor<T>;
     Function CloseParentheses() : IStormWhereCompositor<T>;
   end;

@@ -99,9 +99,10 @@ begin
 end;
 
 
-constructor TProdutoFieldSelection.Create(sql: string);
+constructor TProdutoFieldSelection.Create(sql : string);
 begin
-  inherited create(sql, FSchema,TSchemaProduto(FSchema).Codigo);
+  AddSQL(sql);
+  inherited create(self,FSchema,TSchemaProduto(FSchema).Codigo);
 
 end;
 
@@ -131,12 +132,12 @@ end;
 
 function TProdutoWhereSelection.CloseParentheses: TProdutoWhereSelection;
 begin
-  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(GetSQL).CloseParentheses;
+  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(self).CloseParentheses;
 end;
 
 function TProdutoWhereSelection.Codigo: IStringWhere<TProdutoWhereSelection>;
 begin
-  result := TStringWhere<TProdutoWhereSelection>.create(GetSQL,FSchema,TSchemaProduto(FSchema).Codigo);
+  result := TStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Codigo);
 end;
 
 
@@ -144,12 +145,12 @@ end;
 
 function TProdutoWhereSelection.Descricao: IStringWhere<TProdutoWhereSelection>;
 begin
-  result := TStringWhere<TProdutoWhereSelection>.create(GetSQL,FSchema,TSchemaProduto(FSchema).Descricao);
+  result := TStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Descricao);
 end;
 
 function TProdutoWhereSelection.OpenParentheses: TProdutoWhereSelection;
 begin
-  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(GetSQL).OpenParentheses;
+  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(self).OpenParentheses;
 end;
 
 end.

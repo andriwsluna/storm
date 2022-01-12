@@ -9,6 +9,9 @@
         <Projects Include="storm_console.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="storm_vcl.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="storm_console:Make">
         <MSBuild Projects="storm_console.dproj" Targets="Make"/>
     </Target>
+    <Target Name="storm_vcl">
+        <MSBuild Projects="storm_vcl.dproj"/>
+    </Target>
+    <Target Name="storm_vcl:Clean">
+        <MSBuild Projects="storm_vcl.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="storm_vcl:Make">
+        <MSBuild Projects="storm_vcl.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="storm;storm_console"/>
+        <CallTarget Targets="storm;storm_console;storm_vcl"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="storm:Clean;storm_console:Clean"/>
+        <CallTarget Targets="storm:Clean;storm_console:Clean;storm_vcl:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="storm:Make;storm_console:Make"/>
+        <CallTarget Targets="storm:Make;storm_console:Make;storm_vcl:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

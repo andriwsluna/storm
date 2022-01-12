@@ -33,7 +33,7 @@ type
   protected
     FTable : IStormTableSchema;
     FColumn : IStormSchemaColumn;
-    Constructor create(SQL : string ; Table : IStormTableSchema ; column : IStormSchemaColumn); Reintroduce; Virtual;
+    Constructor create(owner : TStormSQLPartition; Table : IStormTableSchema ; column : IStormSchemaColumn); Reintroduce; Virtual;
 
     Function GetColumnName : string;
   public
@@ -67,29 +67,33 @@ implementation
 
 function TStormWhereCompositor<T>.And_: T;
 begin
-  Result := T.Create(_GetSqlWith(' and'));
+  AddSQL(' and');
+  Result := T.Create(self);
 end;
 
 function TStormWhereCompositor<T>.CloseParentheses: IStormWhereCompositor<T>;
 begin
-  Result := TStormWhereCompositor<T>.Create(_GetSqlWith(' )'));
+  AddSQL(' )');
+  Result := TStormWhereCompositor<T>.Create(self);
 end;
 
 function TStormWhereCompositor<T>.OpenParentheses: IStormWhereCompositor<T>;
 begin
-  Result := TStormWhereCompositor<T>.Create(_GetSqlWith(' ('));
+  AddSQL(' (');
+  Result := TStormWhereCompositor<T>.Create(self);
 end;
 
 function TStormWhereCompositor<T>.Or_: T;
 begin
-  Result := T.Create(_GetSqlWith(' or'));
+  AddSQL(' or');
+  Result := T.Create(self);
 end;
 
 { TStormWhereBase<T> }
 
-constructor TStormWhereBase.create(SQL: string; Table : IStormTableSchema ;column: IStormSchemaColumn);
+constructor TStormWhereBase.create(owner : TStormSQLPartition; Table : IStormTableSchema ;column: IStormSchemaColumn);
 begin
-  inherited create(sql);
+  inherited create(owner);
   FTable := Table;
   FColumn := column;
 end;
@@ -98,21 +102,22 @@ end;
 
 function TStringWhere<T>.EqualsTo(str: string): IStormWhereCompositor<T>;
 begin
-  AddSQL(' ' + GetColumnName + ' = ' + QuotedStr(str));
-  Result := TStormWhereCompositor<T>.Create(_GetSQL);
+  AddSQL(' ' + GetColumnName + ' = ' + AddParameter(str));
+  Result := TStormWhereCompositor<T>.Create(self);
 end;
 
 function TStringWhere<T>.NotEqualsTo(str: string): IStormWhereCompositor<T>;
 begin
-  AddSQL(' ' + GetColumnName + ' <> ' + QuotedStr(str));
-  Result := TStormWhereCompositor<T>.Create(_GetSQL);
+  AddSQL(' ' + GetColumnName + ' <> ' + AddParameter(str));
+  Result := TStormWhereCompositor<T>.Create(self);
 end;
 
 { TWhereNode<T> }
 
 function TWhereNode<T>.Where: T;
 begin
-  Result := T.Create(GetSqlWith(' where'));
+  AddSQL(' where');
+  Result := T.Create(self);
 end;
 
 { TStormFieldSelection<T> }
@@ -126,7 +131,7 @@ end;
 function TStormFieldSelection<T>.From: IWhereNode<T>;
 begin
   AddSQL(' from ' + FTable.GetSchemaName + '.' + FTable.GetTableName);
-  result := TWhereNode<T>.Create(_GetSQL);
+  result := TWhereNode<T>.Create(self);
 end;
 
 function TStormWhereBase.GetColumnName: string;
@@ -138,12 +143,14 @@ end;
 
 function TStormWhereSelection<T>.CloseParentheses: T;
 begin
-  Result := T.Create(_GetSqlWith(' )'));
+  AddSQL(' )');
+  Result := T.Create(self);
 end;
 
 function TStormWhereSelection<T>.OpenParentheses: T;
 begin
-  Result := T.Create(_GetSqlWith(' ('));
+  AddSQL(' (');
+  Result := T.Create(self);
 end;
 
 end.

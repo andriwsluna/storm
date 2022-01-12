@@ -3,9 +3,11 @@ unit storm.orm.base;
 interface
 
 Uses
+
   storm.additional.maybe,
   storm.orm.interfaces,
-
+  storm.orm.query,
+  System.Generics.Collections,
   System.Sysutils, System.Classes;
 
 Type
@@ -13,32 +15,38 @@ Type
   TStormSQLPartition = class abstract (TInterfacedObject)
   private
     FSQL : String;
+    FParameters : TStormQueryParameters;
   protected
 
 
 
-    Procedure   AddSQL(sql : string);
+    Procedure  AddSQL(sql : string);
+    function   AddParameter(value : variant) : string;
 
     Function _GetSQL() : String;
-    Function _GetSqlWith(sql  :string) : string;
   public
-    Constructor Create(SQL : String = ''); Reintroduce; Virtual;
+    Constructor Create(owner : TStormSQLPartition = nil); Reintroduce; Virtual;
   end;
 
   TStormQueryPartition = class abstract (TStormSQLPartition, IStormQueryPartition)
   private
 
   protected
-    Function GetSqlWith(sql  :string) : string;
   public
 
 
     Function GetSQL() : String;
+    Function GetParameters : TList<TQueryParameter>;
 
   end;
 
 implementation
 
+
+function TStormSQLPartition.AddParameter(value: variant): string;
+begin
+  result := FParameters.Add(value);
+end;
 
 procedure TStormSQLPartition.AddSQL(sql: string);
 begin
@@ -47,10 +55,29 @@ end;
 
 
 
-constructor TStormSQLPartition.Create(SQL: String);
+constructor TStormSQLPartition.Create(owner : TStormSQLPartition);
 begin
   inherited create();
-  FSQL := SQL;
+
+  if Assigned(owner) then
+  begin
+    FSQL := owner.FSQL;
+    if assigned(owner.FParameters) then
+    begin
+      FParameters := owner.FParameters;
+    end
+    else
+    begin
+      FParameters := TStormQueryParameters.Create;
+    end;
+
+
+  end
+  else
+  begin
+    FParameters := TStormQueryParameters.Create;
+  end;
+
   _AddRef;
 end;
 
@@ -60,23 +87,20 @@ begin
   Result := FSQL;
 end;
 
-function TStormSQLPartition._GetSqlWith(sql: string): string;
-begin
-  AddSQL(sql);
-  result := FSQL;
-end;
+
 
 { TStormQueryPartition }
 
+
+function TStormQueryPartition.GetParameters: TList<TQueryParameter>;
+begin
+  Result := FParameters.Items;
+end;
 
 function TStormQueryPartition.GetSQL: String;
 begin
   result := _GetSQL;
 end;
 
-function TStormQueryPartition.GetSqlWith(sql: string): string;
-begin
-  result := _GetSqlWith(sql);
-end;
 
 end.
