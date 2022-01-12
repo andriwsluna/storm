@@ -16,11 +16,13 @@ Type
 
 TSchemaProduto = class(TStormTableSchema)
   private
-    Function Codigo() : IStormSchemaColumn;
-    Function Descricao() : IStormSchemaColumn;
+    FCodigo : IStormSchemaColumn;
+    FDescricao : IStormSchemaColumn;
   protected
-
+    Procedure Initialize(); Override;
   public
+    property Codigo: IStormSchemaColumn read FCodigo;
+    property Descricao: IStormSchemaColumn read FDescricao;
     Constructor Create(); Reintroduce;
 end;
 
@@ -33,28 +35,29 @@ implementation
 constructor TSchemaProduto.Create;
 begin
   inherited Create('dbo', 'produto', 'Produto');
-  AddColumn(Codigo);
-  AddColumn(Descricao);
+
 end;
 
-function TSchemaProduto.Codigo: IStormSchemaColumn;
+
+procedure TSchemaProduto.Initialize;
 begin
-  Result := TStormColumnSchema.Create(
+  inherited;
+  FCodigo := TStormColumnSchema.Create(
     'codigo_produto',
     'Codigo',
     TStormVarchar.Create(50),
     [PrimaryKey, NotNull]
   );
-end;
 
-function TSchemaProduto.Descricao: IStormSchemaColumn;
-begin
-  Result := TStormColumnSchema.Create(
-    'descricao_produto',
+  FDescricao := TStormColumnSchema.Create(
+    'descricao',
     'Descricao',
     TStormVarchar.Create(200),
     [NotNull]
   );
+
+  AddColumn(Codigo);
+  AddColumn(Descricao);
 end;
 
 end.

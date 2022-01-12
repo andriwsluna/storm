@@ -2,6 +2,7 @@ unit storm.schema.interfaces;
 
 interface
 USES
+  storm.additional.maybe,
   System.Generics.Collections;
 
 Type
@@ -21,6 +22,8 @@ Type
     Function GetTableName : String;
     Function GetEntityName : String;
     Function GetColumns : TList<IStormSchemaColumn>;
+    Function ColumnByName(name : string) : Maybe<IStormSchemaColumn>;
+    Function ColumnById(id : integer) : Maybe<IStormSchemaColumn>;
   end;
 
 implementation

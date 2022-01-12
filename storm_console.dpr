@@ -26,7 +26,8 @@ uses
   uSchemaProduto in 'src\teste\uSchemaProduto.pas',
   storm.schema.register in 'src\lib\schema\storm.schema.register.pas',
   storm.query.interfaces in 'src\lib\query\storm.query.interfaces.pas',
-  storm.query in 'src\lib\query\storm.query.pas';
+  storm.query in 'src\lib\query\storm.query.pas',
+  uORMProduto in 'src\teste\uORMProduto.pas';
 
 procedure WriteJson(obj : TJSONObject);
 begin
@@ -40,7 +41,7 @@ end;
 
 
 VAR
-  query : TStormQuery;
+  query : TORMProduto;
   stop : string;
   sql : string;
 begin
@@ -48,13 +49,18 @@ begin
   try
     SchemaRegister.RegisterSchema(TProduto, TSchemaProduto.Create);
 
-    query := TStormQuery.Create;
+    query := TORMProduto.Create;
 
     sql :=
     query
-    .Select(TProduto)
-    .All
-    .WherePkIs;
+      .Select
+      .Only([Codigo, Descricao])
+      .Where
+      .Codigo.EqualsTo('1')
+      .Or_
+      .Codigo.EqualsTo('2')
+      .SQL;
+
 
     writeln(sql);
 

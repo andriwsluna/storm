@@ -4,7 +4,7 @@ interface
 
 Uses
   storm.schema.interfaces,
-
+  storm.additional.maybe,
   System.Generics.Collections,
   System.Classes,
   System.Sysutils;
@@ -13,6 +13,7 @@ Type
   TStormTableSchema = Class Abstract(TInterfacedObject, IStormTableSchema)
   private
     FColumns : TList<IStormSchemaColumn>;
+    FColumnsDictionary : TDictionary<string,IStormSchemaColumn>;
   protected
 
     FSchemaName : String;
@@ -20,6 +21,7 @@ Type
     FEntityName : String;
 
     Procedure AddColumn(column : IStormSchemaColumn);
+    Procedure Initialize(); Virtual;
   public
     Function GetSchemaName : String;
     Function GetTableName : String;
@@ -31,6 +33,9 @@ Type
     property EntityName : String read GetEntityName;
 
     Function  GetColumns : TList<IStormSchemaColumn>;
+
+    Function ColumnByName(name : string) : Maybe<IStormSchemaColumn>;
+    Function ColumnById(id : integer) : Maybe<IStormSchemaColumn>;
 
 
   public
@@ -44,7 +49,25 @@ implementation
 
 procedure TStormTableSchema.AddColumn(column: IStormSchemaColumn);
 begin
-  FColumns.Add(column)
+  FColumns.Add(column);
+  FColumnsDictionary.Add(column.GetFieldName, column);
+end;
+
+function TStormTableSchema.ColumnById(id: integer): Maybe<IStormSchemaColumn>;
+begin
+  if Assigned(FColumns.Items[id]) then
+  begin
+    result := FColumns.Items[id];
+  end;
+end;
+
+function TStormTableSchema.ColumnByName(
+  name: string): Maybe<IStormSchemaColumn>;
+begin
+  if FColumnsDictionary.ContainsKey(name) then
+  begin
+    result := FColumnsDictionary.Items[name];
+  end;
 end;
 
 constructor TStormTableSchema.Create(SchemaName, TableName, EntityName: string);
@@ -53,8 +76,8 @@ begin
   FSchemaName := SchemaName;
   FTableName  := TableName;
   FEntityName := EntityName;
+  Initialize;
 
-  FColumns := TList<IStormSchemaColumn>.Create;
 end;
 
 function TStormTableSchema.GetColumns: TList<IStormSchemaColumn>;
@@ -75,6 +98,12 @@ end;
 function TStormTableSchema.GetTableName: String;
 begin
   Result := FTableName;
+end;
+
+procedure TStormTableSchema.Initialize;
+begin
+  FColumns := TList<IStormSchemaColumn>.Create;
+  FColumnsDictionary := TDictionary<string,IStormSchemaColumn>.Create();
 end;
 
 end.
