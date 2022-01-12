@@ -27,7 +27,10 @@ uses
   storm.schema.register in 'src\lib\schema\storm.schema.register.pas',
   storm.query.interfaces in 'src\lib\query\storm.query.interfaces.pas',
   storm.query in 'src\lib\query\storm.query.pas',
-  uORMProduto in 'src\teste\uORMProduto.pas';
+  uORMProduto in 'src\teste\uORMProduto.pas',
+  storm.orm.base in 'src\lib\orm\storm.orm.base.pas',
+  storm.orm.interfaces in 'src\lib\orm\storm.orm.interfaces.pas',
+  storm.orm.where in 'src\lib\orm\storm.orm.where.pas';
 
 procedure WriteJson(obj : TJSONObject);
 begin
@@ -41,7 +44,7 @@ end;
 
 
 VAR
-  query : TORMProduto;
+  produto : IORMProduto;
   stop : string;
   sql : string;
 begin
@@ -49,17 +52,21 @@ begin
   try
     SchemaRegister.RegisterSchema(TProduto, TSchemaProduto.Create);
 
-    query := TORMProduto.Create;
+    produto := TORMProduto.Create;
 
     sql :=
-    query
+    produto
       .Select
       .Only([Codigo, Descricao])
       .Where
+      .OpenParentheses
       .Codigo.EqualsTo('1')
       .Or_
       .Codigo.EqualsTo('2')
-      .SQL;
+      .CloseParentheses
+      .And_
+      .Descricao.NotEqualsTo('Alooooha!')
+      .GetSQL;
 
 
     writeln(sql);

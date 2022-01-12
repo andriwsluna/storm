@@ -3,56 +3,48 @@ unit uORMProduto;
 interface
 
 uses
+  storm.orm.base,
+  storm.orm.where,
+  storm.orm.interfaces,
   storm.schema.interfaces,
   uSchemaProduto;
 
 Type
-  TStormPart = class abstract (TInterfacedObject)
-  protected
-    FSQL : String;
 
-    Constructor Create(SQL : String = '');
+
+  TProdutoWhereSelection = class(TStormQueryPartition, IStormWhereSelection<TProdutoWhereSelection>)
   public
-    property SQL: string read FSQL;
-  end;
-  TProdutoWhereSelection = class;
-  TProdutoWhereCompositor = class(TStormPart)
+    Function OpenParentheses() : TProdutoWhereSelection;
+    Function CloseParentheses() : TProdutoWhereSelection;
   public
-    Function And_() : TProdutoWhereSelection;
-    Function Or_()  : TProdutoWhereSelection;
-  end;
-  TStringWhere = class
-  private
-    FSQL : String;
-    FColumn : IStormSchemaColumn;
-  public
-    Constructor create(SQL : string ;column : IStormSchemaColumn); Reintroduce;
-  public
-    Function EqualsTo(str : string) : TProdutoWhereCompositor;
+
+    Function Codigo : IStringWhere<TProdutoWhereSelection>;
+    Function Descricao : IStringWhere<TProdutoWhereSelection>;
   end;
 
-  TProdutoWhereSelection = class(TStormPart)
-  public
-    Function Codigo : TStringWhere;
-  end;
-
-  TProdutoWhere = class(TStormPart)
-  public
-    Function Where : TProdutoWhereSelection;
-  end;
 
   TProdutoPossibleFields = (Codigo=0, Descricao=1);
   TProdutoSETFieldSelection = set of TProdutoPossibleFields;
 
-  TProdutoFieldSelection = class(TStormPart)
-  private
-    Function From() : TProdutoWhere;
-  public
-    Function All() : TProdutoWhere;
-    Function Only(fields : TProdutoSETFieldSelection) : TProdutoWhere;
+  IProdutoFieldSelection = interface['{9AA32BD0-45FD-42D6-B88A-42570723FD21}']
+    Function All() : IWhereNode<TProdutoWhereSelection>;
+    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection>;
   end;
 
-  TORMProduto = class
+
+  TProdutoFieldSelection = class(TStormFieldSelection<TProdutoWhereSelection>, IProdutoFieldSelection)
+  public
+    Constructor Create(sql : string);Reintroduce;
+    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection>;
+  end;
+
+
+
+  IORMProduto = interface['{F49CF2B7-E6F3-44BC-A28C-6FCF75930CDC}']
+    Function Select()  : IProdutoFieldSelection;
+  end;
+
+  TORMProduto = class(TInterfacedObject, IORMProduto)
   private
 
   protected
@@ -64,7 +56,7 @@ Type
     Constructor Create(); Reintroduce;
     Destructor  Destroy(); Override;
   public
-    Function Select()  : TProdutoFieldSelection;
+    Function Select()  : IProdutoFieldSelection;
   end;
 
 VAR
@@ -81,6 +73,7 @@ uses
 constructor TORMProduto.Create;
 begin
   inherited create();
+  _AddRef();
   Initialize();
 end;
 
@@ -100,26 +93,19 @@ begin
   FSchema := TSchemaProduto.Create();
 end;
 
-function TORMProduto.Select: TProdutoFieldSelection;
+function TORMProduto.Select: IProdutoFieldSelection;
 begin
   result := TProdutoFieldSelection.Create('select ');
 end;
 
-{ TProdutoFieldSelection }
 
-function TProdutoFieldSelection.All: TProdutoWhere;
+constructor TProdutoFieldSelection.Create(sql: string);
 begin
-  FSQL := FSQL + ' *';
-  result := From;
+  inherited create(sql, FSchema,TSchemaProduto(FSchema).Codigo);
+
 end;
 
-function TProdutoFieldSelection.From: TProdutoWhere;
-begin
-  FSQL := FSQL + ' from ' + FSchema.GetSchemaName + '.' + FSchema.GetTableName;
-  result := TProdutoWhere.Create(FSQL);
-end;
-
-function TProdutoFieldSelection.Only(fields : TProdutoSETFieldSelection): TProdutoWhere;
+function TProdutoFieldSelection.Only(fields : TProdutoSETFieldSelection): IWhereNode<TProdutoWhereSelection>;
 VAR
   s : string;
   field : TProdutoPossibleFields;
@@ -131,66 +117,39 @@ begin
     (
       procedure(colum : IStormSchemaColumn)
       begin
-        s := s + ', ' + colum.GetColumnName;
+        s := s + ', ' + FSchema.GetTableName + '.' + colum.GetColumnName;
       end
     );
   end;
 
-  FSQL := FSQL + Copy(s,2, length(s));
+  AddSQL(Copy(s,2, length(s)));
   Result := from;
 
 end;
 
-{ TStormPart }
-
-constructor TStormPart.Create(SQL: String);
-begin
-  FSQL := SQL;
-end;
-
-{ TStormWhereSelection }
-
-
-
-{ TStringWhere }
-
-constructor TStringWhere.create(SQL : string; column: IStormSchemaColumn);
-begin
-  inherited create();
-  FSQL := sql;
-  FColumn := column;
-end;
-
-function TStringWhere.EqualsTo(str: string): TProdutoWhereCompositor;
-begin
-  FSQL := Fsql  + ' ' + FColumn.GetColumnName + ' = ' + str;
-  Result := TProdutoWhereCompositor.Create(FSQL);
-end;
-
 { TProdutoWhereSelection }
 
-function TProdutoWhereSelection.Codigo: TStringWhere;
+function TProdutoWhereSelection.CloseParentheses: TProdutoWhereSelection;
 begin
-  result := TStringWhere.create(FSQL,TSchemaProduto(FSchema).Codigo);
+  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(GetSQL).CloseParentheses;
 end;
 
-{ TProdutoWhere }
-
-function TProdutoWhere.Where: TProdutoWhereSelection;
+function TProdutoWhereSelection.Codigo: IStringWhere<TProdutoWhereSelection>;
 begin
-  result :=  TProdutoWhereSelection.Create(FSQL + ' where');
+  result := TStringWhere<TProdutoWhereSelection>.create(GetSQL,FSchema,TSchemaProduto(FSchema).Codigo);
 end;
 
-{ TProdutoWhereCompositor }
 
-function TProdutoWhereCompositor.And_: TProdutoWhereSelection;
+
+
+function TProdutoWhereSelection.Descricao: IStringWhere<TProdutoWhereSelection>;
 begin
-  Result := TProdutoWhereSelection.Create(FSQL + ' and');
+  result := TStringWhere<TProdutoWhereSelection>.create(GetSQL,FSchema,TSchemaProduto(FSchema).Descricao);
 end;
 
-function TProdutoWhereCompositor.Or_: TProdutoWhereSelection;
+function TProdutoWhereSelection.OpenParentheses: TProdutoWhereSelection;
 begin
-  Result := TProdutoWhereSelection.Create(FSQL + ' or');
+  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(GetSQL).OpenParentheses;
 end;
 
 end.
