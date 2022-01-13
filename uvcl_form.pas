@@ -40,48 +40,42 @@ implementation
 
 procedure Tvcl_form.Button1Click(Sender: TObject);
 var
-  parameters : TList<TQueryParameter>;
-  parameter : TQueryParameter;
-  produto : IORMProduto;
-  select : IProdutoFieldSelection;
-  only : IWhereNode<TProdutoWhereSelection>;
-  where : IStormQueryPartition;
-  cod : IStringWhere<TProdutoWhereSelection>;
-  compo : IStormWhereCompositor<TProdutoWhereSelection>;
+  parameters : TList<IQueryParameter>;
+  parameter : IQueryParameter;
+  ORMproduto : IORMProduto;
 begin
 
 
 
-    produto := TORMProduto.Create;
-    //memosql.Text := produto.Select.Only([Codigo]).Where.Codigo.EqualsTo('2').GetSQL
+    ORMproduto := TORMProduto.Create;
 
 
-    memosql.Text := produto
-        .Select
+    memosql.Text := ORMproduto
+      .Select
       .Only([Codigo, Descricao])
       .Where
-      .OpenParentheses
-      .Codigo.EqualsTo('1')
-      .Or_
-      .Codigo.EqualsTo('2')
-      .CloseParentheses
+      .Codigo.IsIn(['1','2'])
       .And_
-      .Descricao.NotEqualsTo('Alooooha!')
+      .Descricao.BeginsWith('al')
       .GetSQL;
 
-
-
-    //ADOQuery1.SQL.Text := memosql.Text;
-
-//    for parameter in Parameters do
-//    begin
-//      ADOQuery1.Parameters.ParamByName(parameter.getParamName).Value := parameter.Value;
-//    end;
-
-
+    parameters := ORMproduto
+      .Select
+      .Only([Codigo, Descricao])
+      .Where
+      .Codigo.IsIn(['1','2'])
+      .And_
+      .Descricao.EndsWith('ha')
+      .GetParameters;
 
 
 
+    ADOQuery1.SQL.Text := memosql.Text;
+
+    for parameter in Parameters do
+    begin
+      ADOQuery1.Parameters.ParamByName(parameter.getParamName).Value := parameter.getValue;
+    end;
 
 
 
@@ -89,7 +83,7 @@ end;
 
 procedure Tvcl_form.Button2Click(Sender: TObject);
 begin
-
+  ADOQuery1.SQL.Text := memosql.Text;
   ADOQuery1.Open;
 end;
 

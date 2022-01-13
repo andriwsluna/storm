@@ -20,7 +20,7 @@ Type
   public
 
     Function Codigo : IStringWhere<TProdutoWhereSelection>;
-    Function Descricao : IStringWhere<TProdutoWhereSelection>;
+    Function Descricao : InullableStringWhere<TProdutoWhereSelection>;
 
      Constructor Create(owner : TStormSQLPartition = nil); Override;
      Destructor  Destroy(); Override;
@@ -165,9 +165,9 @@ begin
 
 end;
 
-function TProdutoWhereSelection.Descricao: IStringWhere<TProdutoWhereSelection>;
+function TProdutoWhereSelection.Descricao: INullableStringWhere<TProdutoWhereSelection>;
 begin
-  result := TStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Descricao);
+  result := TNullableStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Descricao);
 end;
 
 destructor TProdutoWhereSelection.Destroy;

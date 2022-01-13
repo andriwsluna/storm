@@ -18,7 +18,7 @@ Type
     FSQL : String;
     FParameters : IStormQueryParameters;
   protected
-
+    Procedure Initialize; Virtual;
 
 
     Procedure  AddSQL(sql : string);
@@ -61,26 +61,7 @@ constructor TStormSQLPartition.Create(owner : TStormSQLPartition);
 begin
   inherited create();
   Fowner := owner;
-
-  if Assigned(owner) then
-  begin
-    FSQL := owner.FSQL;
-    if assigned(owner.FParameters) then
-    begin
-      FParameters := owner.FParameters;
-    end
-    else
-    begin
-      FParameters := TStormQueryParameters.Create;
-    end;
-
-
-  end
-  else
-  begin
-    FParameters := TStormQueryParameters.Create;
-  end;
-
+  Initialize;
 end;
 
 
@@ -94,6 +75,28 @@ begin
     end;
   END;
   inherited;
+end;
+
+procedure TStormSQLPartition.Initialize;
+begin
+  if Assigned(Fowner) then
+  begin
+    FSQL := Fowner.FSQL;
+    if assigned(Fowner.FParameters) then
+    begin
+      FParameters := Fowner.FParameters;
+    end
+    else
+    begin
+      FParameters := TStormQueryParameters.Create;
+    end;
+
+
+  end
+  else
+  begin
+    FParameters := TStormQueryParameters.Create;
+  end;
 end;
 
 function TStormSQLPartition._GetSQL: String;

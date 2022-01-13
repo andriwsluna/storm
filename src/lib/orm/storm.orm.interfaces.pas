@@ -12,6 +12,7 @@ Type
    IQueryParameter = interface['{710D25D7-939B-42BD-A446-1445A2832FC8}']
     function getParamName() : string;
     function getPlaceHolderName() : string;
+    Function getValue() : variant;
   end;
 
   IStormQueryPartition = interface['{1453EBB4-0723-418F-BA9F-16528086EFBD}']
@@ -32,9 +33,37 @@ Type
     Function CloseParentheses() : IStormWhereCompositor<T>;
   end;
 
+  INullableWhere<T : IStormQueryPartition> = interface['{6E0036F2-4A2D-43B2-8CB2-88945DDA3E5C}']
+    Function IsNull() : IStormWhereCompositor<T>;
+    Function IsNotNull() : IStormWhereCompositor<T>;
+  end;
+
+  IEqualWhere<T : IStormQueryPartition> = interface['{6E0036F2-4A2D-43B2-8CB2-88945DDA3E5C}']
+    Function IsEqualsTo(value : variant) : IStormWhereCompositor<T>;
+    Function NotIsEqualsTo(value : variant) : IStormWhereCompositor<T>;
+  end;
+
+
   IStringWhere<T : IStormQueryPartition> = interface['{B936FBBD-B8AF-426A-90C2-BC940414A1FC}']
-    Function EqualsTo(str : string) : IStormWhereCompositor<T>;
-    Function NotEqualsTo(str : string) : IStormWhereCompositor<T>;
+    Function IsEqualsTo(value : string) : IStormWhereCompositor<T>;
+    Function NotIsEqualsTo(value : string) : IStormWhereCompositor<T>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<T>;
+    Function IsNotIn(value :TArray<String>) : IStormWhereCompositor<T>;
+    Function BeginsWith(value : string) : IStormWhereCompositor<T>;
+    Function Contains(value : string) : IStormWhereCompositor<T>;
+    Function EndsWith(value : string) : IStormWhereCompositor<T>;
+  end;
+
+  INullableStringWhere<T : IStormQueryPartition> = interface['{B936FBBD-B8AF-426A-90C2-BC940414A1FC}']
+    Function IsNull() : IStormWhereCompositor<T>;
+    Function IsNotNull() : IStormWhereCompositor<T>;
+    Function IsEqualsTo(value : string) : IStormWhereCompositor<T>;
+    Function NotIsEqualsTo(value : string) : IStormWhereCompositor<T>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<T>;
+    Function IsNotIn(value :TArray<String>) : IStormWhereCompositor<T>;
+    Function BeginsWith(value : string) : IStormWhereCompositor<T>;
+    Function Contains(value : string) : IStormWhereCompositor<T>;
+    Function EndsWith(value : string) : IStormWhereCompositor<T>;
   end;
 
   IStormFieldSelection<T : IStormQueryPartition> = interface['{9AA32BD0-45FD-42D6-B88A-42570723FD21}']

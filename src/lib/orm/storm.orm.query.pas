@@ -22,6 +22,7 @@ Type
 
     function getParamName() : string;
     function getPlaceHolderName() : string;
+    Function getValue() : variant;
   end;
 
 
@@ -57,6 +58,11 @@ end;
 function TQueryParameter.getPlaceHolderName: string;
 begin
   Result := PlaceHolderName;
+end;
+
+function TQueryParameter.getValue: variant;
+begin
+  Result := Value;
 end;
 
 { TStormQueryParameters }
