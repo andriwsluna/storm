@@ -24,6 +24,7 @@ TSchemaProduto = class(TStormTableSchema)
     property Codigo: IStormSchemaColumn read FCodigo;
     property Descricao: IStormSchemaColumn read FDescricao;
     Constructor Create(); Reintroduce;
+    Destructor Destroy(); Override;
 end;
 
 
@@ -35,9 +36,14 @@ implementation
 constructor TSchemaProduto.Create;
 begin
   inherited Create('dbo', 'produto', 'Produto');
-
 end;
 
+
+destructor TSchemaProduto.Destroy;
+begin
+  FCodigo := nil;
+  inherited;
+end;
 
 procedure TSchemaProduto.Initialize;
 begin

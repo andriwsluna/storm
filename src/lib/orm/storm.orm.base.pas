@@ -14,8 +14,9 @@ Type
 
   TStormSQLPartition = class abstract (TInterfacedObject)
   private
+    Fowner : TStormSQLPartition;
     FSQL : String;
-    FParameters : TStormQueryParameters;
+    FParameters : IStormQueryParameters;
   protected
 
 
@@ -26,6 +27,7 @@ Type
     Function _GetSQL() : String;
   public
     Constructor Create(owner : TStormSQLPartition = nil); Reintroduce; Virtual;
+    Destructor  Destroy(); Override;
   end;
 
   TStormQueryPartition = class abstract (TStormSQLPartition, IStormQueryPartition)
@@ -36,7 +38,7 @@ Type
 
 
     Function GetSQL() : String;
-    Function GetParameters : TList<TQueryParameter>;
+    Function GetParameters : TList<IQueryParameter>;
 
   end;
 
@@ -58,6 +60,7 @@ end;
 constructor TStormSQLPartition.Create(owner : TStormSQLPartition);
 begin
   inherited create();
+  Fowner := owner;
 
   if Assigned(owner) then
   begin
@@ -78,9 +81,20 @@ begin
     FParameters := TStormQueryParameters.Create;
   end;
 
-  _AddRef;
 end;
 
+
+destructor TStormSQLPartition.Destroy;
+begin
+  if Assigned(Fowner) then
+  BEGIN
+    if Fowner.FRefCount = 0 then
+    begin
+      Fowner.Free;
+    end;
+  END;
+  inherited;
+end;
 
 function TStormSQLPartition._GetSQL: String;
 begin
@@ -92,9 +106,9 @@ end;
 { TStormQueryPartition }
 
 
-function TStormQueryPartition.GetParameters: TList<TQueryParameter>;
+function TStormQueryPartition.GetParameters: TList<IQueryParameter>;
 begin
-  Result := FParameters.Items;
+  Result := TStormQueryParameters(FParameters).Items;
 end;
 
 function TStormQueryPartition.GetSQL: String;

@@ -12,6 +12,7 @@ uses
 Type
 
 
+
   TProdutoWhereSelection = class(TStormQueryPartition, IStormWhereSelection<TProdutoWhereSelection>)
   public
     Function OpenParentheses() : TProdutoWhereSelection;
@@ -20,6 +21,9 @@ Type
 
     Function Codigo : IStringWhere<TProdutoWhereSelection>;
     Function Descricao : IStringWhere<TProdutoWhereSelection>;
+
+     Constructor Create(owner : TStormSQLPartition = nil); Override;
+     Destructor  Destroy(); Override;
   end;
 
 
@@ -62,18 +66,30 @@ Type
 VAR
   FSchema : IStormTableSchema;
 
+Procedure InitializeSchema();
+Procedure FinalizeSchema();
+
 
 implementation
 
 uses
   System.Sysutils;
 
+Procedure InitializeSchema();
+begin
+  FSchema := TSchemaProduto.Create;
+end;
+
+Procedure FinalizeSchema();
+begin
+  FSchema := nil;
+end;
+
 { TORMProduto }
 
 constructor TORMProduto.Create;
 begin
   inherited create();
-  _AddRef();
   Initialize();
 end;
 
@@ -90,7 +106,7 @@ end;
 
 procedure TORMProduto.Initialize;
 begin
-  FSchema := TSchemaProduto.Create();
+
 end;
 
 function TORMProduto.Select: IProdutoFieldSelection;
@@ -143,14 +159,33 @@ end;
 
 
 
+constructor TProdutoWhereSelection.Create(owner: TStormSQLPartition);
+begin
+  inherited;
+
+end;
+
 function TProdutoWhereSelection.Descricao: IStringWhere<TProdutoWhereSelection>;
 begin
   result := TStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Descricao);
+end;
+
+destructor TProdutoWhereSelection.Destroy;
+begin
+
+  inherited;
 end;
 
 function TProdutoWhereSelection.OpenParentheses: TProdutoWhereSelection;
 begin
   Result := TStormWhereSelection<TProdutoWhereSelection>.Create(self).OpenParentheses;
 end;
+
+
+INITIALIZATION
+  InitializeSchema;
+
+finalization
+  FinalizeSchema;
 
 end.

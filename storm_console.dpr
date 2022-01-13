@@ -25,8 +25,6 @@ uses
   storm.schema.interfaces in 'src\lib\schema\storm.schema.interfaces.pas',
   uSchemaProduto in 'src\teste\uSchemaProduto.pas',
   storm.schema.register in 'src\lib\schema\storm.schema.register.pas',
-  storm.query.interfaces in 'src\lib\query\storm.query.interfaces.pas',
-  storm.query in 'src\lib\query\storm.query.pas',
   uORMProduto in 'src\teste\uORMProduto.pas',
   storm.orm.base in 'src\lib\orm\storm.orm.base.pas',
   storm.orm.interfaces in 'src\lib\orm\storm.orm.interfaces.pas',

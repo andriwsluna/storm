@@ -20,6 +20,7 @@ Type
     FRegisteredSchemas : TDictionary<TClass,IStormTableSchema>;
 
     Constructor Create(); Reintroduce;
+    DEstructor Destroy(); Override;
   protected
 
   public
@@ -59,6 +60,12 @@ constructor TSchemaRegister.Create;
 begin
   inherited;
   FRegisteredSchemas := TDictionary<TClass,IStormTableSchema>.Create();
+end;
+
+destructor TSchemaRegister.Destroy;
+begin
+  FRegisteredSchemas.Free;
+  inherited;
 end;
 
 class procedure TSchemaRegister.Finalize;
@@ -107,10 +114,10 @@ begin
   end;
 end;
 
-INITIALIZATION
-  TSchemaRegister.Initialize();
-
-FINALIZATION
-  TSchemaRegister.Finalize();
+//INITIALIZATION
+//  TSchemaRegister.Initialize();
+//
+//FINALIZATION
+//  TSchemaRegister.Finalize();
 
 end.

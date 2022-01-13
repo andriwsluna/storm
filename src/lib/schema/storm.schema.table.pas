@@ -22,6 +22,7 @@ Type
 
     Procedure AddColumn(column : IStormSchemaColumn);
     Procedure Initialize(); Virtual;
+    Procedure Finalize(); Virtual;
   public
     Function GetSchemaName : String;
     Function GetTableName : String;
@@ -40,6 +41,7 @@ Type
 
   public
     Constructor Create(SchemaName, TableName,  EntityName : string); Reintroduce; Virtual;
+    Destructor Destroy(); Override;
 
   End;
 
@@ -78,6 +80,18 @@ begin
   FEntityName := EntityName;
   Initialize;
 
+end;
+
+destructor TStormTableSchema.Destroy;
+begin
+  Finalize;
+  inherited;
+end;
+
+procedure TStormTableSchema.Finalize;
+begin
+  FColumns.Free;
+  FColumnsDictionary.Free;
 end;
 
 function TStormTableSchema.GetColumns: TList<IStormSchemaColumn>;

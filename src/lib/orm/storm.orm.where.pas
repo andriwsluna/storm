@@ -40,7 +40,7 @@ type
 
   end;
 
-  TWhereNode<T : TStormQueryPartition> = class(TStormQueryPartition, IWhereNode<T>)
+  TWhereNode<T : IStormQueryPartition, TStormQueryPartition> = class(TStormQueryPartition, IWhereNode<T>)
   public
     Function Where : T;
   end;
@@ -115,8 +115,11 @@ end;
 { TWhereNode<T> }
 
 function TWhereNode<T>.Where: T;
+VAR
+  i : IInterface;
 begin
   AddSQL(' where');
+  //i := T.Create(self);
   Result := T.Create(self);
 end;
 

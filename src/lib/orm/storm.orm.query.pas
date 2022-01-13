@@ -4,10 +4,11 @@ interface
 
 USES
   System.Sysutils,
+  storm.orm.interfaces,
   System.Generics.Collections;
 
 Type
-  TQueryParameter = class
+  TQueryParameter = class(TInterfacedObject, IQueryParameter)
   private
     FIndex : integer;
     FPlaceHolderName : String;
@@ -20,16 +21,19 @@ Type
     property Value: variant read FValue;
 
     function getParamName() : string;
+    function getPlaceHolderName() : string;
   end;
 
 
-  TStormQueryParameters = class
+  TStormQueryParameters = class(TInterfacedObject, IStormQueryParameters)
   private
-    FItems : TList<TQueryParameter>;
+    FItems : TList<IQueryParameter>;
   public
     Constructor Create; Reintroduce;
+    Destructor  Destroy(); Override;
+
   public
-    property Items: TList<TQueryParameter> read FItems;
+    property Items: TList<IQueryParameter> read FItems;
     function Add(value : variant) : string;
   end;
 
@@ -50,21 +54,32 @@ begin
   Result := PlaceHolderName.Substring(1);
 end;
 
+function TQueryParameter.getPlaceHolderName: string;
+begin
+  Result := PlaceHolderName;
+end;
+
 { TStormQueryParameters }
 
 function TStormQueryParameters.Add(value: variant) : string;
 var
-  parameter : TQueryParameter;
+  parameter : IQueryParameter;
 begin
   parameter := TQueryParameter.Create(FItems.Count+1, value);
   FItems.Add(parameter);
-  result := parameter.PlaceHolderName;
+  result := parameter.getPlaceHolderName;
 end;
 
 constructor TStormQueryParameters.Create;
 begin
   inherited create();
-  FItems := TList<TQueryParameter>.Create;
+  FItems := TList<IQueryParameter>.Create;
+end;
+
+destructor TStormQueryParameters.Destroy;
+begin
+  FItems.Free;
+  inherited;
 end;
 
 end.
