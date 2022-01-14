@@ -173,7 +173,7 @@ end;
 
 function TStormFieldSelection<T>.From: IWhereNode<T>;
 begin
-  AddSQL(' from ' + FTable.GetSchemaName + '.' + FTable.GetTableName);
+  AddSQL(' from ' + SQLDriver.GetFullTableName(FTable));
   result := TWhereNode<T>.Create(self);
 end;
 

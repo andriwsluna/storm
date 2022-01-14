@@ -15,10 +15,12 @@ Type
 
   TStormSQLPartition = class abstract (TInterfacedObject)
   private
+
     Fowner : TStormSQLPartition;
     FSQL : String;
     FParameters : IStormQueryParameters;
   protected
+    SQLDriver : IStormSQLDriver;
     Procedure Initialize; Virtual;
 
 
@@ -31,16 +33,28 @@ Type
     Destructor  Destroy(); Override;
   end;
 
-  TStormQueryExecution = class(TInterfacedObject, IStormQueryExecution)
+  TStormQuerySuccessExecution = class(TInterfacedObject, IStormQuerySuccessExecution)
   private
     FData : Tdataset;
   protected
 
-
   public
     Constructor Create(dataset : TDataset); Reintroduce;
   public
-    Function Dataset : TDataset;
+    Function GetDataset : TDataset;
+  end;
+
+  TStormQueryFailExecution = class(TInterfacedObject, IStormQueryFailExecution)
+  private
+    FErrorMessage : String;
+    FSQL : String;
+  protected
+
+  public
+    Constructor Create(errorMessage : String ; sql : string); Reintroduce;
+  public
+    Function GetErrorMessage : String;
+    Function GetSQL() : String;
   end;
 
   TStormQueryExecutor = class(TStormSQLPartition, IStormQueryExecutor)
@@ -49,8 +63,8 @@ Type
   protected
 
   public
-    Function GetSQL() : String;
-    Function Execute(query : IStormSQLQuery) : IStormQueryExecution;
+    Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor;
+    Function Open(connection : IStormSQLConnection) : TStormQueryResult;
   end;
 
   TStormQueryPartition = class abstract (TStormSQLPartition, IStormQueryPartition)
@@ -66,6 +80,9 @@ Type
 
 
 implementation
+
+Uses
+  storm.dependency.register;
 
 
 function TStormSQLPartition.AddParameter(value: variant): string;
@@ -115,6 +132,19 @@ begin
     end;
 
 
+    DependencyRegister.GetSQLDriverInstance.Bind
+    (
+      procedure(driver : IStormSQLDriver)
+      begin
+        SQLDriver := driver;
+      end,
+      procedure()
+      begin
+        raise Exception.Create('No SQL driver registered');
+      end
+    )
+
+
   end
   else
   begin
@@ -140,30 +170,62 @@ end;
 
 { TStormQueryExecution }
 
-constructor TStormQueryExecution.Create(dataset: TDataset);
+constructor TStormQuerySuccessExecution.Create(dataset: TDataset);
 begin
   inherited create();
   FData := dataset;
 end;
 
-function TStormQueryExecution.Dataset: TDataset;
+function TStormQuerySuccessExecution.GetDataset: TDataset;
 begin
   Result := FData;
 end;
 
 { TStormQueryExecutor }
 
-function TStormQueryExecutor.Execute(query : IStormSQLQuery): IStormQueryExecution;
+function TStormQueryExecutor.Open(connection : IStormSQLConnection): TStormQueryResult;
 begin
-  query.SetSQL(GetSQL);
-  query.LoadParameters(FParameters.Items);
-  query.Open;
-  Result := TStormQueryExecution.Create(query.Dataset);
+  connection.SetSQL(_GetSQL);
+  connection.LoadParameters(FParameters.Items);
+  try
+    connection.Open;
+    Result := TStormQuerySuccessExecution.Create(connection.Dataset);
+  except
+    on e : exception do
+    begin
+      Result := TStormQueryFailExecution.Create(e.Message, _GetSQL);
+    end;
+  end;
+
+
 end;
 
-function TStormQueryExecutor.GetSQL: String;
+function TStormQueryExecutor.GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor;
 begin
-  Result := _GetSQL;
+  if assigned(callback) then
+  begin
+    callback(_GetSQL);
+  end;
+  Result := self;
+end;
+
+{ TStormQueryFailExecution }
+
+constructor TStormQueryFailExecution.Create(errorMessage: String ; sql : string);
+begin
+  inherited create();
+  FErrorMessage := errorMessage;
+  FSQL := sql;
+end;
+
+function TStormQueryFailExecution.GetErrorMessage: String;
+begin
+  Result := FErrorMessage;
+end;
+
+function TStormQueryFailExecution.GetSQL: String;
+begin
+  Result := FSQL;
 end;
 
 end.

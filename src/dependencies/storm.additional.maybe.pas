@@ -29,6 +29,9 @@ type
     function GetEnumerator: TEnumerator;
     function Any: Boolean; inline;
     function GetValueOrDefault(const default: T): T;
+    function OnSome(SomeCallback : TSomeProc) : Maybe<T>;
+    function OnNone(NoneCallback : TNoneProc) : Maybe<T>;
+
     Function Bind(Left : TSomeProc ; Rigth : TNoneProc = nil) : Maybe<T>; Overload;
     Function Bind(Left : TSomeBoolFunc ; Rigth : TNoneBoolFunc = nil) : Boolean; Overload;
     class operator Implicit(const value: T): Maybe<T>;
@@ -81,6 +84,24 @@ class operator Maybe<T>.Implicit(const value: T): Maybe<T>;
 begin
   Result := Maybe<T>.Create(value);
 end;
+function Maybe<T>.OnNone(NoneCallback: TNoneProc): Maybe<T>;
+begin
+  if Not self.Any then
+  BEGIN
+    NoneCallback;
+  END;
+  Result := self;
+end;
+
+function Maybe<T>.OnSome(SomeCallback: TSomeProc): Maybe<T>;
+begin
+  if self.Any then
+  BEGIN
+    SomeCallback(fValue);
+  END;
+  Result := self;
+end;
+
 Function Maybe<T>.Bind(Left: TSomeProc; Rigth: TNoneProc) : Maybe<T>;
 begin
   if self.Any then

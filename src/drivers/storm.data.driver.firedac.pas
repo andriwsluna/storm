@@ -11,7 +11,7 @@ USES
   storm.orm.interfaces;
 
 Type
-  TStormFireDacQuery = Class(TInterfacedObject, IStormSQLQuery)
+  TStormFireDACConnection = Class(TInterfacedObject, IStormSQLConnection)
   private
 
   protected
@@ -30,14 +30,17 @@ Type
 
   TStormFireDacHelper = class helper for TFDConnection
   public
-    Function StormDriver() : IStormSQLQuery;
+    Function StormDriver() : IStormSQLConnection;
   end;
 
 implementation
 
-{ TStormFireDacQuery }
+USES
+  FireDAC.Stan.Param;
 
-constructor TStormFireDacQuery.Create(connection : TFDConnection);
+{ TStormFireDACConnection }
+
+constructor TStormFireDACConnection.Create(connection : TFDConnection);
 begin
   inherited create();
   FConnection := connection;
@@ -45,25 +48,25 @@ begin
   FQuery.Connection := connection;
 end;
 
-function TStormFireDacQuery.Dataset: Tdataset;
+function TStormFireDACConnection.Dataset: Tdataset;
 begin
   Result := TFDMemTable.Create(nil);
   TFDMemTable(Result).CopyDataSet(FQuery,[coStructure, coAppend, coRestart]);
 end;
 
-destructor TStormFireDacQuery.Destroy;
+destructor TStormFireDACConnection.Destroy;
 begin
   FQuery.Free;
   inherited;
 end;
 
-function TStormFireDacQuery.Execute: Boolean;
+function TStormFireDACConnection.Execute: Boolean;
 begin
   FQuery.ExecSQL;
   Result := true;
 end;
 
-procedure TStormFireDacQuery.LoadParameters(parameters: TList<IQueryParameter>);
+procedure TStormFireDACConnection.LoadParameters(parameters: TList<IQueryParameter>);
 VAR
   parameter : IQueryParameter;
 begin
@@ -73,22 +76,22 @@ begin
   end;
 end;
 
-function TStormFireDacQuery.Open: Boolean;
+function TStormFireDACConnection.Open: Boolean;
 begin
   FQuery.Open;
   Result := true;
 end;
 
-procedure TStormFireDacQuery.SetSQL(sql: string);
+procedure TStormFireDACConnection.SetSQL(sql: string);
 begin
   FQuery.SQL.Text := sql;
 end;
 
 { TStormADOHelper }
 
-function TStormFireDacHelper.StormDriver: IStormSQLQuery;
+function TStormFireDacHelper.StormDriver: IStormSQLConnection;
 begin
-   Result := TStormFireDacQuery.Create(self);
+   Result := TStormFireDACConnection.Create(self);
 end;
 
 end.

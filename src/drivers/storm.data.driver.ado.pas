@@ -10,7 +10,7 @@ USES
   storm.orm.interfaces;
 
 Type
-  TStormADOQuery = Class(TInterfacedObject, IStormSQLQuery)
+  TStormADOConnection = Class(TInterfacedObject, IStormSQLConnection)
   private
 
   protected
@@ -29,14 +29,14 @@ Type
 
   TStormADOHelper = class helper for TADOConnection
   public
-    Function StormDriver() : IStormSQLQuery;
+    Function StormDriver() : IStormSQLConnection;
   end;
 
 implementation
 
-{ TStormADOQuery }
+{ TStormADOConnection }
 
-constructor TStormADOQuery.Create(connection : TADOConnection);
+constructor TStormADOConnection.Create(connection : TADOConnection);
 begin
   inherited create();
   FConnection := connection;
@@ -44,25 +44,25 @@ begin
   Fquery.Connection := connection;
 end;
 
-function TStormADOQuery.Dataset: Tdataset;
+function TStormADOConnection.Dataset: Tdataset;
 begin
   Result := TADODataSet.Create(nil);
   TADODataSet(Result).Clone(Fquery);
 end;
 
-destructor TStormADOQuery.Destroy;
+destructor TStormADOConnection.Destroy;
 begin
   Fquery.Free;
   inherited;
 end;
 
-function TStormADOQuery.Execute: Boolean;
+function TStormADOConnection.Execute: Boolean;
 begin
   Fquery.ExecSQL;
   Result := true;
 end;
 
-procedure TStormADOQuery.LoadParameters(parameters: TList<IQueryParameter>);
+procedure TStormADOConnection.LoadParameters(parameters: TList<IQueryParameter>);
 VAR
   parameter : IQueryParameter;
 begin
@@ -72,22 +72,22 @@ begin
   end;
 end;
 
-function TStormADOQuery.Open: Boolean;
+function TStormADOConnection.Open: Boolean;
 begin
   Fquery.Open;
   Result := true;
 end;
 
-procedure TStormADOQuery.SetSQL(sql: string);
+procedure TStormADOConnection.SetSQL(sql: string);
 begin
   Fquery.SQL.Text := sql;
 end;
 
 { TStormADOHelper }
 
-function TStormADOHelper.StormDriver: IStormSQLQuery;
+function TStormADOHelper.StormDriver: IStormSQLConnection;
 begin
-  Result := TStormADOQuery.Create(self);
+  Result := TStormADOConnection.Create(self);
 end;
 
 end.

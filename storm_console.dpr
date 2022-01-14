@@ -24,7 +24,7 @@ uses
   storm.schema.types.varchar in 'src\lib\schema\storm.schema.types.varchar.pas',
   storm.schema.interfaces in 'src\lib\schema\storm.schema.interfaces.pas',
   uSchemaProduto in 'src\teste\uSchemaProduto.pas',
-  storm.schema.register in 'src\lib\schema\storm.schema.register.pas',
+  storm.dependency.register in 'src\lib\schema\storm.dependency.register.pas',
   uORMProduto in 'src\teste\uORMProduto.pas',
   storm.orm.base in 'src\lib\orm\storm.orm.base.pas',
   storm.orm.interfaces in 'src\lib\orm\storm.orm.interfaces.pas',

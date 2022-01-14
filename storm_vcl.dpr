@@ -21,7 +21,11 @@ uses
   storm.orm.query in 'src\lib\orm\storm.orm.query.pas',
   storm.data.interfaces in 'src\lib\data\storm.data.interfaces.pas',
   storm.data.driver.ado in 'src\drivers\storm.data.driver.ado.pas',
-  storm.data.driver.firedac in 'src\drivers\storm.data.driver.firedac.pas';
+  storm.data.driver.firedac in 'src\drivers\storm.data.driver.firedac.pas',
+  storm.dependency.register in 'src\lib\utils\storm.dependency.register.pas',
+  storm.data.driver.mysql in 'src\drivers\storm.data.driver.mysql.pas',
+  storm.data.driver.mssql in 'src\drivers\storm.data.driver.mssql.pas',
+  storm.additional.result in 'src\dependencies\storm.additional.result.pas';
 
 {$R *.res}
 

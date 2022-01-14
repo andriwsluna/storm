@@ -5,19 +5,31 @@ interface
 uses
   System.Generics.Collections,
   storm.data.interfaces,
+  storm.additional.result,
   Data.DB,
   storm.additional.maybe,
 
   System.Sysutils, System.Classes;
 
 Type
-  IStormQueryExecution = interface['{BC94D775-CBB7-4B89-988A-94CBC4B3F22F}']
-    Function Dataset : TDataset;
+
+
+
+  IStormQuerySuccessExecution = interface['{A1E476AD-F4CA-45E6-942D-786DE12EEFB3}']
+    Function GetDataset : TDataset;
   end;
 
-  IStormQueryExecutor = interface['{5F0A65E3-A0CC-4F68-9286-3931FA54C91C}']
+  IStormQueryFailExecution = interface['{D6B05C21-2F7B-452C-BE2B-9809A6439104}']
+    Function GetErrorMessage() : String;
     Function GetSQL() : String;
-    Function Execute(query : IStormSQLQuery) : IStormQueryExecution;
+  end;
+
+  TStormQueryResult = TResult<IStormQuerySuccessExecution,IStormQueryFailExecution>;
+  TGetSqlCallback = reference to procedure(sql : string);
+
+  IStormQueryExecutor = interface['{5F0A65E3-A0CC-4F68-9286-3931FA54C91C}']
+    Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor;
+    Function Open(connection : IStormSQLConnection) : TStormQueryResult;
   end;
 
   IStormQueryPartition = interface['{1453EBB4-0723-418F-BA9F-16528086EFBD}']

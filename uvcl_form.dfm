@@ -10,7 +10,9 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  OldCreateOrder = True
   Position = poDesktopCenter
+  OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
@@ -48,13 +50,13 @@ object vcl_form: Tvcl_form
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 
-      'Provider=SQLOLEDB.1;Password=admserver01;Persist Security Info=T' +
-      'rue;User ID=sa;Initial Catalog=banco_de_testes;Data Source=sql_s' +
-      'erver'
+      'Provider=SQLOLEDB.1;Password=S@geBr.2014;Persist Security Info=T' +
+      'rue;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=localho' +
+      'st'
     LoginPrompt = False
     Provider = 'SQLOLEDB.1'
-    Left = 696
-    Top = 336
+    Left = 632
+    Top = 304
   end
   object DataSource1: TDataSource
     Left = 304
@@ -71,22 +73,6 @@ object vcl_form: Tvcl_form
     Left = 800
     Top = 264
   end
-  object FDConnection1: TFDConnection
-    Params.Strings = (
-      'Database=banco_de_testes'
-      'Password=admserver01'
-      'User_Name=root'
-      'Server=mysql_on_windows'
-      'DriverID=MySQL')
-    LoginPrompt = False
-    Left = 464
-    Top = 320
-  end
-  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    VendorLib = 'E:\delphi\storm\dll\32\libmysql.dll'
-    Left = 296
-    Top = 312
-  end
   object FDMemTable2: TFDMemTable
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
@@ -97,5 +83,21 @@ object vcl_form: Tvcl_form
     UpdateOptions.AutoCommitUpdates = True
     Left = 408
     Top = 264
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'Database=bancodetestes'
+      'User_Name=sa'
+      'Password=S@geBr.2014'
+      'Port=5003'
+      'DriverID=MySQL')
+    LoginPrompt = False
+    Left = 496
+    Top = 304
+  end
+  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
+    VendorLib = 'R:\external\storm\dll\32\libmysql.dll'
+    Left = 328
+    Top = 296
   end
 end
