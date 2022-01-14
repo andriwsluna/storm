@@ -10,8 +10,8 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
   Position = poDesktopCenter
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object Button1: TButton
@@ -46,34 +46,56 @@ object vcl_form: Tvcl_form
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
   end
-  object Button2: TButton
-    Left = 64
-    Top = 328
-    Width = 75
-    Height = 25
-    Caption = 'Button2'
-    TabOrder = 3
-    OnClick = Button2Click
-  end
   object ADOConnection1: TADOConnection
     ConnectionString = 
-      'Provider=SQLOLEDB.1;Password=S@geBr.2014;Persist Security Info=T' +
-      'rue;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=127.0.0' +
-      '.1'
+      'Provider=SQLOLEDB.1;Password=admserver01;Persist Security Info=T' +
+      'rue;User ID=sa;Initial Catalog=banco_de_testes;Data Source=sql_s' +
+      'erver'
     LoginPrompt = False
     Provider = 'SQLOLEDB.1'
     Left = 696
     Top = 336
   end
-  object ADOQuery1: TADOQuery
-    Connection = ADOConnection1
-    Parameters = <>
-    Left = 696
-    Top = 384
-  end
   object DataSource1: TDataSource
-    DataSet = ADOQuery1
     Left = 304
     Top = 440
+  end
+  object FDMemTable1: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 800
+    Top = 264
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'Database=banco_de_testes'
+      'Password=admserver01'
+      'User_Name=root'
+      'Server=mysql_on_windows'
+      'DriverID=MySQL')
+    LoginPrompt = False
+    Left = 464
+    Top = 320
+  end
+  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
+    VendorLib = 'E:\delphi\storm\dll\32\libmysql.dll'
+    Left = 296
+    Top = 312
+  end
+  object FDMemTable2: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 408
+    Top = 264
   end
 end

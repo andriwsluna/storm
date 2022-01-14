@@ -124,6 +124,9 @@
         <DCCReference Include="src\lib\orm\storm.orm.interfaces.pas"/>
         <DCCReference Include="src\lib\orm\storm.orm.where.pas"/>
         <DCCReference Include="src\lib\orm\storm.orm.query.pas"/>
+        <DCCReference Include="src\lib\data\storm.data.interfaces.pas"/>
+        <DCCReference Include="src\drivers\storm.data.driver.ado.pas"/>
+        <DCCReference Include="src\drivers\storm.data.driver.firedac.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

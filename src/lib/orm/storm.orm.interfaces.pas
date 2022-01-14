@@ -4,20 +4,24 @@ interface
 
 uses
   System.Generics.Collections,
+  storm.data.interfaces,
+  Data.DB,
   storm.additional.maybe,
 
   System.Sysutils, System.Classes;
 
 Type
-   IQueryParameter = interface['{710D25D7-939B-42BD-A446-1445A2832FC8}']
-    function getParamName() : string;
-    function getPlaceHolderName() : string;
-    Function getValue() : variant;
+  IStormQueryExecution = interface['{BC94D775-CBB7-4B89-988A-94CBC4B3F22F}']
+    Function Dataset : TDataset;
+  end;
+
+  IStormQueryExecutor = interface['{5F0A65E3-A0CC-4F68-9286-3931FA54C91C}']
+    Function GetSQL() : String;
+    Function Execute(query : IStormSQLQuery) : IStormQueryExecution;
   end;
 
   IStormQueryPartition = interface['{1453EBB4-0723-418F-BA9F-16528086EFBD}']
-    Function GetSQL() : String;
-    Function GetParameters : TList<IQueryParameter>;
+    Function Go() : IStormQueryExecutor;
   end;
 
   IWhereNode<T : IStormQueryPartition> = interface['{A8E49DE9-6183-4464-881C-DF090693E627}']
@@ -27,9 +31,8 @@ Type
   IStormWhereCompositor<T : IStormQueryPartition > = interface['{0FA8F62A-7548-48AB-B341-1015C4459A51}']
     Function And_() : T;
     Function Or_()  : T;
-    Function GetSQL() : String;
-    Function GetParameters : TList<IQueryParameter>;
-    Function OpenParentheses() : IStormWhereCompositor<T>;
+    Function Go() : IStormQueryExecutor;
+    Function OpenParentheses() : T;
     Function CloseParentheses() : IStormWhereCompositor<T>;
   end;
 
@@ -72,11 +75,11 @@ Type
 
   IStormWhereSelection<T : IStormQueryPartition> = interface['{CF2E0AFD-4BEF-49B3-AF62-78E5FA6BDFCB}']
     Function OpenParentheses() : T;
-    Function CloseParentheses() : T;
   end;
 
   IStormQueryParameters = interface['{45188996-E885-495D-8CCB-B8894EDF2241}']
     function Add(value : variant) : string;
+    function Items : TList<IQueryParameter>;
   end;
 
 implementation

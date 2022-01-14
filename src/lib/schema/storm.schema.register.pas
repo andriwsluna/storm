@@ -20,7 +20,7 @@ Type
     FRegisteredSchemas : TDictionary<TClass,IStormTableSchema>;
 
     Constructor Create(); Reintroduce;
-    DEstructor Destroy(); Override;
+    Destructor Destroy(); Override;
   protected
 
   public

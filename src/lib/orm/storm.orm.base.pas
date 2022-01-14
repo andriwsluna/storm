@@ -3,9 +3,10 @@ unit storm.orm.base;
 interface
 
 Uses
-
+  DAta.DB,
   storm.additional.maybe,
   storm.orm.interfaces,
+  storm.data.interfaces,
   storm.orm.query,
   System.Generics.Collections,
   System.Sysutils, System.Classes;
@@ -30,17 +31,39 @@ Type
     Destructor  Destroy(); Override;
   end;
 
-  TStormQueryPartition = class abstract (TStormSQLPartition, IStormQueryPartition)
+  TStormQueryExecution = class(TInterfacedObject, IStormQueryExecution)
+  private
+    FData : Tdataset;
+  protected
+
+
+  public
+    Constructor Create(dataset : TDataset); Reintroduce;
+  public
+    Function Dataset : TDataset;
+  end;
+
+  TStormQueryExecutor = class(TStormSQLPartition, IStormQueryExecutor)
   private
 
   protected
+
   public
-
-
     Function GetSQL() : String;
-    Function GetParameters : TList<IQueryParameter>;
+    Function Execute(query : IStormSQLQuery) : IStormQueryExecution;
+  end;
+
+  TStormQueryPartition = class abstract (TStormSQLPartition, IStormQueryPartition)
+  private
+  protected
+  public
+    Function Go() : IStormQueryExecutor;
 
   end;
+
+
+
+
 
 implementation
 
@@ -109,15 +132,38 @@ end;
 { TStormQueryPartition }
 
 
-function TStormQueryPartition.GetParameters: TList<IQueryParameter>;
+
+function TStormQueryPartition.Go: IStormQueryExecutor;
 begin
-  Result := TStormQueryParameters(FParameters).Items;
+  Result := TStormqueryExecutor.Create(self);
 end;
 
-function TStormQueryPartition.GetSQL: String;
+{ TStormQueryExecution }
+
+constructor TStormQueryExecution.Create(dataset: TDataset);
 begin
-  result := _GetSQL;
+  inherited create();
+  FData := dataset;
 end;
 
+function TStormQueryExecution.Dataset: TDataset;
+begin
+  Result := FData;
+end;
+
+{ TStormQueryExecutor }
+
+function TStormQueryExecutor.Execute(query : IStormSQLQuery): IStormQueryExecution;
+begin
+  query.SetSQL(GetSQL);
+  query.LoadParameters(FParameters.Items);
+  query.Open;
+  Result := TStormQueryExecution.Create(query.Dataset);
+end;
+
+function TStormQueryExecutor.GetSQL: String;
+begin
+  Result := _GetSQL;
+end;
 
 end.

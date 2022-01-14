@@ -5,6 +5,7 @@ interface
 USES
   System.Sysutils,
   storm.orm.interfaces,
+  storm.data.interfaces,
   System.Generics.Collections;
 
 Type
@@ -34,8 +35,8 @@ Type
     Destructor  Destroy(); Override;
 
   public
-    property Items: TList<IQueryParameter> read FItems;
     function Add(value : variant) : string;
+    function Items : TList<IQueryParameter>;
   end;
 
 implementation
@@ -86,6 +87,11 @@ destructor TStormQueryParameters.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TStormQueryParameters.Items: TList<IQueryParameter>;
+begin
+  result :=  FItems;
 end;
 
 end.

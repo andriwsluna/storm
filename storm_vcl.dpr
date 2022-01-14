@@ -14,12 +14,14 @@ uses
   storm.schema.types.varchar in 'src\lib\schema\storm.schema.types.varchar.pas',
   storm.schema.interfaces in 'src\lib\schema\storm.schema.interfaces.pas',
   uSchemaProduto in 'src\teste\uSchemaProduto.pas',
-  //storm.schema.register in 'src\lib\schema\storm.schema.register.pas',
   uORMProduto in 'src\teste\uORMProduto.pas',
   storm.orm.base in 'src\lib\orm\storm.orm.base.pas',
   storm.orm.interfaces in 'src\lib\orm\storm.orm.interfaces.pas',
   storm.orm.where in 'src\lib\orm\storm.orm.where.pas',
-  storm.orm.query in 'src\lib\orm\storm.orm.query.pas';
+  storm.orm.query in 'src\lib\orm\storm.orm.query.pas',
+  storm.data.interfaces in 'src\lib\data\storm.data.interfaces.pas',
+  storm.data.driver.ado in 'src\drivers\storm.data.driver.ado.pas',
+  storm.data.driver.firedac in 'src\drivers\storm.data.driver.firedac.pas';
 
 {$R *.res}
 

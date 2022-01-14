@@ -23,7 +23,7 @@ type
   public
     Function And_() : T;
     Function Or_()  : T;
-    Function OpenParentheses() : IStormWhereCompositor<T>;
+    Function OpenParentheses() : T;
     Function CloseParentheses() : IStormWhereCompositor<T>;
   end;
 
@@ -129,10 +129,10 @@ begin
   Result := TStormWhereCompositor<T>.Create(self);
 end;
 
-function TStormWhereCompositor<T>.OpenParentheses: IStormWhereCompositor<T>;
+function TStormWhereCompositor<T>.OpenParentheses: T;
 begin
   AddSQL(' (');
-  Result := TStormWhereCompositor<T>.Create(self);
+  Result := T.Create(self);
 end;
 
 function TStormWhereCompositor<T>.Or_: T;

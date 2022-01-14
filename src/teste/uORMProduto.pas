@@ -16,7 +16,6 @@ Type
   TProdutoWhereSelection = class(TStormQueryPartition, IStormWhereSelection<TProdutoWhereSelection>)
   public
     Function OpenParentheses() : TProdutoWhereSelection;
-    Function CloseParentheses() : TProdutoWhereSelection;
   public
 
     Function Codigo : IStringWhere<TProdutoWhereSelection>;
@@ -68,12 +67,18 @@ VAR
 
 Procedure InitializeSchema();
 Procedure FinalizeSchema();
+Function ORMProduto : IORMProduto;
 
 
 implementation
 
 uses
   System.Sysutils;
+
+Function ORMProduto : IORMProduto;
+begin
+  Result := TORMProduto.Create;
+end;
 
 Procedure InitializeSchema();
 begin
@@ -144,20 +149,10 @@ begin
 
 end;
 
-{ TProdutoWhereSelection }
-
-function TProdutoWhereSelection.CloseParentheses: TProdutoWhereSelection;
-begin
-  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(self).CloseParentheses;
-end;
-
 function TProdutoWhereSelection.Codigo: IStringWhere<TProdutoWhereSelection>;
 begin
   result := TStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Codigo);
 end;
-
-
-
 
 constructor TProdutoWhereSelection.Create(owner: TStormSQLPartition);
 begin
