@@ -35,7 +35,8 @@ Type
       Function  FieldName() : String;
 
       Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONPair>;
-      Function  FromJSON(Value : TJSONPair) : Boolean;
+      Function  FromJSON(Value : TJSONPair) : Boolean; Overload;
+      Function  FromJSON(Value : TJSONObject) : Boolean; Overload;
 
       Function Clone(Target : IStormField) : Boolean;
 
@@ -70,13 +71,17 @@ begin
   inherited Create();
   FFieldName := name;
   FJSONName := name;
-  _AddRef();
   Initialize();
 end;
 
 function TStormField.FieldName: String;
 begin
   Result:= FFieldName;
+end;
+
+function TStormField.FromJSON(Value: TJSONObject): Boolean;
+begin
+  result := FromJSON(value.Get(self.FJSONName));
 end;
 
 function TStormField.FromJSON(Value: TJSONPair): Boolean;

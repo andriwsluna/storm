@@ -4,6 +4,7 @@ interface
 
 uses
   firedac.DApt,
+  System.JSON,
   uORMProduto,
   storm.data.driver.ado,
   storm.data.driver.firedac,
@@ -38,9 +39,11 @@ type
     FDMemTable2: TFDMemTable;
     FDConnection1: TFDConnection;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
+    Button2: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     procedure freeDataset;
     procedure ShowSql(sql : string);
@@ -88,7 +91,7 @@ begin
     .Descricao.Contains('farinha')
     .Go
     .GetSQL(ShowSql)
-    .Open(FDConnection1.StormDriver)
+    .Open(ADOConnection1.StormDriver)
     .OnSuccess(AtribuirDatasetAoGrid)
     .OnFail(MostrarMensagemDeErro);
 end;
@@ -98,10 +101,40 @@ end;
 
 
 
+procedure Tvcl_form.Button2Click(Sender: TObject);
+var
+  produto1 : IProduto;
+  produto2 : IProduto;
+begin
+  produto1 := NewProduto;
+  produto2 := NewProduto;
+
+  produto1.Codigo.Value.SetValue('1');
+  produto1.Descricao.Value.SetValue('farinha');
+  produto1.ToJSON(false).OnSome
+  (
+    procedure(value :Tjsonobject)
+    begin
+      memosql.Lines.add(value.ToString);
+      produto2.FromJSON(value);
+      value.Free;
+      produto2.ToJSON(false).OnSome
+      (
+        procedure(value :Tjsonobject)
+        begin
+          memosql.Lines.add(value.ToString);
+          value.Free;
+        end
+      )
+    end
+  )
+
+end;
+
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);

@@ -10,7 +10,6 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -48,11 +47,20 @@ object vcl_form: Tvcl_form
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
   end
+  object Button2: TButton
+    Left = 128
+    Top = 280
+    Width = 75
+    Height = 25
+    Caption = 'Button2'
+    TabOrder = 3
+    OnClick = Button2Click
+  end
   object ADOConnection1: TADOConnection
     ConnectionString = 
-      'Provider=SQLOLEDB.1;Password=S@geBr.2014;Persist Security Info=T' +
-      'rue;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=localho' +
-      'st'
+      'Provider=SQLOLEDB.1;Password=admserver01;Persist Security Info=T' +
+      'rue;User ID=sa;Initial Catalog=banco_de_testes;Data Source=sql_s' +
+      'erver'
     LoginPrompt = False
     Provider = 'SQLOLEDB.1'
     Left = 632

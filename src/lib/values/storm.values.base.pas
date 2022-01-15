@@ -42,7 +42,6 @@ end;
 constructor TStormValue.Create;
 begin
   inherited;
-  _AddRef();
   Inititalize();
 end;
 

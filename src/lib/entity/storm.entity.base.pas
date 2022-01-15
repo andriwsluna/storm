@@ -21,17 +21,19 @@ type
     FFieldDictionary  : TDictionary<String,IStormField>;
 
     Procedure Initialize();  Virtual;
+    Procedure Finalize();  Virtual;
 
     Procedure AddStormField(Field : IStormField);
   public
 
     Constructor Create(); Reintroduce;
+    Destructor  Destroy(); override;
 
     Function StormFields() : TList<IStormField>;
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONObject>;
     Function FieldByName(Name : String) : Maybe<IStormField>;
-
-    Function Clone(Target : IStormEntity) : Boolean;
+    Function FromJSON(Value : TJSONObject) : Boolean;
+    Function Clone( Target : IStormEntity) : Boolean;
   end;
 
 implementation
@@ -71,8 +73,13 @@ end;
 constructor TStormEntity.Create;
 begin
   inherited;
-  _AddRef();
   Initialize;
+end;
+
+destructor TStormEntity.Destroy;
+begin
+  Finalize;
+  inherited;
 end;
 
 function TStormEntity.FieldByName(Name: String): Maybe<IStormField>;
@@ -80,6 +87,30 @@ begin
   if FFieldDictionary.ContainsKey(Name) then
   begin
     Result := FFieldDictionary.Items[Name];
+  end;
+end;
+
+procedure TStormEntity.Finalize;
+begin
+  FFieldList.Free;
+  FFieldDictionary.Free;
+end;
+
+function TStormEntity.FromJSON(Value: TJSONObject): Boolean;
+var
+  field : IStormField;
+begin
+  if Assigned(Value) then
+  BEGIN
+    Result := false;
+    for field in FFieldList do
+    begin
+      Result := field.FromJSON(Value) or result;
+    end;
+  END
+  else
+  begin
+    Result := False;
   end;
 end;
 

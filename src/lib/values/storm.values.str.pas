@@ -16,7 +16,8 @@ type
     = class
     (
       TStormValue,
-      IStormValue
+      IStormValue,
+      IStringValue
     )
     private
       FValue : String;
@@ -85,8 +86,7 @@ end;
 
 function TStringValue.FromString(value: String): Boolean;
 begin
-  FValue := Value;
-  Result := true;
+  Result := SetValue(value);
 end;
 
 function TStringValue.GetValue: Maybe<String>;

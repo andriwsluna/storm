@@ -33,6 +33,34 @@ Type
     Function Clone(Target : IStormValue) : Boolean;
   end;
 
+  IStringValue = interface['{77A8492A-EE61-4AEE-A08A-20E3D543CEF0}']
+
+    Function IsAssigned() : Boolean;
+    Procedure Clear();
+
+    Function ToString : Maybe<String>;
+    Function FromString(Value : String) : Boolean;
+
+    Function ToInt : Maybe<Integer>;
+    Function FromInt(Value : Integer) : Boolean;
+
+    Function ToFloat : Maybe<Extended>;
+    Function FromFloat(Value : Extended) : Boolean;
+
+    Function ToBool : Maybe<Boolean>;
+    Function FromBool(Value : Boolean) : Boolean;
+
+    Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONValue>;
+    Function FromJSON(Value : TJSONValue) : Boolean;
+
+    Function Clone(Target : IStormValue) : Boolean;
+
+    Function  SetValue(value : String) : Boolean;
+    Function  GetValue() :  Maybe<String>;
+  end;
+
+
+
 
 
 implementation

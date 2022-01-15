@@ -15,15 +15,16 @@ uses
   System.SysUtils;
 
 Type
-  TStringField = Class(TStormField, IStormField)
+  TStringField = Class(TStormField, IStormField,IStringField)
     private
-      FValue : TStringValue;
+
 
     protected
-      Procedure Initialize(); Override;
       Procedure InitializeStormValue(); Override;
+
+
     public
-      property Value: TStringValue read FValue;
+      function Value : IStringValue;
   End;
 
 implementation
@@ -31,17 +32,17 @@ implementation
 { TStringField }
 
 
-procedure TStringField.Initialize;
+function TStringField.Value: IStringValue;
 begin
-  inherited;
-
+  Result := FStormValue as IStringValue;
 end;
+
+
 
 procedure TStringField.InitializeStormValue;
 begin
   inherited;
-  FValue := TStringValue.Create;
-  FStormValue := FValue;
+  FStormValue := TStringValue.Create;
 end;
 
 
