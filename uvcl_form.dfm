@@ -10,6 +10,7 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -28,7 +29,7 @@ object vcl_form: Tvcl_form
     Left = 144
     Top = 8
     Width = 700
-    Height = 233
+    Height = 105
     Lines.Strings = (
       'memosql')
     TabOrder = 1
@@ -54,13 +55,27 @@ object vcl_form: Tvcl_form
     Height = 25
     Caption = 'Button2'
     TabOrder = 3
-    OnClick = Button2Click
+  end
+  object MemoJson: TMemo
+    Left = 144
+    Top = 119
+    Width = 700
+    Height = 105
+    TabOrder = 4
+  end
+  object Edit1: TEdit
+    Left = 272
+    Top = 248
+    Width = 121
+    Height = 21
+    TabOrder = 5
+    Text = 'Edit1'
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 
-      'Provider=SQLOLEDB.1;Password=admserver01;Persist Security Info=T' +
-      'rue;User ID=sa;Initial Catalog=banco_de_testes;Data Source=sql_s' +
-      'erver'
+      'Provider=SQLOLEDB.1;Password=S@geBr.2014;Persist Security Info=T' +
+      'rue;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=LOCALHO' +
+      'ST'
     LoginPrompt = False
     Provider = 'SQLOLEDB.1'
     Left = 632

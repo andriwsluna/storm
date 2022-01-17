@@ -7,6 +7,8 @@ USES
   storm.values.interfaces,
   storm.fields.interfaces,
   storm.additional.maybe,
+
+  Data.DB,
   System.Classes,
   System.JSON,
   System.Generics.Collections,
@@ -33,6 +35,7 @@ type
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONObject>;
     Function FieldByName(Name : String) : Maybe<IStormField>;
     Function FromJSON(Value : TJSONObject) : Boolean;
+    Function FromDataset(Value : TDataset) : Boolean;
     Function Clone( Target : IStormEntity) : Boolean;
   end;
 
@@ -94,6 +97,24 @@ procedure TStormEntity.Finalize;
 begin
   FFieldList.Free;
   FFieldDictionary.Free;
+end;
+
+function TStormEntity.FromDataset(Value: TDataset): Boolean;
+var
+  field : IStormField;
+begin
+  if Assigned(Value) then
+  BEGIN
+    Result := false;
+    for field in FFieldList do
+    begin
+      Result := field.FromDataset(Value) or result;
+    end;
+  END
+  else
+  begin
+    Result := False;
+  end;
 end;
 
 function TStormEntity.FromJSON(Value: TJSONObject): Boolean;

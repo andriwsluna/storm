@@ -7,6 +7,7 @@ USES
   storm.values.interfaces,
   storm.fields.interfaces,
   storm.additional.maybe,
+  Data.DB,
   System.Classes,
   System.JSON,
   System.SysUtils;
@@ -26,7 +27,7 @@ Type
     public
 
 
-       Constructor Create(name : String); Reintroduce;
+      Constructor Create(name : String); Reintroduce;
 
       Function  IsAssigned() : Boolean;
       Procedure Clear();
@@ -37,8 +38,10 @@ Type
       Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONPair>;
       Function  FromJSON(Value : TJSONPair) : Boolean; Overload;
       Function  FromJSON(Value : TJSONObject) : Boolean; Overload;
+      Function  FromDataField(field : TField) : boolean; Virtual; Abstract;
+      Function  FromDataSet(dataset : TDataset) : boolean;
 
-      Function Clone(Target : IStormField) : Boolean;
+      Function  Clone(Target : IStormField) : Boolean;
 
 
   End;
@@ -77,6 +80,20 @@ end;
 function TStormField.FieldName: String;
 begin
   Result:= FFieldName;
+end;
+
+function TStormField.FromDataSet(dataset: TDataset): boolean;
+begin
+  Result := false;
+  try
+    Result := FromDataField(dataset.FieldByName(self.FFieldName));
+  except
+    on e : Exception do
+    begin
+      {TODO -oError -cGeneral : FromDataSet}
+    end;
+  end;
+
 end;
 
 function TStormField.FromJSON(Value: TJSONObject): Boolean;

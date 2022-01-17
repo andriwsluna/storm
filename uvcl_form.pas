@@ -3,11 +3,14 @@ unit uvcl_form;
 interface
 
 uses
+  storm.model.interfaces,
   firedac.DApt,
   System.JSON,
   uORMProduto,
+  storm.model.base,
   storm.data.driver.ado,
   storm.data.driver.firedac,
+  storm.entity.interfaces,
   System.Generics.Collections,
   storm.additional.result,
   storm.data.driver.mssql,
@@ -40,24 +43,18 @@ type
     FDConnection1: TFDConnection;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
     Button2: TButton;
+    MemoJson: TMemo;
+    Edit1: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
   private
     procedure freeDataset;
     procedure ShowSql(sql : string);
-    procedure AtribuirDatasetAoGrid(resultado : IStormQuerySuccessExecution);
+    procedure AtribuirDatasetAoGrid(resultado : QueryProdutoSuccess);
     procedure MostrarMensagemDeErro(resultado : IStormQueryFailExecution);
+    procedure setEditText(str : string);
   public
-
-
-
-
-
-
-
-
 
 
   end;
@@ -72,8 +69,14 @@ implementation
 procedure Tvcl_form.MostrarMensagemDeErro(resultado: IStormQueryFailExecution);
 begin
   ShowMessage(resultado.GetErrorMessage);
+  ShowSql(resultado.GetSQL);
 end;
 
+
+procedure Tvcl_form.setEditText(str: string);
+begin
+  Edit1.Text := str;
+end;
 
 procedure Tvcl_form.ShowSql(sql: string);
 begin
@@ -86,9 +89,7 @@ begin
     .Select
     .Only([Codigo, Descricao])
     .Where
-    .Codigo.IsIn(['1','3'])
-    .Or_
-    .Descricao.Contains('farinha')
+    .Descricao.IsNotNull
     .Go
     .GetSQL(ShowSql)
     .Open(ADOConnection1.StormDriver)
@@ -100,36 +101,6 @@ end;
 
 
 
-
-procedure Tvcl_form.Button2Click(Sender: TObject);
-var
-  produto1 : IProduto;
-  produto2 : IProduto;
-begin
-  produto1 := NewProduto;
-  produto2 := NewProduto;
-
-  produto1.Codigo.Value.SetValue('1');
-  produto1.Descricao.Value.SetValue('farinha');
-  produto1.ToJSON(false).OnSome
-  (
-    procedure(value :Tjsonobject)
-    begin
-      memosql.Lines.add(value.ToString);
-      produto2.FromJSON(value);
-      value.Free;
-      produto2.ToJSON(false).OnSome
-      (
-        procedure(value :Tjsonobject)
-        begin
-          memosql.Lines.add(value.ToString);
-          value.Free;
-        end
-      )
-    end
-  )
-
-end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
@@ -151,10 +122,21 @@ begin
 end;
 
 
-procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: IStormQuerySuccessExecution);
+procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: QueryProdutoSuccess);
+
 begin
   freeDataset;
   DataSource1.DataSet := resultado.GetDataset;
+
+  resultado.GetModel.Records[0].Codigo.Value.GetValue.OnSome(seteditText);
+  resultado.GetModel.ToJSON(true).OnSome
+  (
+    procedure(json : tjsonarray)
+    begin
+      MemoJson.Text := json.ToString;
+      json.Free;
+    end
+  );
 end;
 
 end.

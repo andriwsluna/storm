@@ -5,6 +5,7 @@ interface
 uses
   System.Classes,
   System.Json,
+  Data.DB,
   System.Generics.Collections,
   storm.fields.interfaces,
   storm.additional.maybe;
@@ -15,6 +16,7 @@ Type
     Function StormFields() : TList<IStormField>;
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONObject>;
     Function FromJSON(Value : TJSONObject) : Boolean;
+    Function FromDataset(Value : TDataset) : Boolean;
     Function FieldByName(Name : String) : Maybe<IStormField>;
   end;
 

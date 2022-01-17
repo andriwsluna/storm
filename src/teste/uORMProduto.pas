@@ -7,19 +7,21 @@ uses
   storm.orm.where,
   storm.orm.interfaces,
   storm.schema.interfaces,
+  uEntityProduto,
   uSchemaProduto;
 
 Type
+  QueryProdutoSuccess = IStormQuerySuccessExecution<IProduto>;
 
-
-
-  TProdutoWhereSelection = class(TStormQueryPartition, IStormWhereSelection<TProdutoWhereSelection>)
+  TProdutoWhereSelection = class(TStormQueryPartition<IProduto>, IStormWhereSelection<IProduto,TProdutoWhereSelection>)
+  protected
+    Procedure Initialize; Override;
   public
     Function OpenParentheses() : TProdutoWhereSelection;
   public
 
-    Function Codigo : IStringWhere<TProdutoWhereSelection>;
-    Function Descricao : InullableStringWhere<TProdutoWhereSelection>;
+    Function Codigo : IStringWhere<IProduto,TProdutoWhereSelection>;
+    Function Descricao : InullableStringWhere<IProduto,TProdutoWhereSelection>;
 
      Constructor Create(owner : TStormSQLPartition = nil); Override;
      Destructor  Destroy(); Override;
@@ -30,15 +32,15 @@ Type
   TProdutoSETFieldSelection = set of TProdutoPossibleFields;
 
   IProdutoFieldSelection = interface['{9AA32BD0-45FD-42D6-B88A-42570723FD21}']
-    Function All() : IWhereNode<TProdutoWhereSelection>;
-    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection>;
+    Function All() : IWhereNode<IProduto,TProdutoWhereSelection>;
+    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<IProduto,TProdutoWhereSelection>;
   end;
 
 
-  TProdutoFieldSelection = class(TStormFieldSelection<TProdutoWhereSelection>, IProdutoFieldSelection)
+  TProdutoFieldSelection = class(TStormFieldSelection<IProduto,TProdutoWhereSelection>, IProdutoFieldSelection)
   public
     Constructor Create(sql : string);Reintroduce;
-    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection>;
+    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<IProduto,TProdutoWhereSelection>;
   end;
 
 
@@ -46,6 +48,8 @@ Type
   IORMProduto = interface['{F49CF2B7-E6F3-44BC-A28C-6FCF75930CDC}']
     Function Select()  : IProdutoFieldSelection;
   end;
+
+
 
   TORMProduto = class(TInterfacedObject, IORMProduto)
   private
@@ -127,7 +131,7 @@ begin
 
 end;
 
-function TProdutoFieldSelection.Only(fields : TProdutoSETFieldSelection): IWhereNode<TProdutoWhereSelection>;
+function TProdutoFieldSelection.Only(fields : TProdutoSETFieldSelection): IWhereNode<IProduto,TProdutoWhereSelection>;
 VAR
   s : string;
   field : TProdutoPossibleFields;
@@ -149,9 +153,9 @@ begin
 
 end;
 
-function TProdutoWhereSelection.Codigo: IStringWhere<TProdutoWhereSelection>;
+function TProdutoWhereSelection.Codigo: IStringWhere<IProduto,TProdutoWhereSelection>;
 begin
-  result := TStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Codigo);
+  result := TStringWhere<IProduto,TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Codigo);
 end;
 
 constructor TProdutoWhereSelection.Create(owner: TStormSQLPartition);
@@ -160,9 +164,9 @@ begin
 
 end;
 
-function TProdutoWhereSelection.Descricao: INullableStringWhere<TProdutoWhereSelection>;
+function TProdutoWhereSelection.Descricao: INullableStringWhere<IProduto,TProdutoWhereSelection>;
 begin
-  result := TNullableStringWhere<TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Descricao);
+  result := TNullableStringWhere<IProduto,TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Descricao);
 end;
 
 destructor TProdutoWhereSelection.Destroy;
@@ -171,9 +175,15 @@ begin
   inherited;
 end;
 
+procedure TProdutoWhereSelection.Initialize;
+begin
+  self.NewEntityFunction := uEntityProduto.NewProduto;
+  inherited;
+end;
+
 function TProdutoWhereSelection.OpenParentheses: TProdutoWhereSelection;
 begin
-  Result := TStormWhereSelection<TProdutoWhereSelection>.Create(self).OpenParentheses;
+  Result := TStormWhereSelection<IProduto,TProdutoWhereSelection>.Create(self).OpenParentheses;
 end;
 
 
@@ -184,3 +194,4 @@ finalization
   FinalizeSchema;
 
 end.
+

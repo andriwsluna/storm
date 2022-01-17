@@ -4,21 +4,27 @@ interface
 USES
   storm.fields.interfaces,
   storm.entity.interfaces,
+  storm.model.base,
   system.JSON,
+  Data.DB,
   storm.additional.maybe,
   system.Generics.Collections,
   storm.fields.str,
   storm.entity.base;
 
+
 Type
-  IProduto = interface['{F266C56E-C11D-442F-8FAF-502E648431F7}']
+
+  IProduto = interface(IStormEntity)['{F266C56E-C11D-442F-8FAF-502E648431F7}']
     function Codigo: IStringField;
     function Descricao: IStringField;
-    Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONObject>;
-    Function FromJSON(Value : TJSONObject) : Boolean;
   end;
 
+
   Function NewProduto() : IProduto;
+
+
+
 
 
 
@@ -26,7 +32,8 @@ Type
 implementation
 
 
-type
+
+  type
   TProduto = class(TStormEntity, IStormEntity, IProduto)
   private
 
@@ -41,6 +48,7 @@ type
     function Descricao: IStringField;
 
   end;
+
 
 { TProduto }
 
@@ -62,16 +70,18 @@ end;
 procedure TProduto.Initialize;
 begin
   inherited;
-  FCodigo     := TStringField.Create('codigo');
+  FCodigo     := TStringField.Create('codigo_produto');
   FDescricao  := TStringField.Create('descricao');
 
   AddStormField(FCodigo as IStormField);
   AddStormField(FDescricao as IStormField);
 end;
 
+
 Function NewProduto() : IProduto;
 begin
   result := TProduto.Create;
 end;
+
 
 end.

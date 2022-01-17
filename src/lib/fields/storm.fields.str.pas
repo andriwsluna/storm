@@ -10,6 +10,7 @@ uses
   storm.values.str,
 
 
+  Data.DB,
   System.JSON,
   System.Classes,
   System.SysUtils;
@@ -24,7 +25,8 @@ Type
 
 
     public
-      function Value : IStringValue;
+      function  Value : IStringValue;
+      Function  FromDataField(field : TField) : boolean; Override;
   End;
 
 implementation
@@ -38,6 +40,19 @@ begin
 end;
 
 
+
+function TStringField.FromDataField(field: TField): boolean;
+begin
+  if assigned(field) then
+  begin
+    Result := Value.SetValue(field.AsString);
+  end
+  else
+  begin
+    Result := false;
+  end;
+
+end;
 
 procedure TStringField.InitializeStormValue;
 begin

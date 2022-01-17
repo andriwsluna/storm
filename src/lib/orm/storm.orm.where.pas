@@ -4,6 +4,7 @@ interface
 Uses
   storm.orm.base,
   storm.additional.maybe,
+  storm.entity.interfaces,
   storm.orm.interfaces,
   storm.schema.interfaces,
 
@@ -13,26 +14,22 @@ type
 
 
 
-  TStormWhereSelection<T : TStormQueryPartition> = class(TStormQueryPartition, IStormWhereSelection<T>)
+  TStormWhereSelection<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>>
+  = class(TStormQueryPartition<EntityType>, IStormWhereSelection<EntityType,T>)
   public
     Function OpenParentheses() : T;
     Function CloseParentheses() : T;
   end;
 
-  TStormWhereCompositor<T : TStormQueryPartition> = class(TStormQueryPartition, IStormWhereCompositor<T>)
+  TStormWhereCompositor<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>> = class(TStormQueryPartition<EntityType>, IStormWhereCompositor<EntityType,T>)
   public
     Function And_() : T;
     Function Or_()  : T;
     Function OpenParentheses() : T;
-    Function CloseParentheses() : IStormWhereCompositor<T>;
+    Function CloseParentheses() : IStormWhereCompositor<EntityType, T>;
   end;
 
-  TWhereNode<T : IStormQueryPartition, TStormQueryPartition> = class(TStormQueryPartition, IWhereNode<T>)
-  public
-    Function Where : T;
-  end;
-
-  TStormWhereBase<T : TStormQueryPartition> = class abstract(TStormSQLPartition)
+  TStormWhereBase<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>> = class abstract(TStormSQLPartition)
   private
 
   protected
@@ -42,100 +39,120 @@ type
 
     Function GetColumnName : string;
 
-    Function Return : IStormWhereCompositor<T>;
+    Function Return : IStormWhereCompositor<EntityType,T>;
 
   public
 
   end;
 
+  TWhereNode<EntityType : IStormEntity ; T : IStormQueryPartition<EntityType>, TStormQueryPartition<EntityType>> = class(TStormQueryPartition<EntityType>, IWhereNode<EntityType, T>)
+  public
+    Function Where : T;
+  end;
 
-  TStormFieldSelection<T : TStormQueryPartition> = class abstract(TStormWhereBase<T>, IStormFieldSelection<T>)
+  TStormFieldSelection<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class abstract(TStormWhereBase<EntityType, T>, IStormFieldSelection<EntityType, T>)
   protected
-    Function From() : IWhereNode<T>;
+    Function From() : IWhereNode<EntityType,T>;
   public
-    Function All() : IWhereNode<T>;
+    Function All() : IWhereNode<EntityType, T>;
   end;
 
-  TNullableWhere<T : TStormQueryPartition> = class(TStormWhereBase<T>, INullableWhere<T>)
+  TNullableWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>, INullableWhere<EntityType,T>)
   private
 
   public
 
   public
-    Function IsNull : IStormWhereCompositor<T>;
-    Function IsNotNull : IStormWhereCompositor<T>;
+    Function IsNull : IStormWhereCompositor<EntityType,T>;
+    Function IsNotNull : IStormWhereCompositor<EntityType,T>;
   end;
 
-  TEqualWhere<T : TStormQueryPartition> = class(TStormWhereBase<T>, IEqualWhere<T>)
-  private
+  TEqualWhere<EntityType : IStormEntity ;T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>, IEqualWhere<EntityType,T>)
+    private
 
-  public
+    public
 
-  public
-    Function IsEqualsTo(value : variant) : IStormWhereCompositor<T>;
-    Function NotIsEqualsTo(value : variant) : IStormWhereCompositor<T>;
-  end;
+    public
+      Function IsEqualsTo(value : variant) : IStormWhereCompositor<EntityType,T>;
+      Function NotIsEqualsTo(value : variant) : IStormWhereCompositor<EntityType,T>;
+    end;
 
-  TGroupWhere<T : TStormQueryPartition> = class(TStormWhereBase<T>)
-  private
-    Function GetGroupString(values : TArray<variant>) : string;
-  public
+    TGroupWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>)
+    private
+      Function GetGroupString(values : TArray<variant>) : string;
+    public
 
-  public
-    Function IsIn(value : TArray<variant>) : IStormWhereCompositor<T>;
-    Function IsNotIn(value : TArray<variant>) : IStormWhereCompositor<T>;
-  end;
+    public
+      Function IsIn(value : TArray<variant>) : IStormWhereCompositor<EntityType,T>;
+      Function IsNotIn(value : TArray<variant>) : IStormWhereCompositor<EntityType,T>;
+    end;
 
 
-  TStringWhere<T : TStormQueryPartition> = class(TStormWhereBase<T>, IStringWhere<T> )
+  TStringWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>, IStringWhere<EntityType, T> )
   private
     Function ConvertoToArrayOfVariant(values : TArray<string>) : TArray<variant>;
   protected
 
   public
-    Function IsEqualsTo(value : string) : IStormWhereCompositor<T>;
-    Function NotIsEqualsTo(value : string) : IStormWhereCompositor<T>;
+    Function IsEqualsTo(value : string) : IStormWhereCompositor<EntityType,T>;
+    Function NotIsEqualsTo(value : string) : IStormWhereCompositor<EntityType,T>;
 
-    Function BeginsWith(value : string) : IStormWhereCompositor<T>;
-    Function Contains(value : string) : IStormWhereCompositor<T>;
-    Function EndsWith(value : string) : IStormWhereCompositor<T>;
+    Function BeginsWith(value : string) : IStormWhereCompositor<EntityType,T>;
+    Function Contains(value : string) : IStormWhereCompositor<EntityType,T>;
+    Function EndsWith(value : string) : IStormWhereCompositor<EntityType,T>;
 
-    Function IsIn(value : TArray<String>) : IStormWhereCompositor<T>;
-    Function IsNotIn(value :TArray<String>) : IStormWhereCompositor<T>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<EntityType,T>;
+    Function IsNotIn(value :TArray<String>) : IStormWhereCompositor<EntityType,T>;
   end;
 
-  TNullableStringWhere<T : TStormQueryPartition> = class(TStringWhere<T>, INullableStringWhere<T>)
+  TNullableStringWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStringWhere<EntityType,T>, INullableStringWhere<EntityType,T>)
   private
 
   protected
 
   public
-    Function IsNull : IStormWhereCompositor<T>;
-    Function IsNotNull : IStormWhereCompositor<T>;
+    Function IsNull : IStormWhereCompositor<EntityType,T>;
+    Function IsNotNull : IStormWhereCompositor<EntityType,T>;
   end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 implementation
 
 
 
-function TStormWhereCompositor<T>.And_: T;
+function TStormWhereCompositor<EntityType, T>.And_: T;
 begin
   AddSQL(' and');
   Result := T.Create(self);
 end;
 
-function TStormWhereCompositor<T>.CloseParentheses: IStormWhereCompositor<T>;
+function TStormWhereCompositor<EntityType, T>.CloseParentheses: IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' )');
-  Result := TStormWhereCompositor<T>.Create(self);
+  Result := TStormWhereCompositor<EntityType, T>.Create(self);
 end;
 
-function TStormWhereCompositor<T>.OpenParentheses: T;
+function TStormWhereCompositor<EntityType, T>.OpenParentheses: T;
 begin
   AddSQL(' (');
   Result := T.Create(self);
 end;
 
-function TStormWhereCompositor<T>.Or_: T;
+function TStormWhereCompositor<EntityType, T>.Or_: T;
 begin
   AddSQL(' or');
   Result := T.Create(self);
@@ -143,7 +160,7 @@ end;
 
 { TStormWhereBase<T> }
 
-constructor TStormWhereBase<T>.create(owner : TStormSQLPartition; Table : IStormTableSchema ;column: IStormSchemaColumn);
+constructor TStormWhereBase<EntityType, T>.create(owner : TStormSQLPartition; Table : IStormTableSchema ;column: IStormSchemaColumn);
 begin
   inherited create(owner);
   FTable := Table;
@@ -154,48 +171,47 @@ end;
 
 { TWhereNode<T> }
 
-function TWhereNode<T>.Where: T;
+function TWhereNode<EntityType, T>.Where: T;
 VAR
   i : IInterface;
 begin
   AddSQL(' where');
-  //i := T.Create(self);
   Result := T.Create(self);
 end;
 
 { TStormFieldSelection<T> }
 
-function TStormFieldSelection<T>.All: IWhereNode<T>;
+function TStormFieldSelection<EntityType, T>.All: IWhereNode<EntityType, T>;
 begin
   AddSQL(' *');
   result := From;
 end;
 
-function TStormFieldSelection<T>.From: IWhereNode<T>;
+function TStormFieldSelection<EntityType, T>.From: IWhereNode<EntityType, T>;
 begin
   AddSQL(' from ' + SQLDriver.GetFullTableName(FTable));
-  result := TWhereNode<T>.Create(self);
+  result := TWhereNode<EntityType, T>.Create(self);
 end;
 
-function TStormWhereBase<T>.GetColumnName: string;
+function TStormWhereBase<EntityType, T>.GetColumnName: string;
 begin
   Result := FTable.GetTableName + '.' + FColumn.GetColumnName;
 end;
 
-function TStormWhereBase<T>.Return: IStormWhereCompositor<T>;
+function TStormWhereBase<EntityType, T>.Return: IStormWhereCompositor<EntityType, T>;
 begin
-  Result := TStormWhereCompositor<T>.Create(self);
+  Result := TStormWhereCompositor<EntityType, T>.Create(self);
 end;
 
 { TStormWhereSelection<T> }
 
-function TStormWhereSelection<T>.CloseParentheses: T;
+function TStormWhereSelection<EntityType, T>.CloseParentheses: T;
 begin
   AddSQL(' )');
   Result := T.Create(self);
 end;
 
-function TStormWhereSelection<T>.OpenParentheses: T;
+function TStormWhereSelection<EntityType, T>.OpenParentheses: T;
 begin
   AddSQL(' (');
   Result := T.Create(self);
@@ -203,13 +219,13 @@ end;
 
 { TNullableWhere<T> }
 
-function TNullableWhere<T>.IsNotNull: IStormWhereCompositor<T>;
+function TNullableWhere<EntityType, T>.IsNotNull: IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' is not null');
   Result := Return;
 end;
 
-function TNullableWhere<T>.IsNull: IStormWhereCompositor<T>;
+function TNullableWhere<EntityType, T>.IsNull: IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' is null');
   Result := Return;
@@ -217,13 +233,13 @@ end;
 
 { TEqualWhere<T> }
 
-function TEqualWhere<T>.IsEqualsTo(value : variant): IStormWhereCompositor<T>;
+function TEqualWhere<EntityType, T>.IsEqualsTo(value : variant): IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' = ' + AddParameter(value));
   Result := Return;
 end;
 
-function TEqualWhere<T>.NotIsEqualsTo(value : variant): IStormWhereCompositor<T>;
+function TEqualWhere<EntityType, T>.NotIsEqualsTo(value : variant): IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' <> ' + AddParameter(value));
   Result := Return;
@@ -231,19 +247,19 @@ end;
 
 { TStringWhere<T> }
 
-function TStringWhere<T>.BeginsWith(value: string): IStormWhereCompositor<T>;
+function TStringWhere<EntityType, T>.BeginsWith(value: string): IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' like ' + AddParameter(value + '%'));
   Result := Return;
 end;
 
-function TStringWhere<T>.Contains(value: string): IStormWhereCompositor<T>;
+function TStringWhere<EntityType, T>.Contains(value: string): IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' like ' + AddParameter('%' + value + '%'));
   Result := Return;
 end;
 
-function TStringWhere<T>.ConvertoToArrayOfVariant(
+function TStringWhere<EntityType, T>.ConvertoToArrayOfVariant(
   values: TArray<string>): TArray<variant>;
 VAR
   i : integer;
@@ -258,49 +274,49 @@ begin
 
 end;
 
-function TStringWhere<T>.EndsWith(value: string): IStormWhereCompositor<T>;
+function TStringWhere<EntityType, T>.EndsWith(value: string): IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' like ' + AddParameter('%' + value));
   Result := Return;
 end;
 
-function TStringWhere<T>.IsEqualsTo(value: string): IStormWhereCompositor<T>;
+function TStringWhere<EntityType, T>.IsEqualsTo(value: string): IStormWhereCompositor<EntityType, T>;
 begin
-  Result := TEqualWhere<T>.create(self, FTable, FColumn).IsEqualsTo(value);
+  Result := TEqualWhere<EntityType, T>.create(self, FTable, FColumn).IsEqualsTo(value);
 end;
 
 
-function TStringWhere<T>.IsIn(value: TArray<String>): IStormWhereCompositor<T>;
+function TStringWhere<EntityType, T>.IsIn(value: TArray<String>): IStormWhereCompositor<EntityType, T>;
 begin
-  Result := TGroupWhere<T>.create(self, FTable, FColumn).IsIn(ConvertoToArrayOfVariant(value));
+  Result := TGroupWhere<EntityType, T>.create(self, FTable, FColumn).IsIn(ConvertoToArrayOfVariant(value));
 end;
 
-function TStringWhere<T>.IsNotIn(
-  value: TArray<String>): IStormWhereCompositor<T>;
+function TStringWhere<EntityType, T>.IsNotIn(
+  value: TArray<String>): IStormWhereCompositor<EntityType, T>;
 begin
-   Result := TGroupWhere<T>.create(self, FTable, FColumn).IsNotIn(ConvertoToArrayOfVariant(value));
+   Result := TGroupWhere<EntityType, T>.create(self, FTable, FColumn).IsNotIn(ConvertoToArrayOfVariant(value));
 end;
 
-function TStringWhere<T>.NotIsEqualsTo(value: string): IStormWhereCompositor<T>;
+function TStringWhere<EntityType, T>.NotIsEqualsTo(value: string): IStormWhereCompositor<EntityType, T>;
 begin
-  Result := TEqualWhere<T>.create(self, FTable, FColumn).NotIsEqualsTo(value);
+  Result := TEqualWhere<EntityType, T>.create(self, FTable, FColumn).NotIsEqualsTo(value);
 end;
 
 { TNullableStringWhere<T> }
 
-function TNullableStringWhere<T>.IsNotNull: IStormWhereCompositor<T>;
+function TNullableStringWhere<EntityType, T>.IsNotNull: IStormWhereCompositor<EntityType, T>;
 begin
-  Result := TNullableWhere<T>.create(self, FTable, FColumn).IsNotNull;
+  Result := TNullableWhere<EntityType, T>.create(self, FTable, FColumn).IsNotNull;
 end;
 
-function TNullableStringWhere<T>.IsNull: IStormWhereCompositor<T>;
+function TNullableStringWhere<EntityType, T>.IsNull: IStormWhereCompositor<EntityType, T>;
 begin
-  Result := TNullableWhere<T>.create(self, FTable, FColumn).IsNull;
+  Result := TNullableWhere<EntityType, T>.create(self, FTable, FColumn).IsNull;
 end;
 
 { TGroupWhere<T> }
 
-function TGroupWhere<T>.GetGroupString(values: TArray<variant>): string;
+function TGroupWhere<EntityType, T>.GetGroupString(values: TArray<variant>): string;
 VAR
   value : variant;
 begin
@@ -315,14 +331,14 @@ begin
 
 end;
 
-function TGroupWhere<T>.IsIn(value: TArray<variant>): IStormWhereCompositor<T>;
+function TGroupWhere<EntityType, T>.IsIn(value: TArray<variant>): IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' in ' + GetGroupString(value));
   Result := Return;
 end;
 
-function TGroupWhere<T>.IsNotIn(
-  value: TArray<variant>): IStormWhereCompositor<T>;
+function TGroupWhere<EntityType, T>.IsNotIn(
+  value: TArray<variant>): IStormWhereCompositor<EntityType, T>;
 begin
   AddSQL(' ' + GetColumnName + ' not in ' + GetGroupString(value));
   Result := Return;

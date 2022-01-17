@@ -5,7 +5,11 @@ interface
 Uses
   DAta.DB,
   storm.additional.maybe,
+  storm.additional.result,
   storm.orm.interfaces,
+  storm.entity.interfaces,
+  storm.model.interfaces,
+  storm.model.base,
   storm.data.interfaces,
   storm.orm.query,
   System.Generics.Collections,
@@ -33,15 +37,18 @@ Type
     Destructor  Destroy(); Override;
   end;
 
-  TStormQuerySuccessExecution = class(TInterfacedObject, IStormQuerySuccessExecution)
+
+
+  TStormQuerySuccessExecution<EntityType : IStormEntity> = class(TInterfacedObject, IStormQuerySuccessExecution<EntityType>)
   private
     FData : Tdataset;
   protected
-
+    NewEntityFunction : GetNewEntityFunction<EntityType>;
   public
     Constructor Create(dataset : TDataset); Reintroduce;
   public
     Function GetDataset : TDataset;
+    Function GetModel : IStormModel<EntityType>;
   end;
 
   TStormQueryFailExecution = class(TInterfacedObject, IStormQueryFailExecution)
@@ -57,21 +64,27 @@ Type
     Function GetSQL() : String;
   end;
 
-  TStormQueryExecutor = class(TStormSQLPartition, IStormQueryExecutor)
+  TStormQueryExecutor<EntityType : IStormEntity> = class(TStormSQLPartition, IStormQueryExecutor<EntityType>)
   private
 
   protected
-
+    NewEntityFunction : GetNewEntityFunction<EntityType>;
   public
-    Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor;
-    Function Open(connection : IStormSQLConnection) : TStormQueryResult;
+    Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<EntityType>;
+    Function Open(connection : IStormSQLConnection) : TResult<IStormQuerySuccessExecution<EntityType>,IStormQueryFailExecution>;
   end;
 
-  TStormQueryPartition = class abstract (TStormSQLPartition, IStormQueryPartition)
+
+
+  TStormQueryPartition<EntityType : IStormEntity> = class abstract (TStormSQLPartition, IStormQueryPartition<EntityType>)
   private
   protected
+    NewEntityFunction : GetNewEntityFunction<EntityType>;
+
+    Procedure Initialize; Override;
+
   public
-    Function Go() : IStormQueryExecutor;
+    Function Go() : IStormQueryExecutor<EntityType>;
 
   end;
 
@@ -163,33 +176,45 @@ end;
 
 
 
-function TStormQueryPartition.Go: IStormQueryExecutor;
+function TStormQueryPartition<EntityType>.Go: IStormQueryExecutor<EntityType>;
 begin
-  Result := TStormqueryExecutor.Create(self);
+  Result := TStormqueryExecutor<EntityType>.Create(self);
+  TStormqueryExecutor<EntityType>(Result).NewEntityFunction := self.NewEntityFunction;
 end;
 
 { TStormQueryExecution }
 
-constructor TStormQuerySuccessExecution.Create(dataset: TDataset);
+constructor TStormQuerySuccessExecution<EntityType>.Create(dataset: TDataset);
 begin
   inherited create();
   FData := dataset;
 end;
 
-function TStormQuerySuccessExecution.GetDataset: TDataset;
+function TStormQuerySuccessExecution<EntityType>.GetDataset: TDataset;
 begin
   Result := FData;
 end;
 
+
+
+function TStormQuerySuccessExecution<EntityType>.GetModel: IStormModel<EntityType>;
+begin
+  Result := TStormModel<EntityType>.FromDataset(FData, self.NewEntityFunction);
+end;
+
 { TStormQueryExecutor }
 
-function TStormQueryExecutor.Open(connection : IStormSQLConnection): TStormQueryResult;
+function TStormQueryExecutor<EntityType>.Open(connection : IStormSQLConnection): TResult<IStormQuerySuccessExecution<EntityType>,IStormQueryFailExecution>;
+var
+  return : IStormQuerySuccessExecution<EntityType>;
 begin
   connection.SetSQL(_GetSQL);
   connection.LoadParameters(FParameters.Items);
   try
     connection.Open;
-    Result := TStormQuerySuccessExecution.Create(connection.Dataset);
+    return := TStormQuerySuccessExecution<EntityType>.Create(connection.Dataset);
+    TStormQuerySuccessExecution<EntityType>(return).NewEntityFunction := self.NewEntityFunction;
+    result := return;
   except
     on e : exception do
     begin
@@ -200,7 +225,7 @@ begin
 
 end;
 
-function TStormQueryExecutor.GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor;
+function TStormQueryExecutor<EntityType>.GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<EntityType>;
 begin
   if assigned(callback) then
   begin
@@ -226,6 +251,19 @@ end;
 function TStormQueryFailExecution.GetSQL: String;
 begin
   Result := FSQL;
+end;
+
+procedure TStormQueryPartition<EntityType>.Initialize;
+begin
+  inherited;
+  if Not assigned(self.NewEntityFunction) and assigned(Fowner) then
+  begin
+    if Fowner.InheritsFrom(TStormQueryPartition<EntityType>) then
+    begin
+      self.NewEntityFunction := TStormQueryPartition<EntityType>(Fowner).NewEntityFunction
+    end;
+
+  end;
 end;
 
 end.
