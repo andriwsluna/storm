@@ -14,28 +14,46 @@ USES
 
 
 Type
+
+  TFuncEntityConstructor<EntityType : IStormEntity> = reference to function(): EntityType;
+  TStormEntityDependency<EntityType : IStormEntity> = class
+
+    private
+      FConstructor : TFuncEntityConstructor<EntityType>;
+    protected
+
+    public
+      Constructor Create(initializer : TFuncEntityConstructor<EntityType>); Reintroduce;
+    public
+      function GetConstructor : TFuncEntityConstructor<EntityType>;
+  end;
+
+
   TStormDependencyRegister = class(TObject)
 
   private
     FRegisteredSqlDriver : IStormSQLDriver;
-
+    FRegisteredEntityDependencies : TObjectDictionary<TGUID, Tobject>;
     Constructor Create(); Reintroduce;
-    Destructor Destroy(); Reintroduce;
+    Destructor  Destroy(); Reintroduce;
   protected
 
   public
     Function RegisterSQLDriver(SQLDriverInstance : IStormSQLDriver) : Boolean;
     Function GetSQLDriverInstance : Maybe<IStormSQLDriver>;
 
+    Function RegisterEntityDependency(entity : TGUID ; dependency : Tobject): boolean;
+    Function GetEntityDependency(entity : TGUID): Maybe<Tobject>;
+
+
   public
     Class Procedure Initialize();
     Class Procedure Finalize();
     Class Function  GetInstance() : TStormDependencyRegister;
-
-
-
-
   end;
+
+
+
 
 VAR
   DependencyRegister : TStormDependencyRegister;
@@ -59,11 +77,12 @@ end;
 constructor TStormDependencyRegister.Create;
 begin
   inherited;
-
+  FRegisteredEntityDependencies := TObjectDictionary<TGUID, Tobject>.Create([doOwnsValues]);
 end;
 
 destructor TStormDependencyRegister.Destroy;
 begin
+  FRegisteredEntityDependencies.Free;
   inherited;
 end;
 
@@ -73,6 +92,16 @@ begin
   begin
     DependencyRegister.Destroy;
   end;
+end;
+
+function TStormDependencyRegister.GetEntityDependency(
+  entity: TGUID): Maybe<Tobject>;
+begin
+  if FRegisteredEntityDependencies.ContainsKey(entity) then
+  begin
+    result := FRegisteredEntityDependencies.Items[entity];
+  end;
+
 end;
 
 class function TStormDependencyRegister.GetInstance: TStormDependencyRegister;
@@ -99,11 +128,33 @@ begin
   end;
 end;
 
+
+function TStormDependencyRegister.RegisterEntityDependency(entity: TGUID;
+  dependency: Tobject): boolean;
+begin
+  FRegisteredEntityDependencies.Add(entity,dependency);
+  result := true;
+end;
+
 function TStormDependencyRegister.RegisterSQLDriver(
   SQLDriverInstance: IStormSQLDriver): Boolean;
 begin
   FRegisteredSqlDriver := SQLDriverInstance;
   Result := true;
+end;
+
+
+{ TStormEntityDependency<EntityType> }
+
+constructor TStormEntityDependency<EntityType>.Create(
+  initializer: TFuncEntityConstructor<EntityType>);
+begin
+  self.FConstructor := initializer;
+end;
+
+function TStormEntityDependency<EntityType>.GetConstructor: TFuncEntityConstructor<EntityType>;
+begin
+  Result := FConstructor;
 end;
 
 INITIALIZATION

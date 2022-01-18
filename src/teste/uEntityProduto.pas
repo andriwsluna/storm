@@ -3,6 +3,7 @@ unit uEntityProduto;
 interface
 USES
   storm.fields.interfaces,
+  storm.dependency.register,
   storm.entity.interfaces,
   storm.model.base,
   system.JSON,
@@ -22,14 +23,16 @@ Type
 
 
   Function NewProduto() : IProduto;
+  Function NewEntity() : IStormEntity;
 
 
 
-
+  Procedure RegisterEntityConstructor;
 
 
 
 implementation
+
 
 
 
@@ -49,6 +52,14 @@ implementation
 
   end;
 
+Procedure RegisterEntityConstructor;
+begin
+  DependencyRegister.RegisterEntityDependency
+  (
+    IProduto,
+    TStormEntityDependency<IProduto>.Create(NewProduto)
+  );
+end;
 
 { TProduto }
 
@@ -82,6 +93,14 @@ Function NewProduto() : IProduto;
 begin
   result := TProduto.Create;
 end;
+
+Function NewEntity() : IStormEntity;
+begin
+  result := NewProduto;
+end;
+
+INITIALIZATION
+  RegisterEntityConstructor();
 
 
 end.

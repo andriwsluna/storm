@@ -43,7 +43,7 @@ Type
   private
     FData : Tdataset;
   protected
-    NewEntityFunction : GetNewEntityFunction<EntityType>;
+
   public
     Constructor Create(dataset : TDataset); Reintroduce;
   public
@@ -68,7 +68,7 @@ Type
   private
 
   protected
-    NewEntityFunction : GetNewEntityFunction<EntityType>;
+
   public
     Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<EntityType>;
     Function Open(connection : IStormSQLConnection) : TResult<IStormQuerySuccessExecution<EntityType>,IStormQueryFailExecution>;
@@ -79,10 +79,6 @@ Type
   TStormQueryPartition<EntityType : IStormEntity> = class abstract (TStormSQLPartition, IStormQueryPartition<EntityType>)
   private
   protected
-    NewEntityFunction : GetNewEntityFunction<EntityType>;
-
-    Procedure Initialize; Override;
-
   public
     Function Go() : IStormQueryExecutor<EntityType>;
 
@@ -179,7 +175,6 @@ end;
 function TStormQueryPartition<EntityType>.Go: IStormQueryExecutor<EntityType>;
 begin
   Result := TStormqueryExecutor<EntityType>.Create(self);
-  TStormqueryExecutor<EntityType>(Result).NewEntityFunction := self.NewEntityFunction;
 end;
 
 { TStormQueryExecution }
@@ -199,7 +194,7 @@ end;
 
 function TStormQuerySuccessExecution<EntityType>.GetModel: IStormModel<EntityType>;
 begin
-  Result := TStormModel<EntityType>.FromDataset(FData, self.NewEntityFunction);
+  Result := TStormModel<EntityType>.FromDataset(FData);
 end;
 
 { TStormQueryExecutor }
@@ -213,7 +208,6 @@ begin
   try
     connection.Open;
     return := TStormQuerySuccessExecution<EntityType>.Create(connection.Dataset);
-    TStormQuerySuccessExecution<EntityType>(return).NewEntityFunction := self.NewEntityFunction;
     result := return;
   except
     on e : exception do
@@ -253,17 +247,6 @@ begin
   Result := FSQL;
 end;
 
-procedure TStormQueryPartition<EntityType>.Initialize;
-begin
-  inherited;
-  if Not assigned(self.NewEntityFunction) and assigned(Fowner) then
-  begin
-    if Fowner.InheritsFrom(TStormQueryPartition<EntityType>) then
-    begin
-      self.NewEntityFunction := TStormQueryPartition<EntityType>(Fowner).NewEntityFunction
-    end;
 
-  end;
-end;
 
 end.

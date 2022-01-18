@@ -177,7 +177,6 @@ end;
 
 procedure TProdutoWhereSelection.Initialize;
 begin
-  self.NewEntityFunction := uEntityProduto.NewProduto;
   inherited;
 end;
 

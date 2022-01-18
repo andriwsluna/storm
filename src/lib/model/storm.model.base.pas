@@ -6,19 +6,23 @@ USES
   storm.entity.interfaces,
   storm.additional.maybe,
   storm.entity.base,
+  storm.dependency.register,
   System.Classes,
   System.Json,
   System.Sysutils,
   Data.DB,
+
   System.Generics.Collections;
 
 Type
-  GetNewEntityFunction<EntityType : IStormEntity> = reference to function(): EntityType;
+
   TStormModel<EntityType : IStormEntity> = class(TInterfacedObject, IStormModel<EntityType>)
   private
     FRecords : Tlist<EntityType>;
+
+    Procedure SolverEntityDependecy(dependecy : TObject);
   protected
-    NewRecord : GetNewEntityFunction<EntityType>;
+    NewRecord : TFuncEntityConstructor<EntityType>;
 
     Procedure Initialize; Virtual;
     Procedure Finalize; Virtual;
@@ -27,7 +31,7 @@ Type
   public
     Constructor Create(); Reintroduce;
     Destructor Destroy(); Override;
-    Constructor FromDataset(Dataset : TDataset ; NewEntityFunction : GetNewEntityFunction<EntityType>);
+    Constructor FromDataset(Dataset : TDataset);
 
     Function  IsEmpty : Boolean;
     Function  IsNotEmpty : Boolean;
@@ -39,6 +43,9 @@ Type
   end;
 
 implementation
+
+uses
+  System.TypInfo;
 
 { TStormModel<EntityType> }
 
@@ -64,7 +71,7 @@ begin
   FRecords.Free;
 end;
 
-constructor TStormModel<EntityType>.FromDataset(Dataset: TDataset ;  NewEntityFunction : GetNewEntityFunction<EntityType>);
+constructor TStormModel<EntityType>.FromDataset(Dataset: TDataset);
 begin
   Create;
   LoadFromDataset(Dataset);
@@ -108,6 +115,9 @@ end;
 procedure TStormModel<EntityType>.Initialize;
 begin
   FRecords := TList<EntityType>.Create();
+
+  DependencyRegister.GetEntityDependency(GetTypeData(TypeInfo(EntityType)).GUID)
+  .OnSome(SolverEntityDependecy);
 end;
 
 
@@ -124,6 +134,11 @@ end;
 function TStormModel<EntityType>.Records: TList<EntityType>;
 begin
   Result := FRecords;
+end;
+
+procedure TStormModel<EntityType>.SolverEntityDependecy(dependecy: TObject);
+begin
+  NewRecord := TStormEntityDependency<EntityType>(dependecy).GetConstructor();
 end;
 
 function TStormModel<EntityType>.ToJSON(

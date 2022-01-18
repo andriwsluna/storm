@@ -28,7 +28,9 @@ uses
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client, FireDAC.UI.Intf,
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
-  FireDAC.VCLUI.Wait, FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL;
+  FireDAC.VCLUI.Wait, FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Rtti,
+  System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.EngExt,
+  Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope;
 
 type
 
@@ -45,6 +47,7 @@ type
     Button2: TButton;
     MemoJson: TMemo;
     Edit1: TEdit;
+    Edit2: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -129,6 +132,7 @@ begin
   DataSource1.DataSet := resultado.GetDataset;
 
   resultado.GetModel.Records[0].Codigo.Value.GetValue.OnSome(seteditText);
+
   resultado.GetModel.ToJSON(true).OnSome
   (
     procedure(json : tjsonarray)
