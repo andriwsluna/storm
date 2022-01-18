@@ -8,6 +8,7 @@ USES
   storm.model.base,
   system.JSON,
   Data.DB,
+  DFE.Interfaces,
   storm.additional.maybe,
   system.Generics.Collections,
   storm.fields.str,
@@ -19,6 +20,7 @@ Type
   IProduto = interface(IStormEntity)['{F266C56E-C11D-442F-8FAF-502E648431F7}']
     function Codigo: IStringField;
     function Descricao: IStringField;
+    Function Clone( Target : Iproduto) : Boolean;
   end;
 
 
@@ -37,7 +39,7 @@ implementation
 
 
   type
-  TProduto = class(TStormEntity, IStormEntity, IProduto)
+  TProduto = class(TStormEntity, IStormEntity, IProduto, ICloneable<IProduto>)
   private
 
   protected
@@ -49,7 +51,7 @@ implementation
   public
     function Codigo: IStringField;
     function Descricao: IStringField;
-
+    Function Clone( Target : Iproduto) : Boolean;
   end;
 
 Procedure RegisterEntityConstructor;
@@ -62,6 +64,11 @@ begin
 end;
 
 { TProduto }
+
+function TProduto.Clone(Target: Iproduto): Boolean;
+begin
+  Result := TStormEntity(self).Clone(Target);
+end;
 
 function TProduto.Codigo: IStringField;
 begin

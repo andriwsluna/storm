@@ -29,7 +29,6 @@ Type
 
   IStringField = interface(IStormField)['{58484363-174F-4028-8C39-4E97DEA5D6DC}']
     function Value : IStringValue;
-
   end;
 
 implementation

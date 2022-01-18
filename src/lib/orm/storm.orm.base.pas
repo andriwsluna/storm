@@ -10,6 +10,7 @@ Uses
   storm.entity.interfaces,
   storm.model.interfaces,
   storm.model.base,
+  DFE.Interfaces,
   storm.data.interfaces,
   storm.orm.query,
   System.Generics.Collections,

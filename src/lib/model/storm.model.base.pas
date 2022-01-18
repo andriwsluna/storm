@@ -7,6 +7,8 @@ USES
   storm.additional.maybe,
   storm.entity.base,
   storm.dependency.register,
+  DFE.Iterator,
+  DFE.Interfaces,
   System.Classes,
   System.Json,
   System.Sysutils,
@@ -16,30 +18,28 @@ USES
 
 Type
 
-  TStormModel<EntityType : IStormEntity> = class(TInterfacedObject, IStormModel<EntityType>)
+  TStormModel<EntityType : IStormEntity> =
+  class(TIterator<EntityType, IStormModel<EntityType>>, IStormModel<EntityType>)
   private
-    FRecords : Tlist<EntityType>;
+
 
     Procedure SolverEntityDependecy(dependecy : TObject);
   protected
+
     NewRecord : TFuncEntityConstructor<EntityType>;
 
-    Procedure Initialize; Virtual;
-    Procedure Finalize; Virtual;
-
+    Procedure Initialize; Override;
+    Procedure Finalize; Override;
+    Function  NewIteratorConstructor : IStormModel<EntityType>; Override;
 
   public
-    Constructor Create(); Reintroduce;
-    Destructor Destroy(); Override;
     Constructor FromDataset(Dataset : TDataset);
-
-    Function  IsEmpty : Boolean;
-    Function  IsNotEmpty : Boolean;
     Procedure AddRecord(entity : EntityType);
     Function Records() : TList<EntityType>;
     Function LoadFromDataset(Dataset : TDataset) : Boolean;
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONArray>;
-
+    function  ForEach(proc : TForEachFunction<EntityType>) : IStormModel<EntityType>;
+    function  Map(func : TMapFunction<EntityType>) : IStormModel<EntityType>;
   end;
 
 implementation
@@ -49,26 +49,23 @@ uses
 
 { TStormModel<EntityType> }
 
+
+
 procedure TStormModel<EntityType>.AddRecord(entity: EntityType);
 begin
-  FRecords.Add(entity);
+  Fitems.Add(entity);
 end;
 
-constructor TStormModel<EntityType>.Create;
-begin
-  inherited;
-  Initialize();
-end;
-
-destructor TStormModel<EntityType>.Destroy;
-begin
-  Finalize;
-  inherited;
-end;
 
 procedure TStormModel<EntityType>.Finalize;
 begin
-  FRecords.Free;
+  inherited;
+end;
+
+function TStormModel<EntityType>.ForEach(
+  proc: TForEachFunction<EntityType>): IStormModel<EntityType>;
+begin
+  Result := self.LocalForEach(proc);
 end;
 
 constructor TStormModel<EntityType>.FromDataset(Dataset: TDataset);
@@ -100,7 +97,7 @@ begin
         Dataset.Next;
       end;
 
-      result := FRecords.Count > 0;
+      result := Fitems.Count > 0;
     end;
   except
     on e : Exception do
@@ -112,28 +109,29 @@ end;
 
 
 
+function TStormModel<EntityType>.Map(
+  func: TMapFunction<EntityType>): IStormModel<EntityType>;
+begin
+  Result := self.LocalMap(func);
+end;
+
+function TStormModel<EntityType>.NewIteratorConstructor: IStormModel<EntityType>;
+begin
+  Result := TStormModel<EntityType>.Create;
+end;
+
 procedure TStormModel<EntityType>.Initialize;
 begin
-  FRecords := TList<EntityType>.Create();
-
+  inherited;
   DependencyRegister.GetEntityDependency(GetTypeData(TypeInfo(EntityType)).GUID)
   .OnSome(SolverEntityDependecy);
 end;
 
 
-function TStormModel<EntityType>.IsEmpty: Boolean;
-begin
-  Result := FRecords.Count <= 0;
-end;
-
-function TStormModel<EntityType>.IsNotEmpty: Boolean;
-begin
-  Result := not IsEmpty;
-end;
 
 function TStormModel<EntityType>.Records: TList<EntityType>;
 begin
-  Result := FRecords;
+  Result := Fitems;
 end;
 
 procedure TStormModel<EntityType>.SolverEntityDependecy(dependecy: TObject);

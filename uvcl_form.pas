@@ -54,9 +54,11 @@ type
   private
     procedure freeDataset;
     procedure ShowSql(sql : string);
-    procedure AtribuirDatasetAoGrid(resultado : QueryProdutoSuccess);
+    procedure AtribuirDatasetAoGrid(resultado : IStormQuerySuccessExecution<IProduto>);
     procedure MostrarMensagemDeErro(resultado : IStormQueryFailExecution);
-    procedure setEditText(str : string);
+    procedure printproduto(produto : Iproduto);
+    procedure showjson(json : tjsonobject);
+    function  FilterProduto(item : Iproduto) : Maybe<Iproduto>;
   public
 
 
@@ -76,9 +78,17 @@ begin
 end;
 
 
-procedure Tvcl_form.setEditText(str: string);
+procedure Tvcl_form.printproduto(produto: Iproduto);
 begin
-  Edit1.Text := str;
+  MemoJson.Lines.Add('produto: ' + produto.Descricao.Value.GetValue.GetValueOrDefault(''));
+  MemoJson.Lines.Add('Código: ' + produto.Codigo.Value.GetValue.GetValueOrDefault(''));
+  produto.ToJSON(true).OnSome(showjson);
+end;
+
+procedure Tvcl_form.showjson(json: tjsonobject);
+begin
+  MemoJson.Lines.add(json.ToString);
+  json.Free;
 end;
 
 procedure Tvcl_form.ShowSql(sql: string);
@@ -95,7 +105,8 @@ begin
     .Descricao.IsNotNull
     .Go
     .GetSQL(ShowSql)
-    .Open(ADOConnection1.StormDriver)
+    //.Open(ADOConnection1.StormDriver)
+    .Open(FDConnection1.StormDriver)
     .OnSuccess(AtribuirDatasetAoGrid)
     .OnFail(MostrarMensagemDeErro);
 end;
@@ -105,10 +116,22 @@ end;
 
 
 
+function Tvcl_form.FilterProduto(item: Iproduto): Maybe<Iproduto>;
+VAR
+  MyNewProduto : IProduto;
+begin
+  if item.Codigo.Value.GetValue.GetValueOrDefault('') = '1' then
+  begin
+    MyNewProduto := newProduto;
+    MyNewProduto.Clone(item);
+    Result := MyNewProduto;
+  end;
+end;
+
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -125,22 +148,48 @@ begin
 end;
 
 
-procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: QueryProdutoSuccess);
-
+procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: IStormQuerySuccessExecution<IProduto>);
+var
+  model : IModelProduto;
 begin
   freeDataset;
   DataSource1.DataSet := resultado.GetDataset;
 
-  resultado.GetModel.Records[0].Codigo.Value.GetValue.OnSome(seteditText);
+  model := resultado.GetModel;
+  model
+    .ForEach(PrintProduto)
+    .Map(FilterProduto)
+    .ToJSON(true).OnSome
+    (
+      procedure(json : tjsonarray)
+      begin
+        MemoJson.lines.add(json.ToString);
+        json.Free;
+      end
+    );
+  model
+    .ToJSON(true).OnSome
+    (
+      procedure(json : tjsonarray)
+      begin
+       MemoJson.lines.add(json.ToString);
+        json.Free;
+      end
+    );
 
-  resultado.GetModel.ToJSON(true).OnSome
-  (
-    procedure(json : tjsonarray)
-    begin
-      MemoJson.Text := json.ToString;
-      json.Free;
-    end
-  );
+
+//  model.Next.OnSome(printproduto);
+//  model.Next.OnSome(printproduto);
+//  model.Next.OnSome(printproduto);
+
+//  resultado.GetModel.ToJSON(true).OnSome
+//  (
+//    procedure(json : tjsonarray)
+//    begin
+//      MemoJson.Text := json.ToString;
+//      json.Free;
+//    end
+//  );
 end;
 
 end.

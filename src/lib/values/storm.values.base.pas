@@ -5,7 +5,6 @@ interface
 USES
   System.JSON,
   storm.additional.maybe,
-  storm.shared.interfaces,
   storm.values.interfaces;
 
 Type

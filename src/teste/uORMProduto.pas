@@ -6,13 +6,14 @@ uses
   storm.orm.base,
   storm.orm.where,
   storm.orm.interfaces,
+  storm.model.interfaces,
   storm.schema.interfaces,
   uEntityProduto,
   uSchemaProduto;
 
 Type
   QueryProdutoSuccess = IStormQuerySuccessExecution<IProduto>;
-
+  IModelProduto = IStormModel<IProduto>;
   TProdutoWhereSelection = class(TStormQueryPartition<IProduto>, IStormWhereSelection<IProduto,TProdutoWhereSelection>)
   protected
     Procedure Initialize; Override;

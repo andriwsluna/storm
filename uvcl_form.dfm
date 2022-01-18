@@ -10,6 +10,7 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -60,6 +61,7 @@ object vcl_form: Tvcl_form
     Top = 119
     Width = 700
     Height = 105
+    ScrollBars = ssVertical
     TabOrder = 4
   end
   object Edit1: TEdit
@@ -114,15 +116,15 @@ object vcl_form: Tvcl_form
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Database=banco_de_testes'
-      'User_Name=root'
-      'Password=admserver01'
-      'Port=5336'
-      'Server=mysql_on_windows'
+      'Database=bancodetestes'
+      'User_Name=sa'
+      'Password=S@geBr.2014'
+      'Port=5003'
+      'Server=localhost'
       'DriverID=MySQL')
     LoginPrompt = False
-    Left = 496
-    Top = 304
+    Left = 480
+    Top = 312
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     VendorLib = 'R:\external\storm\dll\32\libmysql.dll'

@@ -15,18 +15,8 @@ type
   strict private
     fValue: T;
     fHasValue: string;
-    type
-      TEnumerator = record
-      private
-        fValue: T;
-        fHasValue: string;
-      public
-        function MoveNext: Boolean;
-        property Current: T read fValue;
-      end;
   public
     constructor Create(const value: T);
-    function GetEnumerator: TEnumerator;
     function Any: Boolean; inline;
     function GetValueOrDefault(const default: T): T;
     function OnSome(SomeCallback : TSomeProc) : Maybe<T>;
@@ -60,7 +50,11 @@ begin
  case GetTypeKind(T) of
     tkClass, tkInterface, tkClassRef, tkPointer, tkProcedure:
     if (PPointer(@value)^ = nil) then
-      Exit;
+    begin
+      fHasValue := '';
+      exit;
+    end;
+
   end;
   fValue := value;
   fHasValue := '@';
@@ -75,11 +69,7 @@ begin
     Exit(fValue);
   Result := default;
 end;
-function Maybe<T>.GetEnumerator: TEnumerator;
-begin
-  Result.fHasValue := fHasValue;
-  Result.fValue := fValue;
-end;
+
 class operator Maybe<T>.Implicit(const value: T): Maybe<T>;
 begin
   Result := Maybe<T>.Create(value);
@@ -118,11 +108,5 @@ begin
 
 end;
 
-function Maybe<T>.TEnumerator.MoveNext: Boolean;
-begin
-  Result := fHasValue <> '';
-  if Result then
-    fHasValue := '';
-end;
 
 end.

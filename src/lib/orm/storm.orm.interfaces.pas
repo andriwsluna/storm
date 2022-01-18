@@ -15,8 +15,6 @@ uses
 
 Type
 
-
-
   IStormQuerySuccessExecution<EntityType : IStormEntity> = interface['{A1E476AD-F4CA-45E6-942D-786DE12EEFB3}']
     Function GetDataset : TDataset;
     Function GetModel : IStormModel<EntityType>;

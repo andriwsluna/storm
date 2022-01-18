@@ -6,6 +6,7 @@ Uses
   storm.additional.maybe,
   storm.entity.interfaces,
   storm.orm.interfaces,
+  DFE.Interfaces,
   storm.schema.interfaces,
 
   System.Sysutils, System.Generics.Collections,System.Classes;
@@ -50,7 +51,7 @@ type
     Function Where : T;
   end;
 
-  TStormFieldSelection<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class abstract(TStormWhereBase<EntityType, T>, IStormFieldSelection<EntityType, T>)
+  TStormFieldSelection<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>> = class abstract(TStormWhereBase<EntityType, T>, IStormFieldSelection<EntityType, T>)
   protected
     Function From() : IWhereNode<EntityType,T>;
   public

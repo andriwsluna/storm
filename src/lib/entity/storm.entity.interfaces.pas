@@ -3,6 +3,7 @@ unit storm.entity.interfaces;
 interface
 
 uses
+  DFE.Interfaces,
   System.Classes,
   System.Json,
   Data.DB,
