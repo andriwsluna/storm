@@ -3,7 +3,7 @@ unit storm.model.interfaces;
 interface
 USES
   storm.entity.interfaces,
-  storm.additional.maybe,
+  DFE.Maybe,
   DFE.Interfaces,
   system.json,
   System.Generics.Collections;
@@ -20,6 +20,7 @@ Type
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONArray>;
     function  ForEach(proc : TForEachFunction<EntityType>) : IStormModel<EntityType>;
     function  Map(func : TMapFunction<EntityType>) : IStormModel<EntityType>;
+    function  Filter(func : TFilterFunction<EntityType>) : IStormModel<EntityType>;
   end;
 
 

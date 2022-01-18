@@ -57,8 +57,9 @@ type
     procedure AtribuirDatasetAoGrid(resultado : IStormQuerySuccessExecution<IProduto>);
     procedure MostrarMensagemDeErro(resultado : IStormQueryFailExecution);
     procedure printproduto(produto : Iproduto);
-    procedure showjson(json : tjsonobject);
-    function  FilterProduto(item : Iproduto) : Maybe<Iproduto>;
+    procedure showjson(json : tjsonarray);
+    function  MapperProdutoDeCodigo2(produto : Iproduto) : Maybe<Iproduto>;
+    function  ProdutosCujoDescricaoContem_F(produto : Iproduto) : Boolean;
   public
 
 
@@ -80,12 +81,11 @@ end;
 
 procedure Tvcl_form.printproduto(produto: Iproduto);
 begin
-  MemoJson.Lines.Add('produto: ' + produto.Descricao.Value.GetValue.GetValueOrDefault(''));
-  MemoJson.Lines.Add('Código: ' + produto.Codigo.Value.GetValue.GetValueOrDefault(''));
-  produto.ToJSON(true).OnSome(showjson);
+  MemoJson.Lines.Add('produto: ' +
+  produto.Descricao.Value.GetValue.GetValueOrDefault('') + ' Código: ' + produto.Codigo.Value.GetValue.GetValueOrDefault(''));
 end;
 
-procedure Tvcl_form.showjson(json: tjsonobject);
+procedure Tvcl_form.showjson(json: tjsonarray);
 begin
   MemoJson.Lines.add(json.ToString);
   json.Free;
@@ -105,8 +105,8 @@ begin
     .Descricao.IsNotNull
     .Go
     .GetSQL(ShowSql)
-    //.Open(ADOConnection1.StormDriver)
-    .Open(FDConnection1.StormDriver)
+    .Open(ADOConnection1.StormDriver)
+    //.Open(FDConnection1.StormDriver)
     .OnSuccess(AtribuirDatasetAoGrid)
     .OnFail(MostrarMensagemDeErro);
 end;
@@ -116,22 +116,27 @@ end;
 
 
 
-function Tvcl_form.FilterProduto(item: Iproduto): Maybe<Iproduto>;
+function Tvcl_form.MapperProdutoDeCodigo2(produto: Iproduto): Maybe<Iproduto>;
 VAR
   MyNewProduto : IProduto;
 begin
-  if item.Codigo.Value.GetValue.GetValueOrDefault('') = '1' then
+  if produto.Codigo.Value.GetValue.GetValueOrDefault('') = '2' then
   begin
     MyNewProduto := newProduto;
-    MyNewProduto.Clone(item);
+    MyNewProduto.Clone(produto);
     Result := MyNewProduto;
   end;
 end;
 
+function Tvcl_form.ProdutosCujoDescricaoContem_F(produto: Iproduto): Boolean;
+begin
+  Result := produto.Descricao.Value.GetValue.GetValueOrDefault('').Contains('f');
+end;
+
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -149,47 +154,17 @@ end;
 
 
 procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: IStormQuerySuccessExecution<IProduto>);
-var
-  model : IModelProduto;
+
 begin
   freeDataset;
   DataSource1.DataSet := resultado.GetDataset;
 
-  model := resultado.GetModel;
-  model
+  resultado.GetModel
     .ForEach(PrintProduto)
-    .Map(FilterProduto)
-    .ToJSON(true).OnSome
-    (
-      procedure(json : tjsonarray)
-      begin
-        MemoJson.lines.add(json.ToString);
-        json.Free;
-      end
-    );
-  model
-    .ToJSON(true).OnSome
-    (
-      procedure(json : tjsonarray)
-      begin
-       MemoJson.lines.add(json.ToString);
-        json.Free;
-      end
-    );
-
-
-//  model.Next.OnSome(printproduto);
-//  model.Next.OnSome(printproduto);
-//  model.Next.OnSome(printproduto);
-
-//  resultado.GetModel.ToJSON(true).OnSome
-//  (
-//    procedure(json : tjsonarray)
-//    begin
-//      MemoJson.Text := json.ToString;
-//      json.Free;
-//    end
-//  );
+    .Filter(ProdutosCujoDescricaoContem_F)
+    .Map(MapperProdutoDeCodigo2)
+    .ToJSON(true)
+    .OnSome(showjson)
 end;
 
 end.

@@ -11,6 +11,7 @@ Type
 
   TForEachFunction<ItemType> = reference to procedure(item : ItemType);
   TMapFunction<ItemType> = reference to function(item : ItemType) : Maybe<ItemType>;
+  TFilterFunction<ItemType> = reference to function(item : ItemType) : Boolean;
 
   IIterator<ItemType> = interface['{0ABF1B5B-A2DA-4A62-9BCC-B5581CA02B9A}']
     function  Next(): Maybe<ItemType>;
@@ -21,6 +22,7 @@ Type
     procedure Reset();
     function  ForEach(proc : TForEachFunction<ItemType>) : IIterator<ItemType>;
     function  Map(func : TMapFunction<ItemType>) : IIterator<ItemType>;
+    function  Filter(func : TFilterFunction<ItemType>) : IIterator<ItemType>;
   end;
 
 

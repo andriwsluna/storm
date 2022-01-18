@@ -4,7 +4,7 @@ interface
 
 uses
   System.Generics.Collections,
-  storm.additional.maybe,
+  DFE.Maybe,
   DFE.Interfaces;
 
 Type
@@ -12,7 +12,9 @@ Type
   class(TinterfacedObject, IIterator<ItemType>)
 
   private
-
+    Procedure ProcessForEach(proc : TForEachFunction<ItemType> ; iter : TIterator<ItemType , SelfType>);
+    Procedure ProcessMap(func : TMapFunction<ItemType> ; iter : TIterator<ItemType , SelfType>);
+    Procedure ProcessFilter(func : TFilterFunction<ItemType> ; iter : TIterator<ItemType , SelfType>);
   protected
     FIndex : integer;
     FItems : Tlist<ItemType>;
@@ -32,6 +34,8 @@ Type
     Function  Count() : integer; Virtual;
     Function  Current : Maybe<ItemType>; Virtual;
 
+    Function Delete(Index : Integer) : Boolean;
+
     function  Next(): Maybe<ItemType>; Virtual;
     function  Previous(): Maybe<ItemType>; Virtual;
     function  First(): Maybe<ItemType>; Virtual;
@@ -41,6 +45,8 @@ Type
     function  LocalForEach(proc : TForEachFunction<ItemType>) : SelfType;
     function  Map(func : TMapFunction<ItemType>) : IIterator<ItemType>;
     function  LocalMap(func : TMapFunction<ItemType>) : SelfType;
+    function  Filter(func : TFilterFunction<ItemType>) : IIterator<ItemType>;
+    function  LocalFilter(func : TFilterFunction<ItemType>) : SelfType;
   end;
 
 implementation
@@ -74,11 +80,39 @@ begin
   end;
 end;
 
+function TIterator<ItemType, SelfType>.Delete(Index: Integer): Boolean;
+begin
+  Result := False;
+  Try
+    if assigned(FItems[Index]) then
+    begin
+      FItems.Delete(Index);
+      Result := true;
+    end
+  except
+    {TODO -oOwner -cGeneral : ActionItem}
+  End;
+end;
+
 destructor TIterator<ItemType, SelfType>.Destroy;
 begin
   Finalize();
   inherited;
 end;
+
+function TIterator<ItemType, SelfType>.Filter(
+  func: TFilterFunction<ItemType>): IIterator<ItemType>;
+var
+  NewIterator : TIterator<ItemType, SelfType>;
+begin
+  NewIterator := TIterator<ItemType, SelfType>.Create;
+  if assigned(func) then
+  begin
+    ProcessFilter(func, NewIterator);
+  end;
+  Result := NewIterator;
+end;
+
 
 procedure TIterator<ItemType, SelfType>.Finalize;
 begin
@@ -96,30 +130,12 @@ end;
 
 function TIterator<ItemType, SelfType>.ForEach(
   proc: TForEachFunction<ItemType>): IIterator<ItemType>;
-var
-  stop : boolean;
 begin
-  if IsNotEmpty then
+  if assigned(proc) then
   begin
-    Reset;
-    stop := false;
-    repeat
-      stop := next.bind
-      (
-        function(item : ItemType) : boolean
-        begin
-          proc(item);
-          result := false;
-        end,
-        function() : boolean
-        begin
-          result := true;
-        end
-      );
-
-    until stop;
-
+    ProcessForEach(proc, nil);
   end;
+
   Result := Self;
 end;
 
@@ -148,34 +164,28 @@ begin
   end;
 end;
 
-function TIterator<ItemType, SelfType>.LocalForEach(
-  proc: TForEachFunction<ItemType>): SelfType;
+function TIterator<ItemType, SelfType>.LocalFilter(
+  func: TFilterFunction<ItemType>): SelfType;
 var
-  stop : boolean;
   NewIterator : SelfType;
 begin
   NewIterator := self.NewIteratorConstructor;
-  if IsNotEmpty then
+  if assigned(func) then
   begin
-    Reset;
-    stop := false;
-    repeat
-      stop := next.bind
-      (
-        function(item : ItemType) : boolean
-        begin
-          proc(item);
-          TIterator<ItemType, SelfType>(NewIterator).FItems.Add(item);
-          result := false;
-        end,
-        function() : boolean
-        begin
-          result := true;
-        end
-      );
+    ProcessFilter(func, NewIterator as TIterator<ItemType, SelfType>);
+  end;
+  Result := NewIterator;
+end;
 
-    until stop;
-
+function TIterator<ItemType, SelfType>.LocalForEach(
+  proc: TForEachFunction<ItemType>): SelfType;
+var
+  NewIterator : SelfType;
+begin
+  NewIterator := self.NewIteratorConstructor;
+  if assigned(proc) then
+  begin
+    ProcessForEach(proc, NewIterator as TIterator<ItemType, SelfType>);
   end;
   Result := NewIterator;
 end;
@@ -183,36 +193,12 @@ end;
 function TIterator<ItemType, SelfType>.LocalMap(
   func: TMapFunction<ItemType>): SelfType;
 var
-  stop : boolean;
   NewIterator : SelfType;
 begin
   NewIterator := self.NewIteratorConstructor;
-  if IsNotEmpty then
+  if assigned(func) then
   begin
-    Reset;
-    stop := false;
-    repeat
-      stop := next.bind
-      (
-        function(item : ItemType) : boolean
-        begin
-          func(item).OnSome
-          (
-            procedure(newItem : ItemType)
-            begin
-              TIterator<ItemType, SelfType>(NewIterator).FItems.Add(newItem)
-            end
-          );
-          result := false;
-        end,
-        function() : boolean
-        begin
-          result := true;
-        end
-      );
-
-    until stop;
-
+    ProcessMap(func, NewIterator as TIterator<ItemType, SelfType>);
   end;
   Result := NewIterator;
 end;
@@ -220,36 +206,12 @@ end;
 function TIterator<ItemType, SelfType>.Map(
   func: TMapFunction<ItemType>): IIterator<ItemType>;
 var
-  stop : boolean;
   NewIterator : TIterator<ItemType, SelfType>;
 begin
   NewIterator := TIterator<ItemType, SelfType>.Create;
-  if IsNotEmpty then
+  if assigned(func) then
   begin
-    Reset;
-    stop := false;
-    repeat
-      stop := next.bind
-      (
-        function(item : ItemType) : boolean
-        begin
-          func(item).OnSome
-          (
-            procedure(newItem : ItemType)
-            begin
-              NewIterator.FItems.Add(newItem)
-            end
-          );
-          result := false;
-        end,
-        function() : boolean
-        begin
-          result := true;
-        end
-      );
-
-    until stop;
-
+    ProcessMap(func, NewIterator);
   end;
   Result := NewIterator;
 end;
@@ -278,6 +240,117 @@ begin
     begin
       INC(FIndex);
     end;
+  end;
+end;
+
+procedure TIterator<ItemType, SelfType>.ProcessFilter(
+  func: TFilterFunction<ItemType>; iter: TIterator<ItemType, SelfType>);
+var
+  stop : boolean;
+  iteration : TIterator<ItemType , SelfType>;
+begin
+  iteration := iter;
+  if IsNotEmpty then
+  begin
+    Reset;
+    stop := false;
+    repeat
+      stop := next.bind
+      (
+        function(item : ItemType) : boolean
+        begin
+          if func(item) then
+          begin
+            if assigned(iteration) then
+            begin
+              iteration.FItems.Add(item);
+            end;
+          end;
+
+          result := false;
+        end,
+        function() : boolean
+        begin
+          result := true;
+        end
+      );
+
+    until stop;
+
+  end;
+end;
+
+procedure TIterator<ItemType, SelfType>.ProcessForEach(
+  proc: TForEachFunction<ItemType> ; iter : TIterator<ItemType , SelfType>);
+var
+  stop : boolean;
+  iteration : TIterator<ItemType , SelfType>;
+begin
+  iteration := iter;
+  if IsNotEmpty then
+  begin
+    Reset;
+    stop := false;
+    repeat
+      stop := next.bind
+      (
+        function(item : ItemType) : boolean
+        begin
+          proc(item);
+          if assigned(iteration) then
+          begin
+            iteration.FItems.Add(item);
+          end;
+
+          result := false;
+        end,
+        function() : boolean
+        begin
+          result := true;
+        end
+      );
+
+    until stop;
+
+  end;
+end;
+
+procedure TIterator<ItemType, SelfType>.ProcessMap(func: TMapFunction<ItemType>;
+  iter: TIterator<ItemType, SelfType>);
+var
+  stop : boolean;
+  iteration : TIterator<ItemType , SelfType>;
+begin
+  iteration := iter;
+  if IsNotEmpty then
+  begin
+    Reset;
+    stop := false;
+    repeat
+      stop := next.bind
+      (
+        function(item : ItemType) : boolean
+        begin
+          func(item).OnSome
+          (
+            procedure(newItem : ItemType)
+            begin
+              if assigned(iteration) then
+              begin
+                iteration.FItems.Add(newItem);
+              end;
+            end
+          );
+          result := false;
+        end,
+        function() : boolean
+        begin
+          result := true;
+        end
+      );
+
+    until stop;
+
   end;
 end;
 

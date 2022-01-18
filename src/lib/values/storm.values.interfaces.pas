@@ -3,7 +3,7 @@ unit storm.values.interfaces;
 interface
 
 USES
-  storm.additional.maybe,
+  DFE.Maybe,
 
 
   System.JSON;

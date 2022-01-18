@@ -4,7 +4,7 @@ interface
 USES
   storm.model.interfaces,
   storm.entity.interfaces,
-  storm.additional.maybe,
+  DFE.Maybe,
   storm.entity.base,
   storm.dependency.register,
   DFE.Iterator,
@@ -40,6 +40,7 @@ Type
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONArray>;
     function  ForEach(proc : TForEachFunction<EntityType>) : IStormModel<EntityType>;
     function  Map(func : TMapFunction<EntityType>) : IStormModel<EntityType>;
+    function  Filter(func : TFilterFunction<EntityType>) : IStormModel<EntityType>;
   end;
 
 implementation
@@ -56,6 +57,12 @@ begin
   Fitems.Add(entity);
 end;
 
+
+function TStormModel<EntityType>.Filter(
+  func: TFilterFunction<EntityType>): IStormModel<EntityType>;
+begin
+  Result := self.LocalFilter(func);
+end;
 
 procedure TStormModel<EntityType>.Finalize;
 begin

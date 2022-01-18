@@ -4,7 +4,7 @@ interface
 
 USES
   System.JSON,
-  storm.additional.maybe,
+  DFE.Maybe,
   storm.values.interfaces;
 
 Type

@@ -4,7 +4,7 @@ interface
 
 Uses
   storm.values.base,
-  storm.additional.maybe,
+  DFE.Maybe,
   storm.values.interfaces,
 
   System.JSON,
