@@ -25,11 +25,12 @@ uses
   storm.dependency.register in 'src\lib\utils\storm.dependency.register.pas',
   storm.data.driver.mysql in 'src\drivers\storm.data.driver.mysql.pas',
   storm.data.driver.mssql in 'src\drivers\storm.data.driver.mssql.pas',
-  storm.additional.result in 'src\dependencies\storm.additional.result.pas',
   storm.fields.base in 'src\lib\fields\storm.fields.base.pas',
   storm.fields.str in 'src\lib\fields\storm.fields.str.pas',
   DFE.Interfaces in 'src\dependencies\DFE.Interfaces.pas',
-  DFE.Iterator in 'src\dependencies\DFE.Iterator.pas';
+  DFE.Iterator in 'src\dependencies\DFE.Iterator.pas',
+  DFE.Maybe in 'src\dependencies\DFE.Maybe.pas',
+  DFE.Result in 'src\dependencies\DFE.Result.pas';
 
 {$R *.res}
 

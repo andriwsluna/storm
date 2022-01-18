@@ -2,7 +2,7 @@ unit DFE.Interfaces;
 
 interface
 uses
-  storm.additional.maybe;
+  DFE.Maybe;
 
 Type
   ICloneable<T> =  interface['{850DCD71-2475-4422-AE95-844ADD539CD6}']
