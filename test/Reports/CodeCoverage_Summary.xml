@@ -1,21 +1,120 @@
 <?xml version="1.0" encoding="Windows-1252" standalone="no"?>
 <report>
   <stats>
-    <packages value="1"/>
-    <classes value="1"/>
-    <methods value="5"/>
-    <srcfiles value="1"/>
-    <srclines value="25"/>
-    <totallines value="25"/>
-    <coveredlines value="25"/>
-    <coveredpercent value="100"/>
+    <packages value="2"/>
+    <classes value="3"/>
+    <methods value="20"/>
+    <srcfiles value="2"/>
+    <srclines value="79"/>
+    <totallines value="78"/>
+    <coveredlines value="42"/>
+    <coveredpercent value="53"/>
   </stats>
   <data>
     <all name="all classes">
-      <coverage type="class, %" value="100%   (1/1)"/>
-      <coverage type="method, %" value="100%   (5/5)"/>
-      <coverage type="block, %" value="100%   (25/25)"/>
-      <coverage type="line, %" value="100%   (25/25)"/>
+      <coverage type="class, %" value="67%   (2/3)"/>
+      <coverage type="method, %" value="50%   (10/20)"/>
+      <coverage type="block, %" value="53%   (42/79)"/>
+      <coverage type="line, %" value="53%   (42/79)"/>
+      <package name="storm.values.str">
+        <coverage type="class, %" value="50%   (1/2)"/>
+        <coverage type="method, %" value="33%   (5/15)"/>
+        <coverage type="block, %" value="31%   (17/54)"/>
+        <coverage type="line, %" value="31%   (17/54)"/>
+        <srcfile name="storm.values.str.pas">
+          <coverage type="class, %" value="50%   (1/2)"/>
+          <coverage type="method, %" value="33%   (5/15)"/>
+          <coverage type="block, %" value="31%   (17/54)"/>
+          <coverage type="line, %" value="31%   (17/54)"/>
+          <class name="TStringValue.Clone$ActRec">
+            <coverage type="class, %" value="0%   (0/1)"/>
+            <coverage type="method, %" value="0%   (0/1)"/>
+            <coverage type="block, %" value="0%   (0/1)"/>
+            <coverage type="line, %" value="0%   (0/1)"/>
+            <method name="">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/1)"/>
+              <coverage type="line, %" value="0%   (0/1)"/>
+            </method>
+          </class>
+          <class name="TStringValue">
+            <coverage type="class, %" value="100%   (1/1)"/>
+            <coverage type="method, %" value="36%   (5/14)"/>
+            <coverage type="block, %" value="32%   (17/53)"/>
+            <coverage type="line, %" value="32%   (17/53)"/>
+            <method name="ToString">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/3)"/>
+              <coverage type="line, %" value="0%   (0/3)"/>
+            </method>
+            <method name="FromFloat">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (3/3)"/>
+              <coverage type="line, %" value="100%   (3/3)"/>
+            </method>
+            <method name="ToFloat">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/4)"/>
+              <coverage type="line, %" value="0%   (0/4)"/>
+            </method>
+            <method name="FromString">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (3/3)"/>
+              <coverage type="line, %" value="100%   (3/3)"/>
+            </method>
+            <method name="FromBool">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (3/3)"/>
+              <coverage type="line, %" value="100%   (3/3)"/>
+            </method>
+            <method name="ToBool">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/4)"/>
+              <coverage type="line, %" value="0%   (0/4)"/>
+            </method>
+            <method name="FromInt">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/3)"/>
+              <coverage type="line, %" value="0%   (0/3)"/>
+            </method>
+            <method name="Clone">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/5)"/>
+              <coverage type="line, %" value="0%   (0/5)"/>
+            </method>
+            <method name="GetValue">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/4)"/>
+              <coverage type="line, %" value="0%   (0/4)"/>
+            </method>
+            <method name="ToInt">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/4)"/>
+              <coverage type="line, %" value="0%   (0/4)"/>
+            </method>
+            <method name="FromJSON">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/3)"/>
+              <coverage type="line, %" value="0%   (0/3)"/>
+            </method>
+            <method name="ToJSON">
+              <coverage type="method, %" value="0%   (0/1)"/>
+              <coverage type="block, %" value="0%   (0/6)"/>
+              <coverage type="line, %" value="0%   (0/6)"/>
+            </method>
+            <method name="SetValue">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (5/5)"/>
+              <coverage type="line, %" value="100%   (5/5)"/>
+            </method>
+            <method name="Inititalize">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (3/3)"/>
+              <coverage type="line, %" value="100%   (3/3)"/>
+            </method>
+          </class>
+        </srcfile>
+      </package>
       <package name="storm.values.base">
         <coverage type="class, %" value="100%   (1/1)"/>
         <coverage type="method, %" value="100%   (5/5)"/>

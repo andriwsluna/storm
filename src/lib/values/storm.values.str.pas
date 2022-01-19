@@ -20,8 +20,9 @@ type
       IStringValue
     )
     private
-      FValue : String;
+
     protected
+      FValue : String;
       Procedure Inititalize();  Override;
     public
 

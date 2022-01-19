@@ -125,6 +125,7 @@
         <DCCReference Include="..\src\lib\values\storm.values.base.pas"/>
         <DCCReference Include="..\src\lib\values\storm.values.interfaces.pas"/>
         <DCCReference Include="..\src\lib\values\storm.values.str.pas"/>
+        <DCCReference Include="src\lib\values\storm.values.str.test.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

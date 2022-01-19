@@ -32,7 +32,8 @@ uses
   storm.dependency.register in '..\src\lib\utils\storm.dependency.register.pas',
   storm.values.base in '..\src\lib\values\storm.values.base.pas',
   storm.values.interfaces in '..\src\lib\values\storm.values.interfaces.pas',
-  storm.values.str in '..\src\lib\values\storm.values.str.pas';
+  storm.values.str in '..\src\lib\values\storm.values.str.pas',
+  storm.values.str.test in 'src\lib\values\storm.values.str.test.pas';
 
 var
   runner : ITestRunner;
