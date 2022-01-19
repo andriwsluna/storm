@@ -11,11 +11,13 @@ uses
   storm.data.driver.ado,
   storm.data.driver.firedac,
   storm.entity.interfaces,
+  storm.values.interfaces,
   System.Generics.Collections,
   DFE.Result,
   storm.data.driver.mssql,
   storm.orm.interfaces,
   storm.data.interfaces,
+  storm.values.int,
   DFE.Maybe,
   storm.data.driver.mysql,
   uEntityProduto,
@@ -51,13 +53,14 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     procedure freeDataset;
     procedure ShowSql(sql : string);
     procedure AtribuirDatasetAoGrid(resultado : IStormQuerySuccessExecution<IProduto>);
     procedure MostrarMensagemDeErro(resultado : IStormQueryFailExecution);
     procedure printproduto(produto : Iproduto);
-    procedure showjson(json : tjsonarray);
+    procedure showjson(const json : tjsonarray);
     function  MapperProdutoDeCodigo2(produto : Iproduto) : Maybe<Iproduto>;
     function  ProdutosCujoDescricaoContem_F(produto : Iproduto) : Boolean;
   public
@@ -81,11 +84,12 @@ end;
 
 procedure Tvcl_form.printproduto(produto: Iproduto);
 begin
+  produto.Codigo.GetValueOrDefault();
   MemoJson.Lines.Add('produto: ' +
   produto.Descricao.Value.GetValue.GetValueOrDefault('') + ' Código: ' + produto.Codigo.Value.GetValue.GetValueOrDefault(''));
 end;
 
-procedure Tvcl_form.showjson(json: tjsonarray);
+procedure Tvcl_form.showjson(const json: tjsonarray);
 begin
   MemoJson.Lines.add(json.ToString);
   json.Free;
@@ -104,17 +108,23 @@ begin
     .Where
     .Descricao.IsNotNull
     .Go
+    .Limit(1)
     .GetSQL(ShowSql)
-    .Open(ADOConnection1.StormDriver)
-    //.Open(FDConnection1.StormDriver)
+    //.Open(ADOConnection1.StormDriver)
+    .Open(FDConnection1.StormDriver)
     .OnSuccess(AtribuirDatasetAoGrid)
     .OnFail(MostrarMensagemDeErro);
 end;
 
 
-
-
-
+procedure Tvcl_form.Button2Click(Sender: TObject);
+VAR
+  v : IIntegerValue;
+begin
+  v := TIntegerValue.Create;
+  v.SetValue(1);
+  v.ToString.OnSome(ShowMessage);
+end;
 
 function Tvcl_form.MapperProdutoDeCodigo2(produto: Iproduto): Maybe<Iproduto>;
 VAR
@@ -135,8 +145,8 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);

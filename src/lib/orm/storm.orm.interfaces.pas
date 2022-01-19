@@ -28,10 +28,20 @@ Type
 
   TGetSqlCallback = reference to procedure(sql : string);
 
+  IStormQueryExecutorLimited<T : IStormEntity> = interface;
+
   IStormQueryExecutor<T : IStormEntity> = interface['{5F0A65E3-A0CC-4F68-9286-3931FA54C91C}']
+    Function Limit(count : Integer) : IStormQueryExecutorLimited<T>;
     Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<T>;
     Function Open(connection : IStormSQLConnection) : TResult<IStormQuerySuccessExecution<T>,IStormQueryFailExecution>;
   end;
+
+  IStormQueryExecutorLimited<T : IStormEntity> = interface['{D9DFC0F8-E5A4-4221-A106-0D59D25DECE6}']
+    Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<T>;
+    Function Open(connection : IStormSQLConnection) : TResult<IStormQuerySuccessExecution<T>,IStormQueryFailExecution>;
+  end;
+
+
 
   IStormQueryPartition<T : IStormEntity>= interface['{1453EBB4-0723-418F-BA9F-16528086EFBD}']
     Function Go() : IStormQueryExecutor<T>;

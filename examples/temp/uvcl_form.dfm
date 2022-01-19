@@ -10,6 +10,7 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -54,6 +55,7 @@ object vcl_form: Tvcl_form
     Height = 25
     Caption = 'Button2'
     TabOrder = 3
+    OnClick = Button2Click
   end
   object MemoJson: TMemo
     Left = 144
@@ -126,7 +128,7 @@ object vcl_form: Tvcl_form
     Top = 312
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
-    VendorLib = 'R:\external\storm\dll\32\libmysql.dll'
+    VendorLib = '.\libmysql.dll'
     Left = 328
     Top = 296
   end

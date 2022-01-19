@@ -28,7 +28,11 @@ Type
 
 
   IStringField = interface(IStormField)['{58484363-174F-4028-8C39-4E97DEA5D6DC}']
-    function Value : IStringValue;
+
+    Function  Value : IStringValue;
+    Function  SetValue(value : String) : Boolean;
+    Function  GetValue() :  Maybe<String>;
+    Function  GetValueOrDefault(default : string = '') :  string;
   end;
 
 implementation

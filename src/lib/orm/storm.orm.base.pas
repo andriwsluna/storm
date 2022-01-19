@@ -21,9 +21,13 @@ Type
   TStormSQLPartition = class abstract (TInterfacedObject)
   private
 
+    FLimit : Maybe<Integer>;
     Fowner : TStormSQLPartition;
     FSQL : String;
     FParameters : IStormQueryParameters;
+
+
+
   protected
     SQLDriver : IStormSQLDriver;
     Procedure Initialize; Virtual;
@@ -31,11 +35,14 @@ Type
 
     Procedure  AddSQL(sql : string);
     function   AddParameter(value : variant) : string;
+    Procedure ProccessLimit();
 
     Function _GetSQL() : String;
   public
     Constructor Create(owner : TStormSQLPartition = nil); Reintroduce; Virtual;
     Destructor  Destroy(); Override;
+
+
   end;
 
 
@@ -65,12 +72,14 @@ Type
     Function GetSQL() : String;
   end;
 
-  TStormQueryExecutor<EntityType : IStormEntity> = class(TStormSQLPartition, IStormQueryExecutor<EntityType>)
+  TStormQueryExecutor<EntityType : IStormEntity> =
+  class(TStormSQLPartition, IStormQueryExecutor<EntityType>, IStormQueryExecutorLimited<EntityType>)
   private
 
   protected
 
   public
+    Function Limit(count : Integer) : IStormQueryExecutorLimited<EntityType>;
     Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<EntityType>;
     Function Open(connection : IStormSQLConnection) : TResult<IStormQuerySuccessExecution<EntityType>,IStormQueryFailExecution>;
   end;
@@ -79,10 +88,12 @@ Type
 
   TStormQueryPartition<EntityType : IStormEntity> = class abstract (TStormSQLPartition, IStormQueryPartition<EntityType>)
   private
-  protected
-  public
-    Function Go() : IStormQueryExecutor<EntityType>;
 
+  protected
+
+  public
+
+    Function Go() : IStormQueryExecutor<EntityType>;
   end;
 
 
@@ -162,6 +173,21 @@ begin
   end;
 end;
 
+procedure TStormSQLPartition.ProccessLimit;
+var
+  newSql : string;
+begin
+  newSql := self.FSQL;
+  FLimit.OnSome
+  (
+    procedure(limit : integer)
+    begin
+      newSql := self.SQLDriver.GetLimitSyntax(limit, newsql);
+    end
+  );
+  FSQL := newSql;
+end;
+
 function TStormSQLPartition._GetSQL: String;
 begin
   Result := FSQL;
@@ -220,6 +246,14 @@ begin
 
 end;
 
+function TStormQueryExecutor<EntityType>.Limit(
+  count: Integer): IStormQueryExecutorLimited<EntityType>;
+begin
+  Self.FLimit := count;
+  ProccessLimit();
+  Result := Self;
+end;
+
 function TStormQueryExecutor<EntityType>.GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<EntityType>;
 begin
   if assigned(callback) then
@@ -247,7 +281,6 @@ function TStormQueryFailExecution.GetSQL: String;
 begin
   Result := FSQL;
 end;
-
 
 
 end.

@@ -38,6 +38,11 @@ Type
     Function  GetValue() :  Maybe<String>;
   end;
 
+  IIntegerValue = interface(IStormValue)['{77A8492A-EE61-4AEE-A08A-20E3D543CEF0}']
+    Function  SetValue(value : integer) : Boolean;
+    Function  GetValue() :  Maybe<integer>;
+  end;
+
 
 
 

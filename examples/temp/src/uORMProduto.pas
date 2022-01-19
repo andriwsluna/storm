@@ -14,6 +14,10 @@ uses
 Type
   QueryProdutoSuccess = IStormQuerySuccessExecution<IProduto>;
   IModelProduto = IStormModel<IProduto>;
+
+  TProdutoPossibleFields = (Codigo=0, Descricao=1);
+  TProdutoSETFieldSelection = set of TProdutoPossibleFields;
+
   TProdutoWhereSelection = class(TStormQueryPartition<IProduto>, IStormWhereSelection<IProduto,TProdutoWhereSelection>)
   protected
     Procedure Initialize; Override;
@@ -28,14 +32,41 @@ Type
      Destructor  Destroy(); Override;
   end;
 
-
-  TProdutoPossibleFields = (Codigo=0, Descricao=1);
-  TProdutoSETFieldSelection = set of TProdutoPossibleFields;
-
   IProdutoFieldSelection = interface['{9AA32BD0-45FD-42D6-B88A-42570723FD21}']
     Function All() : IWhereNode<IProduto,TProdutoWhereSelection>;
     Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<IProduto,TProdutoWhereSelection>;
   end;
+
+
+
+
+
+
+  IORMProduto = interface['{F49CF2B7-E6F3-44BC-A28C-6FCF75930CDC}']
+    Function Select()  : IProdutoFieldSelection;
+    Function Update() : Boolean;
+  end;
+
+
+
+
+
+
+
+
+Function ORMProduto : IORMProduto;
+
+
+implementation
+
+uses
+  System.Sysutils;
+
+VAR
+  FSchema : IStormTableSchema;
+
+
+Type
 
 
   TProdutoFieldSelection = class(TStormFieldSelection<IProduto,TProdutoWhereSelection>, IProdutoFieldSelection)
@@ -43,14 +74,6 @@ Type
     Constructor Create(sql : string);Reintroduce;
     Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<IProduto,TProdutoWhereSelection>;
   end;
-
-
-
-  IORMProduto = interface['{F49CF2B7-E6F3-44BC-A28C-6FCF75930CDC}']
-    Function Select()  : IProdutoFieldSelection;
-  end;
-
-
 
   TORMProduto = class(TInterfacedObject, IORMProduto)
   private
@@ -65,20 +88,9 @@ Type
     Destructor  Destroy(); Override;
   public
     Function Select()  : IProdutoFieldSelection;
+    Function Update() : Boolean;
   end;
 
-VAR
-  FSchema : IStormTableSchema;
-
-Procedure InitializeSchema();
-Procedure FinalizeSchema();
-Function ORMProduto : IORMProduto;
-
-
-implementation
-
-uses
-  System.Sysutils;
 
 Function ORMProduto : IORMProduto;
 begin
@@ -124,6 +136,13 @@ begin
   result := TProdutoFieldSelection.Create('select ');
 end;
 
+
+
+
+function TORMProduto.Update: Boolean;
+begin
+
+end;
 
 constructor TProdutoFieldSelection.Create(sql : string);
 begin

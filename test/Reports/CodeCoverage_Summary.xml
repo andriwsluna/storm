@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="Windows-1252" standalone="no"?>
+<report>
+  <stats>
+    <packages value="1"/>
+    <classes value="1"/>
+    <methods value="5"/>
+    <srcfiles value="1"/>
+    <srclines value="25"/>
+    <totallines value="25"/>
+    <coveredlines value="25"/>
+    <coveredpercent value="100"/>
+  </stats>
+  <data>
+    <all name="all classes">
+      <coverage type="class, %" value="100%   (1/1)"/>
+      <coverage type="method, %" value="100%   (5/5)"/>
+      <coverage type="block, %" value="100%   (25/25)"/>
+      <coverage type="line, %" value="100%   (25/25)"/>
+      <package name="storm.values.base">
+        <coverage type="class, %" value="100%   (1/1)"/>
+        <coverage type="method, %" value="100%   (5/5)"/>
+        <coverage type="block, %" value="100%   (25/25)"/>
+        <coverage type="line, %" value="100%   (25/25)"/>
+        <srcfile name="storm.values.base.pas">
+          <coverage type="class, %" value="100%   (1/1)"/>
+          <coverage type="method, %" value="100%   (5/5)"/>
+          <coverage type="block, %" value="100%   (25/25)"/>
+          <coverage type="line, %" value="100%   (25/25)"/>
+          <class name="TStormValue">
+            <coverage type="class, %" value="100%   (1/1)"/>
+            <coverage type="method, %" value="100%   (5/5)"/>
+            <coverage type="block, %" value="100%   (25/25)"/>
+            <coverage type="line, %" value="100%   (25/25)"/>
+            <method name="Inititalize">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (3/3)"/>
+              <coverage type="line, %" value="100%   (3/3)"/>
+            </method>
+            <method name="Clear">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (3/3)"/>
+              <coverage type="line, %" value="100%   (3/3)"/>
+            </method>
+            <method name="LoadFromJSON">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (12/12)"/>
+              <coverage type="line, %" value="100%   (12/12)"/>
+            </method>
+            <method name="IsAssigned">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (3/3)"/>
+              <coverage type="line, %" value="100%   (3/3)"/>
+            </method>
+            <method name="Create">
+              <coverage type="method, %" value="100%   (1/1)"/>
+              <coverage type="block, %" value="100%   (4/4)"/>
+              <coverage type="line, %" value="100%   (4/4)"/>
+            </method>
+          </class>
+        </srcfile>
+      </package>
+    </all>
+  </data>
+</report>

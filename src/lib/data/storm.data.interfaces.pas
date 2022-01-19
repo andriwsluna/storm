@@ -26,6 +26,7 @@ type
 
   IStormSQLDriver = interface['{5FF6388D-A47D-4608-BBE8-5ADB56885E45}']
     Function GetFullTableName(Table : IStormTableSchema) : string;
+    Function GetLimitSyntax(Limit : integer ; Sql : string) : string;
   end;
 
 

@@ -19,25 +19,25 @@ Type
   TStringField = Class(TStormField, IStormField,IStringField)
     private
 
-
     protected
       Procedure InitializeStormValue(); Override;
 
+    public
 
     public
       function  Value : IStringValue;
+      Function  SetValue(value : String) : Boolean;
+      Function  GetValue() :  Maybe<String>;
+      Function  GetValueOrDefault(default : string = '') :  string;
       Function  FromDataField(field : TField) : boolean; Override;
+
+
   End;
 
 implementation
 
 { TStringField }
 
-
-function TStringField.Value: IStringValue;
-begin
-  Result := FStormValue as IStringValue;
-end;
 
 
 
@@ -54,6 +54,19 @@ begin
 
 end;
 
+
+
+
+function TStringField.GetValue: Maybe<String>;
+begin
+  Result := value.GetValue();
+end;
+
+function TStringField.GetValueOrDefault(default: string): string;
+begin
+  result := GetValue.GetValueOrDefault(default);
+end;
+
 procedure TStringField.InitializeStormValue;
 begin
   inherited;
@@ -61,5 +74,15 @@ begin
 end;
 
 
+
+function TStringField.SetValue(value: String): Boolean;
+begin
+  Result := self.Value.SetValue(value);
+end;
+
+function TStringField.Value: IStringValue;
+begin
+  Result := FStormValue as IStringValue;
+end;
 
 end.

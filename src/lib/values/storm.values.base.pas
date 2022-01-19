@@ -16,7 +16,7 @@ Type
 
       Procedure Inititalize();  Virtual;
 
-      function LoadFromJSON(Target : IStormValue ; Value: TJSONValue): Boolean;
+      Class function LoadFromJSON(Target : IStormValue ; Value: TJSONValue): Boolean;
 
     public
 
@@ -57,21 +57,21 @@ end;
 
 
 
-function TStormValue.LoadFromJSON(Target: IStormValue;
+class function TStormValue.LoadFromJSON(Target: IStormValue;
   Value: TJSONValue): Boolean;
 begin
   result := false;
 
   if assigned(Value) then
   BEGIN
-    if Value is TJSONString then
-    BEGIN
-      result :=  Target.FromString(TJSONString(Value).Value);
-    END
-    else if Value is TJSONNumber then
+    if Value is TJSONNumber then
     begin
       Result :=  Target.FromFloat(TJSONNumber(Value).AsDouble);
     end
+    else if Value is TJSONString then
+    BEGIN
+      result :=  Target.FromString(TJSONString(Value).Value);
+    END
     else if Value is TJSONBool then
     begin
       Result :=  Target.FromBool(TJSONBool(Value).AsBoolean);

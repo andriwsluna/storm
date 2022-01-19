@@ -1,15 +1,12 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{ADECCD94-8FAA-4B6B-A649-41D5C33A4230}</ProjectGuid>
+        <ProjectGuid>{EC1D7F31-330B-4663-866C-46280D8B55EE}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
         <Projects Include="storm.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="storm_console.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="storm_vcl.dproj">
+        <Projects Include="test\tests.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -29,32 +26,23 @@
     <Target Name="storm:Make">
         <MSBuild Projects="storm.dproj" Targets="Make"/>
     </Target>
-    <Target Name="storm_console">
-        <MSBuild Projects="storm_console.dproj"/>
+    <Target Name="tests">
+        <MSBuild Projects="test\tests.dproj"/>
     </Target>
-    <Target Name="storm_console:Clean">
-        <MSBuild Projects="storm_console.dproj" Targets="Clean"/>
+    <Target Name="tests:Clean">
+        <MSBuild Projects="test\tests.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="storm_console:Make">
-        <MSBuild Projects="storm_console.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="storm_vcl">
-        <MSBuild Projects="storm_vcl.dproj"/>
-    </Target>
-    <Target Name="storm_vcl:Clean">
-        <MSBuild Projects="storm_vcl.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="storm_vcl:Make">
-        <MSBuild Projects="storm_vcl.dproj" Targets="Make"/>
+    <Target Name="tests:Make">
+        <MSBuild Projects="test\tests.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="storm;storm_console;storm_vcl"/>
+        <CallTarget Targets="storm;tests"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="storm:Clean;storm_console:Clean;storm_vcl:Clean"/>
+        <CallTarget Targets="storm:Clean;tests:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="storm:Make;storm_console:Make;storm_vcl:Make"/>
+        <CallTarget Targets="storm:Make;tests:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
