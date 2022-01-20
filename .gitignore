@@ -71,4 +71,4 @@ modules/
 
 #Tests
 test/Reports/
-!tests/CodeCoverage.exe
+!CodeCoverage.exe
