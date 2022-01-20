@@ -110,6 +110,7 @@
         <DCCReference Include="src\lib\values\storm.values.bool.test.pas"/>
         <DCCReference Include="src\lib\values\storm.values.datetime.test.pas"/>
         <DCCReference Include="src\lib\values\storm.values.date.test.pas"/>
+        <DCCReference Include="src\lib\fields\storm.fields.base.test.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

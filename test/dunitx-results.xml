@@ -1,53 +1,52 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<test-results name="R:\external\storm\test\Tests.exe" total="102" errors="0" failures="0" ignored="0" inconclusive="0" not-run="0" skipped="0" invalid="0" date="2022-01-20" time="0.062">
+<test-results name="R:\external\storm\test\Tests.exe" total="112" errors="0" failures="0" ignored="0" inconclusive="0" not-run="0" skipped="0" invalid="0" date="2022-01-20" time="0.090">
   <culture-info current-culture="en" current-uiculture="en" />
-  <test-suite type="Assembly" name="Tests.exe" executed="true" result="Success" success="True" time="0.062" asserts="0">
+  <test-suite type="Assembly" name="Tests.exe" executed="true" result="Success" success="True" time="0.090" asserts="0">
     <results>
-        <test-suite type="Namespace" name="storm" executed="true" result="Success" success="True" time="0.200" asserts="0" >
+        <test-suite type="Namespace" name="storm" executed="true" result="Success" success="True" time="0.436" asserts="0" >
           <results>
-              <test-suite type="Namespace" name="values" executed="true" result="Success" success="True" time="0.200" asserts="0" >
+              <test-suite type="Namespace" name="values" executed="true" result="Success" success="True" time="0.409" asserts="0" >
                 <results>
-                    <test-suite type="Fixture" name="TFloatValue_Test" executed="True" result="Success" success="True" time="0.062" >
+                    <test-suite type="Fixture" name="TDateTimeValue_Test" executed="True" result="Success" success="True" time="0.090" >
                       <results>
-                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="SetValue_Blank_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="Clone_Check" executed="True" result="Success" success="True" time="0.002" asserts="0" />
-                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToInt_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="FromInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToFloat_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="FromFloat_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="ToBool_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromBool_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromJson_Check" executed="True" result="Success" success="True" time="0.002" asserts="0" />
-                        <test-case name="ToDateTime_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                      </results>
-                    </test-suite>
-                    <test-suite type="Fixture" name="TStringValue_Test" executed="True" result="Success" success="True" time="0.047" >
-                      <results>
-                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="SetValue_Blank_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="Clone_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="ToInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromInt_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="ToFloat_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromFloat_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="ToBool_Check" executed="True" result="Success" success="True" time="0.002" asserts="0" />
+                        <test-case name="ToBool_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromBool_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromJson_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="FromJson_Check" executed="True" result="Success" success="True" time="0.002" asserts="0" />
                         <test-case name="ToDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                       </results>
                     </test-suite>
-                    <test-suite type="Fixture" name="TIntegerValue_Test" executed="True" result="Success" success="True" time="0.036" >
+                    <test-suite type="Fixture" name="TBooleanValue_Test" executed="True" result="Success" success="True" time="0.075" >
+                      <results>
+                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="Clone_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToFloat_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromFloat_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToBool_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="FromBool_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.002" asserts="0" />
+                        <test-case name="FromJson_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                      </results>
+                    </test-suite>
+                    <test-suite type="Fixture" name="TIntegerValue_Test" executed="True" result="Success" success="True" time="0.063" >
                       <results>
                         <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="SetValue_Blank_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
@@ -67,63 +66,44 @@
                         <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                       </results>
                     </test-suite>
-                    <test-suite type="Fixture" name="TBooleanValue_Test" executed="True" result="Success" success="True" time="0.025" >
-                      <results>
-                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="Clone_Check" executed="True" result="Success" success="True" time="0.002" asserts="0" />
-                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToFloat_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromFloat_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToBool_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="FromBool_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromJson_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="ToDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                      </results>
-                    </test-suite>
-                    <test-suite type="Fixture" name="TStormValue_Test" executed="True" result="Success" success="True" time="0.014" >
+                    <test-suite type="Fixture" name="TStormValue_Test" executed="True" result="Success" success="True" time="0.052" >
                       <results>
                         <test-case name="IsAssigned_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="LoadFromJSON_CheckWithString" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="LoadFromJSON_CheckWithNumber" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="LoadFromJSON_CheckWithTrue" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="LoadFromJSON_CheckWithTrue" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="LoadFromJSON_CheckWithFalse" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="LoadFromJSON_CheckWithNull" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="LoadFromJSON_CheckWithNil" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                       </results>
                     </test-suite>
-                    <test-suite type="Fixture" name="TDateTimeValue_Test" executed="True" result="Success" success="True" time="0.013" >
+                    <test-suite type="Fixture" name="TStringValue_Test" executed="True" result="Success" success="True" time="0.049" >
                       <results>
-                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="SetValue_Blank_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="Clone_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="ToInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromInt_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="ToFloat_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromFloat_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="ToBool_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromBool_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="FromJson_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="ToDateTime_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
-                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                       </results>
                     </test-suite>
-                    <test-suite type="Fixture" name="TDateValue_Test" executed="True" result="Success" success="True" time="0.003" >
+                    <test-suite type="Fixture" name="TDateValue_Test" executed="True" result="Success" success="True" time="0.041" >
                       <results>
-                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="SetValue_Blank_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
                         <test-case name="Clone_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
-                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="ToInt_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                         <test-case name="FromInt_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
@@ -137,6 +117,40 @@
                         <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                       </results>
                     </test-suite>
+                    <test-suite type="Fixture" name="TFloatValue_Test" executed="True" result="Success" success="True" time="0.038" >
+                      <results>
+                        <test-case name="SetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="SetValue_Blank_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="GetValue_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="Clone_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToString_check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromString_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToInt_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromInt_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToFloat_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="FromFloat_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToBool_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromBool_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="ToJson_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromJson_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                        <test-case name="ToDateTime_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                        <test-case name="FromDateTime_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                      </results>
+                    </test-suite>
+                </results>
+              </test-suite>
+              <test-suite type="Fixture" name="TStormField_Test" executed="True" result="Success" success="True" time="0.027" >
+                <results>
+                  <test-case name="IsAssigned_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="Clear_Check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="JSONName_check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="FieldName_check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="ToJSON_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="FromJSON_Pair_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="FromJSON_Object_Check" executed="True" result="Success" success="True" time="0.011" asserts="0" />
+                  <test-case name="FromDataField_Check" executed="True" result="Success" success="True" time="0.001" asserts="0" />
+                  <test-case name="FromDataSet_Check" executed="True" result="Success" success="True" time="0.010" asserts="0" />
+                  <test-case name="Clone_check" executed="True" result="Success" success="True" time="0.000" asserts="0" />
                 </results>
               </test-suite>
           </results>

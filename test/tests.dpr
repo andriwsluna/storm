@@ -17,7 +17,8 @@ uses
   storm.values.float.test in 'src\lib\values\storm.values.float.test.pas',
   storm.values.bool.test in 'src\lib\values\storm.values.bool.test.pas',
   storm.values.datetime.test in 'src\lib\values\storm.values.datetime.test.pas',
-  storm.values.date.test in 'src\lib\values\storm.values.date.test.pas';
+  storm.values.date.test in 'src\lib\values\storm.values.date.test.pas',
+  storm.fields.base.test in 'src\lib\fields\storm.fields.base.test.pas';
 
 var
   runner : ITestRunner;

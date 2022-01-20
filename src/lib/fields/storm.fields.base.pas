@@ -38,7 +38,7 @@ Type
       Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONPair>;
       Function  FromJSON(Value : TJSONPair) : Boolean; Overload;
       Function  FromJSON(Value : TJSONObject) : Boolean; Overload;
-      Function  FromDataField(field : TField) : boolean; Virtual; Abstract;
+      Function  FromDataField(field : TField) : boolean; Virtual;
       Function  FromDataSet(dataset : TDataset) : boolean;
 
       Function  Clone(Target : IStormField) : Boolean;
@@ -82,6 +82,11 @@ begin
   Result:= FFieldName;
 end;
 
+function TStormField.FromDataField(field: TField): boolean;
+begin
+  Result := False;
+end;
+
 function TStormField.FromDataSet(dataset: TDataset): boolean;
 begin
   Result := false;
@@ -98,18 +103,30 @@ end;
 
 function TStormField.FromJSON(Value: TJSONObject): Boolean;
 begin
-  result := FromJSON(value.Get(self.FJSONName));
+  Result := false;
+  try
+    if assigned(Value) and assigned(value.Get(self.FJSONName)) then
+    begin
+      result := FromJSON(value.Get(self.FJSONName));
+    end;
+  except
+    on e:exception do
+    begin
+      {TODO -oOwner -cGeneral : ActionItem}
+    end;
+
+  end;
 end;
 
 function TStormField.FromJSON(Value: TJSONPair): Boolean;
 begin
-  if Value.JsonString.Value = FJSONName then
+  result := false;
+  if assigned(Value) and assigned(Value.JsonString) then
   begin
-    Result := StormValue.FromJSON(Value.JsonValue);
-  end
-  else
-  begin
-    result := false;
+    if Value.JsonString.Value = FJSONName then
+    begin
+      Result := StormValue.FromJSON(Value.JsonValue);
+    end;
   end;
 end;
 
