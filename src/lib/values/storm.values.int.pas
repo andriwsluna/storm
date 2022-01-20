@@ -113,7 +113,6 @@ begin
   begin
     result := false;
   end;
-
 end;
 
 function TIntegerValue.GetValue: Maybe<integer>;

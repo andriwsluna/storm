@@ -48,6 +48,27 @@ Type
     Function  GetValueOrDefault(default : Extended = 0.0) :  Extended;
   end;
 
+  IBooleanField = interface(IStormField)['{561AD79E-FBE4-44E3-8014-3A0485409475}']
+    Function  Value : IBooleanValue;
+    Function  SetValue(value : Boolean) : Boolean;
+    Function  GetValue() :  Maybe<Boolean>;
+    Function  GetValueOrDefault(default : Boolean = false) :  Boolean;
+  end;
+
+  IDateTimeField = interface(IStormField)['{CE42FA20-4EC6-41BF-A3E7-136C6BD337C0}']
+    Function  Value : IDateTimeValue;
+    Function  SetValue(value : TDateTime) : Boolean;
+    Function  GetValue() :  Maybe<TDateTime>;
+    Function  GetValueOrDefault(default : TDateTime = 0) :  TDateTime;
+  end;
+
+  IDateField = interface(IStormField)['{0973ADCB-2CFB-49D8-B26D-641E82D0B1EB}']
+    Function  Value : IDateValue;
+    Function  SetValue(value : TDate) : Boolean;
+    Function  GetValue() :  Maybe<TDate>;
+    Function  GetValueOrDefault(default : TDate = 0) :  TDate;
+  end;
+
 implementation
 
 end.

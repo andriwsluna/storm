@@ -60,6 +60,9 @@ contains
   storm.values.datetime in 'src\lib\values\storm.values.datetime.pas',
   storm.values.date in 'src\lib\values\storm.values.date.pas',
   storm.fields.int in 'src\lib\fields\storm.fields.int.pas',
-  storm.fields.float in 'src\lib\fields\storm.fields.float.pas';
+  storm.fields.float in 'src\lib\fields\storm.fields.float.pas',
+  storm.fields.bool in 'src\lib\fields\storm.fields.bool.pas',
+  storm.fields.datetime in 'src\lib\fields\storm.fields.datetime.pas',
+  storm.fields.date in 'src\lib\fields\storm.fields.date.pas';
 
 end.

@@ -21,7 +21,10 @@ uses
   storm.fields.base.test in 'src\lib\fields\storm.fields.base.test.pas',
   storm.fields.str.test in 'src\lib\fields\storm.fields.str.test.pas' {/storm.fields.int.test in 'src\lib\fields\storm.fields.int.test.pas';},
   storm.fields.int.test in 'src\lib\fields\storm.fields.int.test.pas',
-  storm.fields.float.test in 'src\lib\fields\storm.fields.float.test.pas';
+  storm.fields.float.test in 'src\lib\fields\storm.fields.float.test.pas',
+  storm.fields.bool.test in 'src\lib\fields\storm.fields.bool.test.pas',
+  storm.fields.datetime.test in 'src\lib\fields\storm.fields.datetime.test.pas',
+  storm.fields.date.test in 'src\lib\fields\storm.fields.date.test.pas';
 
 var
   runner : ITestRunner;

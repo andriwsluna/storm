@@ -1,4 +1,7 @@
 Will track coverage for:storm.fields.base
+Will track coverage for:storm.fields.bool
+Will track coverage for:storm.fields.date
+Will track coverage for:storm.fields.datetime
 Will track coverage for:storm.fields.float
 Will track coverage for:storm.fields.int
 Will track coverage for:storm.fields.str
@@ -11,7 +14,7 @@ Will track coverage for:storm.values.int
 Will track coverage for:storm.values.str
 Trying to start .\Tests.exe with the Parameters :
 Started successfully
-Create Process:10276 name:.\Tests.exe
+Create Process:3544 name:.\Tests.exe
 Adding breakpoints for module:.\Tests.exe
 Module name "System.Types" did not match module from address name "System.UITypes" at address:00019787
 Module name "System.Generics.Collections" did not match module from address name "System.Hash" at address:0007E85C
@@ -508,171 +511,171 @@ Activate storm.values.int.pas line 114 BreakPoint at:006296D9
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57368
 Adding breakpoint for storm.values.int.TIntegerValue.FromString in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 117 BreakPoint at:006296DD
+Activate storm.values.int.pas line 116 BreakPoint at:006296DD
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57369
 Adding breakpoint for storm.values.int.TIntegerValue.GetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 120 BreakPoint at:00629704
+Activate storm.values.int.pas line 119 BreakPoint at:00629704
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57370
 Adding breakpoint for storm.values.int.TIntegerValue.GetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 121 BreakPoint at:00629710
+Activate storm.values.int.pas line 120 BreakPoint at:00629710
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57371
 Adding breakpoint for storm.values.int.TIntegerValue.GetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 123 BreakPoint at:0062971C
+Activate storm.values.int.pas line 122 BreakPoint at:0062971C
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57372
 Adding breakpoint for storm.values.int.TIntegerValue.GetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 125 BreakPoint at:0062972A
+Activate storm.values.int.pas line 124 BreakPoint at:0062972A
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57373
 Adding breakpoint for storm.values.int.TIntegerValue.Inititalize in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 128 BreakPoint at:00629730
+Activate storm.values.int.pas line 127 BreakPoint at:00629730
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57374
 Adding breakpoint for storm.values.int.TIntegerValue.Inititalize in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 129 BreakPoint at:00629737
+Activate storm.values.int.pas line 128 BreakPoint at:00629737
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57375
 Adding breakpoint for storm.values.int.TIntegerValue.Inititalize in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 130 BreakPoint at:0062973F
+Activate storm.values.int.pas line 129 BreakPoint at:0062973F
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57376
 Adding breakpoint for storm.values.int.TIntegerValue.ToBool in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 133 BreakPoint at:00629744
+Activate storm.values.int.pas line 132 BreakPoint at:00629744
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57377
 Adding breakpoint for storm.values.int.TIntegerValue.ToBool in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 134 BreakPoint at:00629750
+Activate storm.values.int.pas line 133 BreakPoint at:00629750
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57378
 Adding breakpoint for storm.values.int.TIntegerValue.ToBool in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 136 BreakPoint at:0062975C
+Activate storm.values.int.pas line 135 BreakPoint at:0062975C
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57379
 Adding breakpoint for storm.values.int.TIntegerValue.ToBool in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 138 BreakPoint at:00629765
+Activate storm.values.int.pas line 137 BreakPoint at:00629765
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57380
 Adding breakpoint for storm.values.int.TIntegerValue.ToBool in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 141 BreakPoint at:00629771
+Activate storm.values.int.pas line 140 BreakPoint at:00629771
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57381
 Adding breakpoint for storm.values.int.TIntegerValue.ToBool in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 143 BreakPoint at:0062977A
+Activate storm.values.int.pas line 142 BreakPoint at:0062977A
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57382
 Adding breakpoint for storm.values.int.TIntegerValue.ToBool in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 146 BreakPoint at:00629784
+Activate storm.values.int.pas line 145 BreakPoint at:00629784
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57383
 Adding breakpoint for storm.values.int.TIntegerValue.ToDateTime in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 151 BreakPoint at:00629788
+Activate storm.values.int.pas line 150 BreakPoint at:00629788
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57384
 Adding breakpoint for storm.values.int.TIntegerValue.ToDateTime in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 152 BreakPoint at:00629794
+Activate storm.values.int.pas line 151 BreakPoint at:00629794
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57385
 Adding breakpoint for storm.values.int.TIntegerValue.ToDateTime in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 154 BreakPoint at:006297A0
+Activate storm.values.int.pas line 153 BreakPoint at:006297A0
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57386
 Adding breakpoint for storm.values.int.TIntegerValue.ToDateTime in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 156 BreakPoint at:006297B9
+Activate storm.values.int.pas line 155 BreakPoint at:006297B9
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57387
 Adding breakpoint for storm.values.int.TIntegerValue.ToDateTime in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 160 BreakPoint at:006297C7
+Activate storm.values.int.pas line 159 BreakPoint at:006297C7
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57388
 Adding breakpoint for storm.values.int.TIntegerValue.ToFloat in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 162 BreakPoint at:006297CC
+Activate storm.values.int.pas line 161 BreakPoint at:006297CC
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57389
 Adding breakpoint for storm.values.int.TIntegerValue.ToFloat in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 163 BreakPoint at:006297D8
+Activate storm.values.int.pas line 162 BreakPoint at:006297D8
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57390
 Adding breakpoint for storm.values.int.TIntegerValue.ToFloat in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 165 BreakPoint at:006297E4
+Activate storm.values.int.pas line 164 BreakPoint at:006297E4
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57391
 Adding breakpoint for storm.values.int.TIntegerValue.ToFloat in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 167 BreakPoint at:006297F9
+Activate storm.values.int.pas line 166 BreakPoint at:006297F9
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57392
 Adding breakpoint for storm.values.int.TIntegerValue.ToInt in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 170 BreakPoint at:00629800
+Activate storm.values.int.pas line 169 BreakPoint at:00629800
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57393
 Adding breakpoint for storm.values.int.TIntegerValue.ToInt in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 171 BreakPoint at:0062980C
+Activate storm.values.int.pas line 170 BreakPoint at:0062980C
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57394
 Adding breakpoint for storm.values.int.TIntegerValue.ToInt in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 172 BreakPoint at:00629817
+Activate storm.values.int.pas line 171 BreakPoint at:00629817
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57395
 Adding breakpoint for storm.values.int.TIntegerValue.ToJSON in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 175 BreakPoint at:0062981C
+Activate storm.values.int.pas line 174 BreakPoint at:0062981C
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57396
 Adding breakpoint for storm.values.int.TIntegerValue.ToJSON in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 176 BreakPoint at:0062982B
+Activate storm.values.int.pas line 175 BreakPoint at:0062982B
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57397
 Adding breakpoint for storm.values.int.TIntegerValue.ToJSON in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 178 BreakPoint at:00629837
+Activate storm.values.int.pas line 177 BreakPoint at:00629837
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57398
 Adding breakpoint for storm.values.int.TIntegerValue.ToJSON in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 181 BreakPoint at:00629853
+Activate storm.values.int.pas line 180 BreakPoint at:00629853
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57399
 Adding breakpoint for storm.values.int.TIntegerValue.ToJSON in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 183 BreakPoint at:00629859
+Activate storm.values.int.pas line 182 BreakPoint at:00629859
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57400
 Adding breakpoint for storm.values.int.TIntegerValue.ToJSON in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 185 BreakPoint at:0062986D
+Activate storm.values.int.pas line 184 BreakPoint at:0062986D
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57401
 Adding breakpoint for storm.values.int.TIntegerValue.ToString in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 188 BreakPoint at:00629874
+Activate storm.values.int.pas line 187 BreakPoint at:00629874
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57402
 Adding breakpoint for storm.values.int.TIntegerValue.ToString in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 189 BreakPoint at:00629893
+Activate storm.values.int.pas line 188 BreakPoint at:00629893
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57403
 Adding breakpoint for storm.values.int.TIntegerValue.ToString in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 191 BreakPoint at:0062989F
+Activate storm.values.int.pas line 190 BreakPoint at:0062989F
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57404
 Adding breakpoint for storm.values.int.TIntegerValue.ToString in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 193 BreakPoint at:006298B8
+Activate storm.values.int.pas line 192 BreakPoint at:006298B8
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57405
 Adding breakpoint for storm.values.int.TIntegerValue.SetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 197 BreakPoint at:006298DC
+Activate storm.values.int.pas line 196 BreakPoint at:006298DC
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57406
 Adding breakpoint for storm.values.int.TIntegerValue.SetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 198 BreakPoint at:006298E8
+Activate storm.values.int.pas line 197 BreakPoint at:006298E8
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57407
 Adding breakpoint for storm.values.int.TIntegerValue.SetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 199 BreakPoint at:006298F1
+Activate storm.values.int.pas line 198 BreakPoint at:006298F1
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57408
 Adding breakpoint for storm.values.int.TIntegerValue.SetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 200 BreakPoint at:006298F8
+Activate storm.values.int.pas line 199 BreakPoint at:006298F8
 Setting BreakPoint for module: storm.values.int unit storm.values.int.pas addr:57409
 Adding breakpoint for storm.values.int.TIntegerValue.SetValue in storm.values.int.pas
 TBreakPoint.Activate:
-Activate storm.values.int.pas line 201 BreakPoint at:00629901
+Activate storm.values.int.pas line 200 BreakPoint at:00629901
 Module name "storm.values.int" did not match module from address name "storm.values.float" at address:0022890F
 Module name "storm.values.str.test" did not match module from address name "storm.values.float" at address:00228E0F
 Setting BreakPoint for module: storm.values.float unit storm.values.float.pas addr:57412
@@ -1599,347 +1602,372 @@ Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr
 Adding breakpoint for storm.fields.base.TStormField.Clear in storm.fields.base.pas
 Creating class info for storm.fields.base class TStormField
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 54 BreakPoint at:006830F8
+Activate storm.fields.base.pas line 54 BreakPoint at:006831CC
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69067
 Adding breakpoint for storm.fields.base.TStormField.Clear in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 55 BreakPoint at:006830FF
+Activate storm.fields.base.pas line 55 BreakPoint at:006831D3
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69068
 Adding breakpoint for storm.fields.base.TStormField.Clear in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 56 BreakPoint at:0068310A
+Activate storm.fields.base.pas line 56 BreakPoint at:006831DE
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69069
 Adding breakpoint for storm.fields.base.TStormField.Clone in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 61 BreakPoint at:00683110
+Activate storm.fields.base.pas line 61 BreakPoint at:006831E4
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69070
 Adding breakpoint for storm.fields.base.TStormField.Clone in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 62 BreakPoint at:0068313A
+Activate storm.fields.base.pas line 62 BreakPoint at:0068320E
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69071
 Adding breakpoint for storm.fields.base.TStormField.Clone in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 64 BreakPoint at:00683140
+Activate storm.fields.base.pas line 64 BreakPoint at:00683214
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69072
 Adding breakpoint for storm.fields.base.TStormField.Clone in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 68 BreakPoint at:00683168
+Activate storm.fields.base.pas line 68 BreakPoint at:0068323C
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69073
 Adding breakpoint for storm.fields.base.TStormField.Clone in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 70 BreakPoint at:0068316C
+Activate storm.fields.base.pas line 70 BreakPoint at:00683240
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69074
 Adding breakpoint for storm.fields.base.TStormField.Create in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 73 BreakPoint at:006831A4
+Activate storm.fields.base.pas line 73 BreakPoint at:00683278
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69075
 Adding breakpoint for storm.fields.base.TStormField.Create in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 74 BreakPoint at:006831D5
+Activate storm.fields.base.pas line 74 BreakPoint at:006832A9
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69076
 Adding breakpoint for storm.fields.base.TStormField.Create in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 75 BreakPoint at:006831DF
+Activate storm.fields.base.pas line 75 BreakPoint at:006832B3
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69077
 Adding breakpoint for storm.fields.base.TStormField.Create in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 76 BreakPoint at:006831ED
+Activate storm.fields.base.pas line 76 BreakPoint at:006832C1
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69078
 Adding breakpoint for storm.fields.base.TStormField.Create in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 77 BreakPoint at:006831FB
+Activate storm.fields.base.pas line 77 BreakPoint at:006832CF
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69079
 Adding breakpoint for storm.fields.base.TStormField.Create in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 78 BreakPoint at:00683202
+Activate storm.fields.base.pas line 78 BreakPoint at:006832D6
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69080
 Adding breakpoint for storm.fields.base.TStormField.FieldName in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 81 BreakPoint at:00683240
+Activate storm.fields.base.pas line 81 BreakPoint at:00683314
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69081
 Adding breakpoint for storm.fields.base.TStormField.FieldName in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 82 BreakPoint at:0068324C
+Activate storm.fields.base.pas line 82 BreakPoint at:00683320
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69082
 Adding breakpoint for storm.fields.base.TStormField.FieldName in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 83 BreakPoint at:0068325A
+Activate storm.fields.base.pas line 83 BreakPoint at:0068332E
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69083
 Adding breakpoint for storm.fields.base.TStormField.FromDataField in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 86 BreakPoint at:00683260
+Activate storm.fields.base.pas line 86 BreakPoint at:00683334
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69084
 Adding breakpoint for storm.fields.base.TStormField.FromDataField in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 87 BreakPoint at:0068326C
+Activate storm.fields.base.pas line 87 BreakPoint at:00683340
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69085
 Adding breakpoint for storm.fields.base.TStormField.FromDataField in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 88 BreakPoint at:00683270
+Activate storm.fields.base.pas line 88 BreakPoint at:00683344
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69086
 Adding breakpoint for storm.fields.base.TStormField.FromDataSet in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 91 BreakPoint at:00683278
+Activate storm.fields.base.pas line 91 BreakPoint at:0068334C
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69087
 Adding breakpoint for storm.fields.base.TStormField.FromDataSet in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 92 BreakPoint at:00683287
+Activate storm.fields.base.pas line 92 BreakPoint at:0068335B
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69088
 Adding breakpoint for storm.fields.base.TStormField.FromDataSet in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 93 BreakPoint at:0068328B
+Activate storm.fields.base.pas line 93 BreakPoint at:0068335F
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69089
 Adding breakpoint for storm.fields.base.TStormField.FromDataSet in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 94 BreakPoint at:00683299
+Activate storm.fields.base.pas line 94 BreakPoint at:0068336D
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69090
 Adding breakpoint for storm.fields.base.TStormField.FromDataSet in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 96 BreakPoint at:006832CF
+Activate storm.fields.base.pas line 96 BreakPoint at:006833A3
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69091
 Adding breakpoint for storm.fields.base.TStormField.FromDataSet in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 102 BreakPoint at:006832D7
+Activate storm.fields.base.pas line 102 BreakPoint at:006833AB
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69092
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 105 BreakPoint at:006832E4
+Activate storm.fields.base.pas line 105 BreakPoint at:006833B8
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69093
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 106 BreakPoint at:006832F3
+Activate storm.fields.base.pas line 106 BreakPoint at:006833C7
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69094
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 107 BreakPoint at:006832F7
+Activate storm.fields.base.pas line 107 BreakPoint at:006833CB
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69095
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 108 BreakPoint at:00683305
+Activate storm.fields.base.pas line 108 BreakPoint at:006833D9
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69096
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 110 BreakPoint at:0068331D
+Activate storm.fields.base.pas line 110 BreakPoint at:006833F1
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69097
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 113 BreakPoint at:00683353
+Activate storm.fields.base.pas line 113 BreakPoint at:00683427
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69098
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 119 BreakPoint at:0068335B
+Activate storm.fields.base.pas line 119 BreakPoint at:0068342F
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69099
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 122 BreakPoint at:00683368
+Activate storm.fields.base.pas line 122 BreakPoint at:0068343C
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69100
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 123 BreakPoint at:0068338A
+Activate storm.fields.base.pas line 123 BreakPoint at:0068345E
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69101
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 124 BreakPoint at:0068338E
+Activate storm.fields.base.pas line 124 BreakPoint at:00683462
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69102
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 126 BreakPoint at:006833A0
+Activate storm.fields.base.pas line 126 BreakPoint at:00683474
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69103
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 128 BreakPoint at:006833C0
+Activate storm.fields.base.pas line 128 BreakPoint at:00683494
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69104
 Adding breakpoint for storm.fields.base.TStormField.FromJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 131 BreakPoint at:006833E2
+Activate storm.fields.base.pas line 131 BreakPoint at:006834B6
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69105
 Adding breakpoint for storm.fields.base.TStormField.Initialize in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 134 BreakPoint at:00683410
+Activate storm.fields.base.pas line 134 BreakPoint at:006834E4
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69106
 Adding breakpoint for storm.fields.base.TStormField.Initialize in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 135 BreakPoint at:00683417
+Activate storm.fields.base.pas line 135 BreakPoint at:006834EB
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69107
 Adding breakpoint for storm.fields.base.TStormField.Initialize in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 136 BreakPoint at:0068341F
+Activate storm.fields.base.pas line 136 BreakPoint at:006834F3
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69108
 Adding breakpoint for storm.fields.base.TStormField.IsAssigned in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 139 BreakPoint at:00683424
+Activate storm.fields.base.pas line 139 BreakPoint at:006834F8
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69109
 Adding breakpoint for storm.fields.base.TStormField.IsAssigned in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 140 BreakPoint at:0068342D
+Activate storm.fields.base.pas line 140 BreakPoint at:00683501
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69110
 Adding breakpoint for storm.fields.base.TStormField.IsAssigned in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 141 BreakPoint at:0068343B
+Activate storm.fields.base.pas line 141 BreakPoint at:0068350F
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69111
 Adding breakpoint for storm.fields.base.TStormField.JSONName in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 149 BreakPoint at:00683444
+Activate storm.fields.base.pas line 149 BreakPoint at:00683518
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69112
 Adding breakpoint for storm.fields.base.TStormField.JSONName in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 150 BreakPoint at:00683450
+Activate storm.fields.base.pas line 150 BreakPoint at:00683524
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69113
 Adding breakpoint for storm.fields.base.TStormField.JSONName in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 151 BreakPoint at:0068345E
+Activate storm.fields.base.pas line 151 BreakPoint at:00683532
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69114
 Adding breakpoint for storm.fields.base.TStormField.StormValue in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 154 BreakPoint at:00683464
+Activate storm.fields.base.pas line 154 BreakPoint at:00683538
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69115
 Adding breakpoint for storm.fields.base.TStormField.StormValue in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 155 BreakPoint at:00683470
+Activate storm.fields.base.pas line 155 BreakPoint at:00683544
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69116
 Adding breakpoint for storm.fields.base.TStormField.StormValue in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 156 BreakPoint at:0068347E
+Activate storm.fields.base.pas line 156 BreakPoint at:00683552
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69117
 Adding breakpoint for storm.fields.base.TStormField.ToJSON$ActRec.$0$Body in storm.fields.base.pas
 Creating class info for storm.fields.base class TStormField.ToJSON$ActRec
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 165 BreakPoint at:00683610
+Activate storm.fields.base.pas line 165 BreakPoint at:006836E4
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69118
 Adding breakpoint for storm.fields.base.TStormField.ToJSON$ActRec.$0$Body in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 166 BreakPoint at:0068361C
+Activate storm.fields.base.pas line 166 BreakPoint at:006836F0
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69119
 Adding breakpoint for storm.fields.base.TStormField.ToJSON$ActRec.$0$Body in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 168 BreakPoint at:0068363B
+Activate storm.fields.base.pas line 168 BreakPoint at:0068370F
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69120
 Adding breakpoint for storm.fields.base.TStormField.ToJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 161 BreakPoint at:00683640
+Activate storm.fields.base.pas line 161 BreakPoint at:00683714
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69121
 Adding breakpoint for storm.fields.base.TStormField.ToJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 168 BreakPoint at:006836A4
+Activate storm.fields.base.pas line 168 BreakPoint at:00683778
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69122
 Adding breakpoint for storm.fields.base.TStormField.ToJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 170 BreakPoint at:006836D8
+Activate storm.fields.base.pas line 170 BreakPoint at:006837AC
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69123
 Adding breakpoint for storm.fields.base.TStormField.ToJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 172 BreakPoint at:006836E1
+Activate storm.fields.base.pas line 172 BreakPoint at:006837B5
 Setting BreakPoint for module: storm.fields.base unit storm.fields.base.pas addr:69124
 Adding breakpoint for storm.fields.base.TStormField.ToJSON in storm.fields.base.pas
 TBreakPoint.Activate:
-Activate storm.fields.base.pas line 174 BreakPoint at:006836EF
-Module name "storm.fields.base" did not match module from address name "storm.fields.str" at address:0028273C
+Activate storm.fields.base.pas line 174 BreakPoint at:006837C3
+Module name "storm.fields.base" did not match module from address name "storm.fields.str" at address:00282810
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69126
 Adding breakpoint for storm.fields.str.TStormStringField.FromDataField in storm.fields.str.pas
 Creating class info for storm.fields.str class TStormStringField
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 43 BreakPoint at:00683A64
+Activate storm.fields.str.pas line 43 BreakPoint at:00683B38
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69127
 Adding breakpoint for storm.fields.str.TStormStringField.FromDataField in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 44 BreakPoint at:00683A89
+Activate storm.fields.str.pas line 44 BreakPoint at:00683B5D
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69128
 Adding breakpoint for storm.fields.str.TStormStringField.FromDataField in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 45 BreakPoint at:00683A8D
+Activate storm.fields.str.pas line 45 BreakPoint at:00683B61
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69129
 Adding breakpoint for storm.fields.str.TStormStringField.FromDataField in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 46 BreakPoint at:00683A9B
+Activate storm.fields.str.pas line 46 BreakPoint at:00683B6F
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69130
 Adding breakpoint for storm.fields.str.TStormStringField.FromDataField in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 48 BreakPoint at:00683AA1
+Activate storm.fields.str.pas line 48 BreakPoint at:00683B75
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69131
 Adding breakpoint for storm.fields.str.TStormStringField.FromDataField in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 52 BreakPoint at:00683AD9
+Activate storm.fields.str.pas line 52 BreakPoint at:00683BAD
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69132
 Adding breakpoint for storm.fields.str.TStormStringField.FromDataField in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 53 BreakPoint at:00683ADE
+Activate storm.fields.str.pas line 53 BreakPoint at:00683BB2
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69133
 Adding breakpoint for storm.fields.str.TStormStringField.GetValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 59 BreakPoint at:00683B10
+Activate storm.fields.str.pas line 59 BreakPoint at:00683BE4
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69134
 Adding breakpoint for storm.fields.str.TStormStringField.GetValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 60 BreakPoint at:00683B2F
+Activate storm.fields.str.pas line 60 BreakPoint at:00683C03
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69135
 Adding breakpoint for storm.fields.str.TStormStringField.GetValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 61 BreakPoint at:00683B45
+Activate storm.fields.str.pas line 61 BreakPoint at:00683C19
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69136
 Adding breakpoint for storm.fields.str.TStormStringField.GetValueOrDefault in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 64 BreakPoint at:00683B68
+Activate storm.fields.str.pas line 64 BreakPoint at:00683C3C
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69137
 Adding breakpoint for storm.fields.str.TStormStringField.GetValueOrDefault in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 65 BreakPoint at:00683B9B
+Activate storm.fields.str.pas line 65 BreakPoint at:00683C6F
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69138
 Adding breakpoint for storm.fields.str.TStormStringField.GetValueOrDefault in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 66 BreakPoint at:00683BB4
+Activate storm.fields.str.pas line 66 BreakPoint at:00683C88
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69139
 Adding breakpoint for storm.fields.str.TStormStringField.InitializeStormValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 69 BreakPoint at:00683BE4
+Activate storm.fields.str.pas line 69 BreakPoint at:00683CB8
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69140
 Adding breakpoint for storm.fields.str.TStormStringField.InitializeStormValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 71 BreakPoint at:00683BEB
+Activate storm.fields.str.pas line 71 BreakPoint at:00683CBF
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69141
 Adding breakpoint for storm.fields.str.TStormStringField.InitializeStormValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 72 BreakPoint at:00683C0B
+Activate storm.fields.str.pas line 72 BreakPoint at:00683CDF
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69142
 Adding breakpoint for storm.fields.str.TStormStringField.SetValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 77 BreakPoint at:00683C10
+Activate storm.fields.str.pas line 77 BreakPoint at:00683CE4
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69143
 Adding breakpoint for storm.fields.str.TStormStringField.SetValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 78 BreakPoint at:00683C37
+Activate storm.fields.str.pas line 78 BreakPoint at:00683D0B
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69144
 Adding breakpoint for storm.fields.str.TStormStringField.SetValue in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 79 BreakPoint at:00683C50
+Activate storm.fields.str.pas line 79 BreakPoint at:00683D24
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69145
 Adding breakpoint for storm.fields.str.TStormStringField.Value in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 82 BreakPoint at:00683C7C
+Activate storm.fields.str.pas line 82 BreakPoint at:00683D50
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69146
 Adding breakpoint for storm.fields.str.TStormStringField.Value in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 83 BreakPoint at:00683C88
+Activate storm.fields.str.pas line 83 BreakPoint at:00683D5C
 Setting BreakPoint for module: storm.fields.str unit storm.fields.str.pas addr:69147
 Adding breakpoint for storm.fields.str.TStormStringField.Value in storm.fields.str.pas
 TBreakPoint.Activate:
-Activate storm.fields.str.pas line 84 BreakPoint at:00683C9B
-Module name "storm.fields.str" did not match module from address name "storm.fields.base.test" at address:00282CB7
-Module name "storm.fields.base.test" did not match module from address name "storm.fields.str.test" at address:00283F8B
+Activate storm.fields.str.pas line 84 BreakPoint at:00683D6F
+Module name "storm.fields.str" did not match module from address name "storm.fields.base.test" at address:00282D8B
+Module name "storm.fields.base.test" did not match module from address name "storm.fields.str.test" at address:0028405F
 Setting BreakPoint for module: storm.fields.int unit storm.fields.int.pas addr:69238
 Adding breakpoint for storm.fields.int.TStormIntegerField.GetValue in storm.fields.int.pas
 Creating class info for storm.fields.int class TStormIntegerField
 TBreakPoint.Activate:
-Activate storm.fields.int.pas line 43 BreakPoint at:006856E8
-Module name "storm.fields.str.test" did not match module from address name "storm.fields.int" at address:002846FF
-Module name "storm.fields.int" did not match module from address name "storm.fields.int.test" at address:00284907
+Activate storm.fields.int.pas line 43 BreakPoint at:006857BC
+Module name "storm.fields.str.test" did not match module from address name "storm.fields.int" at address:002847D3
+Module name "storm.fields.int" did not match module from address name "storm.fields.int.test" at address:002849DB
 Setting BreakPoint for module: storm.fields.float unit storm.fields.float.pas addr:69285
 Adding breakpoint for storm.fields.float.TStormFloatField.FromDataField in storm.fields.float.pas
 Creating class info for storm.fields.float class TStormFloatField
 TBreakPoint.Activate:
-Activate storm.fields.float.pas line 43 BreakPoint at:0068633C
-Module name "storm.fields.int.test" did not match module from address name "storm.fields.float" at address:00285355
-Module name "storm.fields.float" did not match module from address name "storm.fields.float.test" at address:0028556F
-Module name "storm.fields.float.test" did not match module from address name "tests" at address:00285FFB
+Activate storm.fields.float.pas line 43 BreakPoint at:00686410
+Module name "storm.fields.int.test" did not match module from address name "storm.fields.float" at address:00285429
+Module name "storm.fields.float" did not match module from address name "storm.fields.float.test" at address:00285643
+Setting BreakPoint for module: storm.fields.bool unit storm.fields.Bool.pas addr:69332
+Adding breakpoint for storm.fields.bool.TStormBooleanField.FromDataField in storm.fields.Bool.pas
+Creating class info for storm.fields.bool class TStormBooleanField
+TBreakPoint.Activate:
+Activate storm.fields.Bool.pas line 32 BreakPoint at:006870B4
+Module name "storm.fields.float.test" did not match module from address name "storm.fields.bool" at address:002860CF
+Module name "storm.fields.bool" did not match module from address name "storm.fields.bool.test" at address:002862EB
+Setting BreakPoint for module: storm.fields.datetime unit storm.fields.datetime.pas addr:69379
+Adding breakpoint for storm.fields.datetime.TStormDateTimeField.FromDataField in storm.fields.datetime.pas
+Creating class info for storm.fields.datetime class TStormDateTimeField
+TBreakPoint.Activate:
+Activate storm.fields.datetime.pas line 43 BreakPoint at:00687D24
+Module name "storm.fields.bool.test" did not match module from address name "storm.fields.datetime" at address:00286D31
+Module name "storm.fields.datetime" did not match module from address name "storm.fields.datetime.test" at address:00286F4F
+Setting BreakPoint for module: storm.fields.date unit storm.fields.Date.pas addr:69426
+Adding breakpoint for storm.fields.date.TStormDateField.FromDataField in storm.fields.Date.pas
+Creating class info for storm.fields.date class TStormDateField
+TBreakPoint.Activate:
+Activate storm.fields.Date.pas line 43 BreakPoint at:006889B4
+Setting BreakPoint for module: storm.fields.date unit storm.fields.Date.pas addr:69427
+Adding breakpoint for storm.fields.date.TStormDateField.FromDataField in storm.fields.Date.pas
+TBreakPoint.Activate:
+Activate storm.fields.Date.pas line 44 BreakPoint at:006889D6
+Module name "storm.fields.datetime.test" did not match module from address name "storm.fields.date" at address:002879D9
+Module name "storm.fields.date" did not match module from address name "storm.fields.date.test" at address:00287BDF
+Module name "storm.fields.date.test" did not match module from address name "tests" at address:00288639
 Module Data.DB skipped
 Module Data.FmtBcd skipped
 Module Data.SqlTimSt skipped
@@ -1961,6 +1989,9 @@ Module pcre_study skipped
 Module pcre_valid_utf8 skipped
 Module pcre_xclass skipped
 Module storm.fields.base.test skipped
+Module storm.fields.bool.test skipped
+Module storm.fields.date.test skipped
+Module storm.fields.datetime.test skipped
 Module storm.fields.float.test skipped
 Module storm.fields.int.test skipped
 Module storm.fields.str.test skipped
@@ -2015,7 +2046,7 @@ Loading DLL at addr:76260000 (C:\windows\SysWOW64\ole32.dll) size :758272
 Done adding  BreakPoints
 Loading DLL at addr:76600000 (C:\windows\SysWOW64\ucrtbase.dll) size :1106432
 Done adding  BreakPoints
-Create thread:17524
+Create thread:3336
 Loading DLL at addr:76B90000 (C:\windows\SysWOW64\RPCRT4.dll) size :711680
 Done adding  BreakPoints
 Loading DLL at addr:75130000 (C:\windows\SysWOW64\combase.dll) size :2350592
@@ -2030,8 +2061,8 @@ Loading DLL at addr:76360000 (C:\windows\SysWOW64\msvcp_win.dll) size :449536
 Done adding  BreakPoints
 Loading DLL at addr:75A40000 (C:\windows\SysWOW64\USER32.dll) size :654336
 Done adding  BreakPoints
-Create thread:6200
-Create thread:18692
+Create thread:18512
+Create thread:17420
 Loading DLL at addr:76EA0000 (C:\windows\SysWOW64\oleaut32.dll) size :552960
 Done adding  BreakPoints
 Loading DLL at addr:76080000 (C:\windows\SysWOW64\msvcrt.dll) size :722432
@@ -2040,15 +2071,36 @@ Loading DLL at addr:750B0000 (C:\windows\SysWOW64\advapi32.dll) size :422400
 Done adding  BreakPoints
 Loading DLL at addr:73EC0000 (C:\windows\SysWOW64\version.dll) size :10752
 Done adding  BreakPoints
-Loading DLL at addr:744F0000 (C:\windows\SysWOW64\netapi32.dll) size :51712
-Done adding  BreakPoints
 Loading DLL at addr:76720000 (C:\windows\SysWOW64\sechost.dll) size :417280
+Done adding  BreakPoints
+Loading DLL at addr:744F0000 (C:\windows\SysWOW64\netapi32.dll) size :51712
 Done adding  BreakPoints
 Loading DLL at addr:740D0000 (C:\windows\SysWOW64\NETUTILS.DLL) size :20992
 Done adding  BreakPoints
 Couldn't find BreakPoint for exception address:772B1A62
 Loading DLL at addr:76DB0000 (C:\windows\SysWOW64\IMM32.DLL) size :100864
 Done adding  BreakPoints
+Adding coverage:storm.fields.base.pas (storm.fields.base) 73
+Clearing BreakPoint at 00683278
+De-Activate storm.fields.base.pas line 73 BreakPoint at:00683278
+Adding coverage:storm.fields.base.pas (storm.fields.base) 74
+Clearing BreakPoint at 006832A9
+De-Activate storm.fields.base.pas line 74 BreakPoint at:006832A9
+Adding coverage:storm.fields.base.pas (storm.fields.base) 75
+Clearing BreakPoint at 006832B3
+De-Activate storm.fields.base.pas line 75 BreakPoint at:006832B3
+Adding coverage:storm.fields.base.pas (storm.fields.base) 76
+Clearing BreakPoint at 006832C1
+De-Activate storm.fields.base.pas line 76 BreakPoint at:006832C1
+Adding coverage:storm.fields.base.pas (storm.fields.base) 77
+Clearing BreakPoint at 006832CF
+De-Activate storm.fields.base.pas line 77 BreakPoint at:006832CF
+Adding coverage:storm.fields.base.pas (storm.fields.base) 134
+Clearing BreakPoint at 006834E4
+De-Activate storm.fields.base.pas line 134 BreakPoint at:006834E4
+Adding coverage:storm.fields.base.pas (storm.fields.base) 135
+Clearing BreakPoint at 006834EB
+De-Activate storm.fields.base.pas line 135 BreakPoint at:006834EB
 Adding coverage:storm.values.base.pas (storm.values.base) 42
 Clearing BreakPoint at 00625880
 De-Activate storm.values.base.pas line 42 BreakPoint at:00625880
@@ -2079,6 +2131,12 @@ De-Activate storm.values.datetime.pas line 123 BreakPoint at:00630E4B
 Adding coverage:storm.values.base.pas (storm.values.base) 45
 Clearing BreakPoint at 006258A9
 De-Activate storm.values.base.pas line 45 BreakPoint at:006258A9
+Adding coverage:storm.fields.base.pas (storm.fields.base) 136
+Clearing BreakPoint at 006834F3
+De-Activate storm.fields.base.pas line 136 BreakPoint at:006834F3
+Adding coverage:storm.fields.base.pas (storm.fields.base) 78
+Clearing BreakPoint at 006832D6
+De-Activate storm.fields.base.pas line 78 BreakPoint at:006832D6
 Adding coverage:storm.values.datetime.pas (storm.values.datetime) 174
 Clearing BreakPoint at 00631090
 De-Activate storm.values.datetime.pas line 174 BreakPoint at:00631090
@@ -2097,12 +2155,12 @@ De-Activate storm.values.datetime.pas line 179 BreakPoint at:006310BE
 Adding coverage:storm.values.datetime.pas (storm.values.datetime) 186
 Clearing BreakPoint at 006310CD
 De-Activate storm.values.datetime.pas line 186 BreakPoint at:006310CD
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 113
-Clearing BreakPoint at 00630E0C
-De-Activate storm.values.datetime.pas line 113 BreakPoint at:00630E0C
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 114
-Clearing BreakPoint at 00630E18
-De-Activate storm.values.datetime.pas line 114 BreakPoint at:00630E18
+Adding coverage:storm.fields.base.pas (storm.fields.base) 139
+Clearing BreakPoint at 006834F8
+De-Activate storm.fields.base.pas line 139 BreakPoint at:006834F8
+Adding coverage:storm.fields.base.pas (storm.fields.base) 140
+Clearing BreakPoint at 00683501
+De-Activate storm.fields.base.pas line 140 BreakPoint at:00683501
 Adding coverage:storm.values.base.pas (storm.values.base) 54
 Clearing BreakPoint at 006258DC
 De-Activate storm.values.base.pas line 54 BreakPoint at:006258DC
@@ -2112,198 +2170,113 @@ De-Activate storm.values.base.pas line 55 BreakPoint at:006258E5
 Adding coverage:storm.values.base.pas (storm.values.base) 56
 Clearing BreakPoint at 006258EE
 De-Activate storm.values.base.pas line 56 BreakPoint at:006258EE
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 118
-Clearing BreakPoint at 00630E35
-De-Activate storm.values.datetime.pas line 118 BreakPoint at:00630E35
+Adding coverage:storm.fields.base.pas (storm.fields.base) 141
+Clearing BreakPoint at 0068350F
+De-Activate storm.fields.base.pas line 141 BreakPoint at:0068350F
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 113
+Clearing BreakPoint at 00630E0C
+De-Activate storm.values.datetime.pas line 113 BreakPoint at:00630E0C
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 114
+Clearing BreakPoint at 00630E18
+De-Activate storm.values.datetime.pas line 114 BreakPoint at:00630E18
 Adding coverage:storm.values.datetime.pas (storm.values.datetime) 116
 Clearing BreakPoint at 00630E24
 De-Activate storm.values.datetime.pas line 116 BreakPoint at:00630E24
-Adding coverage:storm.values.base.pas (storm.values.base) 37
-Clearing BreakPoint at 0062586C
-De-Activate storm.values.base.pas line 37 BreakPoint at:0062586C
-Adding coverage:storm.values.base.pas (storm.values.base) 38
-Clearing BreakPoint at 00625873
-De-Activate storm.values.base.pas line 38 BreakPoint at:00625873
-Adding coverage:storm.values.base.pas (storm.values.base) 39
-Clearing BreakPoint at 0062587A
-De-Activate storm.values.base.pas line 39 BreakPoint at:0062587A
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 61
-Clearing BreakPoint at 00630C08
-De-Activate storm.values.datetime.pas line 61 BreakPoint at:00630C08
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 62
-Clearing BreakPoint at 00630C67
-De-Activate storm.values.datetime.pas line 62 BreakPoint at:00630C67
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 68
-Clearing BreakPoint at 00630C91
-De-Activate storm.values.datetime.pas line 68 BreakPoint at:00630C91
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 70
-Clearing BreakPoint at 00630C95
-De-Activate storm.values.datetime.pas line 70 BreakPoint at:00630C95
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 64
-Clearing BreakPoint at 00630C6D
-De-Activate storm.values.datetime.pas line 64 BreakPoint at:00630C6D
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 131
-Clearing BreakPoint at 00630E60
-De-Activate storm.values.datetime.pas line 131 BreakPoint at:00630E60
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 132
-Clearing BreakPoint at 00630E6C
-De-Activate storm.values.datetime.pas line 132 BreakPoint at:00630E6C
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 133
-Clearing BreakPoint at 00630E77
-De-Activate storm.values.datetime.pas line 133 BreakPoint at:00630E77
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 64
-Clearing BreakPoint at 00630BE0
-De-Activate storm.values.datetime.pas line 64 BreakPoint at:00630BE0
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 165
-Clearing BreakPoint at 00630FEC
-De-Activate storm.values.datetime.pas line 165 BreakPoint at:00630FEC
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 166
-Clearing BreakPoint at 0063100B
-De-Activate storm.values.datetime.pas line 166 BreakPoint at:0063100B
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 170
-Clearing BreakPoint at 0063106F
-De-Activate storm.values.datetime.pas line 170 BreakPoint at:0063106F
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 168
-Clearing BreakPoint at 00631017
-De-Activate storm.values.datetime.pas line 168 BreakPoint at:00631017
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 100
-Clearing BreakPoint at 00630D94
-De-Activate storm.values.datetime.pas line 100 BreakPoint at:00630D94
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 101
-Clearing BreakPoint at 00630DB6
-De-Activate storm.values.datetime.pas line 101 BreakPoint at:00630DB6
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 103
-Clearing BreakPoint at 00630DD0
-De-Activate storm.values.datetime.pas line 103 BreakPoint at:00630DD0
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 110
-Clearing BreakPoint at 00630DE7
-De-Activate storm.values.datetime.pas line 110 BreakPoint at:00630DE7
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 107
-Clearing BreakPoint at 00630DE3
-De-Activate storm.values.datetime.pas line 107 BreakPoint at:00630DE3
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 144
-Clearing BreakPoint at 00630EB0
-De-Activate storm.values.datetime.pas line 144 BreakPoint at:00630EB0
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 145
-Clearing BreakPoint at 00630EBC
-De-Activate storm.values.datetime.pas line 145 BreakPoint at:00630EBC
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 149
-Clearing BreakPoint at 00630EDB
-De-Activate storm.values.datetime.pas line 149 BreakPoint at:00630EDB
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 147
-Clearing BreakPoint at 00630EC8
-De-Activate storm.values.datetime.pas line 147 BreakPoint at:00630EC8
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 88
-Clearing BreakPoint at 00630D38
-De-Activate storm.values.datetime.pas line 88 BreakPoint at:00630D38
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 89
-Clearing BreakPoint at 00630D44
-De-Activate storm.values.datetime.pas line 89 BreakPoint at:00630D44
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 90
-Clearing BreakPoint at 00630D5C
-De-Activate storm.values.datetime.pas line 90 BreakPoint at:00630D5C
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 136
-Clearing BreakPoint at 00630E7C
-De-Activate storm.values.datetime.pas line 136 BreakPoint at:00630E7C
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 137
-Clearing BreakPoint at 00630E88
-De-Activate storm.values.datetime.pas line 137 BreakPoint at:00630E88
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 141
-Clearing BreakPoint at 00630EA9
-De-Activate storm.values.datetime.pas line 141 BreakPoint at:00630EA9
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 139
-Clearing BreakPoint at 00630E94
-De-Activate storm.values.datetime.pas line 139 BreakPoint at:00630E94
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 83
-Clearing BreakPoint at 00630D0C
-De-Activate storm.values.datetime.pas line 83 BreakPoint at:00630D0C
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 84
-Clearing BreakPoint at 00630D15
-De-Activate storm.values.datetime.pas line 84 BreakPoint at:00630D15
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 85
-Clearing BreakPoint at 00630D2D
-De-Activate storm.values.datetime.pas line 85 BreakPoint at:00630D2D
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 126
-Clearing BreakPoint at 00630E50
-De-Activate storm.values.datetime.pas line 126 BreakPoint at:00630E50
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 128
-Clearing BreakPoint at 00630E5C
-De-Activate storm.values.datetime.pas line 128 BreakPoint at:00630E5C
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 73
-Clearing BreakPoint at 00630CD0
-De-Activate storm.values.datetime.pas line 73 BreakPoint at:00630CD0
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 74
-Clearing BreakPoint at 00630CDC
-De-Activate storm.values.datetime.pas line 74 BreakPoint at:00630CDC
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 75
-Clearing BreakPoint at 00630CE0
-De-Activate storm.values.datetime.pas line 75 BreakPoint at:00630CE0
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 152
-Clearing BreakPoint at 00630EE0
-De-Activate storm.values.datetime.pas line 152 BreakPoint at:00630EE0
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 153
-Clearing BreakPoint at 00630F03
-De-Activate storm.values.datetime.pas line 153 BreakPoint at:00630F03
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 158
-Clearing BreakPoint at 00630F79
-De-Activate storm.values.datetime.pas line 158 BreakPoint at:00630F79
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 160
-Clearing BreakPoint at 00630F7F
-De-Activate storm.values.datetime.pas line 160 BreakPoint at:00630F7F
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 162
-Clearing BreakPoint at 00630F93
-De-Activate storm.values.datetime.pas line 162 BreakPoint at:00630F93
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 155
-Clearing BreakPoint at 00630F0F
-De-Activate storm.values.datetime.pas line 155 BreakPoint at:00630F0F
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 93
-Clearing BreakPoint at 00630D64
-De-Activate storm.values.datetime.pas line 93 BreakPoint at:00630D64
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 94
-Clearing BreakPoint at 00630D70
-De-Activate storm.values.datetime.pas line 94 BreakPoint at:00630D70
-Adding coverage:storm.values.base.pas (storm.values.base) 62
-Clearing BreakPoint at 006258F8
-De-Activate storm.values.base.pas line 62 BreakPoint at:006258F8
-Adding coverage:storm.values.base.pas (storm.values.base) 63
-Clearing BreakPoint at 00625923
-De-Activate storm.values.base.pas line 63 BreakPoint at:00625923
-Adding coverage:storm.values.base.pas (storm.values.base) 65
-Clearing BreakPoint at 00625927
-De-Activate storm.values.base.pas line 65 BreakPoint at:00625927
-Adding coverage:storm.values.base.pas (storm.values.base) 84
-Clearing BreakPoint at 006259D5
-De-Activate storm.values.base.pas line 84 BreakPoint at:006259D5
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 95
-Clearing BreakPoint at 00630D8A
-De-Activate storm.values.datetime.pas line 95 BreakPoint at:00630D8A
-Adding coverage:storm.values.base.pas (storm.values.base) 67
-Clearing BreakPoint at 0062593B
-De-Activate storm.values.base.pas line 67 BreakPoint at:0062593B
-Adding coverage:storm.values.base.pas (storm.values.base) 71
-Clearing BreakPoint at 00625969
-De-Activate storm.values.base.pas line 71 BreakPoint at:00625969
-Adding coverage:storm.values.base.pas (storm.values.base) 75
-Clearing BreakPoint at 00625996
-De-Activate storm.values.base.pas line 75 BreakPoint at:00625996
-Adding coverage:storm.values.base.pas (storm.values.base) 79
-Clearing BreakPoint at 006259BB
-De-Activate storm.values.base.pas line 79 BreakPoint at:006259BB
-Adding coverage:storm.values.base.pas (storm.values.base) 81
-Clearing BreakPoint at 006259CD
-De-Activate storm.values.base.pas line 81 BreakPoint at:006259CD
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 183
-Clearing BreakPoint at 006310C9
-De-Activate storm.values.datetime.pas line 183 BreakPoint at:006310C9
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 78
-Clearing BreakPoint at 00630CE8
-De-Activate storm.values.datetime.pas line 78 BreakPoint at:00630CE8
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 79
-Clearing BreakPoint at 00630CF1
-De-Activate storm.values.datetime.pas line 79 BreakPoint at:00630CF1
-Adding coverage:storm.values.datetime.pas (storm.values.datetime) 80
-Clearing BreakPoint at 00630D02
-De-Activate storm.values.datetime.pas line 80 BreakPoint at:00630D02
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 118
+Clearing BreakPoint at 00630E35
+De-Activate storm.values.datetime.pas line 118 BreakPoint at:00630E35
+Adding coverage:storm.fields.datetime.pas (storm.fields.datetime) 43
+Clearing BreakPoint at 00687D24
+De-Activate storm.fields.datetime.pas line 43 BreakPoint at:00687D24
+ACCESS VIOLATION at Address:00687D63
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000064
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:006883C1
+After line:storm.fields.datetime.test line 54
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
+Adding coverage:storm.values.date.pas (storm.values.date) 39
+Clearing BreakPoint at 00632C90
+De-Activate storm.values.date.pas line 39 BreakPoint at:00632C90
+Adding coverage:storm.values.date.pas (storm.values.date) 40
+Clearing BreakPoint at 00632C99
+De-Activate storm.values.date.pas line 40 BreakPoint at:00632C99
+Adding coverage:storm.values.date.pas (storm.values.date) 41
+Clearing BreakPoint at 00632CAA
+De-Activate storm.values.date.pas line 41 BreakPoint at:00632CAA
+Adding coverage:storm.values.date.pas (storm.values.date) 31
+Clearing BreakPoint at 00632C60
+De-Activate storm.values.date.pas line 31 BreakPoint at:00632C60
+Adding coverage:storm.values.date.pas (storm.values.date) 32
+Clearing BreakPoint at 00632C6C
+De-Activate storm.values.date.pas line 32 BreakPoint at:00632C6C
+Adding coverage:storm.values.date.pas (storm.values.date) 34
+Clearing BreakPoint at 00632C78
+De-Activate storm.values.date.pas line 34 BreakPoint at:00632C78
+Adding coverage:storm.values.date.pas (storm.values.date) 36
+Clearing BreakPoint at 00632C89
+De-Activate storm.values.date.pas line 36 BreakPoint at:00632C89
+Adding coverage:storm.fields.Date.pas (storm.fields.date) 43
+Clearing BreakPoint at 006889B4
+De-Activate storm.fields.Date.pas line 43 BreakPoint at:006889B4
+Adding coverage:storm.fields.Date.pas (storm.fields.date) 44
+Clearing BreakPoint at 006889D6
+De-Activate storm.fields.Date.pas line 44 BreakPoint at:006889D6
+ACCESS VIOLATION at Address:006889F3
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000064
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:00689039
+After line:storm.fields.date.test line 54
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
 Adding coverage:storm.values.bool.pas (storm.values.bool) 145
 Clearing BreakPoint at 0062E8A0
 De-Activate storm.values.bool.pas line 145 BreakPoint at:0062E8A0
@@ -2334,12 +2307,620 @@ De-Activate storm.values.bool.pas line 137 BreakPoint at:0062E874
 Adding coverage:storm.values.bool.pas (storm.values.bool) 138
 Clearing BreakPoint at 0062E880
 De-Activate storm.values.bool.pas line 138 BreakPoint at:0062E880
-Adding coverage:storm.values.bool.pas (storm.values.bool) 142
-Clearing BreakPoint at 0062E89A
-De-Activate storm.values.bool.pas line 142 BreakPoint at:0062E89A
 Adding coverage:storm.values.bool.pas (storm.values.bool) 140
 Clearing BreakPoint at 0062E88C
 De-Activate storm.values.bool.pas line 140 BreakPoint at:0062E88C
+Adding coverage:storm.values.bool.pas (storm.values.bool) 142
+Clearing BreakPoint at 0062E89A
+De-Activate storm.values.bool.pas line 142 BreakPoint at:0062E89A
+Adding coverage:storm.fields.Bool.pas (storm.fields.bool) 32
+Clearing BreakPoint at 006870B4
+De-Activate storm.fields.Bool.pas line 32 BreakPoint at:006870B4
+ACCESS VIOLATION at Address:006870F3
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000058
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:00687751
+After line:storm.fields.bool.test line 54
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
+Adding coverage:storm.values.int.pas (storm.values.int) 127
+Clearing BreakPoint at 00629730
+De-Activate storm.values.int.pas line 127 BreakPoint at:00629730
+Adding coverage:storm.values.int.pas (storm.values.int) 128
+Clearing BreakPoint at 00629737
+De-Activate storm.values.int.pas line 128 BreakPoint at:00629737
+Adding coverage:storm.values.int.pas (storm.values.int) 129
+Clearing BreakPoint at 0062973F
+De-Activate storm.values.int.pas line 129 BreakPoint at:0062973F
+Adding coverage:storm.values.int.pas (storm.values.int) 196
+Clearing BreakPoint at 006298DC
+De-Activate storm.values.int.pas line 196 BreakPoint at:006298DC
+Adding coverage:storm.values.int.pas (storm.values.int) 197
+Clearing BreakPoint at 006298E8
+De-Activate storm.values.int.pas line 197 BreakPoint at:006298E8
+Adding coverage:storm.values.int.pas (storm.values.int) 198
+Clearing BreakPoint at 006298F1
+De-Activate storm.values.int.pas line 198 BreakPoint at:006298F1
+Adding coverage:storm.values.int.pas (storm.values.int) 199
+Clearing BreakPoint at 006298F8
+De-Activate storm.values.int.pas line 199 BreakPoint at:006298F8
+Adding coverage:storm.values.int.pas (storm.values.int) 200
+Clearing BreakPoint at 00629901
+De-Activate storm.values.int.pas line 200 BreakPoint at:00629901
+Adding coverage:storm.fields.int.pas (storm.fields.int) 43
+Clearing BreakPoint at 006857BC
+De-Activate storm.fields.int.pas line 43 BreakPoint at:006857BC
+Adding coverage:storm.values.int.pas (storm.values.int) 119
+Clearing BreakPoint at 00629704
+De-Activate storm.values.int.pas line 119 BreakPoint at:00629704
+Adding coverage:storm.values.int.pas (storm.values.int) 120
+Clearing BreakPoint at 00629710
+De-Activate storm.values.int.pas line 120 BreakPoint at:00629710
+Adding coverage:storm.values.int.pas (storm.values.int) 122
+Clearing BreakPoint at 0062971C
+De-Activate storm.values.int.pas line 122 BreakPoint at:0062971C
+Adding coverage:storm.values.int.pas (storm.values.int) 124
+Clearing BreakPoint at 0062972A
+De-Activate storm.values.int.pas line 124 BreakPoint at:0062972A
+ACCESS VIOLATION at Address:00685853
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000074
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:00685E41
+After line:storm.fields.int.test line 54
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
+Adding coverage:storm.fields.str.pas (storm.fields.str) 69
+Clearing BreakPoint at 00683CB8
+De-Activate storm.fields.str.pas line 69 BreakPoint at:00683CB8
+Adding coverage:storm.fields.str.pas (storm.fields.str) 71
+Clearing BreakPoint at 00683CBF
+De-Activate storm.fields.str.pas line 71 BreakPoint at:00683CBF
+Adding coverage:storm.values.str.pas (storm.values.str) 119
+Clearing BreakPoint at 006264F4
+De-Activate storm.values.str.pas line 119 BreakPoint at:006264F4
+Adding coverage:storm.values.str.pas (storm.values.str) 120
+Clearing BreakPoint at 006264FB
+De-Activate storm.values.str.pas line 120 BreakPoint at:006264FB
+Adding coverage:storm.values.str.pas (storm.values.str) 121
+Clearing BreakPoint at 00626503
+De-Activate storm.values.str.pas line 121 BreakPoint at:00626503
+Adding coverage:storm.fields.str.pas (storm.fields.str) 72
+Clearing BreakPoint at 00683CDF
+De-Activate storm.fields.str.pas line 72 BreakPoint at:00683CDF
+Adding coverage:storm.fields.str.pas (storm.fields.str) 82
+Clearing BreakPoint at 00683D50
+De-Activate storm.fields.str.pas line 82 BreakPoint at:00683D50
+Adding coverage:storm.fields.str.pas (storm.fields.str) 83
+Clearing BreakPoint at 00683D5C
+De-Activate storm.fields.str.pas line 83 BreakPoint at:00683D5C
+Adding coverage:storm.fields.str.pas (storm.fields.str) 84
+Clearing BreakPoint at 00683D6F
+De-Activate storm.fields.str.pas line 84 BreakPoint at:00683D6F
+Adding coverage:storm.fields.str.pas (storm.fields.str) 77
+Clearing BreakPoint at 00683CE4
+De-Activate storm.fields.str.pas line 77 BreakPoint at:00683CE4
+Adding coverage:storm.fields.str.pas (storm.fields.str) 78
+Clearing BreakPoint at 00683D0B
+De-Activate storm.fields.str.pas line 78 BreakPoint at:00683D0B
+Adding coverage:storm.values.str.pas (storm.values.str) 197
+Clearing BreakPoint at 00626698
+De-Activate storm.values.str.pas line 197 BreakPoint at:00626698
+Adding coverage:storm.values.str.pas (storm.values.str) 198
+Clearing BreakPoint at 006266BA
+De-Activate storm.values.str.pas line 198 BreakPoint at:006266BA
+Adding coverage:storm.values.str.pas (storm.values.str) 199
+Clearing BreakPoint at 006266C8
+De-Activate storm.values.str.pas line 199 BreakPoint at:006266C8
+Adding coverage:storm.values.str.pas (storm.values.str) 200
+Clearing BreakPoint at 006266CF
+De-Activate storm.values.str.pas line 200 BreakPoint at:006266CF
+Adding coverage:storm.values.str.pas (storm.values.str) 201
+Clearing BreakPoint at 006266D8
+De-Activate storm.values.str.pas line 201 BreakPoint at:006266D8
+Adding coverage:storm.fields.str.pas (storm.fields.str) 79
+Clearing BreakPoint at 00683D24
+De-Activate storm.fields.str.pas line 79 BreakPoint at:00683D24
+Adding coverage:storm.fields.str.pas (storm.fields.str) 64
+Clearing BreakPoint at 00683C3C
+De-Activate storm.fields.str.pas line 64 BreakPoint at:00683C3C
+Adding coverage:storm.fields.str.pas (storm.fields.str) 65
+Clearing BreakPoint at 00683C6F
+De-Activate storm.fields.str.pas line 65 BreakPoint at:00683C6F
+Adding coverage:storm.fields.str.pas (storm.fields.str) 59
+Clearing BreakPoint at 00683BE4
+De-Activate storm.fields.str.pas line 59 BreakPoint at:00683BE4
+Adding coverage:storm.fields.str.pas (storm.fields.str) 60
+Clearing BreakPoint at 00683C03
+De-Activate storm.fields.str.pas line 60 BreakPoint at:00683C03
+Adding coverage:storm.values.str.pas (storm.values.str) 111
+Clearing BreakPoint at 006264C8
+De-Activate storm.values.str.pas line 111 BreakPoint at:006264C8
+Adding coverage:storm.values.str.pas (storm.values.str) 112
+Clearing BreakPoint at 006264D4
+De-Activate storm.values.str.pas line 112 BreakPoint at:006264D4
+Adding coverage:storm.values.str.pas (storm.values.str) 114
+Clearing BreakPoint at 006264E0
+De-Activate storm.values.str.pas line 114 BreakPoint at:006264E0
+Adding coverage:storm.values.str.pas (storm.values.str) 116
+Clearing BreakPoint at 006264EE
+De-Activate storm.values.str.pas line 116 BreakPoint at:006264EE
+Adding coverage:storm.fields.str.pas (storm.fields.str) 61
+Clearing BreakPoint at 00683C19
+De-Activate storm.fields.str.pas line 61 BreakPoint at:00683C19
+Adding coverage:storm.fields.str.pas (storm.fields.str) 66
+Clearing BreakPoint at 00683C88
+De-Activate storm.fields.str.pas line 66 BreakPoint at:00683C88
+Adding coverage:storm.fields.str.pas (storm.fields.str) 43
+Clearing BreakPoint at 00683B38
+De-Activate storm.fields.str.pas line 43 BreakPoint at:00683B38
+Adding coverage:storm.fields.str.pas (storm.fields.str) 44
+Clearing BreakPoint at 00683B5D
+De-Activate storm.fields.str.pas line 44 BreakPoint at:00683B5D
+Adding coverage:storm.fields.str.pas (storm.fields.str) 45
+Clearing BreakPoint at 00683B61
+De-Activate storm.fields.str.pas line 45 BreakPoint at:00683B61
+Adding coverage:storm.fields.str.pas (storm.fields.str) 46
+Clearing BreakPoint at 00683B6F
+De-Activate storm.fields.str.pas line 46 BreakPoint at:00683B6F
+Adding coverage:storm.fields.str.pas (storm.fields.str) 48
+Clearing BreakPoint at 00683B75
+De-Activate storm.fields.str.pas line 48 BreakPoint at:00683B75
+ACCESS VIOLATION at Address:00683B7D
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000088
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:00685165
+After line:storm.fields.str.test line 54
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
+Adding coverage:storm.fields.str.pas (storm.fields.str) 52
+Clearing BreakPoint at 00683BAD
+De-Activate storm.fields.str.pas line 52 BreakPoint at:00683BAD
+Adding coverage:storm.fields.str.pas (storm.fields.str) 53
+Clearing BreakPoint at 00683BB2
+De-Activate storm.fields.str.pas line 53 BreakPoint at:00683BB2
+Adding coverage:storm.fields.base.pas (storm.fields.base) 154
+Clearing BreakPoint at 00683538
+De-Activate storm.fields.base.pas line 154 BreakPoint at:00683538
+Adding coverage:storm.fields.base.pas (storm.fields.base) 155
+Clearing BreakPoint at 00683544
+De-Activate storm.fields.base.pas line 155 BreakPoint at:00683544
+Adding coverage:storm.fields.base.pas (storm.fields.base) 156
+Clearing BreakPoint at 00683552
+De-Activate storm.fields.base.pas line 156 BreakPoint at:00683552
+Adding coverage:storm.fields.base.pas (storm.fields.base) 54
+Clearing BreakPoint at 006831CC
+De-Activate storm.fields.base.pas line 54 BreakPoint at:006831CC
+Adding coverage:storm.fields.base.pas (storm.fields.base) 55
+Clearing BreakPoint at 006831D3
+De-Activate storm.fields.base.pas line 55 BreakPoint at:006831D3
+Adding coverage:storm.values.base.pas (storm.values.base) 37
+Clearing BreakPoint at 0062586C
+De-Activate storm.values.base.pas line 37 BreakPoint at:0062586C
+Adding coverage:storm.values.base.pas (storm.values.base) 38
+Clearing BreakPoint at 00625873
+De-Activate storm.values.base.pas line 38 BreakPoint at:00625873
+Adding coverage:storm.values.base.pas (storm.values.base) 39
+Clearing BreakPoint at 0062587A
+De-Activate storm.values.base.pas line 39 BreakPoint at:0062587A
+Adding coverage:storm.fields.base.pas (storm.fields.base) 56
+Clearing BreakPoint at 006831DE
+De-Activate storm.fields.base.pas line 56 BreakPoint at:006831DE
+Adding coverage:storm.fields.base.pas (storm.fields.base) 149
+Clearing BreakPoint at 00683518
+De-Activate storm.fields.base.pas line 149 BreakPoint at:00683518
+Adding coverage:storm.fields.base.pas (storm.fields.base) 150
+Clearing BreakPoint at 00683524
+De-Activate storm.fields.base.pas line 150 BreakPoint at:00683524
+Adding coverage:storm.fields.base.pas (storm.fields.base) 151
+Clearing BreakPoint at 00683532
+De-Activate storm.fields.base.pas line 151 BreakPoint at:00683532
+Adding coverage:storm.fields.base.pas (storm.fields.base) 81
+Clearing BreakPoint at 00683314
+De-Activate storm.fields.base.pas line 81 BreakPoint at:00683314
+Adding coverage:storm.fields.base.pas (storm.fields.base) 82
+Clearing BreakPoint at 00683320
+De-Activate storm.fields.base.pas line 82 BreakPoint at:00683320
+Adding coverage:storm.fields.base.pas (storm.fields.base) 83
+Clearing BreakPoint at 0068332E
+De-Activate storm.fields.base.pas line 83 BreakPoint at:0068332E
+Adding coverage:storm.fields.base.pas (storm.fields.base) 161
+Clearing BreakPoint at 00683714
+De-Activate storm.fields.base.pas line 161 BreakPoint at:00683714
+Adding coverage:storm.fields.base.pas (storm.fields.base) 168
+Clearing BreakPoint at 00683778
+De-Activate storm.fields.base.pas line 168 BreakPoint at:00683778
+Adding coverage:storm.values.str.pas (storm.values.str) 178
+Clearing BreakPoint at 00626624
+De-Activate storm.values.str.pas line 178 BreakPoint at:00626624
+Adding coverage:storm.values.str.pas (storm.values.str) 179
+Clearing BreakPoint at 00626633
+De-Activate storm.values.str.pas line 179 BreakPoint at:00626633
+Adding coverage:storm.values.str.pas (storm.values.str) 184
+Clearing BreakPoint at 0062665B
+De-Activate storm.values.str.pas line 184 BreakPoint at:0062665B
+Adding coverage:storm.values.str.pas (storm.values.str) 188
+Clearing BreakPoint at 00626675
+De-Activate storm.values.str.pas line 188 BreakPoint at:00626675
+Adding coverage:storm.fields.base.pas (storm.fields.base) 170
+Clearing BreakPoint at 006837AC
+De-Activate storm.fields.base.pas line 170 BreakPoint at:006837AC
+Adding coverage:storm.fields.base.pas (storm.fields.base) 174
+Clearing BreakPoint at 006837C3
+De-Activate storm.fields.base.pas line 174 BreakPoint at:006837C3
+Adding coverage:storm.values.str.pas (storm.values.str) 186
+Clearing BreakPoint at 00626661
+De-Activate storm.values.str.pas line 186 BreakPoint at:00626661
+Adding coverage:storm.fields.base.pas (storm.fields.base) 165
+Clearing BreakPoint at 006836E4
+De-Activate storm.fields.base.pas line 165 BreakPoint at:006836E4
+Adding coverage:storm.fields.base.pas (storm.fields.base) 166
+Clearing BreakPoint at 006836F0
+De-Activate storm.fields.base.pas line 166 BreakPoint at:006836F0
+Adding coverage:storm.fields.base.pas (storm.fields.base) 168
+Clearing BreakPoint at 0068370F
+De-Activate storm.fields.base.pas line 168 BreakPoint at:0068370F
+Adding coverage:storm.fields.base.pas (storm.fields.base) 172
+Clearing BreakPoint at 006837B5
+De-Activate storm.fields.base.pas line 172 BreakPoint at:006837B5
+Adding coverage:storm.values.str.pas (storm.values.str) 181
+Clearing BreakPoint at 0062663F
+De-Activate storm.values.str.pas line 181 BreakPoint at:0062663F
+Adding coverage:storm.fields.base.pas (storm.fields.base) 122
+Clearing BreakPoint at 0068343C
+De-Activate storm.fields.base.pas line 122 BreakPoint at:0068343C
+Adding coverage:storm.fields.base.pas (storm.fields.base) 123
+Clearing BreakPoint at 0068345E
+De-Activate storm.fields.base.pas line 123 BreakPoint at:0068345E
+Adding coverage:storm.fields.base.pas (storm.fields.base) 124
+Clearing BreakPoint at 00683462
+De-Activate storm.fields.base.pas line 124 BreakPoint at:00683462
+Adding coverage:storm.fields.base.pas (storm.fields.base) 131
+Clearing BreakPoint at 006834B6
+De-Activate storm.fields.base.pas line 131 BreakPoint at:006834B6
+Adding coverage:storm.fields.base.pas (storm.fields.base) 126
+Clearing BreakPoint at 00683474
+De-Activate storm.fields.base.pas line 126 BreakPoint at:00683474
+Adding coverage:storm.fields.base.pas (storm.fields.base) 128
+Clearing BreakPoint at 00683494
+De-Activate storm.fields.base.pas line 128 BreakPoint at:00683494
+Adding coverage:storm.values.str.pas (storm.values.str) 92
+Clearing BreakPoint at 00626438
+De-Activate storm.values.str.pas line 92 BreakPoint at:00626438
+Adding coverage:storm.values.str.pas (storm.values.str) 93
+Clearing BreakPoint at 00626444
+De-Activate storm.values.str.pas line 93 BreakPoint at:00626444
+Adding coverage:storm.values.str.pas (storm.values.str) 95
+Clearing BreakPoint at 0062644A
+De-Activate storm.values.str.pas line 95 BreakPoint at:0062644A
+Adding coverage:storm.values.base.pas (storm.values.base) 62
+Clearing BreakPoint at 006258F8
+De-Activate storm.values.base.pas line 62 BreakPoint at:006258F8
+Adding coverage:storm.values.base.pas (storm.values.base) 63
+Clearing BreakPoint at 00625923
+De-Activate storm.values.base.pas line 63 BreakPoint at:00625923
+Adding coverage:storm.values.base.pas (storm.values.base) 65
+Clearing BreakPoint at 00625927
+De-Activate storm.values.base.pas line 65 BreakPoint at:00625927
+Adding coverage:storm.values.base.pas (storm.values.base) 67
+Clearing BreakPoint at 0062593B
+De-Activate storm.values.base.pas line 67 BreakPoint at:0062593B
+Adding coverage:storm.values.base.pas (storm.values.base) 71
+Clearing BreakPoint at 00625969
+De-Activate storm.values.base.pas line 71 BreakPoint at:00625969
+Adding coverage:storm.values.base.pas (storm.values.base) 73
+Clearing BreakPoint at 0062597B
+De-Activate storm.values.base.pas line 73 BreakPoint at:0062597B
+Adding coverage:storm.values.str.pas (storm.values.str) 106
+Clearing BreakPoint at 00626474
+De-Activate storm.values.str.pas line 106 BreakPoint at:00626474
+Adding coverage:storm.values.str.pas (storm.values.str) 107
+Clearing BreakPoint at 00626496
+De-Activate storm.values.str.pas line 107 BreakPoint at:00626496
+Adding coverage:storm.values.str.pas (storm.values.str) 108
+Clearing BreakPoint at 006264A4
+De-Activate storm.values.str.pas line 108 BreakPoint at:006264A4
+Adding coverage:storm.values.base.pas (storm.values.base) 84
+Clearing BreakPoint at 006259D5
+De-Activate storm.values.base.pas line 84 BreakPoint at:006259D5
+Adding coverage:storm.values.str.pas (storm.values.str) 103
+Clearing BreakPoint at 0062646A
+De-Activate storm.values.str.pas line 103 BreakPoint at:0062646A
+Adding coverage:storm.fields.base.pas (storm.fields.base) 105
+Clearing BreakPoint at 006833B8
+De-Activate storm.fields.base.pas line 105 BreakPoint at:006833B8
+Adding coverage:storm.fields.base.pas (storm.fields.base) 106
+Clearing BreakPoint at 006833C7
+De-Activate storm.fields.base.pas line 106 BreakPoint at:006833C7
+Adding coverage:storm.fields.base.pas (storm.fields.base) 107
+Clearing BreakPoint at 006833CB
+De-Activate storm.fields.base.pas line 107 BreakPoint at:006833CB
+Adding coverage:storm.fields.base.pas (storm.fields.base) 108
+Clearing BreakPoint at 006833D9
+De-Activate storm.fields.base.pas line 108 BreakPoint at:006833D9
+ACCESS VIOLATION at Address:0061D8CF
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000008
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:0061D8C9
+Exact line:System.JSON line 1733
+Module : .\Tests.exe Stack frame:0068464F
+After line:storm.fields.base.test line 98
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
+Adding coverage:storm.fields.base.pas (storm.fields.base) 113
+Clearing BreakPoint at 00683427
+De-Activate storm.fields.base.pas line 113 BreakPoint at:00683427
+Adding coverage:storm.fields.base.pas (storm.fields.base) 119
+Clearing BreakPoint at 0068342F
+De-Activate storm.fields.base.pas line 119 BreakPoint at:0068342F
+Adding coverage:storm.fields.base.pas (storm.fields.base) 110
+Clearing BreakPoint at 006833F1
+De-Activate storm.fields.base.pas line 110 BreakPoint at:006833F1
+Adding coverage:storm.fields.base.pas (storm.fields.base) 86
+Clearing BreakPoint at 00683334
+De-Activate storm.fields.base.pas line 86 BreakPoint at:00683334
+Adding coverage:storm.fields.base.pas (storm.fields.base) 87
+Clearing BreakPoint at 00683340
+De-Activate storm.fields.base.pas line 87 BreakPoint at:00683340
+Adding coverage:storm.fields.base.pas (storm.fields.base) 88
+Clearing BreakPoint at 00683344
+De-Activate storm.fields.base.pas line 88 BreakPoint at:00683344
+Adding coverage:storm.fields.base.pas (storm.fields.base) 91
+Clearing BreakPoint at 0068334C
+De-Activate storm.fields.base.pas line 91 BreakPoint at:0068334C
+Adding coverage:storm.fields.base.pas (storm.fields.base) 92
+Clearing BreakPoint at 0068335B
+De-Activate storm.fields.base.pas line 92 BreakPoint at:0068335B
+Adding coverage:storm.fields.base.pas (storm.fields.base) 93
+Clearing BreakPoint at 0068335F
+De-Activate storm.fields.base.pas line 93 BreakPoint at:0068335F
+Adding coverage:storm.fields.base.pas (storm.fields.base) 94
+Clearing BreakPoint at 0068336D
+De-Activate storm.fields.base.pas line 94 BreakPoint at:0068336D
+ACCESS VIOLATION at Address:006725BE
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000040
+Data.DB line 13314
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:0068337B
+After line:storm.fields.base line 96
+Module : .\Tests.exe Stack frame:00684624
+After line:storm.fields.base.test line 89
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
+Adding coverage:storm.fields.base.pas (storm.fields.base) 96
+Clearing BreakPoint at 006833A3
+De-Activate storm.fields.base.pas line 96 BreakPoint at:006833A3
+Adding coverage:storm.fields.base.pas (storm.fields.base) 102
+Clearing BreakPoint at 006833AB
+De-Activate storm.fields.base.pas line 102 BreakPoint at:006833AB
+Adding coverage:storm.fields.base.pas (storm.fields.base) 61
+Clearing BreakPoint at 006831E4
+De-Activate storm.fields.base.pas line 61 BreakPoint at:006831E4
+Adding coverage:storm.fields.base.pas (storm.fields.base) 62
+Clearing BreakPoint at 0068320E
+De-Activate storm.fields.base.pas line 62 BreakPoint at:0068320E
+Adding coverage:storm.fields.base.pas (storm.fields.base) 68
+Clearing BreakPoint at 0068323C
+De-Activate storm.fields.base.pas line 68 BreakPoint at:0068323C
+Adding coverage:storm.fields.base.pas (storm.fields.base) 70
+Clearing BreakPoint at 00683240
+De-Activate storm.fields.base.pas line 70 BreakPoint at:00683240
+Adding coverage:storm.fields.base.pas (storm.fields.base) 64
+Clearing BreakPoint at 00683214
+De-Activate storm.fields.base.pas line 64 BreakPoint at:00683214
+Adding coverage:storm.values.str.pas (storm.values.str) 60
+Clearing BreakPoint at 00626190
+De-Activate storm.values.str.pas line 60 BreakPoint at:00626190
+Adding coverage:storm.values.str.pas (storm.values.str) 61
+Clearing BreakPoint at 006261EF
+De-Activate storm.values.str.pas line 61 BreakPoint at:006261EF
+Adding coverage:storm.values.str.pas (storm.values.str) 63
+Clearing BreakPoint at 006261F5
+De-Activate storm.values.str.pas line 63 BreakPoint at:006261F5
+Adding coverage:storm.values.str.pas (storm.values.str) 191
+Clearing BreakPoint at 0062667C
+De-Activate storm.values.str.pas line 191 BreakPoint at:0062667C
+Adding coverage:storm.values.str.pas (storm.values.str) 192
+Clearing BreakPoint at 00626688
+De-Activate storm.values.str.pas line 192 BreakPoint at:00626688
+Adding coverage:storm.values.str.pas (storm.values.str) 193
+Clearing BreakPoint at 00626693
+De-Activate storm.values.str.pas line 193 BreakPoint at:00626693
+Adding coverage:storm.values.str.pas (storm.values.str) 69
+Clearing BreakPoint at 0062621D
+De-Activate storm.values.str.pas line 69 BreakPoint at:0062621D
+Adding coverage:storm.values.str.pas (storm.values.str) 63
+Clearing BreakPoint at 00626138
+De-Activate storm.values.str.pas line 63 BreakPoint at:00626138
+Adding coverage:storm.values.float.pas (storm.values.float) 127
+Clearing BreakPoint at 0062A2BC
+De-Activate storm.values.float.pas line 127 BreakPoint at:0062A2BC
+Adding coverage:storm.values.float.pas (storm.values.float) 128
+Clearing BreakPoint at 0062A2C3
+De-Activate storm.values.float.pas line 128 BreakPoint at:0062A2C3
+Adding coverage:storm.values.float.pas (storm.values.float) 129
+Clearing BreakPoint at 0062A2CB
+De-Activate storm.values.float.pas line 129 BreakPoint at:0062A2CB
+Adding coverage:storm.values.float.pas (storm.values.float) 195
+Clearing BreakPoint at 0062A4D0
+De-Activate storm.values.float.pas line 195 BreakPoint at:0062A4D0
+Adding coverage:storm.values.float.pas (storm.values.float) 196
+Clearing BreakPoint at 0062A4D9
+De-Activate storm.values.float.pas line 196 BreakPoint at:0062A4D9
+Adding coverage:storm.values.float.pas (storm.values.float) 197
+Clearing BreakPoint at 0062A4F0
+De-Activate storm.values.float.pas line 197 BreakPoint at:0062A4F0
+Adding coverage:storm.values.float.pas (storm.values.float) 198
+Clearing BreakPoint at 0062A4F7
+De-Activate storm.values.float.pas line 198 BreakPoint at:0062A4F7
+Adding coverage:storm.values.float.pas (storm.values.float) 199
+Clearing BreakPoint at 0062A500
+De-Activate storm.values.float.pas line 199 BreakPoint at:0062A500
+Adding coverage:storm.values.float.pas (storm.values.float) 119
+Clearing BreakPoint at 0062A288
+De-Activate storm.values.float.pas line 119 BreakPoint at:0062A288
+Adding coverage:storm.values.float.pas (storm.values.float) 120
+Clearing BreakPoint at 0062A294
+De-Activate storm.values.float.pas line 120 BreakPoint at:0062A294
+Adding coverage:storm.values.float.pas (storm.values.float) 122
+Clearing BreakPoint at 0062A2A0
+De-Activate storm.values.float.pas line 122 BreakPoint at:0062A2A0
+Adding coverage:storm.values.float.pas (storm.values.float) 124
+Clearing BreakPoint at 0062A2B6
+De-Activate storm.values.float.pas line 124 BreakPoint at:0062A2B6
+Adding coverage:storm.fields.float.pas (storm.fields.float) 43
+Clearing BreakPoint at 00686410
+De-Activate storm.fields.float.pas line 43 BreakPoint at:00686410
+ACCESS VIOLATION at Address:0068644F
+C0000005 not a debug BreakPoint
+Tried to read
+Trying to access Address:00000070
+---------------Stack trace --------------
+Module : .\Tests.exe Stack frame:00686AA5
+After line:storm.fields.float.test line 54
+Module : .\Tests.exe Stack frame:005BF060
+After line:System.DateUtils line 668
+Module : .\Tests.exe Stack frame:005E9D56
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005EA018
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E971C
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E9749
+After line:DUnitX.Loggers.Null line 68
+Module : .\Tests.exe Stack frame:005E93BD
+After line:DUnitX.Loggers.Null line 68
+No module found for exception address:0068EEC1
+Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
+Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
+No module found for exception address:77267A4E
+No module found for exception address:77267A1E
+---------------End of Stack trace --------------
 Adding coverage:storm.values.bool.pas (storm.values.bool) 60
 Clearing BreakPoint at 0062E638
 De-Activate storm.values.bool.pas line 60 BreakPoint at:0062E638
@@ -2520,6 +3101,15 @@ De-Activate storm.values.bool.pas line 118 BreakPoint at:0062E7E4
 Adding coverage:storm.values.bool.pas (storm.values.bool) 119
 Clearing BreakPoint at 0062E7FE
 De-Activate storm.values.bool.pas line 119 BreakPoint at:0062E7FE
+Adding coverage:storm.values.base.pas (storm.values.base) 75
+Clearing BreakPoint at 00625996
+De-Activate storm.values.base.pas line 75 BreakPoint at:00625996
+Adding coverage:storm.values.base.pas (storm.values.base) 79
+Clearing BreakPoint at 006259BB
+De-Activate storm.values.base.pas line 79 BreakPoint at:006259BB
+Adding coverage:storm.values.base.pas (storm.values.base) 81
+Clearing BreakPoint at 006259CD
+De-Activate storm.values.base.pas line 81 BreakPoint at:006259CD
 Adding coverage:storm.values.bool.pas (storm.values.bool) 155
 Clearing BreakPoint at 0062E8D0
 De-Activate storm.values.bool.pas line 155 BreakPoint at:0062E8D0
@@ -2535,249 +3125,6 @@ De-Activate storm.values.bool.pas line 78 BreakPoint at:0062E72D
 Adding coverage:storm.values.bool.pas (storm.values.bool) 79
 Clearing BreakPoint at 0062E731
 De-Activate storm.values.bool.pas line 79 BreakPoint at:0062E731
-Adding coverage:storm.values.int.pas (storm.values.int) 128
-Clearing BreakPoint at 00629730
-De-Activate storm.values.int.pas line 128 BreakPoint at:00629730
-Adding coverage:storm.values.int.pas (storm.values.int) 129
-Clearing BreakPoint at 00629737
-De-Activate storm.values.int.pas line 129 BreakPoint at:00629737
-Adding coverage:storm.values.int.pas (storm.values.int) 130
-Clearing BreakPoint at 0062973F
-De-Activate storm.values.int.pas line 130 BreakPoint at:0062973F
-Adding coverage:storm.values.int.pas (storm.values.int) 197
-Clearing BreakPoint at 006298DC
-De-Activate storm.values.int.pas line 197 BreakPoint at:006298DC
-Adding coverage:storm.values.int.pas (storm.values.int) 198
-Clearing BreakPoint at 006298E8
-De-Activate storm.values.int.pas line 198 BreakPoint at:006298E8
-Adding coverage:storm.values.int.pas (storm.values.int) 199
-Clearing BreakPoint at 006298F1
-De-Activate storm.values.int.pas line 199 BreakPoint at:006298F1
-Adding coverage:storm.values.int.pas (storm.values.int) 200
-Clearing BreakPoint at 006298F8
-De-Activate storm.values.int.pas line 200 BreakPoint at:006298F8
-Adding coverage:storm.values.int.pas (storm.values.int) 201
-Clearing BreakPoint at 00629901
-De-Activate storm.values.int.pas line 201 BreakPoint at:00629901
-Adding coverage:storm.values.int.pas (storm.values.int) 120
-Clearing BreakPoint at 00629704
-De-Activate storm.values.int.pas line 120 BreakPoint at:00629704
-Adding coverage:storm.values.int.pas (storm.values.int) 121
-Clearing BreakPoint at 00629710
-De-Activate storm.values.int.pas line 121 BreakPoint at:00629710
-Adding coverage:storm.values.int.pas (storm.values.int) 125
-Clearing BreakPoint at 0062972A
-De-Activate storm.values.int.pas line 125 BreakPoint at:0062972A
-Adding coverage:storm.values.int.pas (storm.values.int) 123
-Clearing BreakPoint at 0062971C
-De-Activate storm.values.int.pas line 123 BreakPoint at:0062971C
-Adding coverage:storm.values.int.pas (storm.values.int) 61
-Clearing BreakPoint at 006294F4
-De-Activate storm.values.int.pas line 61 BreakPoint at:006294F4
-Adding coverage:storm.values.int.pas (storm.values.int) 62
-Clearing BreakPoint at 00629553
-De-Activate storm.values.int.pas line 62 BreakPoint at:00629553
-Adding coverage:storm.values.int.pas (storm.values.int) 68
-Clearing BreakPoint at 0062957D
-De-Activate storm.values.int.pas line 68 BreakPoint at:0062957D
-Adding coverage:storm.values.int.pas (storm.values.int) 70
-Clearing BreakPoint at 00629581
-De-Activate storm.values.int.pas line 70 BreakPoint at:00629581
-Adding coverage:storm.values.int.pas (storm.values.int) 64
-Clearing BreakPoint at 00629559
-De-Activate storm.values.int.pas line 64 BreakPoint at:00629559
-Adding coverage:storm.values.int.pas (storm.values.int) 170
-Clearing BreakPoint at 00629800
-De-Activate storm.values.int.pas line 170 BreakPoint at:00629800
-Adding coverage:storm.values.int.pas (storm.values.int) 171
-Clearing BreakPoint at 0062980C
-De-Activate storm.values.int.pas line 171 BreakPoint at:0062980C
-Adding coverage:storm.values.int.pas (storm.values.int) 172
-Clearing BreakPoint at 00629817
-De-Activate storm.values.int.pas line 172 BreakPoint at:00629817
-Adding coverage:storm.values.int.pas (storm.values.int) 64
-Clearing BreakPoint at 006294D0
-De-Activate storm.values.int.pas line 64 BreakPoint at:006294D0
-Adding coverage:storm.values.int.pas (storm.values.int) 188
-Clearing BreakPoint at 00629874
-De-Activate storm.values.int.pas line 188 BreakPoint at:00629874
-Adding coverage:storm.values.int.pas (storm.values.int) 189
-Clearing BreakPoint at 00629893
-De-Activate storm.values.int.pas line 189 BreakPoint at:00629893
-Adding coverage:storm.values.int.pas (storm.values.int) 193
-Clearing BreakPoint at 006298B8
-De-Activate storm.values.int.pas line 193 BreakPoint at:006298B8
-Adding coverage:storm.values.int.pas (storm.values.int) 191
-Clearing BreakPoint at 0062989F
-De-Activate storm.values.int.pas line 191 BreakPoint at:0062989F
-Adding coverage:storm.values.int.pas (storm.values.int) 107
-Clearing BreakPoint at 00629698
-De-Activate storm.values.int.pas line 107 BreakPoint at:00629698
-Adding coverage:storm.values.int.pas (storm.values.int) 108
-Clearing BreakPoint at 006296BA
-De-Activate storm.values.int.pas line 108 BreakPoint at:006296BA
-Adding coverage:storm.values.int.pas (storm.values.int) 110
-Clearing BreakPoint at 006296C9
-De-Activate storm.values.int.pas line 110 BreakPoint at:006296C9
-Adding coverage:storm.values.int.pas (storm.values.int) 117
-Clearing BreakPoint at 006296DD
-De-Activate storm.values.int.pas line 117 BreakPoint at:006296DD
-Adding coverage:storm.values.int.pas (storm.values.int) 114
-Clearing BreakPoint at 006296D9
-De-Activate storm.values.int.pas line 114 BreakPoint at:006296D9
-Adding coverage:storm.values.int.pas (storm.values.int) 95
-Clearing BreakPoint at 00629644
-De-Activate storm.values.int.pas line 95 BreakPoint at:00629644
-Adding coverage:storm.values.int.pas (storm.values.int) 96
-Clearing BreakPoint at 00629650
-De-Activate storm.values.int.pas line 96 BreakPoint at:00629650
-Adding coverage:storm.values.int.pas (storm.values.int) 97
-Clearing BreakPoint at 0062965E
-De-Activate storm.values.int.pas line 97 BreakPoint at:0062965E
-Adding coverage:storm.values.int.pas (storm.values.int) 162
-Clearing BreakPoint at 006297CC
-De-Activate storm.values.int.pas line 162 BreakPoint at:006297CC
-Adding coverage:storm.values.int.pas (storm.values.int) 163
-Clearing BreakPoint at 006297D8
-De-Activate storm.values.int.pas line 163 BreakPoint at:006297D8
-Adding coverage:storm.values.int.pas (storm.values.int) 167
-Clearing BreakPoint at 006297F9
-De-Activate storm.values.int.pas line 167 BreakPoint at:006297F9
-Adding coverage:storm.values.int.pas (storm.values.int) 165
-Clearing BreakPoint at 006297E4
-De-Activate storm.values.int.pas line 165 BreakPoint at:006297E4
-Adding coverage:storm.values.int.pas (storm.values.int) 90
-Clearing BreakPoint at 0062961C
-De-Activate storm.values.int.pas line 90 BreakPoint at:0062961C
-Adding coverage:storm.values.int.pas (storm.values.int) 91
-Clearing BreakPoint at 00629625
-De-Activate storm.values.int.pas line 91 BreakPoint at:00629625
-Adding coverage:storm.values.int.pas (storm.values.int) 92
-Clearing BreakPoint at 0062963A
-De-Activate storm.values.int.pas line 92 BreakPoint at:0062963A
-Adding coverage:storm.values.int.pas (storm.values.int) 133
-Clearing BreakPoint at 00629744
-De-Activate storm.values.int.pas line 133 BreakPoint at:00629744
-Adding coverage:storm.values.int.pas (storm.values.int) 134
-Clearing BreakPoint at 00629750
-De-Activate storm.values.int.pas line 134 BreakPoint at:00629750
-Adding coverage:storm.values.int.pas (storm.values.int) 146
-Clearing BreakPoint at 00629784
-De-Activate storm.values.int.pas line 146 BreakPoint at:00629784
-Adding coverage:storm.values.int.pas (storm.values.int) 136
-Clearing BreakPoint at 0062975C
-De-Activate storm.values.int.pas line 136 BreakPoint at:0062975C
-Adding coverage:storm.values.int.pas (storm.values.int) 138
-Clearing BreakPoint at 00629765
-De-Activate storm.values.int.pas line 138 BreakPoint at:00629765
-Adding coverage:storm.values.int.pas (storm.values.int) 141
-Clearing BreakPoint at 00629771
-De-Activate storm.values.int.pas line 141 BreakPoint at:00629771
-Adding coverage:storm.values.int.pas (storm.values.int) 143
-Clearing BreakPoint at 0062977A
-De-Activate storm.values.int.pas line 143 BreakPoint at:0062977A
-Adding coverage:storm.values.int.pas (storm.values.int) 73
-Clearing BreakPoint at 006295BC
-De-Activate storm.values.int.pas line 73 BreakPoint at:006295BC
-Adding coverage:storm.values.int.pas (storm.values.int) 74
-Clearing BreakPoint at 006295C8
-De-Activate storm.values.int.pas line 74 BreakPoint at:006295C8
-Adding coverage:storm.values.int.pas (storm.values.int) 76
-Clearing BreakPoint at 006295CE
-De-Activate storm.values.int.pas line 76 BreakPoint at:006295CE
-Adding coverage:storm.values.int.pas (storm.values.int) 82
-Clearing BreakPoint at 006295ED
-De-Activate storm.values.int.pas line 82 BreakPoint at:006295ED
-Adding coverage:storm.values.int.pas (storm.values.int) 80
-Clearing BreakPoint at 006295E0
-De-Activate storm.values.int.pas line 80 BreakPoint at:006295E0
-Adding coverage:storm.values.int.pas (storm.values.int) 175
-Clearing BreakPoint at 0062981C
-De-Activate storm.values.int.pas line 175 BreakPoint at:0062981C
-Adding coverage:storm.values.int.pas (storm.values.int) 176
-Clearing BreakPoint at 0062982B
-De-Activate storm.values.int.pas line 176 BreakPoint at:0062982B
-Adding coverage:storm.values.int.pas (storm.values.int) 181
-Clearing BreakPoint at 00629853
-De-Activate storm.values.int.pas line 181 BreakPoint at:00629853
-Adding coverage:storm.values.int.pas (storm.values.int) 183
-Clearing BreakPoint at 00629859
-De-Activate storm.values.int.pas line 183 BreakPoint at:00629859
-Adding coverage:storm.values.int.pas (storm.values.int) 185
-Clearing BreakPoint at 0062986D
-De-Activate storm.values.int.pas line 185 BreakPoint at:0062986D
-Adding coverage:storm.values.int.pas (storm.values.int) 178
-Clearing BreakPoint at 00629837
-De-Activate storm.values.int.pas line 178 BreakPoint at:00629837
-Adding coverage:storm.values.int.pas (storm.values.int) 100
-Clearing BreakPoint at 00629668
-De-Activate storm.values.int.pas line 100 BreakPoint at:00629668
-Adding coverage:storm.values.int.pas (storm.values.int) 101
-Clearing BreakPoint at 00629674
-De-Activate storm.values.int.pas line 101 BreakPoint at:00629674
-Adding coverage:storm.values.int.pas (storm.values.int) 102
-Clearing BreakPoint at 0062968E
-De-Activate storm.values.int.pas line 102 BreakPoint at:0062968E
-Adding coverage:storm.values.int.pas (storm.values.int) 151
-Clearing BreakPoint at 00629788
-De-Activate storm.values.int.pas line 151 BreakPoint at:00629788
-Adding coverage:storm.values.int.pas (storm.values.int) 152
-Clearing BreakPoint at 00629794
-De-Activate storm.values.int.pas line 152 BreakPoint at:00629794
-Adding coverage:storm.values.int.pas (storm.values.int) 160
-Clearing BreakPoint at 006297C7
-De-Activate storm.values.int.pas line 160 BreakPoint at:006297C7
-Adding coverage:storm.values.int.pas (storm.values.int) 154
-Clearing BreakPoint at 006297A0
-De-Activate storm.values.int.pas line 154 BreakPoint at:006297A0
-Adding coverage:storm.values.int.pas (storm.values.int) 156
-Clearing BreakPoint at 006297B9
-De-Activate storm.values.int.pas line 156 BreakPoint at:006297B9
-Adding coverage:storm.values.int.pas (storm.values.int) 85
-Clearing BreakPoint at 006295F4
-De-Activate storm.values.int.pas line 85 BreakPoint at:006295F4
-Adding coverage:storm.values.int.pas (storm.values.int) 86
-Clearing BreakPoint at 006295FD
-De-Activate storm.values.int.pas line 86 BreakPoint at:006295FD
-Adding coverage:storm.values.int.pas (storm.values.int) 87
-Clearing BreakPoint at 00629612
-De-Activate storm.values.int.pas line 87 BreakPoint at:00629612
-Adding coverage:storm.values.str.pas (storm.values.str) 119
-Clearing BreakPoint at 006264F4
-De-Activate storm.values.str.pas line 119 BreakPoint at:006264F4
-Adding coverage:storm.values.str.pas (storm.values.str) 120
-Clearing BreakPoint at 006264FB
-De-Activate storm.values.str.pas line 120 BreakPoint at:006264FB
-Adding coverage:storm.values.str.pas (storm.values.str) 121
-Clearing BreakPoint at 00626503
-De-Activate storm.values.str.pas line 121 BreakPoint at:00626503
-Adding coverage:storm.values.base.pas (storm.values.base) 73
-Clearing BreakPoint at 0062597B
-De-Activate storm.values.base.pas line 73 BreakPoint at:0062597B
-Adding coverage:storm.values.str.pas (storm.values.str) 106
-Clearing BreakPoint at 00626474
-De-Activate storm.values.str.pas line 106 BreakPoint at:00626474
-Adding coverage:storm.values.str.pas (storm.values.str) 107
-Clearing BreakPoint at 00626496
-De-Activate storm.values.str.pas line 107 BreakPoint at:00626496
-Adding coverage:storm.values.str.pas (storm.values.str) 197
-Clearing BreakPoint at 00626698
-De-Activate storm.values.str.pas line 197 BreakPoint at:00626698
-Adding coverage:storm.values.str.pas (storm.values.str) 198
-Clearing BreakPoint at 006266BA
-De-Activate storm.values.str.pas line 198 BreakPoint at:006266BA
-Adding coverage:storm.values.str.pas (storm.values.str) 199
-Clearing BreakPoint at 006266C8
-De-Activate storm.values.str.pas line 199 BreakPoint at:006266C8
-Adding coverage:storm.values.str.pas (storm.values.str) 200
-Clearing BreakPoint at 006266CF
-De-Activate storm.values.str.pas line 200 BreakPoint at:006266CF
-Adding coverage:storm.values.str.pas (storm.values.str) 201
-Clearing BreakPoint at 006266D8
-De-Activate storm.values.str.pas line 201 BreakPoint at:006266D8
-Adding coverage:storm.values.str.pas (storm.values.str) 108
-Clearing BreakPoint at 006264A4
-De-Activate storm.values.str.pas line 108 BreakPoint at:006264A4
 Adding coverage:storm.values.base.pas (storm.values.base) 69
 Clearing BreakPoint at 0062594D
 De-Activate storm.values.base.pas line 69 BreakPoint at:0062594D
@@ -2802,27 +3149,411 @@ De-Activate storm.values.str.pas line 73 BreakPoint at:00626277
 Adding coverage:storm.values.str.pas (storm.values.str) 74
 Clearing BreakPoint at 00626292
 De-Activate storm.values.str.pas line 74 BreakPoint at:00626292
-Adding coverage:storm.values.date.pas (storm.values.date) 39
-Clearing BreakPoint at 00632C90
-De-Activate storm.values.date.pas line 39 BreakPoint at:00632C90
-Adding coverage:storm.values.date.pas (storm.values.date) 40
-Clearing BreakPoint at 00632C99
-De-Activate storm.values.date.pas line 40 BreakPoint at:00632C99
-Adding coverage:storm.values.date.pas (storm.values.date) 41
-Clearing BreakPoint at 00632CAA
-De-Activate storm.values.date.pas line 41 BreakPoint at:00632CAA
-Adding coverage:storm.values.date.pas (storm.values.date) 31
-Clearing BreakPoint at 00632C60
-De-Activate storm.values.date.pas line 31 BreakPoint at:00632C60
-Adding coverage:storm.values.date.pas (storm.values.date) 32
-Clearing BreakPoint at 00632C6C
-De-Activate storm.values.date.pas line 32 BreakPoint at:00632C6C
-Adding coverage:storm.values.date.pas (storm.values.date) 36
-Clearing BreakPoint at 00632C89
-De-Activate storm.values.date.pas line 36 BreakPoint at:00632C89
-Adding coverage:storm.values.date.pas (storm.values.date) 34
-Clearing BreakPoint at 00632C78
-De-Activate storm.values.date.pas line 34 BreakPoint at:00632C78
+Adding coverage:storm.values.str.pas (storm.values.str) 67
+Clearing BreakPoint at 00626219
+De-Activate storm.values.str.pas line 67 BreakPoint at:00626219
+Adding coverage:storm.values.str.pas (storm.values.str) 167
+Clearing BreakPoint at 006265E8
+De-Activate storm.values.str.pas line 167 BreakPoint at:006265E8
+Adding coverage:storm.values.str.pas (storm.values.str) 168
+Clearing BreakPoint at 006265F4
+De-Activate storm.values.str.pas line 168 BreakPoint at:006265F4
+Adding coverage:storm.values.str.pas (storm.values.str) 175
+Clearing BreakPoint at 0062661D
+De-Activate storm.values.str.pas line 175 BreakPoint at:0062661D
+Adding coverage:storm.values.str.pas (storm.values.str) 170
+Clearing BreakPoint at 00626600
+De-Activate storm.values.str.pas line 170 BreakPoint at:00626600
+Adding coverage:storm.values.str.pas (storm.values.str) 172
+Clearing BreakPoint at 00626612
+De-Activate storm.values.str.pas line 172 BreakPoint at:00626612
+Adding coverage:storm.values.str.pas (storm.values.str) 87
+Clearing BreakPoint at 006263DC
+De-Activate storm.values.str.pas line 87 BreakPoint at:006263DC
+Adding coverage:storm.values.str.pas (storm.values.str) 88
+Clearing BreakPoint at 006263FB
+De-Activate storm.values.str.pas line 88 BreakPoint at:006263FB
+Adding coverage:storm.values.str.pas (storm.values.str) 89
+Clearing BreakPoint at 00626414
+De-Activate storm.values.str.pas line 89 BreakPoint at:00626414
+Adding coverage:storm.values.str.pas (storm.values.str) 153
+Clearing BreakPoint at 00626594
+De-Activate storm.values.str.pas line 153 BreakPoint at:00626594
+Adding coverage:storm.values.str.pas (storm.values.str) 154
+Clearing BreakPoint at 006265A0
+De-Activate storm.values.str.pas line 154 BreakPoint at:006265A0
+Adding coverage:storm.values.str.pas (storm.values.str) 162
+Clearing BreakPoint at 006265E2
+De-Activate storm.values.str.pas line 162 BreakPoint at:006265E2
+Adding coverage:storm.values.str.pas (storm.values.str) 156
+Clearing BreakPoint at 006265AC
+De-Activate storm.values.str.pas line 156 BreakPoint at:006265AC
+Adding coverage:storm.values.str.pas (storm.values.str) 158
+Clearing BreakPoint at 006265CF
+De-Activate storm.values.str.pas line 158 BreakPoint at:006265CF
+Adding coverage:storm.values.str.pas (storm.values.str) 126
+Clearing BreakPoint at 00626508
+De-Activate storm.values.str.pas line 126 BreakPoint at:00626508
+Adding coverage:storm.values.str.pas (storm.values.str) 127
+Clearing BreakPoint at 00626514
+De-Activate storm.values.str.pas line 127 BreakPoint at:00626514
+Adding coverage:storm.values.str.pas (storm.values.str) 134
+Clearing BreakPoint at 0062653D
+De-Activate storm.values.str.pas line 134 BreakPoint at:0062653D
+Adding coverage:storm.values.str.pas (storm.values.str) 129
+Clearing BreakPoint at 00626520
+De-Activate storm.values.str.pas line 129 BreakPoint at:00626520
+Adding coverage:storm.values.str.pas (storm.values.str) 131
+Clearing BreakPoint at 00626532
+De-Activate storm.values.str.pas line 131 BreakPoint at:00626532
+Adding coverage:storm.values.str.pas (storm.values.str) 99
+Clearing BreakPoint at 00626466
+De-Activate storm.values.str.pas line 99 BreakPoint at:00626466
+Adding coverage:storm.values.str.pas (storm.values.str) 139
+Clearing BreakPoint at 00626544
+De-Activate storm.values.str.pas line 139 BreakPoint at:00626544
+Adding coverage:storm.values.str.pas (storm.values.str) 140
+Clearing BreakPoint at 00626550
+De-Activate storm.values.str.pas line 140 BreakPoint at:00626550
+Adding coverage:storm.values.str.pas (storm.values.str) 148
+Clearing BreakPoint at 0062658D
+De-Activate storm.values.str.pas line 148 BreakPoint at:0062658D
+Adding coverage:storm.values.str.pas (storm.values.str) 142
+Clearing BreakPoint at 0062655C
+De-Activate storm.values.str.pas line 142 BreakPoint at:0062655C
+Adding coverage:storm.values.str.pas (storm.values.str) 144
+Clearing BreakPoint at 0062657F
+De-Activate storm.values.str.pas line 144 BreakPoint at:0062657F
+Adding coverage:storm.values.str.pas (storm.values.str) 77
+Clearing BreakPoint at 006262B8
+De-Activate storm.values.str.pas line 77 BreakPoint at:006262B8
+Adding coverage:storm.values.str.pas (storm.values.str) 78
+Clearing BreakPoint at 006262D4
+De-Activate storm.values.str.pas line 78 BreakPoint at:006262D4
+Adding coverage:storm.values.str.pas (storm.values.str) 79
+Clearing BreakPoint at 00626320
+De-Activate storm.values.str.pas line 79 BreakPoint at:00626320
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 61
+Clearing BreakPoint at 00630C08
+De-Activate storm.values.datetime.pas line 61 BreakPoint at:00630C08
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 62
+Clearing BreakPoint at 00630C67
+De-Activate storm.values.datetime.pas line 62 BreakPoint at:00630C67
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 68
+Clearing BreakPoint at 00630C91
+De-Activate storm.values.datetime.pas line 68 BreakPoint at:00630C91
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 70
+Clearing BreakPoint at 00630C95
+De-Activate storm.values.datetime.pas line 70 BreakPoint at:00630C95
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 64
+Clearing BreakPoint at 00630C6D
+De-Activate storm.values.datetime.pas line 64 BreakPoint at:00630C6D
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 131
+Clearing BreakPoint at 00630E60
+De-Activate storm.values.datetime.pas line 131 BreakPoint at:00630E60
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 132
+Clearing BreakPoint at 00630E6C
+De-Activate storm.values.datetime.pas line 132 BreakPoint at:00630E6C
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 133
+Clearing BreakPoint at 00630E77
+De-Activate storm.values.datetime.pas line 133 BreakPoint at:00630E77
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 64
+Clearing BreakPoint at 00630BE0
+De-Activate storm.values.datetime.pas line 64 BreakPoint at:00630BE0
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 165
+Clearing BreakPoint at 00630FEC
+De-Activate storm.values.datetime.pas line 165 BreakPoint at:00630FEC
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 166
+Clearing BreakPoint at 0063100B
+De-Activate storm.values.datetime.pas line 166 BreakPoint at:0063100B
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 170
+Clearing BreakPoint at 0063106F
+De-Activate storm.values.datetime.pas line 170 BreakPoint at:0063106F
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 168
+Clearing BreakPoint at 00631017
+De-Activate storm.values.datetime.pas line 168 BreakPoint at:00631017
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 100
+Clearing BreakPoint at 00630D94
+De-Activate storm.values.datetime.pas line 100 BreakPoint at:00630D94
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 101
+Clearing BreakPoint at 00630DB6
+De-Activate storm.values.datetime.pas line 101 BreakPoint at:00630DB6
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 103
+Clearing BreakPoint at 00630DD0
+De-Activate storm.values.datetime.pas line 103 BreakPoint at:00630DD0
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 110
+Clearing BreakPoint at 00630DE7
+De-Activate storm.values.datetime.pas line 110 BreakPoint at:00630DE7
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 107
+Clearing BreakPoint at 00630DE3
+De-Activate storm.values.datetime.pas line 107 BreakPoint at:00630DE3
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 144
+Clearing BreakPoint at 00630EB0
+De-Activate storm.values.datetime.pas line 144 BreakPoint at:00630EB0
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 145
+Clearing BreakPoint at 00630EBC
+De-Activate storm.values.datetime.pas line 145 BreakPoint at:00630EBC
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 149
+Clearing BreakPoint at 00630EDB
+De-Activate storm.values.datetime.pas line 149 BreakPoint at:00630EDB
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 147
+Clearing BreakPoint at 00630EC8
+De-Activate storm.values.datetime.pas line 147 BreakPoint at:00630EC8
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 88
+Clearing BreakPoint at 00630D38
+De-Activate storm.values.datetime.pas line 88 BreakPoint at:00630D38
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 89
+Clearing BreakPoint at 00630D44
+De-Activate storm.values.datetime.pas line 89 BreakPoint at:00630D44
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 90
+Clearing BreakPoint at 00630D5C
+De-Activate storm.values.datetime.pas line 90 BreakPoint at:00630D5C
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 136
+Clearing BreakPoint at 00630E7C
+De-Activate storm.values.datetime.pas line 136 BreakPoint at:00630E7C
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 137
+Clearing BreakPoint at 00630E88
+De-Activate storm.values.datetime.pas line 137 BreakPoint at:00630E88
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 141
+Clearing BreakPoint at 00630EA9
+De-Activate storm.values.datetime.pas line 141 BreakPoint at:00630EA9
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 139
+Clearing BreakPoint at 00630E94
+De-Activate storm.values.datetime.pas line 139 BreakPoint at:00630E94
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 83
+Clearing BreakPoint at 00630D0C
+De-Activate storm.values.datetime.pas line 83 BreakPoint at:00630D0C
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 84
+Clearing BreakPoint at 00630D15
+De-Activate storm.values.datetime.pas line 84 BreakPoint at:00630D15
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 85
+Clearing BreakPoint at 00630D2D
+De-Activate storm.values.datetime.pas line 85 BreakPoint at:00630D2D
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 126
+Clearing BreakPoint at 00630E50
+De-Activate storm.values.datetime.pas line 126 BreakPoint at:00630E50
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 128
+Clearing BreakPoint at 00630E5C
+De-Activate storm.values.datetime.pas line 128 BreakPoint at:00630E5C
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 73
+Clearing BreakPoint at 00630CD0
+De-Activate storm.values.datetime.pas line 73 BreakPoint at:00630CD0
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 74
+Clearing BreakPoint at 00630CDC
+De-Activate storm.values.datetime.pas line 74 BreakPoint at:00630CDC
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 75
+Clearing BreakPoint at 00630CE0
+De-Activate storm.values.datetime.pas line 75 BreakPoint at:00630CE0
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 152
+Clearing BreakPoint at 00630EE0
+De-Activate storm.values.datetime.pas line 152 BreakPoint at:00630EE0
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 153
+Clearing BreakPoint at 00630F03
+De-Activate storm.values.datetime.pas line 153 BreakPoint at:00630F03
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 158
+Clearing BreakPoint at 00630F79
+De-Activate storm.values.datetime.pas line 158 BreakPoint at:00630F79
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 160
+Clearing BreakPoint at 00630F7F
+De-Activate storm.values.datetime.pas line 160 BreakPoint at:00630F7F
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 162
+Clearing BreakPoint at 00630F93
+De-Activate storm.values.datetime.pas line 162 BreakPoint at:00630F93
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 155
+Clearing BreakPoint at 00630F0F
+De-Activate storm.values.datetime.pas line 155 BreakPoint at:00630F0F
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 93
+Clearing BreakPoint at 00630D64
+De-Activate storm.values.datetime.pas line 93 BreakPoint at:00630D64
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 94
+Clearing BreakPoint at 00630D70
+De-Activate storm.values.datetime.pas line 94 BreakPoint at:00630D70
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 95
+Clearing BreakPoint at 00630D8A
+De-Activate storm.values.datetime.pas line 95 BreakPoint at:00630D8A
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 183
+Clearing BreakPoint at 006310C9
+De-Activate storm.values.datetime.pas line 183 BreakPoint at:006310C9
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 78
+Clearing BreakPoint at 00630CE8
+De-Activate storm.values.datetime.pas line 78 BreakPoint at:00630CE8
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 79
+Clearing BreakPoint at 00630CF1
+De-Activate storm.values.datetime.pas line 79 BreakPoint at:00630CF1
+Adding coverage:storm.values.datetime.pas (storm.values.datetime) 80
+Clearing BreakPoint at 00630D02
+De-Activate storm.values.datetime.pas line 80 BreakPoint at:00630D02
+Adding coverage:storm.values.int.pas (storm.values.int) 61
+Clearing BreakPoint at 006294F4
+De-Activate storm.values.int.pas line 61 BreakPoint at:006294F4
+Adding coverage:storm.values.int.pas (storm.values.int) 62
+Clearing BreakPoint at 00629553
+De-Activate storm.values.int.pas line 62 BreakPoint at:00629553
+Adding coverage:storm.values.int.pas (storm.values.int) 68
+Clearing BreakPoint at 0062957D
+De-Activate storm.values.int.pas line 68 BreakPoint at:0062957D
+Adding coverage:storm.values.int.pas (storm.values.int) 70
+Clearing BreakPoint at 00629581
+De-Activate storm.values.int.pas line 70 BreakPoint at:00629581
+Adding coverage:storm.values.int.pas (storm.values.int) 64
+Clearing BreakPoint at 00629559
+De-Activate storm.values.int.pas line 64 BreakPoint at:00629559
+Adding coverage:storm.values.int.pas (storm.values.int) 169
+Clearing BreakPoint at 00629800
+De-Activate storm.values.int.pas line 169 BreakPoint at:00629800
+Adding coverage:storm.values.int.pas (storm.values.int) 170
+Clearing BreakPoint at 0062980C
+De-Activate storm.values.int.pas line 170 BreakPoint at:0062980C
+Adding coverage:storm.values.int.pas (storm.values.int) 171
+Clearing BreakPoint at 00629817
+De-Activate storm.values.int.pas line 171 BreakPoint at:00629817
+Adding coverage:storm.values.int.pas (storm.values.int) 64
+Clearing BreakPoint at 006294D0
+De-Activate storm.values.int.pas line 64 BreakPoint at:006294D0
+Adding coverage:storm.values.int.pas (storm.values.int) 187
+Clearing BreakPoint at 00629874
+De-Activate storm.values.int.pas line 187 BreakPoint at:00629874
+Adding coverage:storm.values.int.pas (storm.values.int) 188
+Clearing BreakPoint at 00629893
+De-Activate storm.values.int.pas line 188 BreakPoint at:00629893
+Adding coverage:storm.values.int.pas (storm.values.int) 192
+Clearing BreakPoint at 006298B8
+De-Activate storm.values.int.pas line 192 BreakPoint at:006298B8
+Adding coverage:storm.values.int.pas (storm.values.int) 190
+Clearing BreakPoint at 0062989F
+De-Activate storm.values.int.pas line 190 BreakPoint at:0062989F
+Adding coverage:storm.values.int.pas (storm.values.int) 107
+Clearing BreakPoint at 00629698
+De-Activate storm.values.int.pas line 107 BreakPoint at:00629698
+Adding coverage:storm.values.int.pas (storm.values.int) 108
+Clearing BreakPoint at 006296BA
+De-Activate storm.values.int.pas line 108 BreakPoint at:006296BA
+Adding coverage:storm.values.int.pas (storm.values.int) 110
+Clearing BreakPoint at 006296C9
+De-Activate storm.values.int.pas line 110 BreakPoint at:006296C9
+Adding coverage:storm.values.int.pas (storm.values.int) 116
+Clearing BreakPoint at 006296DD
+De-Activate storm.values.int.pas line 116 BreakPoint at:006296DD
+Adding coverage:storm.values.int.pas (storm.values.int) 114
+Clearing BreakPoint at 006296D9
+De-Activate storm.values.int.pas line 114 BreakPoint at:006296D9
+Adding coverage:storm.values.int.pas (storm.values.int) 95
+Clearing BreakPoint at 00629644
+De-Activate storm.values.int.pas line 95 BreakPoint at:00629644
+Adding coverage:storm.values.int.pas (storm.values.int) 96
+Clearing BreakPoint at 00629650
+De-Activate storm.values.int.pas line 96 BreakPoint at:00629650
+Adding coverage:storm.values.int.pas (storm.values.int) 97
+Clearing BreakPoint at 0062965E
+De-Activate storm.values.int.pas line 97 BreakPoint at:0062965E
+Adding coverage:storm.values.int.pas (storm.values.int) 161
+Clearing BreakPoint at 006297CC
+De-Activate storm.values.int.pas line 161 BreakPoint at:006297CC
+Adding coverage:storm.values.int.pas (storm.values.int) 162
+Clearing BreakPoint at 006297D8
+De-Activate storm.values.int.pas line 162 BreakPoint at:006297D8
+Adding coverage:storm.values.int.pas (storm.values.int) 166
+Clearing BreakPoint at 006297F9
+De-Activate storm.values.int.pas line 166 BreakPoint at:006297F9
+Adding coverage:storm.values.int.pas (storm.values.int) 164
+Clearing BreakPoint at 006297E4
+De-Activate storm.values.int.pas line 164 BreakPoint at:006297E4
+Adding coverage:storm.values.int.pas (storm.values.int) 90
+Clearing BreakPoint at 0062961C
+De-Activate storm.values.int.pas line 90 BreakPoint at:0062961C
+Adding coverage:storm.values.int.pas (storm.values.int) 91
+Clearing BreakPoint at 00629625
+De-Activate storm.values.int.pas line 91 BreakPoint at:00629625
+Adding coverage:storm.values.int.pas (storm.values.int) 92
+Clearing BreakPoint at 0062963A
+De-Activate storm.values.int.pas line 92 BreakPoint at:0062963A
+Adding coverage:storm.values.int.pas (storm.values.int) 132
+Clearing BreakPoint at 00629744
+De-Activate storm.values.int.pas line 132 BreakPoint at:00629744
+Adding coverage:storm.values.int.pas (storm.values.int) 133
+Clearing BreakPoint at 00629750
+De-Activate storm.values.int.pas line 133 BreakPoint at:00629750
+Adding coverage:storm.values.int.pas (storm.values.int) 145
+Clearing BreakPoint at 00629784
+De-Activate storm.values.int.pas line 145 BreakPoint at:00629784
+Adding coverage:storm.values.int.pas (storm.values.int) 135
+Clearing BreakPoint at 0062975C
+De-Activate storm.values.int.pas line 135 BreakPoint at:0062975C
+Adding coverage:storm.values.int.pas (storm.values.int) 137
+Clearing BreakPoint at 00629765
+De-Activate storm.values.int.pas line 137 BreakPoint at:00629765
+Adding coverage:storm.values.int.pas (storm.values.int) 140
+Clearing BreakPoint at 00629771
+De-Activate storm.values.int.pas line 140 BreakPoint at:00629771
+Adding coverage:storm.values.int.pas (storm.values.int) 142
+Clearing BreakPoint at 0062977A
+De-Activate storm.values.int.pas line 142 BreakPoint at:0062977A
+Adding coverage:storm.values.int.pas (storm.values.int) 73
+Clearing BreakPoint at 006295BC
+De-Activate storm.values.int.pas line 73 BreakPoint at:006295BC
+Adding coverage:storm.values.int.pas (storm.values.int) 74
+Clearing BreakPoint at 006295C8
+De-Activate storm.values.int.pas line 74 BreakPoint at:006295C8
+Adding coverage:storm.values.int.pas (storm.values.int) 76
+Clearing BreakPoint at 006295CE
+De-Activate storm.values.int.pas line 76 BreakPoint at:006295CE
+Adding coverage:storm.values.int.pas (storm.values.int) 82
+Clearing BreakPoint at 006295ED
+De-Activate storm.values.int.pas line 82 BreakPoint at:006295ED
+Adding coverage:storm.values.int.pas (storm.values.int) 80
+Clearing BreakPoint at 006295E0
+De-Activate storm.values.int.pas line 80 BreakPoint at:006295E0
+Adding coverage:storm.values.int.pas (storm.values.int) 174
+Clearing BreakPoint at 0062981C
+De-Activate storm.values.int.pas line 174 BreakPoint at:0062981C
+Adding coverage:storm.values.int.pas (storm.values.int) 175
+Clearing BreakPoint at 0062982B
+De-Activate storm.values.int.pas line 175 BreakPoint at:0062982B
+Adding coverage:storm.values.int.pas (storm.values.int) 180
+Clearing BreakPoint at 00629853
+De-Activate storm.values.int.pas line 180 BreakPoint at:00629853
+Adding coverage:storm.values.int.pas (storm.values.int) 182
+Clearing BreakPoint at 00629859
+De-Activate storm.values.int.pas line 182 BreakPoint at:00629859
+Adding coverage:storm.values.int.pas (storm.values.int) 184
+Clearing BreakPoint at 0062986D
+De-Activate storm.values.int.pas line 184 BreakPoint at:0062986D
+Adding coverage:storm.values.int.pas (storm.values.int) 177
+Clearing BreakPoint at 00629837
+De-Activate storm.values.int.pas line 177 BreakPoint at:00629837
+Adding coverage:storm.values.int.pas (storm.values.int) 100
+Clearing BreakPoint at 00629668
+De-Activate storm.values.int.pas line 100 BreakPoint at:00629668
+Adding coverage:storm.values.int.pas (storm.values.int) 101
+Clearing BreakPoint at 00629674
+De-Activate storm.values.int.pas line 101 BreakPoint at:00629674
+Adding coverage:storm.values.int.pas (storm.values.int) 102
+Clearing BreakPoint at 0062968E
+De-Activate storm.values.int.pas line 102 BreakPoint at:0062968E
+Adding coverage:storm.values.int.pas (storm.values.int) 150
+Clearing BreakPoint at 00629788
+De-Activate storm.values.int.pas line 150 BreakPoint at:00629788
+Adding coverage:storm.values.int.pas (storm.values.int) 151
+Clearing BreakPoint at 00629794
+De-Activate storm.values.int.pas line 151 BreakPoint at:00629794
+Adding coverage:storm.values.int.pas (storm.values.int) 159
+Clearing BreakPoint at 006297C7
+De-Activate storm.values.int.pas line 159 BreakPoint at:006297C7
+Adding coverage:storm.values.int.pas (storm.values.int) 153
+Clearing BreakPoint at 006297A0
+De-Activate storm.values.int.pas line 153 BreakPoint at:006297A0
+Adding coverage:storm.values.int.pas (storm.values.int) 155
+Clearing BreakPoint at 006297B9
+De-Activate storm.values.int.pas line 155 BreakPoint at:006297B9
+Adding coverage:storm.values.int.pas (storm.values.int) 85
+Clearing BreakPoint at 006295F4
+De-Activate storm.values.int.pas line 85 BreakPoint at:006295F4
+Adding coverage:storm.values.int.pas (storm.values.int) 86
+Clearing BreakPoint at 006295FD
+De-Activate storm.values.int.pas line 86 BreakPoint at:006295FD
+Adding coverage:storm.values.int.pas (storm.values.int) 87
+Clearing BreakPoint at 00629612
+De-Activate storm.values.int.pas line 87 BreakPoint at:00629612
 Adding coverage:storm.values.date.pas (storm.values.date) 57
 Clearing BreakPoint at 00632DB0
 De-Activate storm.values.date.pas line 57 BreakPoint at:00632DB0
@@ -2853,42 +3584,6 @@ De-Activate storm.values.date.pas line 54 BreakPoint at:00632D67
 Adding coverage:storm.values.date.pas (storm.values.date) 47
 Clearing BreakPoint at 00632CE3
 De-Activate storm.values.date.pas line 47 BreakPoint at:00632CE3
-Adding coverage:storm.values.float.pas (storm.values.float) 127
-Clearing BreakPoint at 0062A2BC
-De-Activate storm.values.float.pas line 127 BreakPoint at:0062A2BC
-Adding coverage:storm.values.float.pas (storm.values.float) 128
-Clearing BreakPoint at 0062A2C3
-De-Activate storm.values.float.pas line 128 BreakPoint at:0062A2C3
-Adding coverage:storm.values.float.pas (storm.values.float) 129
-Clearing BreakPoint at 0062A2CB
-De-Activate storm.values.float.pas line 129 BreakPoint at:0062A2CB
-Adding coverage:storm.values.float.pas (storm.values.float) 195
-Clearing BreakPoint at 0062A4D0
-De-Activate storm.values.float.pas line 195 BreakPoint at:0062A4D0
-Adding coverage:storm.values.float.pas (storm.values.float) 196
-Clearing BreakPoint at 0062A4D9
-De-Activate storm.values.float.pas line 196 BreakPoint at:0062A4D9
-Adding coverage:storm.values.float.pas (storm.values.float) 197
-Clearing BreakPoint at 0062A4F0
-De-Activate storm.values.float.pas line 197 BreakPoint at:0062A4F0
-Adding coverage:storm.values.float.pas (storm.values.float) 198
-Clearing BreakPoint at 0062A4F7
-De-Activate storm.values.float.pas line 198 BreakPoint at:0062A4F7
-Adding coverage:storm.values.float.pas (storm.values.float) 199
-Clearing BreakPoint at 0062A500
-De-Activate storm.values.float.pas line 199 BreakPoint at:0062A500
-Adding coverage:storm.values.float.pas (storm.values.float) 119
-Clearing BreakPoint at 0062A288
-De-Activate storm.values.float.pas line 119 BreakPoint at:0062A288
-Adding coverage:storm.values.float.pas (storm.values.float) 120
-Clearing BreakPoint at 0062A294
-De-Activate storm.values.float.pas line 120 BreakPoint at:0062A294
-Adding coverage:storm.values.float.pas (storm.values.float) 124
-Clearing BreakPoint at 0062A2B6
-De-Activate storm.values.float.pas line 124 BreakPoint at:0062A2B6
-Adding coverage:storm.values.float.pas (storm.values.float) 122
-Clearing BreakPoint at 0062A2A0
-De-Activate storm.values.float.pas line 122 BreakPoint at:0062A2A0
 Adding coverage:storm.values.float.pas (storm.values.float) 60
 Clearing BreakPoint at 0062A058
 De-Activate storm.values.float.pas line 60 BreakPoint at:0062A058
@@ -3060,569 +3755,10 @@ De-Activate storm.values.float.pas line 85 BreakPoint at:0062A16D
 Adding coverage:storm.values.float.pas (storm.values.float) 86
 Clearing BreakPoint at 0062A182
 De-Activate storm.values.float.pas line 86 BreakPoint at:0062A182
-Adding coverage:storm.values.str.pas (storm.values.str) 111
-Clearing BreakPoint at 006264C8
-De-Activate storm.values.str.pas line 111 BreakPoint at:006264C8
-Adding coverage:storm.values.str.pas (storm.values.str) 112
-Clearing BreakPoint at 006264D4
-De-Activate storm.values.str.pas line 112 BreakPoint at:006264D4
-Adding coverage:storm.values.str.pas (storm.values.str) 116
-Clearing BreakPoint at 006264EE
-De-Activate storm.values.str.pas line 116 BreakPoint at:006264EE
-Adding coverage:storm.values.str.pas (storm.values.str) 114
-Clearing BreakPoint at 006264E0
-De-Activate storm.values.str.pas line 114 BreakPoint at:006264E0
-Adding coverage:storm.values.str.pas (storm.values.str) 60
-Clearing BreakPoint at 00626190
-De-Activate storm.values.str.pas line 60 BreakPoint at:00626190
-Adding coverage:storm.values.str.pas (storm.values.str) 61
-Clearing BreakPoint at 006261EF
-De-Activate storm.values.str.pas line 61 BreakPoint at:006261EF
-Adding coverage:storm.values.str.pas (storm.values.str) 67
-Clearing BreakPoint at 00626219
-De-Activate storm.values.str.pas line 67 BreakPoint at:00626219
-Adding coverage:storm.values.str.pas (storm.values.str) 69
-Clearing BreakPoint at 0062621D
-De-Activate storm.values.str.pas line 69 BreakPoint at:0062621D
-Adding coverage:storm.values.str.pas (storm.values.str) 63
-Clearing BreakPoint at 006261F5
-De-Activate storm.values.str.pas line 63 BreakPoint at:006261F5
-Adding coverage:storm.values.str.pas (storm.values.str) 191
-Clearing BreakPoint at 0062667C
-De-Activate storm.values.str.pas line 191 BreakPoint at:0062667C
-Adding coverage:storm.values.str.pas (storm.values.str) 192
-Clearing BreakPoint at 00626688
-De-Activate storm.values.str.pas line 192 BreakPoint at:00626688
-Adding coverage:storm.values.str.pas (storm.values.str) 193
-Clearing BreakPoint at 00626693
-De-Activate storm.values.str.pas line 193 BreakPoint at:00626693
-Adding coverage:storm.values.str.pas (storm.values.str) 63
-Clearing BreakPoint at 00626138
-De-Activate storm.values.str.pas line 63 BreakPoint at:00626138
-Adding coverage:storm.values.str.pas (storm.values.str) 167
-Clearing BreakPoint at 006265E8
-De-Activate storm.values.str.pas line 167 BreakPoint at:006265E8
-Adding coverage:storm.values.str.pas (storm.values.str) 168
-Clearing BreakPoint at 006265F4
-De-Activate storm.values.str.pas line 168 BreakPoint at:006265F4
-Adding coverage:storm.values.str.pas (storm.values.str) 175
-Clearing BreakPoint at 0062661D
-De-Activate storm.values.str.pas line 175 BreakPoint at:0062661D
-Adding coverage:storm.values.str.pas (storm.values.str) 170
-Clearing BreakPoint at 00626600
-De-Activate storm.values.str.pas line 170 BreakPoint at:00626600
-Adding coverage:storm.values.str.pas (storm.values.str) 172
-Clearing BreakPoint at 00626612
-De-Activate storm.values.str.pas line 172 BreakPoint at:00626612
-Adding coverage:storm.values.str.pas (storm.values.str) 87
-Clearing BreakPoint at 006263DC
-De-Activate storm.values.str.pas line 87 BreakPoint at:006263DC
-Adding coverage:storm.values.str.pas (storm.values.str) 88
-Clearing BreakPoint at 006263FB
-De-Activate storm.values.str.pas line 88 BreakPoint at:006263FB
-Adding coverage:storm.values.str.pas (storm.values.str) 89
-Clearing BreakPoint at 00626414
-De-Activate storm.values.str.pas line 89 BreakPoint at:00626414
-Adding coverage:storm.values.str.pas (storm.values.str) 153
-Clearing BreakPoint at 00626594
-De-Activate storm.values.str.pas line 153 BreakPoint at:00626594
-Adding coverage:storm.values.str.pas (storm.values.str) 154
-Clearing BreakPoint at 006265A0
-De-Activate storm.values.str.pas line 154 BreakPoint at:006265A0
-Adding coverage:storm.values.str.pas (storm.values.str) 162
-Clearing BreakPoint at 006265E2
-De-Activate storm.values.str.pas line 162 BreakPoint at:006265E2
-Adding coverage:storm.values.str.pas (storm.values.str) 156
-Clearing BreakPoint at 006265AC
-De-Activate storm.values.str.pas line 156 BreakPoint at:006265AC
-Adding coverage:storm.values.str.pas (storm.values.str) 158
-Clearing BreakPoint at 006265CF
-De-Activate storm.values.str.pas line 158 BreakPoint at:006265CF
-Adding coverage:storm.values.str.pas (storm.values.str) 126
-Clearing BreakPoint at 00626508
-De-Activate storm.values.str.pas line 126 BreakPoint at:00626508
-Adding coverage:storm.values.str.pas (storm.values.str) 127
-Clearing BreakPoint at 00626514
-De-Activate storm.values.str.pas line 127 BreakPoint at:00626514
-Adding coverage:storm.values.str.pas (storm.values.str) 134
-Clearing BreakPoint at 0062653D
-De-Activate storm.values.str.pas line 134 BreakPoint at:0062653D
-Adding coverage:storm.values.str.pas (storm.values.str) 129
-Clearing BreakPoint at 00626520
-De-Activate storm.values.str.pas line 129 BreakPoint at:00626520
-Adding coverage:storm.values.str.pas (storm.values.str) 131
-Clearing BreakPoint at 00626532
-De-Activate storm.values.str.pas line 131 BreakPoint at:00626532
-Adding coverage:storm.values.str.pas (storm.values.str) 178
-Clearing BreakPoint at 00626624
-De-Activate storm.values.str.pas line 178 BreakPoint at:00626624
-Adding coverage:storm.values.str.pas (storm.values.str) 179
-Clearing BreakPoint at 00626633
-De-Activate storm.values.str.pas line 179 BreakPoint at:00626633
-Adding coverage:storm.values.str.pas (storm.values.str) 184
-Clearing BreakPoint at 0062665B
-De-Activate storm.values.str.pas line 184 BreakPoint at:0062665B
-Adding coverage:storm.values.str.pas (storm.values.str) 186
-Clearing BreakPoint at 00626661
-De-Activate storm.values.str.pas line 186 BreakPoint at:00626661
-Adding coverage:storm.values.str.pas (storm.values.str) 188
-Clearing BreakPoint at 00626675
-De-Activate storm.values.str.pas line 188 BreakPoint at:00626675
-Adding coverage:storm.values.str.pas (storm.values.str) 181
-Clearing BreakPoint at 0062663F
-De-Activate storm.values.str.pas line 181 BreakPoint at:0062663F
-Adding coverage:storm.values.str.pas (storm.values.str) 92
-Clearing BreakPoint at 00626438
-De-Activate storm.values.str.pas line 92 BreakPoint at:00626438
-Adding coverage:storm.values.str.pas (storm.values.str) 93
-Clearing BreakPoint at 00626444
-De-Activate storm.values.str.pas line 93 BreakPoint at:00626444
-Adding coverage:storm.values.str.pas (storm.values.str) 99
-Clearing BreakPoint at 00626466
-De-Activate storm.values.str.pas line 99 BreakPoint at:00626466
-Adding coverage:storm.values.str.pas (storm.values.str) 103
-Clearing BreakPoint at 0062646A
-De-Activate storm.values.str.pas line 103 BreakPoint at:0062646A
-Adding coverage:storm.values.str.pas (storm.values.str) 95
-Clearing BreakPoint at 0062644A
-De-Activate storm.values.str.pas line 95 BreakPoint at:0062644A
-Adding coverage:storm.values.str.pas (storm.values.str) 139
-Clearing BreakPoint at 00626544
-De-Activate storm.values.str.pas line 139 BreakPoint at:00626544
-Adding coverage:storm.values.str.pas (storm.values.str) 140
-Clearing BreakPoint at 00626550
-De-Activate storm.values.str.pas line 140 BreakPoint at:00626550
-Adding coverage:storm.values.str.pas (storm.values.str) 148
-Clearing BreakPoint at 0062658D
-De-Activate storm.values.str.pas line 148 BreakPoint at:0062658D
-Adding coverage:storm.values.str.pas (storm.values.str) 142
-Clearing BreakPoint at 0062655C
-De-Activate storm.values.str.pas line 142 BreakPoint at:0062655C
-Adding coverage:storm.values.str.pas (storm.values.str) 144
-Clearing BreakPoint at 0062657F
-De-Activate storm.values.str.pas line 144 BreakPoint at:0062657F
-Adding coverage:storm.values.str.pas (storm.values.str) 77
-Clearing BreakPoint at 006262B8
-De-Activate storm.values.str.pas line 77 BreakPoint at:006262B8
-Adding coverage:storm.values.str.pas (storm.values.str) 78
-Clearing BreakPoint at 006262D4
-De-Activate storm.values.str.pas line 78 BreakPoint at:006262D4
-Adding coverage:storm.values.str.pas (storm.values.str) 79
-Clearing BreakPoint at 00626320
-De-Activate storm.values.str.pas line 79 BreakPoint at:00626320
-Adding coverage:storm.fields.base.pas (storm.fields.base) 73
-Clearing BreakPoint at 006831A4
-De-Activate storm.fields.base.pas line 73 BreakPoint at:006831A4
-Adding coverage:storm.fields.base.pas (storm.fields.base) 74
-Clearing BreakPoint at 006831D5
-De-Activate storm.fields.base.pas line 74 BreakPoint at:006831D5
-Adding coverage:storm.fields.base.pas (storm.fields.base) 75
-Clearing BreakPoint at 006831DF
-De-Activate storm.fields.base.pas line 75 BreakPoint at:006831DF
-Adding coverage:storm.fields.base.pas (storm.fields.base) 76
-Clearing BreakPoint at 006831ED
-De-Activate storm.fields.base.pas line 76 BreakPoint at:006831ED
-Adding coverage:storm.fields.base.pas (storm.fields.base) 77
-Clearing BreakPoint at 006831FB
-De-Activate storm.fields.base.pas line 77 BreakPoint at:006831FB
-Adding coverage:storm.fields.base.pas (storm.fields.base) 134
-Clearing BreakPoint at 00683410
-De-Activate storm.fields.base.pas line 134 BreakPoint at:00683410
-Adding coverage:storm.fields.base.pas (storm.fields.base) 135
-Clearing BreakPoint at 00683417
-De-Activate storm.fields.base.pas line 135 BreakPoint at:00683417
-Adding coverage:storm.fields.base.pas (storm.fields.base) 136
-Clearing BreakPoint at 0068341F
-De-Activate storm.fields.base.pas line 136 BreakPoint at:0068341F
-Adding coverage:storm.fields.base.pas (storm.fields.base) 78
-Clearing BreakPoint at 00683202
-De-Activate storm.fields.base.pas line 78 BreakPoint at:00683202
-Adding coverage:storm.fields.base.pas (storm.fields.base) 139
-Clearing BreakPoint at 00683424
-De-Activate storm.fields.base.pas line 139 BreakPoint at:00683424
-Adding coverage:storm.fields.base.pas (storm.fields.base) 140
-Clearing BreakPoint at 0068342D
-De-Activate storm.fields.base.pas line 140 BreakPoint at:0068342D
-Adding coverage:storm.fields.base.pas (storm.fields.base) 141
-Clearing BreakPoint at 0068343B
-De-Activate storm.fields.base.pas line 141 BreakPoint at:0068343B
-Adding coverage:storm.fields.float.pas (storm.fields.float) 43
-Clearing BreakPoint at 0068633C
-De-Activate storm.fields.float.pas line 43 BreakPoint at:0068633C
-ACCESS VIOLATION at Address:0068637B
-C0000005 not a debug BreakPoint
-Tried to read
-Trying to access Address:00000070
----------------Stack trace --------------
-Module : .\Tests.exe Stack frame:006869D1
-After line:storm.fields.float.test line 54
-Module : .\Tests.exe Stack frame:005BF060
-After line:System.DateUtils line 668
-Module : .\Tests.exe Stack frame:005E9D56
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005EA018
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E971C
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E93BD
-After line:DUnitX.Loggers.Null line 68
-No module found for exception address:0068CEC1
-Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
-Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
-No module found for exception address:77267A4E
-No module found for exception address:77267A1E
----------------End of Stack trace --------------
-Adding coverage:storm.fields.int.pas (storm.fields.int) 43
-Clearing BreakPoint at 006856E8
-De-Activate storm.fields.int.pas line 43 BreakPoint at:006856E8
-ACCESS VIOLATION at Address:0068577F
-C0000005 not a debug BreakPoint
-Tried to read
-Trying to access Address:00000074
----------------Stack trace --------------
-Module : .\Tests.exe Stack frame:00685D6D
-After line:storm.fields.int.test line 54
-Module : .\Tests.exe Stack frame:005BF060
-After line:System.DateUtils line 668
-Module : .\Tests.exe Stack frame:005E9D56
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005EA018
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E971C
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E93BD
-After line:DUnitX.Loggers.Null line 68
-No module found for exception address:0068CEC1
-Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
-Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
-No module found for exception address:77267A4E
-No module found for exception address:77267A1E
----------------End of Stack trace --------------
-Adding coverage:storm.fields.base.pas (storm.fields.base) 154
-Clearing BreakPoint at 00683464
-De-Activate storm.fields.base.pas line 154 BreakPoint at:00683464
-Adding coverage:storm.fields.base.pas (storm.fields.base) 155
-Clearing BreakPoint at 00683470
-De-Activate storm.fields.base.pas line 155 BreakPoint at:00683470
-Adding coverage:storm.fields.base.pas (storm.fields.base) 156
-Clearing BreakPoint at 0068347E
-De-Activate storm.fields.base.pas line 156 BreakPoint at:0068347E
-Adding coverage:storm.fields.base.pas (storm.fields.base) 54
-Clearing BreakPoint at 006830F8
-De-Activate storm.fields.base.pas line 54 BreakPoint at:006830F8
-Adding coverage:storm.fields.base.pas (storm.fields.base) 55
-Clearing BreakPoint at 006830FF
-De-Activate storm.fields.base.pas line 55 BreakPoint at:006830FF
-Adding coverage:storm.fields.base.pas (storm.fields.base) 56
-Clearing BreakPoint at 0068310A
-De-Activate storm.fields.base.pas line 56 BreakPoint at:0068310A
-Adding coverage:storm.fields.base.pas (storm.fields.base) 149
-Clearing BreakPoint at 00683444
-De-Activate storm.fields.base.pas line 149 BreakPoint at:00683444
-Adding coverage:storm.fields.base.pas (storm.fields.base) 150
-Clearing BreakPoint at 00683450
-De-Activate storm.fields.base.pas line 150 BreakPoint at:00683450
-Adding coverage:storm.fields.base.pas (storm.fields.base) 151
-Clearing BreakPoint at 0068345E
-De-Activate storm.fields.base.pas line 151 BreakPoint at:0068345E
-Adding coverage:storm.fields.base.pas (storm.fields.base) 81
-Clearing BreakPoint at 00683240
-De-Activate storm.fields.base.pas line 81 BreakPoint at:00683240
-Adding coverage:storm.fields.base.pas (storm.fields.base) 82
-Clearing BreakPoint at 0068324C
-De-Activate storm.fields.base.pas line 82 BreakPoint at:0068324C
-Adding coverage:storm.fields.base.pas (storm.fields.base) 83
-Clearing BreakPoint at 0068325A
-De-Activate storm.fields.base.pas line 83 BreakPoint at:0068325A
-Adding coverage:storm.fields.base.pas (storm.fields.base) 161
-Clearing BreakPoint at 00683640
-De-Activate storm.fields.base.pas line 161 BreakPoint at:00683640
-Adding coverage:storm.fields.base.pas (storm.fields.base) 168
-Clearing BreakPoint at 006836A4
-De-Activate storm.fields.base.pas line 168 BreakPoint at:006836A4
-Adding coverage:storm.fields.base.pas (storm.fields.base) 170
-Clearing BreakPoint at 006836D8
-De-Activate storm.fields.base.pas line 170 BreakPoint at:006836D8
-Adding coverage:storm.fields.base.pas (storm.fields.base) 174
-Clearing BreakPoint at 006836EF
-De-Activate storm.fields.base.pas line 174 BreakPoint at:006836EF
-Adding coverage:storm.fields.base.pas (storm.fields.base) 165
-Clearing BreakPoint at 00683610
-De-Activate storm.fields.base.pas line 165 BreakPoint at:00683610
-Adding coverage:storm.fields.base.pas (storm.fields.base) 166
-Clearing BreakPoint at 0068361C
-De-Activate storm.fields.base.pas line 166 BreakPoint at:0068361C
-Adding coverage:storm.fields.base.pas (storm.fields.base) 168
-Clearing BreakPoint at 0068363B
-De-Activate storm.fields.base.pas line 168 BreakPoint at:0068363B
-Adding coverage:storm.fields.base.pas (storm.fields.base) 172
-Clearing BreakPoint at 006836E1
-De-Activate storm.fields.base.pas line 172 BreakPoint at:006836E1
-Adding coverage:storm.fields.base.pas (storm.fields.base) 122
-Clearing BreakPoint at 00683368
-De-Activate storm.fields.base.pas line 122 BreakPoint at:00683368
-Adding coverage:storm.fields.base.pas (storm.fields.base) 123
-Clearing BreakPoint at 0068338A
-De-Activate storm.fields.base.pas line 123 BreakPoint at:0068338A
-Adding coverage:storm.fields.base.pas (storm.fields.base) 124
-Clearing BreakPoint at 0068338E
-De-Activate storm.fields.base.pas line 124 BreakPoint at:0068338E
-Adding coverage:storm.fields.base.pas (storm.fields.base) 131
-Clearing BreakPoint at 006833E2
-De-Activate storm.fields.base.pas line 131 BreakPoint at:006833E2
-Adding coverage:storm.fields.base.pas (storm.fields.base) 126
-Clearing BreakPoint at 006833A0
-De-Activate storm.fields.base.pas line 126 BreakPoint at:006833A0
-Adding coverage:storm.fields.base.pas (storm.fields.base) 128
-Clearing BreakPoint at 006833C0
-De-Activate storm.fields.base.pas line 128 BreakPoint at:006833C0
-Adding coverage:storm.fields.base.pas (storm.fields.base) 105
-Clearing BreakPoint at 006832E4
-De-Activate storm.fields.base.pas line 105 BreakPoint at:006832E4
-Adding coverage:storm.fields.base.pas (storm.fields.base) 106
-Clearing BreakPoint at 006832F3
-De-Activate storm.fields.base.pas line 106 BreakPoint at:006832F3
-Adding coverage:storm.fields.base.pas (storm.fields.base) 107
-Clearing BreakPoint at 006832F7
-De-Activate storm.fields.base.pas line 107 BreakPoint at:006832F7
-Adding coverage:storm.fields.base.pas (storm.fields.base) 108
-Clearing BreakPoint at 00683305
-De-Activate storm.fields.base.pas line 108 BreakPoint at:00683305
-ACCESS VIOLATION at Address:0061D8CF
-C0000005 not a debug BreakPoint
-Tried to read
-Trying to access Address:00000008
----------------Stack trace --------------
-Module : .\Tests.exe Stack frame:0061D8C9
-Exact line:System.JSON line 1733
-Module : .\Tests.exe Stack frame:0068457B
-After line:storm.fields.base.test line 98
-Module : .\Tests.exe Stack frame:005BF060
-After line:System.DateUtils line 668
-Module : .\Tests.exe Stack frame:005E9D56
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005EA018
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E971C
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E93BD
-After line:DUnitX.Loggers.Null line 68
-No module found for exception address:0068CEC1
-Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
-Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
-No module found for exception address:77267A4E
-No module found for exception address:77267A1E
----------------End of Stack trace --------------
-Adding coverage:storm.fields.base.pas (storm.fields.base) 113
-Clearing BreakPoint at 00683353
-De-Activate storm.fields.base.pas line 113 BreakPoint at:00683353
-Adding coverage:storm.fields.base.pas (storm.fields.base) 119
-Clearing BreakPoint at 0068335B
-De-Activate storm.fields.base.pas line 119 BreakPoint at:0068335B
-Adding coverage:storm.fields.base.pas (storm.fields.base) 110
-Clearing BreakPoint at 0068331D
-De-Activate storm.fields.base.pas line 110 BreakPoint at:0068331D
-Adding coverage:storm.fields.base.pas (storm.fields.base) 86
-Clearing BreakPoint at 00683260
-De-Activate storm.fields.base.pas line 86 BreakPoint at:00683260
-Adding coverage:storm.fields.base.pas (storm.fields.base) 87
-Clearing BreakPoint at 0068326C
-De-Activate storm.fields.base.pas line 87 BreakPoint at:0068326C
-Adding coverage:storm.fields.base.pas (storm.fields.base) 88
-Clearing BreakPoint at 00683270
-De-Activate storm.fields.base.pas line 88 BreakPoint at:00683270
-Adding coverage:storm.fields.base.pas (storm.fields.base) 91
-Clearing BreakPoint at 00683278
-De-Activate storm.fields.base.pas line 91 BreakPoint at:00683278
-Adding coverage:storm.fields.base.pas (storm.fields.base) 92
-Clearing BreakPoint at 00683287
-De-Activate storm.fields.base.pas line 92 BreakPoint at:00683287
-Adding coverage:storm.fields.base.pas (storm.fields.base) 93
-Clearing BreakPoint at 0068328B
-De-Activate storm.fields.base.pas line 93 BreakPoint at:0068328B
-Adding coverage:storm.fields.base.pas (storm.fields.base) 94
-Clearing BreakPoint at 00683299
-De-Activate storm.fields.base.pas line 94 BreakPoint at:00683299
-ACCESS VIOLATION at Address:006725BE
-C0000005 not a debug BreakPoint
-Tried to read
-Trying to access Address:00000040
-Data.DB line 13314
----------------Stack trace --------------
-Module : .\Tests.exe Stack frame:006832A7
-After line:storm.fields.base line 96
-Module : .\Tests.exe Stack frame:00684550
-After line:storm.fields.base.test line 89
-Module : .\Tests.exe Stack frame:005BF060
-After line:System.DateUtils line 668
-Module : .\Tests.exe Stack frame:005E9D56
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005EA018
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E971C
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E93BD
-After line:DUnitX.Loggers.Null line 68
-No module found for exception address:0068CEC1
-Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
-Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
-No module found for exception address:77267A4E
-No module found for exception address:77267A1E
----------------End of Stack trace --------------
-Adding coverage:storm.fields.base.pas (storm.fields.base) 96
-Clearing BreakPoint at 006832CF
-De-Activate storm.fields.base.pas line 96 BreakPoint at:006832CF
-Adding coverage:storm.fields.base.pas (storm.fields.base) 102
-Clearing BreakPoint at 006832D7
-De-Activate storm.fields.base.pas line 102 BreakPoint at:006832D7
-Adding coverage:storm.fields.base.pas (storm.fields.base) 61
-Clearing BreakPoint at 00683110
-De-Activate storm.fields.base.pas line 61 BreakPoint at:00683110
-Adding coverage:storm.fields.base.pas (storm.fields.base) 62
-Clearing BreakPoint at 0068313A
-De-Activate storm.fields.base.pas line 62 BreakPoint at:0068313A
-Adding coverage:storm.fields.base.pas (storm.fields.base) 68
-Clearing BreakPoint at 00683168
-De-Activate storm.fields.base.pas line 68 BreakPoint at:00683168
-Adding coverage:storm.fields.base.pas (storm.fields.base) 70
-Clearing BreakPoint at 0068316C
-De-Activate storm.fields.base.pas line 70 BreakPoint at:0068316C
-Adding coverage:storm.fields.str.pas (storm.fields.str) 69
-Clearing BreakPoint at 00683BE4
-De-Activate storm.fields.str.pas line 69 BreakPoint at:00683BE4
-Adding coverage:storm.fields.str.pas (storm.fields.str) 71
-Clearing BreakPoint at 00683BEB
-De-Activate storm.fields.str.pas line 71 BreakPoint at:00683BEB
-Adding coverage:storm.fields.str.pas (storm.fields.str) 72
-Clearing BreakPoint at 00683C0B
-De-Activate storm.fields.str.pas line 72 BreakPoint at:00683C0B
-Adding coverage:storm.fields.base.pas (storm.fields.base) 64
-Clearing BreakPoint at 00683140
-De-Activate storm.fields.base.pas line 64 BreakPoint at:00683140
-Adding coverage:storm.fields.str.pas (storm.fields.str) 77
-Clearing BreakPoint at 00683C10
-De-Activate storm.fields.str.pas line 77 BreakPoint at:00683C10
-Adding coverage:storm.fields.str.pas (storm.fields.str) 78
-Clearing BreakPoint at 00683C37
-De-Activate storm.fields.str.pas line 78 BreakPoint at:00683C37
-Adding coverage:storm.fields.str.pas (storm.fields.str) 82
-Clearing BreakPoint at 00683C7C
-De-Activate storm.fields.str.pas line 82 BreakPoint at:00683C7C
-Adding coverage:storm.fields.str.pas (storm.fields.str) 83
-Clearing BreakPoint at 00683C88
-De-Activate storm.fields.str.pas line 83 BreakPoint at:00683C88
-Adding coverage:storm.fields.str.pas (storm.fields.str) 84
-Clearing BreakPoint at 00683C9B
-De-Activate storm.fields.str.pas line 84 BreakPoint at:00683C9B
-Adding coverage:storm.fields.str.pas (storm.fields.str) 79
-Clearing BreakPoint at 00683C50
-De-Activate storm.fields.str.pas line 79 BreakPoint at:00683C50
-Adding coverage:storm.fields.str.pas (storm.fields.str) 64
-Clearing BreakPoint at 00683B68
-De-Activate storm.fields.str.pas line 64 BreakPoint at:00683B68
-Adding coverage:storm.fields.str.pas (storm.fields.str) 65
-Clearing BreakPoint at 00683B9B
-De-Activate storm.fields.str.pas line 65 BreakPoint at:00683B9B
-Adding coverage:storm.fields.str.pas (storm.fields.str) 59
-Clearing BreakPoint at 00683B10
-De-Activate storm.fields.str.pas line 59 BreakPoint at:00683B10
-Adding coverage:storm.fields.str.pas (storm.fields.str) 60
-Clearing BreakPoint at 00683B2F
-De-Activate storm.fields.str.pas line 60 BreakPoint at:00683B2F
-Adding coverage:storm.fields.str.pas (storm.fields.str) 61
-Clearing BreakPoint at 00683B45
-De-Activate storm.fields.str.pas line 61 BreakPoint at:00683B45
-Adding coverage:storm.fields.str.pas (storm.fields.str) 66
-Clearing BreakPoint at 00683BB4
-De-Activate storm.fields.str.pas line 66 BreakPoint at:00683BB4
-Adding coverage:storm.fields.str.pas (storm.fields.str) 43
-Clearing BreakPoint at 00683A64
-De-Activate storm.fields.str.pas line 43 BreakPoint at:00683A64
-Adding coverage:storm.fields.str.pas (storm.fields.str) 44
-Clearing BreakPoint at 00683A89
-De-Activate storm.fields.str.pas line 44 BreakPoint at:00683A89
-Adding coverage:storm.fields.str.pas (storm.fields.str) 45
-Clearing BreakPoint at 00683A8D
-De-Activate storm.fields.str.pas line 45 BreakPoint at:00683A8D
-Adding coverage:storm.fields.str.pas (storm.fields.str) 46
-Clearing BreakPoint at 00683A9B
-De-Activate storm.fields.str.pas line 46 BreakPoint at:00683A9B
-Adding coverage:storm.fields.str.pas (storm.fields.str) 48
-Clearing BreakPoint at 00683AA1
-De-Activate storm.fields.str.pas line 48 BreakPoint at:00683AA1
-ACCESS VIOLATION at Address:00683AA9
-C0000005 not a debug BreakPoint
-Tried to read
-Trying to access Address:00000088
----------------Stack trace --------------
-Module : .\Tests.exe Stack frame:00685091
-After line:storm.fields.str.test line 54
-Module : .\Tests.exe Stack frame:005BF060
-After line:System.DateUtils line 668
-Module : .\Tests.exe Stack frame:005E9D56
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005EA018
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E971C
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E9749
-After line:DUnitX.Loggers.Null line 68
-Module : .\Tests.exe Stack frame:005E93BD
-After line:DUnitX.Loggers.Null line 68
-No module found for exception address:0068CEC1
-Module : C:\windows\SysWOW64\KERNEL32.DLL Stack frame:767BFA29
-Module : C:\windows\SysWOW64\KERNEL32.DLL - no MAP information exists
-No module found for exception address:77267A4E
-No module found for exception address:77267A1E
----------------End of Stack trace --------------
-Adding coverage:storm.fields.str.pas (storm.fields.str) 52
-Clearing BreakPoint at 00683AD9
-De-Activate storm.fields.str.pas line 52 BreakPoint at:00683AD9
-Adding coverage:storm.fields.str.pas (storm.fields.str) 53
-Clearing BreakPoint at 00683ADE
-De-Activate storm.fields.str.pas line 53 BreakPoint at:00683ADE
-Thread exit:17524
-Thread exit:18692
-Thread exit:6200
-Process 10276 exiting. Exit code :0
+Thread exit:18512
+Thread exit:3336
+Thread exit:17420
+Process 3544 exiting. Exit code :0
 Finished processing debug events
 ProcedureReport
 Generating reports
@@ -3631,14 +3767,6 @@ Source dir: R:\external\storm\src\lib\values
 Output dir: .\Reports\
 Generating xml coverage report
 Generating EMMA file
-Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.str, filename=storm.fields.str.pas ]
-Generating EMMA data for class: TStormStringField
-Generating EMMA data for method: InitializeStormValue l:3 c:3
-Generating EMMA data for method: Value l:3 c:3
-Generating EMMA data for method: GetValue l:3 c:3
-Generating EMMA data for method: FromDataField l:7 c:7
-Generating EMMA data for method: GetValueOrDefault l:3 c:3
-Generating EMMA data for method: SetValue l:3 c:3
 Generating EMMA data for module: ModuleInfo[ modulename=storm.values.float, filename=storm.values.float.pas ]
 Generating EMMA data for class: TFloatValue
 Generating EMMA data for method: FromDateTime l:3 c:3
@@ -3668,22 +3796,9 @@ Generating EMMA data for method: ToString l:4 c:4
 Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.float, filename=storm.fields.float.pas ]
 Generating EMMA data for class: TStormFloatField
 Generating EMMA data for method: FromDataField l:1 c:1
-Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.base, filename=storm.fields.base.pas ]
-Generating EMMA data for class: TStormField.ToJSON$ActRec
-Generating EMMA data for method:  l:3 c:3
-Generating EMMA data for class: TStormField
-Generating EMMA data for method: Clone l:5 c:5
-Generating EMMA data for method: StormValue l:3 c:3
-Generating EMMA data for method: IsAssigned l:3 c:3
-Generating EMMA data for method: FromDataField l:3 c:3
-Generating EMMA data for method: FieldName l:3 c:3
-Generating EMMA data for method: FromDataSet l:6 c:6
-Generating EMMA data for method: Clear l:3 c:3
-Generating EMMA data for method: Create l:6 c:6
-Generating EMMA data for method: JSONName l:3 c:3
-Generating EMMA data for method: FromJSON l:13 c:13
-Generating EMMA data for method: ToJSON l:5 c:5
-Generating EMMA data for method: Initialize l:3 c:3
+Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.date, filename=storm.fields.Date.pas ]
+Generating EMMA data for class: TStormDateField
+Generating EMMA data for method: FromDataField l:2 c:2
 Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.int, filename=storm.fields.int.pas ]
 Generating EMMA data for class: TStormIntegerField
 Generating EMMA data for method: GetValue l:1 c:1
@@ -3707,13 +3822,6 @@ Generating EMMA data for method: FromJSON l:5 c:5
 Generating EMMA data for method: ToJSON l:6 c:6
 Generating EMMA data for method: SetValue l:5 c:5
 Generating EMMA data for method: Inititalize l:3 c:3
-Generating EMMA data for module: ModuleInfo[ modulename=storm.values.base, filename=storm.values.base.pas ]
-Generating EMMA data for class: TStormValue
-Generating EMMA data for method: Inititalize l:3 c:3
-Generating EMMA data for method: Clear l:3 c:3
-Generating EMMA data for method: LoadFromJSON l:12 c:12
-Generating EMMA data for method: IsAssigned l:3 c:3
-Generating EMMA data for method: Create l:4 c:4
 Generating EMMA data for module: ModuleInfo[ modulename=storm.values.datetime, filename=storm.values.datetime.pas ]
 Generating EMMA data for class: TDateTimeValue
 Generating EMMA data for method: FromDateTime l:3 c:3
@@ -3734,6 +3842,43 @@ Generating EMMA data for method: SetValue l:7 c:7
 Generating EMMA data for method: Inititalize l:3 c:3
 Generating EMMA data for class: TDateTimeValue.Clone$ActRec
 Generating EMMA data for method:  l:1 c:1
+Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.datetime, filename=storm.fields.datetime.pas ]
+Generating EMMA data for class: TStormDateTimeField
+Generating EMMA data for method: FromDataField l:1 c:1
+Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.bool, filename=storm.fields.Bool.pas ]
+Generating EMMA data for class: TStormBooleanField
+Generating EMMA data for method: FromDataField l:1 c:1
+Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.str, filename=storm.fields.str.pas ]
+Generating EMMA data for class: TStormStringField
+Generating EMMA data for method: InitializeStormValue l:3 c:3
+Generating EMMA data for method: Value l:3 c:3
+Generating EMMA data for method: GetValue l:3 c:3
+Generating EMMA data for method: FromDataField l:7 c:7
+Generating EMMA data for method: GetValueOrDefault l:3 c:3
+Generating EMMA data for method: SetValue l:3 c:3
+Generating EMMA data for module: ModuleInfo[ modulename=storm.fields.base, filename=storm.fields.base.pas ]
+Generating EMMA data for class: TStormField.ToJSON$ActRec
+Generating EMMA data for method:  l:3 c:3
+Generating EMMA data for class: TStormField
+Generating EMMA data for method: Clone l:5 c:5
+Generating EMMA data for method: StormValue l:3 c:3
+Generating EMMA data for method: IsAssigned l:3 c:3
+Generating EMMA data for method: FromDataField l:3 c:3
+Generating EMMA data for method: FieldName l:3 c:3
+Generating EMMA data for method: FromDataSet l:6 c:6
+Generating EMMA data for method: Clear l:3 c:3
+Generating EMMA data for method: Create l:6 c:6
+Generating EMMA data for method: JSONName l:3 c:3
+Generating EMMA data for method: FromJSON l:13 c:13
+Generating EMMA data for method: ToJSON l:5 c:5
+Generating EMMA data for method: Initialize l:3 c:3
+Generating EMMA data for module: ModuleInfo[ modulename=storm.values.base, filename=storm.values.base.pas ]
+Generating EMMA data for class: TStormValue
+Generating EMMA data for method: Inititalize l:3 c:3
+Generating EMMA data for method: Clear l:3 c:3
+Generating EMMA data for method: LoadFromJSON l:12 c:12
+Generating EMMA data for method: IsAssigned l:3 c:3
+Generating EMMA data for method: Create l:4 c:4
 Generating EMMA data for module: ModuleInfo[ modulename=storm.values.bool, filename=storm.values.bool.pas ]
 Generating EMMA data for class: TBooleanValue
 Generating EMMA data for method: FromDateTime l:3 c:3
@@ -3782,5 +3927,5 @@ Summary:
 +-----------+-----------+-----------+
 |   Lines   |  Covered  | Covered % |
 +-----------+-----------+-----------+
-|       464 |       464 |     100 % |
+|       468 |       468 |     100 % |
 +-----------+-----------+-----------+
