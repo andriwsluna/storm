@@ -12,7 +12,8 @@ uses
   DUnitX.Loggers.Xml.NUnit,
   DUnitX.TestFramework,
   storm.values.base.test in 'src\lib\values\storm.values.base.test.pas',
-  storm.values.str.test in 'src\lib\values\storm.values.str.test.pas';
+  storm.values.str.test in 'src\lib\values\storm.values.str.test.pas',
+  storm.values.int.test in 'src\lib\values\storm.values.int.test.pas';
 
 var
   runner : ITestRunner;

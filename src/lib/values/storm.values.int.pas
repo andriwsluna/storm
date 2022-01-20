@@ -20,8 +20,9 @@ type
       ,IIntegerValue
     )
     private
-      FValue : integer;
+
     protected
+      FValue : integer;
       Procedure Inititalize();  Override;
     public
 
@@ -125,7 +126,15 @@ VAR
 begin
   if self.IsAssigned then
   begin
-    Result := Boolean(FValue);
+    if FValue = 1 then
+    begin
+      result := true;
+    end
+    else
+    if FValue = 0 then
+    begin
+      result := false;
+    end;
   end;
 end;
 
