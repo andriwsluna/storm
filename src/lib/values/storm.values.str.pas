@@ -82,7 +82,16 @@ end;
 
 function TStringValue.FromJSON(Value: TJSONValue): Boolean;
 begin
-  result := LoadFromJSON(self,Value);
+  if assigned(Value) then
+  begin
+    result := LoadFromJSON(self,Value);
+  end
+  else
+  begin
+    result := false;
+  end;
+
+
 end;
 
 function TStringValue.FromString(value: String): Boolean;
@@ -107,9 +116,12 @@ function TStringValue.ToBool: Maybe<Boolean>;
 VAR
   return : Boolean;
 begin
-  if TryStrToBool(FValue,return) then
+  if IsAssigned then
   begin
-    result := return;
+    if TryStrToBool(FValue,return) then
+    begin
+      result := return;
+    end;
   end;
 end;
 
@@ -117,19 +129,26 @@ function TStringValue.ToFloat: Maybe<Extended>;
 VAR
   return : Extended;
 begin
-  if TryStrToFloat(FValue,return) then
+  if IsAssigned then
   begin
-    result := return;
+    if TryStrToFloat(FValue,return) then
+    begin
+      result := return;
+    end;
   end;
+
 end;
 
 function TStringValue.ToInt: Maybe<Integer>;
 VAR
   return : integer;
 begin
-  if TryStrToInt(FValue,return) then
+  if IsAssigned then
   begin
-    result := return;
+    if TryStrToInt(FValue,return) then
+    begin
+      result := return;
+    end;
   end;
 end;
 

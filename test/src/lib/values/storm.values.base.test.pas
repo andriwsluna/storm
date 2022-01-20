@@ -34,6 +34,7 @@ Type
     Procedure LoadFromJSON_CheckWithTrue();
     Procedure LoadFromJSON_CheckWithFalse();
     procedure LoadFromJSON_CheckWithNull();
+    procedure LoadFromJSON_CheckWithNil();
   end;
 
 
@@ -61,9 +62,19 @@ VAR
   v : IStormValue;
 begin
   v := TStringValue.Create;
-  assert.IsTrue(TStormValue_Testable.LoadFromJSON(v, TJSONFalse.Create));
+  assert.IsTrue(FStormValue.LoadFromJSON(v, TJSONFalse.Create));
   assert.IsTrue(v.IsAssigned);
 end;
+
+procedure TStormValue_Test.LoadFromJSON_CheckWithNil;
+VAR
+  v : IStormValue;
+begin
+  v := TStringValue.Create;
+  assert.IsFalse(TStormValue_Testable.LoadFromJSON(v, nil));
+  assert.IsFalse(v.IsAssigned);
+end;
+
 
 procedure TStormValue_Test.LoadFromJSON_CheckWithNull;
 VAR

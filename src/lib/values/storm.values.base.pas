@@ -16,7 +16,7 @@ Type
 
       Procedure Inititalize();  Virtual;
 
-      Class function LoadFromJSON(Target : IStormValue ; Value: TJSONValue): Boolean;
+      class function LoadFromJSON(Target : IStormValue ; Value: TJSONValue): Boolean;
 
     public
 
@@ -62,7 +62,7 @@ class function TStormValue.LoadFromJSON(Target: IStormValue;
 begin
   result := false;
 
-  if assigned(Value) then
+  if Assigned(Target) and Assigned(Value) then
   BEGIN
     if Value is TJSONNumber then
     begin
