@@ -1,4 +1,4 @@
-unit storm.values.int;
+unit storm.values.float;
 
 interface
 
@@ -10,32 +10,32 @@ Uses
   System.JSON,
   System.SysUtils;
 
-
+Const NullDate = -700000;
 type
-  TIntegerValue
+  TFloatValue
     = class
     (
        TStormValue
       ,IStormValue
-      ,IIntegerValue
+      ,IFloatValue
     )
     private
 
     protected
-      FValue : integer;
+      FValue : Extended;
       Procedure Inititalize();  Override;
     public
 
-      Function  SetValue(value : integer) : Boolean;
-      Function  GetValue() :  Maybe<integer>;
+      Function  SetValue(value : Extended) : Boolean;
+      Function  GetValue() :  Maybe<Extended>;
 
       Function  Clone(target : IStormValue) : Boolean;
 
       Function  ToString : Maybe<String>; Reintroduce;
       Function  FromString(value : String) : Boolean;
 
-      Function  ToInt : Maybe<Integer>;
-      Function  FromInt(value : Integer) : Boolean;
+      Function  ToInt : Maybe<integer>;
+      Function  FromInt(value : integer) : Boolean;
 
       Function  ToFloat : Maybe<Extended>;
       Function  FromFloat(Value : Extended) : Boolean;
@@ -46,22 +46,21 @@ type
       Function  ToDateTime : Maybe<TDateTime>;
       Function  FromDateTime(Value : TDateTime) : Boolean;
 
-
       Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONValue>;
       Function  FromJSON(Value : TJSONValue) : Boolean;
   end;
 
 implementation
 
-{ TIntegerValue }
+{ TFloatValue }
 
 
 
-function TIntegerValue.Clone(target: IStormValue): Boolean;
+function TFloatValue.Clone(target: IStormValue): Boolean;
 begin
   if Assigned(target) then
   begin
-    Result := target.ToInt.Bind(SetValue);
+    Result := target.ToFloat.Bind(SetValue);
   end
   else
   begin
@@ -69,7 +68,7 @@ begin
   end;
 end;
 
-function TIntegerValue.FromBool(Value: Boolean): Boolean;
+function TFloatValue.FromBool(Value: Boolean): Boolean;
 begin
   if Value then
   begin
@@ -81,31 +80,31 @@ begin
   end;
 end;
 
-function TIntegerValue.FromDateTime(Value: TDateTime): Boolean;
+function TFloatValue.FromDateTime(Value: TDateTime): Boolean;
 begin
   result := FromFloat(Value);
 end;
 
-function TIntegerValue.FromFloat(Value: Extended): Boolean;
-begin
-  result := SetValue(Trunc(value));
-end;
-
-function TIntegerValue.FromInt(value: Integer): Boolean;
+function TFloatValue.FromFloat(Value: Extended): Boolean;
 begin
   result := SetValue(value);
 end;
 
-function TIntegerValue.FromJSON(Value: TJSONValue): Boolean;
+function TFloatValue.FromInt(value: integer): Boolean;
+begin
+  result := SetValue(value);
+end;
+
+function TFloatValue.FromJSON(Value: TJSONValue): Boolean;
 begin
   result := LoadFromJSON(self,Value);
 end;
 
-function TIntegerValue.FromString(value: String): Boolean;
+function TFloatValue.FromString(value: String): Boolean;
 VAR
-  i : integer;
+  i : Extended;
 begin
-  if TryStrToInt(Value, i) then
+  if TryStrToFloat(Value, i) then
   begin
     Result := SetValue(i);
   end
@@ -116,7 +115,7 @@ begin
 
 end;
 
-function TIntegerValue.GetValue: Maybe<integer>;
+function TFloatValue.GetValue: Maybe<Extended>;
 begin
   if IsAssigned() then
   BEGIN
@@ -124,16 +123,16 @@ begin
   END;
 end;
 
-procedure TIntegerValue.Inititalize;
+procedure TFloatValue.Inititalize;
 begin
   inherited;
 end;
 
-function TIntegerValue.ToBool: Maybe<Boolean>;
+function TFloatValue.ToBool: Maybe<Boolean>;
 begin
   if self.IsAssigned then
   begin
-    if FValue = 1 then
+    if FValue = 1.0 then
     begin
       result := true;
     end
@@ -145,33 +144,32 @@ begin
   end;
 end;
 
-function TIntegerValue.ToDateTime: Maybe<TDateTime>;
-VAR
-  return : TDateTime;
+function TFloatValue.ToDateTime: Maybe<TDateTime>;
 begin
   if IsAssigned then
   begin
-    if TryFloatToDateTime(FValue,return) then
+    if FValue > NullDate then
     begin
-      result := return;
+      result := TDateTime(FValue);
     end;
   end;
+end;
+
+function TFloatValue.ToFloat: Maybe<Extended>;
+begin
+  result := GetValue;
 
 end;
-function TIntegerValue.ToFloat: Maybe<Extended>;
+
+function TFloatValue.ToInt: Maybe<integer>;
 begin
   if IsAssigned then
   begin
-    result := FValue;
+    result := Trunc(FValue);
   end;
 end;
 
-function TIntegerValue.ToInt: Maybe<Integer>;
-begin
-  result := GetValue;
-end;
-
-function TIntegerValue.ToJSON(ConvertNulls : Boolean = false): Maybe<TJSONValue>;
+function TFloatValue.ToJSON(ConvertNulls : Boolean = false): Maybe<TJSONValue>;
 begin
   if IsAssigned then
   begin
@@ -184,16 +182,16 @@ begin
   end;
 end;
 
-function TIntegerValue.ToString: Maybe<String>;
+function TFloatValue.ToString: Maybe<String>;
 begin
   if IsAssigned then
   begin
-    Result := IntToStr(Fvalue);
+    Result := FloatToStr(Fvalue);
   end;
 end;
 
 
-function TIntegerValue.SetValue(value: integer): Boolean;
+function TFloatValue.SetValue(value: Extended): Boolean;
 begin
   FValue := value;
   FAssigned := true;

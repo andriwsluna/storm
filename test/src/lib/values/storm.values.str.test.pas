@@ -41,6 +41,8 @@ Type
     Procedure FromBool_Check();
     Procedure ToJson_Check();
     Procedure FromJson_Check();
+    Procedure ToDateTime_Check();
+    Procedure FromDateTime_Check();
   end;
 
 
@@ -75,6 +77,16 @@ begin
   Assert.IsTrue(FStringValue.FromBool(bool));
   Assert.IsTrue(FStringValue.IsAssigned);
   Assert.AreEqual(BoolToStr(bool, true), myValue.FValue);
+end;
+
+procedure TStringValue_Test.FromDateTime_Check;
+VAR
+  data  : TDatetime;
+begin
+  data := now;
+  Assert.IsTrue(FStringValue.FromDateTime(data));
+  Assert.IsTrue(FStringValue.IsAssigned);
+  Assert.AreEqual(DateTimeToStr(data), myValue.FValue);
 end;
 
 procedure TStringValue_Test.FromFloat_Check;
@@ -170,6 +182,21 @@ begin
   Assert.AreEqual(StrToBool(Valid),FStringValue.ToBool.GetValueOrDefault(false));
   FStringValue.SetValue(Invalid);
   Assert.IsFalse(FStringValue.ToBool.IsSome);
+end;
+
+procedure TStringValue_Test.ToDateTime_Check;
+Const
+  Invalid = 'a';
+VAR
+  Valid : String;
+begin
+  Valid := DateTimeToStr(now);
+  Assert.IsFalse(FStringValue.ToDateTime.IsSome);
+  FStringValue.SetValue(Valid);
+  Assert.IsTrue(FStringValue.ToDateTime.IsSome);
+  Assert.AreEqual(StrToDateTime(Valid),FStringValue.ToDateTime.GetValueOrDefault(0.1));
+  FStringValue.SetValue(Invalid);
+  Assert.IsFalse(FStringValue.ToDateTime.IsSome);
 end;
 
 procedure TStringValue_Test.ToFloat_Check;

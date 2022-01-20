@@ -13,7 +13,11 @@ uses
   DUnitX.TestFramework,
   storm.values.base.test in 'src\lib\values\storm.values.base.test.pas',
   storm.values.str.test in 'src\lib\values\storm.values.str.test.pas',
-  storm.values.int.test in 'src\lib\values\storm.values.int.test.pas';
+  storm.values.int.test in 'src\lib\values\storm.values.int.test.pas',
+  storm.values.float.test in 'src\lib\values\storm.values.float.test.pas',
+  storm.values.bool.test in 'src\lib\values\storm.values.bool.test.pas',
+  storm.values.datetime.test in 'src\lib\values\storm.values.datetime.test.pas',
+  storm.values.date.test in 'src\lib\values\storm.values.date.test.pas';
 
 var
   runner : ITestRunner;

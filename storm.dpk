@@ -54,6 +54,10 @@ contains
   storm.values.base in 'src\lib\values\storm.values.base.pas',
   storm.values.interfaces in 'src\lib\values\storm.values.interfaces.pas',
   storm.values.str in 'src\lib\values\storm.values.str.pas',
-  storm.values.int in 'src\lib\values\storm.values.int.pas';
+  storm.values.int in 'src\lib\values\storm.values.int.pas',
+  storm.values.float in 'src\lib\values\storm.values.float.pas',
+  storm.values.bool in 'src\lib\values\storm.values.bool.pas',
+  storm.values.datetime in 'src\lib\values\storm.values.datetime.pas',
+  storm.values.date in 'src\lib\values\storm.values.date.pas';
 
 end.

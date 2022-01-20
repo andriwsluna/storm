@@ -4,6 +4,7 @@ interface
 uses
 
   storm.values.int,
+  storm.values.float,
   storm.values.interfaces,
 
   System.Classes, System.SysUtils,
@@ -41,6 +42,8 @@ Type
     Procedure FromBool_Check();
     Procedure ToJson_Check();
     Procedure FromJson_Check();
+    Procedure ToDateTime_Check();
+    Procedure FromDateTime_Check();
   end;
 
 
@@ -76,6 +79,16 @@ begin
   Assert.IsTrue(FIntegerValue.FromBool(false));
   Assert.IsTrue(FIntegerValue.IsAssigned);
   Assert.AreEqual(0, myValue.FValue);
+end;
+
+procedure TIntegerValue_Test.FromDateTime_Check;
+VAR
+  data  : TDatetime;
+begin
+  data := now;
+  Assert.IsTrue(myValue.FromDateTime(data));
+  Assert.IsTrue(myValue.IsAssigned);
+  Assert.AreEqual(Integer(Trunc(Extended(data))), myValue.FValue);
 end;
 
 procedure TIntegerValue_Test.FromFloat_Check;
@@ -175,6 +188,21 @@ begin
   Assert.AreEqual(Boolean(0),FIntegerValue.ToBool.GetValueOrDefault(false));
   FIntegerValue.SetValue(Invalid);
   Assert.IsFalse(FIntegerValue.ToBool.IsSome);
+end;
+
+procedure TIntegerValue_Test.ToDateTime_Check;
+Const
+  Invalid = NullDate;
+VAR
+  Valid : integer;
+begin
+  Valid := trunc(now);
+  Assert.IsFalse(myValue.ToDateTime.IsSome);
+  myValue.SetValue(Valid);
+  Assert.IsTrue(myValue.ToDateTime.IsSome);
+  Assert.AreEqual(TDatetime(Valid),myValue.ToDateTime.GetValueOrDefault(0.1));
+  myValue.SetValue(Invalid);
+  Assert.IsFalse(myValue.ToDateTime.IsSome);
 end;
 
 procedure TIntegerValue_Test.ToFloat_Check;

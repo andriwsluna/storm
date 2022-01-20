@@ -43,6 +43,9 @@ type
       Function  ToBool : Maybe<Boolean>;
       Function  FromBool(Value : Boolean) : Boolean;
 
+      Function  ToDateTime : Maybe<TDateTime>;
+      Function  FromDateTime(Value : TDateTime) : Boolean;
+
       Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONValue>;
       Function  FromJSON(Value : TJSONValue) : Boolean;
   end;
@@ -68,6 +71,11 @@ end;
 function TStringValue.FromBool(Value: Boolean): Boolean;
 begin
   result := SetValue(BoolToStr(value, true));
+end;
+
+function TStringValue.FromDateTime(Value: TDateTime): Boolean;
+begin
+  result := SetValue(DateTimeToStr(value));
 end;
 
 function TStringValue.FromFloat(Value: Extended): Boolean;
@@ -123,6 +131,20 @@ begin
       result := return;
     end;
   end;
+end;
+
+function TStringValue.ToDateTime: Maybe<TDateTime>;
+VAR
+  return : TDateTime;
+begin
+  if IsAssigned then
+  begin
+    if TryStrToDateTime(FValue,return) then
+    begin
+      result := return;
+    end;
+  end;
+
 end;
 
 function TStringValue.ToFloat: Maybe<Extended>;
