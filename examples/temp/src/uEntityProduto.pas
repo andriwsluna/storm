@@ -88,8 +88,8 @@ end;
 procedure TProduto.Initialize;
 begin
   inherited;
-  FCodigo     := TStringField.Create('codigo_produto');
-  FDescricao  := TStringField.Create('descricao');
+  FCodigo     := TStormStringField.Create('codigo_produto');
+  FDescricao  := TStormStringField.Create('descricao');
 
   AddStormField(FCodigo as IStormField);
   AddStormField(FDescricao as IStormField);

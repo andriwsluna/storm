@@ -58,6 +58,8 @@ contains
   storm.values.float in 'src\lib\values\storm.values.float.pas',
   storm.values.bool in 'src\lib\values\storm.values.bool.pas',
   storm.values.datetime in 'src\lib\values\storm.values.datetime.pas',
-  storm.values.date in 'src\lib\values\storm.values.date.pas';
+  storm.values.date in 'src\lib\values\storm.values.date.pas',
+  storm.fields.int in 'src\lib\fields\storm.fields.int.pas',
+  storm.fields.float in 'src\lib\fields\storm.fields.float.pas';
 
 end.

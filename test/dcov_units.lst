@@ -6,3 +6,6 @@ storm.values.bool.pas
 storm.values.datetime.pas
 storm.values.date.pas
 storm.fields.base.pas
+storm.fields.int.pas
+storm.fields.float.pas
+storm.fields.str.pas

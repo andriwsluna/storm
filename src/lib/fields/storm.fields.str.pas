@@ -16,7 +16,7 @@ uses
   System.SysUtils;
 
 Type
-  TStringField = Class(TStormField, IStormField,IStringField)
+  TStormStringField = Class(TStormField, IStormField,IStringField)
     private
 
     protected
@@ -30,44 +30,42 @@ Type
       Function  GetValue() :  Maybe<String>;
       Function  GetValueOrDefault(default : string = '') :  string;
       Function  FromDataField(field : TField) : boolean; Override;
-
-
   End;
 
 implementation
 
-{ TStringField }
+{ TStormStringField }
 
 
 
 
-function TStringField.FromDataField(field: TField): boolean;
+function TStormStringField.FromDataField(field: TField): boolean;
 begin
-  if assigned(field) then
-  begin
-    Result := Value.SetValue(field.AsString);
-  end
-  else
-  begin
-    Result := false;
+  Result := false;
+  try
+    if assigned(field) then
+    begin
+      Result := Value.SetValue(field.AsString);
+    end
+  except
+  {TODO -oOwner -cGeneral : ActionItem}
   end;
-
 end;
 
 
 
 
-function TStringField.GetValue: Maybe<String>;
+function TStormStringField.GetValue: Maybe<String>;
 begin
   Result := value.GetValue();
 end;
 
-function TStringField.GetValueOrDefault(default: string): string;
+function TStormStringField.GetValueOrDefault(default: string): string;
 begin
   result := GetValue.GetValueOrDefault(default);
 end;
 
-procedure TStringField.InitializeStormValue;
+procedure TStormStringField.InitializeStormValue;
 begin
   inherited;
   FStormValue := TStringValue.Create;
@@ -75,12 +73,12 @@ end;
 
 
 
-function TStringField.SetValue(value: String): Boolean;
+function TStormStringField.SetValue(value: String): Boolean;
 begin
   Result := self.Value.SetValue(value);
 end;
 
-function TStringField.Value: IStringValue;
+function TStormStringField.Value: IStringValue;
 begin
   Result := FStormValue as IStringValue;
 end;

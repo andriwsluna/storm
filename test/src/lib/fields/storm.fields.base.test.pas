@@ -67,7 +67,7 @@ VAr
   sField : IStringField;
 begin
   Assert.IsFalse(Field.Clone(nil));
-  sField := storm.fields.str.TStringField.Create('aloha');
+  sField := TStormStringField.Create('aloha');
   Assert.IsFalse(Field.Clone(sField));
   sField.SetValue('1');
   Assert.Istrue(Field.Clone(sField));
