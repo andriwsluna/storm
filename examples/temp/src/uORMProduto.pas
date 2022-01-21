@@ -5,6 +5,7 @@ interface
 uses
   storm.orm.base,
   storm.orm.where,
+  storm.orm.update,
   storm.orm.interfaces,
   storm.model.interfaces,
   storm.schema.interfaces,
@@ -12,39 +13,38 @@ uses
   uSchemaProduto;
 
 Type
-  QueryProdutoSuccess = IStormQuerySuccessExecution<IProduto>;
   IModelProduto = IStormModel<IProduto>;
 
   TProdutoPossibleFields = (Codigo=0, Descricao=1);
   TProdutoSETFieldSelection = set of TProdutoPossibleFields;
 
-  TProdutoWhereSelection = class(TStormQueryPartition<IProduto>, IStormWhereSelection<IProduto,TProdutoWhereSelection>)
+  TProdutoWhereSelection<ExecutorType : TStormSqlPartition> = class(TStormSqlPartition)
   protected
+    Schema : IStormTableSchema;
+
     Procedure Initialize; Override;
   public
-    Function OpenParentheses() : TProdutoWhereSelection;
+    Function OpenParentheses() : TProdutoWhereSelection<ExecutorType>;
   public
 
-    Function Codigo : IStringWhere<IProduto,TProdutoWhereSelection>;
-    Function Descricao : InullableStringWhere<IProduto,TProdutoWhereSelection>;
-
-     Constructor Create(owner : TStormSQLPartition = nil); Override;
-     Destructor  Destroy(); Override;
+    Function Codigo : IStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
+    Function Descricao : InullableStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
   end;
 
-  IProdutoFieldSelection = interface['{9AA32BD0-45FD-42D6-B88A-42570723FD21}']
-    Function All() : IWhereNode<IProduto,TProdutoWhereSelection>;
-    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<IProduto,TProdutoWhereSelection>;
+  IProdutoFieldSelection<ExecutorType : TStormSqlPartition> = interface['{9AA32BD0-45FD-42D6-B88A-42570723FD21}']
+    Function All() : IWhereNode<TProdutoWhereSelection<ExecutorType>>;
+    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection<ExecutorType>>;
   end;
 
-
-
-
+  IProdutoFieldUpdate<ExecutorType : TStormSqlPartition> = interface
+    Function Codigo : IStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+    Function Descricao : IStormStringNullableUpdater<IWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+  end;
 
 
   IORMProduto = interface['{F49CF2B7-E6F3-44BC-A28C-6FCF75930CDC}']
-    Function Select()  : IProdutoFieldSelection;
-    Function Update() : Boolean;
+    Function Select()  : IProdutoFieldSelection<TStormSelectExecutor<IProduto>>;
+    Function Update() : IProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>;
   end;
 
 
@@ -60,6 +60,7 @@ Function ORMProduto : IORMProduto;
 implementation
 
 uses
+
   System.Sysutils;
 
 VAR
@@ -69,10 +70,26 @@ VAR
 Type
 
 
-  TProdutoFieldSelection = class(TStormFieldSelection<IProduto,TProdutoWhereSelection>, IProdutoFieldSelection)
+  TProdutoFieldSelection<ExecutorType : TStormSqlPartition> = class
+  (
+    TStormFieldSelection<TProdutoWhereSelection<ExecutorType>,TStormSelectExecutor<IProduto>>,
+    IProdutoFieldSelection<ExecutorType>
+  )
   public
     Constructor Create(sql : string);Reintroduce;
-    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<IProduto,TProdutoWhereSelection>;
+    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection<ExecutorType>>;
+  end;
+
+
+  TProdutoFieldUpdate<ExecutorType : TStormSqlPartition> = class(TStormSqlPartition, IProdutoFieldUpdate<ExecutorType>)
+  protected
+    Schema : IStormTableSchema;
+
+    Procedure Initialize; Override;
+  public
+  public
+    Function Codigo : IStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+    Function Descricao : IStormStringNullableUpdater<IWhereNode<TProdutoWhereSelection<ExecutorType>>>;
   end;
 
   TORMProduto = class(TInterfacedObject, IORMProduto)
@@ -87,8 +104,8 @@ Type
     Constructor Create(); Reintroduce;
     Destructor  Destroy(); Override;
   public
-    Function Select()  : IProdutoFieldSelection;
-    Function Update() : Boolean;
+    Function Select()  : IProdutoFieldSelection<TStormSelectExecutor<IProduto>>;
+    Function Update() : IProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>;
   end;
 
 
@@ -131,27 +148,26 @@ begin
 
 end;
 
-function TORMProduto.Select: IProdutoFieldSelection;
+function TORMProduto.Select: IProdutoFieldSelection<TStormSelectExecutor<IProduto>>;
 begin
-  result := TProdutoFieldSelection.Create('select ');
+  result := TProdutoFieldSelection<TStormSelectExecutor<IProduto>>.Create('select ');
 end;
 
 
-
-
-function TORMProduto.Update: Boolean;
+function TORMProduto.Update: IProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>;
 begin
-
+  Result := TProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>.Create();
 end;
 
-constructor TProdutoFieldSelection.Create(sql : string);
+constructor TProdutoFieldSelection<ExecutorType>.Create(sql : string);
 begin
   AddSQL(sql);
   inherited create(self,FSchema,TSchemaProduto(FSchema).Codigo);
 
 end;
 
-function TProdutoFieldSelection.Only(fields : TProdutoSETFieldSelection): IWhereNode<IProduto,TProdutoWhereSelection>;
+function TProdutoFieldSelection<ExecutorType>.Only(fields : TProdutoSETFieldSelection):
+IWhereNode<TProdutoWhereSelection<ExecutorType>>;
 VAR
   s : string;
   field : TProdutoPossibleFields;
@@ -173,38 +189,51 @@ begin
 
 end;
 
-function TProdutoWhereSelection.Codigo: IStringWhere<IProduto,TProdutoWhereSelection>;
+function TProdutoWhereSelection<ExecutorType>.Codigo : IStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
 begin
-  result := TStringWhere<IProduto,TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Codigo);
+  result :=
+  TStringWhere<TProdutoWhereSelection<ExecutorType>,ExecutorType>
+  .create(self,Schema,TSchemaProduto(Schema).Codigo);
 end;
 
-constructor TProdutoWhereSelection.Create(owner: TStormSQLPartition);
-begin
-  inherited;
 
+function TProdutoWhereSelection<ExecutorType>.Descricao: INullableStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
+begin
+  result := TNullableStringWhere<TProdutoWhereSelection<ExecutorType>,ExecutorType>
+  .create(self,Schema,TSchemaProduto(Schema).Descricao);
 end;
 
-function TProdutoWhereSelection.Descricao: INullableStringWhere<IProduto,TProdutoWhereSelection>;
-begin
-  result := TNullableStringWhere<IProduto,TProdutoWhereSelection>.create(self,FSchema,TSchemaProduto(FSchema).Descricao);
-end;
 
-destructor TProdutoWhereSelection.Destroy;
-begin
-
-  inherited;
-end;
-
-procedure TProdutoWhereSelection.Initialize;
+procedure TProdutoWhereSelection<ExecutorType>.Initialize;
 begin
   inherited;
+  Self.Schema := TSchemaProduto.Create;
 end;
 
-function TProdutoWhereSelection.OpenParentheses: TProdutoWhereSelection;
+function TProdutoWhereSelection<ExecutorType>.OpenParentheses: TProdutoWhereSelection<ExecutorType>;
 begin
-  Result := TStormWhereSelection<IProduto,TProdutoWhereSelection>.Create(self).OpenParentheses;
+  Result := TStormWhereSelection<TProdutoWhereSelection<ExecutorType>>.Create(self).OpenParentheses;
 end;
 
+
+{ TProdutoFieldUpdate<ExecutorType> }
+
+function TProdutoFieldUpdate<ExecutorType>.Codigo: IStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+begin
+  Result := TStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>.Create(self, Schema, TSchemaProduto(Schema).Codigo);
+end;
+
+function TProdutoFieldUpdate<ExecutorType>.Descricao: IStormStringNullableUpdater<IWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+begin
+
+end;
+
+procedure TProdutoFieldUpdate<ExecutorType>.Initialize;
+begin
+  inherited;
+  Self.Schema := TSchemaProduto.Create;
+  AddSQL('UPDATE ' + SQLDriver.GetFullTableName(Self.Schema) + ' SET ');
+end;
 
 INITIALIZATION
   InitializeSchema;

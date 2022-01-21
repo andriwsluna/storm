@@ -50,6 +50,7 @@ type
     MemoJson: TMemo;
     Edit1: TEdit;
     Edit2: TEdit;
+    Label1: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -57,12 +58,14 @@ type
   private
     procedure freeDataset;
     procedure ShowSql(sql : string);
-    procedure AtribuirDatasetAoGrid(resultado : IStormQuerySuccessExecution<IProduto>);
-    procedure MostrarMensagemDeErro(resultado : IStormQueryFailExecution);
+    procedure AtribuirDatasetAoGrid(resultado : IStormSelectSuccessExecution<IProduto>);
+    procedure MostrarMensagemDeErro(resultado : IStormSelectFailExecution);
+    procedure MostrarMensagemDeErroDoUpdate(resultado : IStormUpdateFailExecution);
     procedure printproduto(produto : Iproduto);
     procedure showjson(const json : tjsonarray);
     function  MapperProdutoDeCodigo2(produto : Iproduto) : Maybe<Iproduto>;
     function  ProdutosCujoDescricaoContem_F(produto : Iproduto) : Boolean;
+    procedure MostrarLinhasAfetadas(resultado : IStormUpdateSuccessExecution);
   public
 
 
@@ -75,7 +78,29 @@ implementation
 
 {$R *.dfm}
 
-procedure Tvcl_form.MostrarMensagemDeErro(resultado: IStormQueryFailExecution);
+procedure Tvcl_form.MostrarLinhasAfetadas(
+  resultado: IStormUpdateSuccessExecution);
+begin
+  label1.caption := IntToStr(resultado.GetUpdatedRowsCount);
+  ORMproduto
+    .Select
+    .Only([Codigo, Descricao])
+    .Where
+    .Descricao.IsNotNull
+    .Go
+    //.Open(ADOConnection1.StormDriver)
+    .Open(FDConnection1.StormDriver)
+    .OnSuccess(AtribuirDatasetAoGrid)
+    .OnFail(MostrarMensagemDeErro);
+end;
+
+procedure Tvcl_form.MostrarMensagemDeErroDoUpdate(resultado: IStormUpdateFailExecution);
+begin
+  ShowMessage(resultado.GetErrorMessage);
+  ShowSql(resultado.GetSQL);
+end;
+
+procedure Tvcl_form.MostrarMensagemDeErro(resultado: IStormSelectFailExecution);
 begin
   ShowMessage(resultado.GetErrorMessage);
   ShowSql(resultado.GetSQL);
@@ -118,12 +143,17 @@ end;
 
 
 procedure Tvcl_form.Button2Click(Sender: TObject);
-VAR
-  v : IIntegerValue;
 begin
-  v := TIntegerValue.Create;
-  v.SetValue(1);
-  v.ToString.OnSome(ShowMessage);
+  ORMproduto
+    .Update
+    .Codigo.SetTo(edit2.text)
+    .Where
+    .Codigo.IsEqualsTo(edit1.text)
+    .Go
+    .GetSQL(showsql)
+    .Execute(FDConnection1.StormDriver)
+    .OnSuccess(mostrarlinhasafetadas)
+    .OnFail(MostrarMensagemDeErroDoUpdate);
 end;
 
 function Tvcl_form.MapperProdutoDeCodigo2(produto: Iproduto): Maybe<Iproduto>;
@@ -163,7 +193,7 @@ begin
 end;
 
 
-procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: IStormQuerySuccessExecution<IProduto>);
+procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: IStormSelectSuccessExecution<IProduto>);
 
 begin
   freeDataset;

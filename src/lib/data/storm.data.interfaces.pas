@@ -22,6 +22,7 @@ type
     Function  Execute() : Boolean;
     Function  Open() : Boolean;
     Function  Dataset : Tdataset;
+    Function  RowsAffected: integer;
   end;
 
   IStormSQLDriver = interface['{5FF6388D-A47D-4608-BBE8-5ADB56885E45}']

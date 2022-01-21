@@ -106,6 +106,7 @@
         <DCCReference Include="src\lib\orm\storm.orm.interfaces.pas"/>
         <DCCReference Include="src\lib\orm\storm.orm.query.pas"/>
         <DCCReference Include="src\lib\orm\storm.orm.where.pas"/>
+        <DCCReference Include="src\lib\orm\storm.orm.update.pas"/>
         <DCCReference Include="src\lib\schema\storm.schema.column.pas"/>
         <DCCReference Include="src\lib\schema\storm.schema.interfaces.pas"/>
         <DCCReference Include="src\lib\schema\storm.schema.table.pas"/>

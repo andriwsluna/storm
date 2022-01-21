@@ -47,7 +47,7 @@ Type
 
 
 
-  TStormQuerySuccessExecution<EntityType : IStormEntity> = class(TInterfacedObject, IStormQuerySuccessExecution<EntityType>)
+  TStormSelectSuccessExecution<EntityType : IStormEntity> = class(TInterfacedObject, IStormSelectSuccessExecution<EntityType>)
   private
     FData : Tdataset;
   protected
@@ -59,7 +59,7 @@ Type
     Function GetModel : IStormModel<EntityType>;
   end;
 
-  TStormQueryFailExecution = class(TInterfacedObject, IStormQueryFailExecution)
+  TStormSelectFailExecution = class(TInterfacedObject, IStormSelectFailExecution)
   private
     FErrorMessage : String;
     FSQL : String;
@@ -72,31 +72,46 @@ Type
     Function GetSQL() : String;
   end;
 
-  TStormQueryExecutor<EntityType : IStormEntity> =
-  class(TStormSQLPartition, IStormQueryExecutor<EntityType>, IStormQueryExecutorLimited<EntityType>)
+  TStormSelectExecutor<EntityType : IStormEntity> =
+  class(TStormSQLPartition, IStormSelectExecutor<EntityType>, IStormSelectExecutorLimited<EntityType>)
   private
 
   protected
 
   public
-    Function Limit(count : Integer) : IStormQueryExecutorLimited<EntityType>;
-    Function GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<EntityType>;
-    Function Open(connection : IStormSQLConnection) : TResult<IStormQuerySuccessExecution<EntityType>,IStormQueryFailExecution>;
+    Function Limit(count : Integer) : IStormSelectExecutorLimited<EntityType>;
+    Function GetSQL(callback : TGetSqlCallback) : IStormSelectExecutor<EntityType>;
+    Function Open(connection : IStormSQLConnection) : TResult<IStormSelectSuccessExecution<EntityType>,IStormSelectFailExecution>;
   end;
 
 
+  TStormUpdateSuccessExecution<EntityType : IStormEntity> = class(TInterfacedObject, IStormUpdateSuccessExecution)
+  private
+    FRowsAffected : integer;
+  protected
 
-  TStormQueryPartition<EntityType : IStormEntity> = class abstract (TStormSQLPartition, IStormQueryPartition<EntityType>)
+  public
+    Constructor Create(rowscount : integer); Reintroduce;
+  public
+    Function GetUpdatedRowsCount : integer;
+  end;
+
+  TStormUpdateFailExecution = class(TStormSelectFailExecution, IStormUpdateFailExecution)
+  private
+
+  end;
+
+
+  TStormUpdateExecutor<EntityType : IStormEntity> =
+  class(TStormSQLPartition, IStormUpdateExecutor<EntityType>)
   private
 
   protected
 
   public
-
-    Function Go() : IStormQueryExecutor<EntityType>;
+    Function GetSQL(callback : TGetSqlCallback) : IStormUpdateExecutor<EntityType>;
+    Function Execute(connection : IStormSQLConnection) : TResult<IStormUpdateSuccessExecution,IStormUpdateFailExecution>;
   end;
-
-
 
 
 
@@ -140,6 +155,18 @@ end;
 
 procedure TStormSQLPartition.Initialize;
 begin
+  DependencyRegister.GetSQLDriverInstance.Bind
+  (
+    procedure(driver : IStormSQLDriver)
+    begin
+      SQLDriver := driver;
+    end,
+    procedure()
+    begin
+      raise Exception.Create('No SQL driver registered');
+    end
+  );
+
   if Assigned(Fowner) then
   begin
     FSQL := Fowner.FSQL;
@@ -151,21 +178,6 @@ begin
     begin
       FParameters := TStormQueryParameters.Create;
     end;
-
-
-    DependencyRegister.GetSQLDriverInstance.Bind
-    (
-      procedure(driver : IStormSQLDriver)
-      begin
-        SQLDriver := driver;
-      end,
-      procedure()
-      begin
-        raise Exception.Create('No SQL driver registered');
-      end
-    )
-
-
   end
   else
   begin
@@ -195,66 +207,57 @@ end;
 
 
 
-{ TStormQueryPartition }
-
-
-
-function TStormQueryPartition<EntityType>.Go: IStormQueryExecutor<EntityType>;
-begin
-  Result := TStormqueryExecutor<EntityType>.Create(self);
-end;
-
 { TStormQueryExecution }
 
-constructor TStormQuerySuccessExecution<EntityType>.Create(dataset: TDataset);
+constructor TStormSelectSuccessExecution<EntityType>.Create(dataset: TDataset);
 begin
   inherited create();
   FData := dataset;
 end;
 
-function TStormQuerySuccessExecution<EntityType>.GetDataset: TDataset;
+function TStormSelectSuccessExecution<EntityType>.GetDataset: TDataset;
 begin
   Result := FData;
 end;
 
 
 
-function TStormQuerySuccessExecution<EntityType>.GetModel: IStormModel<EntityType>;
+function TStormSelectSuccessExecution<EntityType>.GetModel: IStormModel<EntityType>;
 begin
   Result := TStormModel<EntityType>.FromDataset(FData);
 end;
 
-{ TStormQueryExecutor }
+{ TStormSelectExecutor }
 
-function TStormQueryExecutor<EntityType>.Open(connection : IStormSQLConnection): TResult<IStormQuerySuccessExecution<EntityType>,IStormQueryFailExecution>;
+function TStormSelectExecutor<EntityType>.Open(connection : IStormSQLConnection): TResult<IStormSelectSuccessExecution<EntityType>,IStormSelectFailExecution>;
 var
-  return : IStormQuerySuccessExecution<EntityType>;
+  return : IStormSelectSuccessExecution<EntityType>;
 begin
   connection.SetSQL(_GetSQL);
   connection.LoadParameters(FParameters.Items);
   try
     connection.Open;
-    return := TStormQuerySuccessExecution<EntityType>.Create(connection.Dataset);
+    return := TStormSelectSuccessExecution<EntityType>.Create(connection.Dataset);
     result := return;
   except
     on e : exception do
     begin
-      Result := TStormQueryFailExecution.Create(e.Message, _GetSQL);
+      Result := TStormSelectFailExecution.Create(e.Message, _GetSQL);
     end;
   end;
 
 
 end;
 
-function TStormQueryExecutor<EntityType>.Limit(
-  count: Integer): IStormQueryExecutorLimited<EntityType>;
+function TStormSelectExecutor<EntityType>.Limit(
+  count: Integer): IStormSelectExecutorLimited<EntityType>;
 begin
   Self.FLimit := count;
   ProccessLimit();
   Result := Self;
 end;
 
-function TStormQueryExecutor<EntityType>.GetSQL(callback : TGetSqlCallback) : IStormQueryExecutor<EntityType>;
+function TStormSelectExecutor<EntityType>.GetSQL(callback : TGetSqlCallback) : IStormSelectExecutor<EntityType>;
 begin
   if assigned(callback) then
   begin
@@ -263,24 +266,71 @@ begin
   Result := self;
 end;
 
-{ TStormQueryFailExecution }
+{ TStormSelectFailExecution }
 
-constructor TStormQueryFailExecution.Create(errorMessage: String ; sql : string);
+constructor TStormSelectFailExecution.Create(errorMessage: String ; sql : string);
 begin
   inherited create();
   FErrorMessage := errorMessage;
   FSQL := sql;
 end;
 
-function TStormQueryFailExecution.GetErrorMessage: String;
+function TStormSelectFailExecution.GetErrorMessage: String;
 begin
   Result := FErrorMessage;
 end;
 
-function TStormQueryFailExecution.GetSQL: String;
+function TStormSelectFailExecution.GetSQL: String;
 begin
   Result := FSQL;
 end;
 
+
+{ TStormUpdateExecutor<EntityType> }
+
+function TStormUpdateExecutor<EntityType>.Execute(
+  connection: IStormSQLConnection): TResult<IStormUpdateSuccessExecution, IStormUpdateFailExecution>;
+var
+  return : IStormUpdateSuccessExecution;
+begin
+  connection.SetSQL(_GetSQL);
+  connection.LoadParameters(FParameters.Items);
+  try
+    connection.Execute;
+
+    return := TStormUpdateSuccessExecution<EntityType>.Create(connection.RowsAffected);
+    result := return;
+  except
+    on e : exception do
+    begin
+      Result := TStormUpdateFailExecution.Create(e.Message, _GetSQL);
+    end;
+  end;
+
+
+end;
+
+function TStormUpdateExecutor<EntityType>.GetSQL(
+  callback: TGetSqlCallback): IStormUpdateExecutor<EntityType>;
+begin
+  if assigned(callback) then
+  begin
+    callback(_GetSQL);
+  end;
+  Result := self;
+end;
+
+{ TStormUpdateSuccessExecution<EntityType> }
+
+constructor TStormUpdateSuccessExecution<EntityType>.Create(rowscount: integer);
+begin
+  inherited create;
+  FRowsAffected := rowscount;
+end;
+
+function TStormUpdateSuccessExecution<EntityType>.GetUpdatedRowsCount: integer;
+begin
+  Result := self.FRowsAffected;
+end;
 
 end.

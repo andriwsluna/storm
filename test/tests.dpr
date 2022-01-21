@@ -19,7 +19,7 @@ uses
   storm.values.datetime.test in 'src\lib\values\storm.values.datetime.test.pas',
   storm.values.date.test in 'src\lib\values\storm.values.date.test.pas',
   storm.fields.base.test in 'src\lib\fields\storm.fields.base.test.pas',
-  storm.fields.str.test in 'src\lib\fields\storm.fields.str.test.pas' {/storm.fields.int.test in 'src\lib\fields\storm.fields.int.test.pas';},
+  storm.fields.str.test in 'src\lib\fields\storm.fields.str.test.pas' ,
   storm.fields.int.test in 'src\lib\fields\storm.fields.int.test.pas',
   storm.fields.float.test in 'src\lib\fields\storm.fields.float.test.pas',
   storm.fields.bool.test in 'src\lib\fields\storm.fields.bool.test.pas',

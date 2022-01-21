@@ -35,7 +35,8 @@ uses
   DFE.Iterator in '..\..\src\dependencies\DFE.Iterator.pas',
   DFE.Maybe in '..\..\src\dependencies\DFE.Maybe.pas',
   DFE.Result in '..\..\src\dependencies\DFE.Result.pas',
-  storm.values.int in '..\..\src\lib\values\storm.values.int.pas';
+  storm.values.int in '..\..\src\lib\values\storm.values.int.pas',
+  storm.orm.update in '..\..\src\lib\orm\storm.orm.update.pas';
 
 {$R *.res}
 

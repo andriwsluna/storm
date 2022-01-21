@@ -16,6 +16,13 @@ object vcl_form: Tvcl_form
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
+  object Label1: TLabel
+    Left = 144
+    Top = 248
+    Width = 31
+    Height = 13
+    Caption = 'Label1'
+  end
   object Button1: TButton
     Left = 40
     Top = 48
@@ -49,8 +56,8 @@ object vcl_form: Tvcl_form
     TitleFont.Style = []
   end
   object Button2: TButton
-    Left = 128
-    Top = 280
+    Left = 40
+    Top = 88
     Width = 75
     Height = 25
     Caption = 'Button2'

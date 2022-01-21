@@ -25,6 +25,7 @@ Type
     Function  Execute() : Boolean;
     Function  Open() : Boolean;
     Function  Dataset : Tdataset;
+    Function  RowsAffected: integer;
   End;
 
   TStormADOHelper = class helper for TADOConnection
@@ -76,6 +77,11 @@ function TStormADOConnection.Open: Boolean;
 begin
   Fquery.Open;
   Result := true;
+end;
+
+function TStormADOConnection.RowsAffected: integer;
+begin
+  Result := Fquery.RowsAffected;
 end;
 
 procedure TStormADOConnection.SetSQL(sql: string);

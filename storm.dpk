@@ -45,6 +45,7 @@ contains
   storm.orm.interfaces in 'src\lib\orm\storm.orm.interfaces.pas',
   storm.orm.query in 'src\lib\orm\storm.orm.query.pas',
   storm.orm.where in 'src\lib\orm\storm.orm.where.pas',
+  storm.orm.update in 'src\lib\orm\storm.orm.update.pas',
   storm.schema.column in 'src\lib\schema\storm.schema.column.pas',
   storm.schema.interfaces in 'src\lib\schema\storm.schema.interfaces.pas',
   storm.schema.table in 'src\lib\schema\storm.schema.table.pas',

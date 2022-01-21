@@ -15,105 +15,162 @@ type
 
 
 
-  TStormWhereSelection<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>>
-  = class(TStormQueryPartition<EntityType>, IStormWhereSelection<EntityType,T>)
+  TStormWhereSelection<WhereType : TStormSQLPartition>
+  = class(TStormSQLPartition)
   public
-    Function OpenParentheses() : T;
-    Function CloseParentheses() : T;
+    Function OpenParentheses() : WhereType;
+    Function CloseParentheses() : WhereType;
   end;
 
-  TStormWhereCompositor<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>> = class(TStormQueryPartition<EntityType>, IStormWhereCompositor<EntityType,T>)
+  TStormWhereCompositor
+  <
+    WhereType : TStormSqlPartition;
+    ExecutorType : TStormSqlPartition
+  > = class
+  (
+    TStormSqlPartition,
+    IStormWhereCompositor<WhereType,ExecutorType>
+  )
   public
-    Function And_() : T;
-    Function Or_()  : T;
-    Function OpenParentheses() : T;
-    Function CloseParentheses() : IStormWhereCompositor<EntityType, T>;
+    Function And_() : WhereType;
+    Function Or_()  : WhereType;
+    Function OpenParentheses() : WhereType;
+    Function Go : ExecutorType;
+    Function CloseParentheses() : IStormWhereCompositor<WhereType, ExecutorType>;
   end;
 
-  TStormWhereBase<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>> = class abstract(TStormSQLPartition)
+  TStormWhereBase
+  <
+    WhereType : TStormSQLPartition;
+    ExecutorType : TStormSQLPartition
+  > = class abstract(TStormSQLPartition)
   private
 
   protected
     FTable : IStormTableSchema;
     FColumn : IStormSchemaColumn;
-    Constructor create(owner : TStormSQLPartition; Table : IStormTableSchema ; column : IStormSchemaColumn); Reintroduce; Virtual;
+    Constructor create
+    (
+      owner : TStormSQLPartition;
+      Table : IStormTableSchema ;
+      column : IStormSchemaColumn
+    ); Reintroduce; Virtual;
 
     Function GetColumnName : string;
 
-    Function Return : IStormWhereCompositor<EntityType,T>;
+    Function Return : IStormWhereCompositor<WhereType,ExecutorType>;
 
   public
 
   end;
 
-  TWhereNode<EntityType : IStormEntity ; T : IStormQueryPartition<EntityType>, TStormQueryPartition<EntityType>> = class(TStormQueryPartition<EntityType>, IWhereNode<EntityType, T>)
+  TWhereNode
+  <
+    WhereType : TStormSqlPartition
+  > = class(TStormSqlPartition, IWhereNode<WhereType>)
   public
-    Function Where : T;
+    Function Where : WhereType;
   end;
 
-  TStormFieldSelection<EntityType : IStormEntity; T : TStormQueryPartition<EntityType>> = class abstract(TStormWhereBase<EntityType, T>, IStormFieldSelection<EntityType, T>)
+  TStormFieldSelection
+  <
+    WhereType : TStormSQLPartition;
+    ExecutorType : TStormSQLPartition
+  > = class abstract
+  (
+    TStormWhereBase<WhereType, ExecutorType>,
+    IStormFieldSelection<WhereType>
+  )
   protected
-    Function From() : IWhereNode<EntityType,T>;
+    Function From() : IWhereNode<WhereType>;
   public
-    Function All() : IWhereNode<EntityType, T>;
+    Function All() : IWhereNode<WhereType>;
   end;
 
-  TNullableWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>)
+  TNullableWhere
+  <
+    WhereType : TStormSQLPartition;
+    ExecutorType : TStormSQLPartition
+  > = class(TStormWhereBase<WhereType, ExecutorType>)
   private
 
   public
 
   public
-    Function IsNull : IStormWhereCompositor<EntityType,T>;
-    Function IsNotNull : IStormWhereCompositor<EntityType,T>;
+    Function IsNull : IStormWhereCompositor<WhereType,ExecutorType>;
+    Function IsNotNull : IStormWhereCompositor<WhereType,ExecutorType>;
   end;
 
-  TEqualWhere<EntityType : IStormEntity ;T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>)
+  TEqualWhere
+  <
+    WhereType : TStormSQLPartition;
+    ExecutorType : TStormSQLPartition
+  > = class(TStormWhereBase<WhereType, ExecutorType>)
     private
 
     public
 
     public
-      Function IsEqualsTo(value : variant) : IStormWhereCompositor<EntityType,T>;
-      Function NotIsEqualsTo(value : variant) : IStormWhereCompositor<EntityType,T>;
-    end;
+      Function IsEqualsTo(value : variant) : IStormWhereCompositor<WhereType,ExecutorType>;
+      Function NotIsEqualsTo(value : variant) : IStormWhereCompositor<WhereType,ExecutorType>;
+  end;
 
-    TGroupWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>)
-    private
-      Function GetGroupString(values : TArray<variant>) : string;
-    public
+  TGroupWhere
+  <
+  WhereType : TStormSQLPartition;
+  ExecutorType : TStormSQLPartition
+  > = class(TStormWhereBase<WhereType, ExecutorType>)
+  private
+    Function GetGroupString(values : TArray<variant>) : string;
+  public
 
-    public
-      Function IsIn(value : TArray<variant>) : IStormWhereCompositor<EntityType,T>;
-      Function IsNotIn(value : TArray<variant>) : IStormWhereCompositor<EntityType,T>;
+  public
+    Function IsIn(value : TArray<variant>) : IStormWhereCompositor<WhereType,ExecutorType>;
+    Function IsNotIn(value : TArray<variant>) : IStormWhereCompositor<WhereType,ExecutorType>;
   end;
 
 
-  TStringWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>, IStringWhere<EntityType, T> )
+  TStringWhere
+  <
+   WhereType : TStormSQLPartition;
+   ExecutorType : TStormSQLPartition
+  > = class
+  (
+    TStormWhereBase<WhereType,ExecutorType>,
+    IStringWhere<IStormWhereCompositor<WhereType,ExecutorType>>
+  )
   private
     Function ConvertoToArrayOfVariant(values : TArray<string>) : TArray<variant>;
   protected
 
   public
-    Function IsEqualsTo(value : string) : IStormWhereCompositor<EntityType,T>;
-    Function NotIsEqualsTo(value : string) : IStormWhereCompositor<EntityType,T>;
+    Function IsEqualsTo(value : string) : IStormWhereCompositor<WhereType,ExecutorType>;
+    Function NotIsEqualsTo(value : string) : IStormWhereCompositor<WhereType,ExecutorType>;
 
-    Function BeginsWith(value : string) : IStormWhereCompositor<EntityType,T>;
-    Function Contains(value : string) : IStormWhereCompositor<EntityType,T>;
-    Function EndsWith(value : string) : IStormWhereCompositor<EntityType,T>;
+    Function BeginsWith(value : string) : IStormWhereCompositor<WhereType,ExecutorType>;
+    Function Contains(value : string) : IStormWhereCompositor<WhereType,ExecutorType>;
+    Function EndsWith(value : string) : IStormWhereCompositor<WhereType,ExecutorType>;
 
-    Function IsIn(value : TArray<String>) : IStormWhereCompositor<EntityType,T>;
-    Function IsNotIn(value :TArray<String>) : IStormWhereCompositor<EntityType,T>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereType,ExecutorType>;
+    Function IsNotIn(value :TArray<String>) : IStormWhereCompositor<WhereType,ExecutorType>;
   end;
 
-  TNullableStringWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStringWhere<EntityType,T>, INullableStringWhere<EntityType,T>)
+  TNullableStringWhere
+  <
+    WhereType : TStormSQLPartition;
+    ExecutorType : TStormSQLPartition
+  > = class
+  (
+    TStringWhere<WhereType,ExecutorType>,
+    INullableStringWhere<IStormWhereCompositor<WhereType,ExecutorType>>
+  )
   private
 
   protected
 
   public
-    Function IsNull : IStormWhereCompositor<EntityType,T>;
-    Function IsNotNull : IStormWhereCompositor<EntityType,T>;
+    Function IsNull : IStormWhereCompositor<WhereType,ExecutorType>;
+    Function IsNotNull : IStormWhereCompositor<WhereType,ExecutorType>;
   end;
 
 
@@ -135,33 +192,38 @@ implementation
 
 
 
-function TStormWhereCompositor<EntityType, T>.And_: T;
+function TStormWhereCompositor<WhereType, ExecutorType>.And_: WhereType;
 begin
   AddSQL(' and');
-  Result := T.Create(self);
+  Result := WhereType.Create(self);
 end;
 
-function TStormWhereCompositor<EntityType, T>.CloseParentheses: IStormWhereCompositor<EntityType, T>;
+function TStormWhereCompositor<WhereType, ExecutorType>.CloseParentheses: IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' )');
-  Result := TStormWhereCompositor<EntityType, T>.Create(self);
+  Result := TStormWhereCompositor<WhereType, ExecutorType>.Create(self);
 end;
 
-function TStormWhereCompositor<EntityType, T>.OpenParentheses: T;
+function TStormWhereCompositor<WhereType, ExecutorType>.Go: ExecutorType;
+begin
+  Result := ExecutorType.Create(Self);
+end;
+
+function TStormWhereCompositor<WhereType, ExecutorType>.OpenParentheses: WhereType;
 begin
   AddSQL(' (');
-  Result := T.Create(self);
+  Result := WhereType.Create(self);
 end;
 
-function TStormWhereCompositor<EntityType, T>.Or_: T;
+function TStormWhereCompositor<WhereType, ExecutorType>.Or_: WhereType;
 begin
   AddSQL(' or');
-  Result := T.Create(self);
+  Result := WhereType.Create(self);
 end;
 
 { TStormWhereBase<T> }
 
-constructor TStormWhereBase<EntityType, T>.create(owner : TStormSQLPartition; Table : IStormTableSchema ;column: IStormSchemaColumn);
+constructor TStormWhereBase<WhereType, ExecutorType>.create(owner : TStormSQLPartition; Table : IStormTableSchema ;column: IStormSchemaColumn);
 begin
   inherited create(owner);
   FTable := Table;
@@ -172,61 +234,61 @@ end;
 
 { TWhereNode<T> }
 
-function TWhereNode<EntityType, T>.Where: T;
+function TWhereNode<WhereType>.Where: WhereType;
 VAR
   i : IInterface;
 begin
   AddSQL(' where');
-  Result := T.Create(self);
+  Result := WhereType.Create(self);
 end;
 
 { TStormFieldSelection<T> }
 
-function TStormFieldSelection<EntityType, T>.All: IWhereNode<EntityType, T>;
+function TStormFieldSelection<WhereType, ExecutorType>.All: IWhereNode<WhereType>;
 begin
   AddSQL(' *');
   result := From;
 end;
 
-function TStormFieldSelection<EntityType, T>.From: IWhereNode<EntityType, T>;
+function TStormFieldSelection<WhereType, ExecutorType>.From: IWhereNode<WhereType>;
 begin
   AddSQL(' from ' + SQLDriver.GetFullTableName(FTable));
-  result := TWhereNode<EntityType, T>.Create(self);
+  result := TWhereNode<WhereType>.Create(self);
 end;
 
-function TStormWhereBase<EntityType, T>.GetColumnName: string;
+function TStormWhereBase<WhereType, ExecutorType>.GetColumnName: string;
 begin
   Result := FTable.GetTableName + '.' + FColumn.GetColumnName;
 end;
 
-function TStormWhereBase<EntityType, T>.Return: IStormWhereCompositor<EntityType, T>;
+function TStormWhereBase<WhereType, ExecutorType>.Return: IStormWhereCompositor<WhereType, ExecutorType>;
 begin
-  Result := TStormWhereCompositor<EntityType, T>.Create(self);
+  Result := TStormWhereCompositor<WhereType, ExecutorType>.Create(self);
 end;
 
 { TStormWhereSelection<T> }
 
-function TStormWhereSelection<EntityType, T>.CloseParentheses: T;
+function TStormWhereSelection<WhereType>.CloseParentheses: WhereType;
 begin
   AddSQL(' )');
-  Result := T.Create(self);
+  Result := WhereType.Create(self);
 end;
 
-function TStormWhereSelection<EntityType, T>.OpenParentheses: T;
+function TStormWhereSelection<WhereType>.OpenParentheses: WhereType;
 begin
   AddSQL(' (');
-  Result := T.Create(self);
+  Result := WhereType.Create(self);
 end;
 
 { TNullableWhere<T> }
 
-function TNullableWhere<EntityType, T>.IsNotNull: IStormWhereCompositor<EntityType, T>;
+function TNullableWhere<WhereType, ExecutorType>.IsNotNull: IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' is not null');
   Result := Return;
 end;
 
-function TNullableWhere<EntityType, T>.IsNull: IStormWhereCompositor<EntityType, T>;
+function TNullableWhere<WhereType, ExecutorType>.IsNull: IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' is null');
   Result := Return;
@@ -234,13 +296,13 @@ end;
 
 { TEqualWhere<T> }
 
-function TEqualWhere<EntityType, T>.IsEqualsTo(value : variant): IStormWhereCompositor<EntityType, T>;
+function TEqualWhere<WhereType, ExecutorType>.IsEqualsTo(value : variant): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' = ' + AddParameter(value));
   Result := Return;
 end;
 
-function TEqualWhere<EntityType, T>.NotIsEqualsTo(value : variant): IStormWhereCompositor<EntityType, T>;
+function TEqualWhere<WhereType, ExecutorType>.NotIsEqualsTo(value : variant): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' <> ' + AddParameter(value));
   Result := Return;
@@ -248,19 +310,19 @@ end;
 
 { TStringWhere<T> }
 
-function TStringWhere<EntityType, T>.BeginsWith(value: string): IStormWhereCompositor<EntityType, T>;
+function TStringWhere<WhereType, ExecutorType>.BeginsWith(value: string): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' like ' + AddParameter(value + '%'));
   Result := Return;
 end;
 
-function TStringWhere<EntityType, T>.Contains(value: string): IStormWhereCompositor<EntityType, T>;
+function TStringWhere<WhereType, ExecutorType>.Contains(value: string): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' like ' + AddParameter('%' + value + '%'));
   Result := Return;
 end;
 
-function TStringWhere<EntityType, T>.ConvertoToArrayOfVariant(
+function TStringWhere<WhereType, ExecutorType>.ConvertoToArrayOfVariant(
   values: TArray<string>): TArray<variant>;
 VAR
   i : integer;
@@ -275,49 +337,49 @@ begin
 
 end;
 
-function TStringWhere<EntityType, T>.EndsWith(value: string): IStormWhereCompositor<EntityType, T>;
+function TStringWhere<WhereType, ExecutorType>.EndsWith(value: string): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' like ' + AddParameter('%' + value));
   Result := Return;
 end;
 
-function TStringWhere<EntityType, T>.IsEqualsTo(value: string): IStormWhereCompositor<EntityType, T>;
+function TStringWhere<WhereType, ExecutorType>.IsEqualsTo(value: string): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
-  Result := TEqualWhere<EntityType, T>.create(self, FTable, FColumn).IsEqualsTo(value);
+  Result := TEqualWhere<WhereType, ExecutorType>.create(self, FTable, FColumn).IsEqualsTo(value);
 end;
 
 
-function TStringWhere<EntityType, T>.IsIn(value: TArray<String>): IStormWhereCompositor<EntityType, T>;
+function TStringWhere<WhereType, ExecutorType>.IsIn(value: TArray<String>): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
-  Result := TGroupWhere<EntityType, T>.create(self, FTable, FColumn).IsIn(ConvertoToArrayOfVariant(value));
+  Result := TGroupWhere<WhereType, ExecutorType>.create(self, FTable, FColumn).IsIn(ConvertoToArrayOfVariant(value));
 end;
 
-function TStringWhere<EntityType, T>.IsNotIn(
-  value: TArray<String>): IStormWhereCompositor<EntityType, T>;
+function TStringWhere<WhereType, ExecutorType>.IsNotIn(
+  value: TArray<String>): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
-   Result := TGroupWhere<EntityType, T>.create(self, FTable, FColumn).IsNotIn(ConvertoToArrayOfVariant(value));
+   Result := TGroupWhere<WhereType, ExecutorType>.create(self, FTable, FColumn).IsNotIn(ConvertoToArrayOfVariant(value));
 end;
 
-function TStringWhere<EntityType, T>.NotIsEqualsTo(value: string): IStormWhereCompositor<EntityType, T>;
+function TStringWhere<WhereType, ExecutorType>.NotIsEqualsTo(value: string): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
-  Result := TEqualWhere<EntityType, T>.create(self, FTable, FColumn).NotIsEqualsTo(value);
+  Result := TEqualWhere<WhereType, ExecutorType>.create(self, FTable, FColumn).NotIsEqualsTo(value);
 end;
 
 { TNullableStringWhere<T> }
 
-function TNullableStringWhere<EntityType, T>.IsNotNull: IStormWhereCompositor<EntityType, T>;
+function TNullableStringWhere<WhereType, ExecutorType>.IsNotNull: IStormWhereCompositor<WhereType, ExecutorType>;
 begin
-  Result := TNullableWhere<EntityType, T>.create(self, FTable, FColumn).IsNotNull;
+  Result := TNullableWhere<WhereType, ExecutorType>.create(self, FTable, FColumn).IsNotNull;
 end;
 
-function TNullableStringWhere<EntityType, T>.IsNull: IStormWhereCompositor<EntityType, T>;
+function TNullableStringWhere<WhereType, ExecutorType>.IsNull: IStormWhereCompositor<WhereType, ExecutorType>;
 begin
-  Result := TNullableWhere<EntityType, T>.create(self, FTable, FColumn).IsNull;
+  Result := TNullableWhere<WhereType, ExecutorType>.create(self, FTable, FColumn).IsNull;
 end;
 
 { TGroupWhere<T> }
 
-function TGroupWhere<EntityType, T>.GetGroupString(values: TArray<variant>): string;
+function TGroupWhere<WhereType, ExecutorType>.GetGroupString(values: TArray<variant>): string;
 VAR
   value : variant;
 begin
@@ -332,14 +394,14 @@ begin
 
 end;
 
-function TGroupWhere<EntityType, T>.IsIn(value: TArray<variant>): IStormWhereCompositor<EntityType, T>;
+function TGroupWhere<WhereType, ExecutorType>.IsIn(value: TArray<variant>): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' in ' + GetGroupString(value));
   Result := Return;
 end;
 
-function TGroupWhere<EntityType, T>.IsNotIn(
-  value: TArray<variant>): IStormWhereCompositor<EntityType, T>;
+function TGroupWhere<WhereType, ExecutorType>.IsNotIn(
+  value: TArray<variant>): IStormWhereCompositor<WhereType, ExecutorType>;
 begin
   AddSQL(' ' + GetColumnName + ' not in ' + GetGroupString(value));
   Result := Return;

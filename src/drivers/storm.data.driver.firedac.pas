@@ -26,6 +26,7 @@ Type
     Function  Execute() : Boolean;
     Function  Open() : Boolean;
     Function  Dataset : Tdataset;
+    Function  RowsAffected: integer;
   End;
 
   TStormFireDacHelper = class helper for TFDConnection
@@ -80,6 +81,11 @@ function TStormFireDACConnection.Open: Boolean;
 begin
   FQuery.Open;
   Result := true;
+end;
+
+function TStormFireDACConnection.RowsAffected: integer;
+begin
+  Result := FQuery.RowsAffected;
 end;
 
 procedure TStormFireDACConnection.SetSQL(sql: string);
