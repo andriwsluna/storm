@@ -59,17 +59,6 @@ Type
     Function CloseParentheses() : IStormWhereCompositor<G, T>;
   end;
 
-  INullableWhere<EntityType : IStormEntity ; T : IStormQueryPartition<EntityType>> = interface['{6E0036F2-4A2D-43B2-8CB2-88945DDA3E5C}']
-    Function IsNull() : IStormWhereCompositor<EntityType,T>;
-    Function IsNotNull() : IStormWhereCompositor<EntityType, T>;
-  end;
-
-  IEqualWhere<EntityType : IStormEntity ; T : IStormQueryPartition<EntityType>> = interface['{6E0036F2-4A2D-43B2-8CB2-88945DDA3E5C}']
-    Function IsEqualsTo(value : variant) : IStormWhereCompositor<EntityType,T>;
-    Function NotIsEqualsTo(value : variant) : IStormWhereCompositor<EntityType,T>;
-  end;
-
-
   IStringWhere<EntityType : IStormEntity ; T : IStormQueryPartition<EntityType>>
   = interface['{B936FBBD-B8AF-426A-90C2-BC940414A1FC}']
     Function IsEqualsTo(value : string) : IStormWhereCompositor<EntityType,T>;

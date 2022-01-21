@@ -58,7 +58,7 @@ type
     Function All() : IWhereNode<EntityType, T>;
   end;
 
-  TNullableWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>, INullableWhere<EntityType,T>)
+  TNullableWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>)
   private
 
   public
@@ -68,7 +68,7 @@ type
     Function IsNotNull : IStormWhereCompositor<EntityType,T>;
   end;
 
-  TEqualWhere<EntityType : IStormEntity ;T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>, IEqualWhere<EntityType,T>)
+  TEqualWhere<EntityType : IStormEntity ;T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>)
     private
 
     public
@@ -86,7 +86,7 @@ type
     public
       Function IsIn(value : TArray<variant>) : IStormWhereCompositor<EntityType,T>;
       Function IsNotIn(value : TArray<variant>) : IStormWhereCompositor<EntityType,T>;
-    end;
+  end;
 
 
   TStringWhere<EntityType : IStormEntity ; T : TStormQueryPartition<EntityType>> = class(TStormWhereBase<EntityType,T>, IStringWhere<EntityType, T> )
