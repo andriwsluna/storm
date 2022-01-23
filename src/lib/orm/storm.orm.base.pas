@@ -6,113 +6,131 @@ Uses
   DAta.DB,
   DFE.Maybe,
   DFE.Result,
-  storm.orm.interfaces,
-  storm.entity.interfaces,
-  storm.model.interfaces,
-  storm.model.base,
-  DFE.Interfaces,
-  storm.data.interfaces,
-  storm.orm.query,
+  storm.schema.interfaces,
   System.Generics.Collections,
+  storm.data.interfaces,
+  storm.orm.interfaces,
+  storm.orm.query,
+  storm.model.base,
+  storm.model.interfaces,
+  storm.entity.interfaces,
   System.Sysutils, System.Classes;
 
 Type
-
-  TStormSQLPartition = class abstract (TInterfacedObject)
-  private
-
-    FLimit : Maybe<Integer>;
-    Fowner : TStormSQLPartition;
-    FSQL : String;
-    FParameters : IStormQueryParameters;
+  TStormORM = Class;
 
 
 
+
+  TStormChild = class(TInterfacedObject)
   protected
-    SQLDriver : IStormSQLDriver;
+    ORM : TStormORM;
+
     Procedure Initialize; Virtual;
+    Procedure Finalize; Virtual;
 
-
-    Procedure  AddSQL(sql : string);
-    function   AddParameter(value : variant) : string;
-    Procedure ProccessLimit();
-
-    Function _GetSQL() : String;
+    Function SQLDriver : IStormSQLDriver;
+    Function TableSchema : IStormTableSchema;
   public
-    Constructor Create(owner : TStormSQLPartition = nil); Reintroduce; Virtual;
-    Destructor  Destroy(); Override;
+    Constructor Create(Const ORM : TStormORM); Reintroduce; Virtual;
+    Destructor Destroy(); Override;
+  end;
+
+  TStormSQLPartition= class(TStormChild)
+  protected
+    Owner : TStormSQLPartition;
+    SQL : String;
+    QueryParameters : IStormQueryParameters;
+    Procedure AddSQL(const  content : string);
+    Procedure AddOpenParenthesis();
+    Procedure AddCloseParenthesis();
+    Procedure AddAnd();
+    Procedure AddOr();
+    Procedure Initialize; Override;
+    function  AddParameter(value : variant) : string;
+  public
+    Constructor Create(Const ORM : TStormORM ; Const Owner : TStormSQLPartition); Reintroduce; Overload; Virtual;
+    Constructor Create(Const Owner : TStormSQLPartition); Reintroduce;Overload; Virtual;
+  end;
+
+  TStormColumnPartition = class(TInterfacedObject)
+  protected
+    Owner : TStormSQLPartition;
+    ColumnSchema : IStormSchemaColumn;
+
+    Function GetColumnName : String;
+    Function SQLDriver : IStormSQLDriver;
+    Function TableSchema : IStormTableSchema;
+    Procedure AddSQL(const  content : string);
+    Procedure AddOpenParenthesis();
+    Procedure AddCloseParenthesis();
+    function  AddParameter(value : variant) : string;
+  public
+    Constructor Create(Owner : TStormSQLPartition ; Const ColumnSchema : IStormSchemaColumn); Reintroduce;
+  end;
+
+  TStormFieldSelection = class(TStormSQLPartition)
+  protected
+    Procedure Initialize; Override;
+    Procedure SelectAll;
+    Procedure From;
+  end;
+
+  TStormWhere = Class(TStormSQLPartition)
+  protected
+    Procedure AddWhere();
+  End;
+
+  TStormWherePartition = Class(TStormSQLPartition)
+  protected
+
+  End;
 
 
+  TStormSQLExecutor = class(TStormSQLPartition)
+  protected
+    Function DbSQLConnecton  : IStormSQLConnection;
   end;
 
 
-
-  TStormSelectSuccessExecution<EntityType : IStormEntity> = class(TInterfacedObject, IStormSelectSuccessExecution<EntityType>)
-  private
-    FData : Tdataset;
+  TStormExecutionFail = class(TInterfacedObject)
   protected
+    ErrorMessage : string;
+    ExecutedCommand : string;
+  public
+    Constructor Create(Const ErrorMessage : String ; Const ExecutedCommand : string); Reintroduce;
+    Function GetErrorMessage()    : String;
+    Function GetExecutedCommand() : String;
+  end;
 
+  TStormSelectSuccess<EntityType : IStormEntity> = class(TInterfacedObject)
+  protected
+    Dataset : TDataset;
   public
-    Constructor Create(dataset : TDataset); Reintroduce;
-  public
+    Constructor Create(VAR Dataset : TDataset); Reintroduce;
     Function GetDataset : TDataset;
-    Function GetModel : IStormModel<EntityType>;
+    Function GetModel   : IStormModel<EntityType>;
   end;
 
-  TStormSelectFailExecution = class(TInterfacedObject, IStormSelectFailExecution)
-  private
-    FErrorMessage : String;
-    FSQL : String;
+  TStormSelectExecutor = Class(TStormSQLExecutor)
   protected
+    Function OpenSQL : TResult<TDataset, String>;
+  End;
 
-  public
-    Constructor Create(errorMessage : String ; sql : string); Reintroduce;
-  public
-    Function GetErrorMessage : String;
-    Function GetSQL() : String;
-  end;
 
-  TStormSelectExecutor<EntityType : IStormEntity> =
-  class(TStormSQLPartition, IStormSelectExecutor<EntityType>, IStormSelectExecutorLimited<EntityType>)
-  private
 
+
+
+  TStormORM = Class(TInterfacedObject)
   protected
+    TableSchema     : IStormTableSchema;
+    DbSQLConnecton  : IStormSQLConnection;
+    SQLDriver       : IStormSQLDriver;
 
+     Procedure Initialize; Virtual;
   public
-    Function Limit(count : Integer) : IStormSelectExecutorLimited<EntityType>;
-    Function GetSQL(callback : TGetSqlCallback) : IStormSelectExecutor<EntityType>;
-    Function Open(connection : IStormSQLConnection) : TResult<IStormSelectSuccessExecution<EntityType>,IStormSelectFailExecution>;
-  end;
-
-
-  TStormUpdateSuccessExecution<EntityType : IStormEntity> = class(TInterfacedObject, IStormUpdateSuccessExecution)
-  private
-    FRowsAffected : integer;
-  protected
-
-  public
-    Constructor Create(rowscount : integer); Reintroduce;
-  public
-    Function GetUpdatedRowsCount : integer;
-  end;
-
-  TStormUpdateFailExecution = class(TStormSelectFailExecution, IStormUpdateFailExecution)
-  private
-
-  end;
-
-
-  TStormUpdateExecutor<EntityType : IStormEntity> =
-  class(TStormSQLPartition, IStormUpdateExecutor<EntityType>)
-  private
-
-  protected
-
-  public
-    Function GetSQL(callback : TGetSqlCallback) : IStormUpdateExecutor<EntityType>;
-    Function Execute(connection : IStormSQLConnection) : TResult<IStormUpdateSuccessExecution,IStormUpdateFailExecution>;
-  end;
-
+    Constructor Create(Const DbSQLConnecton : IStormSQLConnection ; Const TableSchema : IStormTableSchema);
+  End;
 
 
 implementation
@@ -121,216 +139,295 @@ Uses
   storm.dependency.register;
 
 
+{ TStormORM }
+
+constructor TStormORM.Create(Const DbSQLConnecton : IStormSQLConnection ;
+Const TableSchema : IStormTableSchema);
+begin
+  inherited create;
+  Self.TableSchema := TableSchema;
+  Self.DbSQLConnecton := DbSQLConnecton;
+  Initialize();
+end;
+
+procedure TStormORM.Initialize;
+begin
+  DependencyRegister.GetSQLDriverInstance
+  .OnSome
+  (
+    procedure(sqldriver : IStormSQLDriver)
+    begin
+      self.SQLDriver := sqldriver;
+    end
+  )
+  .OnNone
+  (
+    procedure
+    begin
+      raise Exception.Create('No Sql Driver Registered.');
+    end
+  )
+
+end;
+
+{ TStormChild }
+
+constructor TStormChild.Create(Const ORM: TStormORM);
+begin
+  inherited Create;
+  Self.ORM := ORM;
+  Initialize();
+end;
+
+destructor TStormChild.Destroy;
+begin
+  Finalize;
+  inherited;
+end;
+
+procedure TStormChild.Finalize;
+begin
+
+end;
+
+procedure TStormChild.Initialize;
+begin
+
+end;
+
+function TStormChild.SQLDriver: IStormSQLDriver;
+begin
+  Result := self.ORM.SQLDriver;
+end;
+
+function TStormChild.TableSchema: IStormTableSchema;
+begin
+  Result := Self.ORM.TableSchema;
+end;
+
+{ TStormSQLPartition }
+
+procedure TStormSQLPartition.AddAnd;
+begin
+  AddSQL('AND');
+end;
+
+procedure TStormSQLPartition.AddCloseParenthesis;
+begin
+  AddSQL(')');
+end;
+
+procedure TStormSQLPartition.AddOpenParenthesis;
+begin
+  AddSQL('(');
+end;
+
+procedure TStormSQLPartition.AddOr;
+begin
+  AddSQL('OR');
+end;
+
 function TStormSQLPartition.AddParameter(value: variant): string;
 begin
-  result := FParameters.Add(value);
+  Result := QueryParameters.Add(value);
 end;
 
-procedure TStormSQLPartition.AddSQL(sql: string);
+procedure TStormSQLPartition.AddSQL(const content: string);
 begin
-  FSQL := FSQL + sql;
+  if Not self.sql.IsEmpty then
+  begin
+    self.SQL := self.SQL + ' ' + content;
+  end
+  else
+  begin
+    self.SQL := self.SQL + content;
+  end;
 end;
 
-
-
-constructor TStormSQLPartition.Create(owner : TStormSQLPartition);
+constructor TStormSQLPartition.Create(const ORM: TStormORM;
+  Const Owner: TStormSQLPartition);
 begin
-  inherited create();
-  Fowner := owner;
-  Initialize;
+  if assigned(Owner) then
+  begin
+    Self.Owner := Owner;
+    Self.SQL := Owner.SQL;
+  end;
+  inherited Create(ORM);
+
 end;
 
-
-destructor TStormSQLPartition.Destroy;
+constructor TStormSQLPartition.Create(Const Owner: TStormSQLPartition);
 begin
-  if Assigned(Fowner) then
-  BEGIN
-    if Fowner.FRefCount = 0 then
-    begin
-      Fowner.Free;
-    end;
-  END;
-  inherited;
+  if Assigned(Owner) then
+  begin
+    create(Owner.ORM, Owner);
+  end
+  else
+  begin
+    raise Exception.Create('Parameter Owner must be assigned');
+  end;
 end;
 
 procedure TStormSQLPartition.Initialize;
 begin
-  DependencyRegister.GetSQLDriverInstance.Bind
-  (
-    procedure(driver : IStormSQLDriver)
-    begin
-      SQLDriver := driver;
-    end,
-    procedure()
-    begin
-      raise Exception.Create('No SQL driver registered');
-    end
-  );
-
-  if Assigned(Fowner) then
+  inherited;
+  if Assigned(owner) and assigned(owner.QueryParameters) then
   begin
-    FSQL := Fowner.FSQL;
-    if assigned(Fowner.FParameters) then
+    self.QueryParameters := owner.QueryParameters;
+  end
+  else
+  begin
+    QueryParameters := TStormQueryParameters.Create;
+  end;
+end;
+
+{ TStormFieldSelection }
+
+procedure TStormFieldSelection.From;
+begin
+  AddSQL('FROM ' + SQLDriver.GetFullTableName(TableSchema));
+end;
+
+procedure TStormFieldSelection.Initialize;
+begin
+  inherited;
+  AddSQL('SELECT');
+end;
+
+procedure TStormFieldSelection.SelectAll;
+begin
+  AddSQL('*');
+  From;
+end;
+
+
+
+{ TStormWhere }
+
+procedure TStormWhere.AddWhere;
+begin
+  AddSQL('WHERE');
+end;
+
+{ TStormColumnPartition }
+
+procedure TStormColumnPartition.AddCloseParenthesis;
+begin
+  Self.Owner.AddCloseParenthesis;
+end;
+
+procedure TStormColumnPartition.AddOpenParenthesis;
+begin
+  Self.Owner.AddOpenParenthesis;
+end;
+
+function TStormColumnPartition.AddParameter(value: variant): string;
+begin
+  Result := Self.Owner.AddParameter(value);
+end;
+
+procedure TStormColumnPartition.AddSQL(const content: string);
+begin
+  self.Owner.AddSQL(content);
+end;
+
+constructor TStormColumnPartition.Create(Owner: TStormSQLPartition;
+  const ColumnSchema: IStormSchemaColumn);
+begin
+  inherited create();
+  if Assigned(Owner) then
+  begin
+    Self.Owner := Owner;
+    if Assigned(ColumnSchema) then
     begin
-      FParameters := Fowner.FParameters;
+      Self.ColumnSchema := ColumnSchema;
     end
     else
     begin
-      FParameters := TStormQueryParameters.Create;
+      raise Exception.Create('Parameter ColumnSchema must be assigned');
     end;
   end
   else
   begin
-    FParameters := TStormQueryParameters.Create;
+    raise Exception.Create('Parameter Owner must be assigned');
   end;
 end;
 
-procedure TStormSQLPartition.ProccessLimit;
-var
-  newSql : string;
+function TStormColumnPartition.GetColumnName: String;
 begin
-  newSql := self.FSQL;
-  FLimit.OnSome
-  (
-    procedure(limit : integer)
-    begin
-      newSql := self.SQLDriver.GetLimitSyntax(limit, newsql);
-    end
-  );
-  FSQL := newSql;
+  Result := TableSchema.GetTableName + '.' + ColumnSchema.GetColumnName;
 end;
 
-function TStormSQLPartition._GetSQL: String;
+function TStormColumnPartition.SQLDriver: IStormSQLDriver;
 begin
-  Result := FSQL;
+  Result := self.Owner.SQLDriver;
 end;
 
-
-
-{ TStormQueryExecution }
-
-constructor TStormSelectSuccessExecution<EntityType>.Create(dataset: TDataset);
+function TStormColumnPartition.TableSchema: IStormTableSchema;
 begin
-  inherited create();
-  FData := dataset;
-end;
-
-function TStormSelectSuccessExecution<EntityType>.GetDataset: TDataset;
-begin
-  Result := FData;
-end;
-
-
-
-function TStormSelectSuccessExecution<EntityType>.GetModel: IStormModel<EntityType>;
-begin
-  Result := TStormModel<EntityType>.FromDataset(FData);
+  Result := self.Owner.TableSchema;
 end;
 
 { TStormSelectExecutor }
 
-function TStormSelectExecutor<EntityType>.Open(connection : IStormSQLConnection): TResult<IStormSelectSuccessExecution<EntityType>,IStormSelectFailExecution>;
-var
-  return : IStormSelectSuccessExecution<EntityType>;
+function TStormSelectExecutor.OpenSQL: TResult<TDataset, String>;
 begin
-  connection.SetSQL(_GetSQL);
-  connection.LoadParameters(FParameters.Items);
+  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
-    connection.Open;
-    return := TStormSelectSuccessExecution<EntityType>.Create(connection.Dataset);
-    result := return;
+    DbSQLConnecton.Open;
+    result := DbSQLConnecton.Dataset;
   except
     on e : exception do
     begin
-      Result := TStormSelectFailExecution.Create(e.Message, _GetSQL);
+      Result := e.Message;
     end;
   end;
-
-
 end;
 
-function TStormSelectExecutor<EntityType>.Limit(
-  count: Integer): IStormSelectExecutorLimited<EntityType>;
+{ TStormSQLExecutor }
+
+function TStormSQLExecutor.DbSQLConnecton: IStormSQLConnection;
 begin
-  Self.FLimit := count;
-  ProccessLimit();
-  Result := Self;
+  Result := self.ORM.DbSQLConnecton;
 end;
 
-function TStormSelectExecutor<EntityType>.GetSQL(callback : TGetSqlCallback) : IStormSelectExecutor<EntityType>;
-begin
-  if assigned(callback) then
-  begin
-    callback(_GetSQL);
-  end;
-  Result := self;
-end;
+{ TStormExecutionFail }
 
-{ TStormSelectFailExecution }
-
-constructor TStormSelectFailExecution.Create(errorMessage: String ; sql : string);
+constructor TStormExecutionFail.Create(const ErrorMessage,
+  ExecutedCommand: string);
 begin
   inherited create();
-  FErrorMessage := errorMessage;
-  FSQL := sql;
+  self.ErrorMessage := ErrorMessage;
+  self.ExecutedCommand := ExecutedCommand;
 end;
 
-function TStormSelectFailExecution.GetErrorMessage: String;
+function TStormExecutionFail.GetErrorMessage: String;
 begin
-  Result := FErrorMessage;
+  Result := ErrorMessage;
 end;
 
-function TStormSelectFailExecution.GetSQL: String;
+function TStormExecutionFail.GetExecutedCommand: String;
 begin
-  Result := FSQL;
+  Result := ExecutedCommand;
 end;
 
+{ TStormSelectSuccess<EntityType> }
 
-{ TStormUpdateExecutor<EntityType> }
-
-function TStormUpdateExecutor<EntityType>.Execute(
-  connection: IStormSQLConnection): TResult<IStormUpdateSuccessExecution, IStormUpdateFailExecution>;
-var
-  return : IStormUpdateSuccessExecution;
+constructor TStormSelectSuccess<EntityType>.Create(var Dataset: TDataset);
 begin
-  connection.SetSQL(_GetSQL);
-  connection.LoadParameters(FParameters.Items);
-  try
-    connection.Execute;
-
-    return := TStormUpdateSuccessExecution<EntityType>.Create(connection.RowsAffected);
-    result := return;
-  except
-    on e : exception do
-    begin
-      Result := TStormUpdateFailExecution.Create(e.Message, _GetSQL);
-    end;
-  end;
-
-
+  inherited create();
+  Self.Dataset := Dataset;
 end;
 
-function TStormUpdateExecutor<EntityType>.GetSQL(
-  callback: TGetSqlCallback): IStormUpdateExecutor<EntityType>;
+function TStormSelectSuccess<EntityType>.GetDataset: TDataset;
 begin
-  if assigned(callback) then
-  begin
-    callback(_GetSQL);
-  end;
-  Result := self;
+  Result := Self.Dataset;
 end;
 
-{ TStormUpdateSuccessExecution<EntityType> }
-
-constructor TStormUpdateSuccessExecution<EntityType>.Create(rowscount: integer);
+function TStormSelectSuccess<EntityType>.GetModel: IStormModel<EntityType>;
 begin
-  inherited create;
-  FRowsAffected := rowscount;
-end;
-
-function TStormUpdateSuccessExecution<EntityType>.GetUpdatedRowsCount: integer;
-begin
-  Result := self.FRowsAffected;
+  Result := TStormModel<EntityType>.FromDataset(Dataset);
 end;
 
 end.

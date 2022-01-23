@@ -3,243 +3,414 @@ unit uORMProduto;
 interface
 
 uses
-  storm.orm.base,
-  storm.orm.where,
-  storm.orm.update,
-  storm.orm.interfaces,
+  DFE.Result,
   storm.model.interfaces,
-  storm.schema.interfaces,
-  uEntityProduto,
-  uSchemaProduto;
+  Data.DB,
+  storm.data.interfaces,
+  uEntityProduto;
 
 Type
-  IModelProduto = IStormModel<IProduto>;
-
   TProdutoPossibleFields = (Codigo=0, Descricao=1);
   TProdutoSETFieldSelection = set of TProdutoPossibleFields;
 
-  TProdutoWhereSelection<ExecutorType : TStormSqlPartition> = class(TStormSqlPartition)
-  protected
-    Schema : IStormTableSchema;
-
-    Procedure Initialize; Override;
-  public
-    Function OpenParentheses() : TProdutoWhereSelection<ExecutorType>;
-  public
-
-    Function Codigo : IStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
-    Function Descricao : InullableStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
+  IProdutoSelectByIDSuccess = interface['{EA9B3145-5974-4DF0-9DA5-97B42BEE876D}']
+    Function GetEntity : IProduto;
   end;
 
-  IProdutoFieldSelection<ExecutorType : TStormSqlPartition> = interface['{9AA32BD0-45FD-42D6-B88A-42570723FD21}']
-    Function All() : IWhereNode<TProdutoWhereSelection<ExecutorType>>;
-    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection<ExecutorType>>;
+  IProdutoSelectByIDFail = interface['{BD9D3FEA-76BB-4C46-9E36-BCDC4AD7CD4F}']
+    Function GetErrorMessage()    : String;
+    Function GetExecutedCommand() : String;
   end;
 
-  IProdutoFieldUpdate<ExecutorType : TStormSqlPartition> = interface
-    Function Codigo : IStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>;
-    Function Descricao : IStormStringNullableUpdater<IWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+  IProdutoSelectByIDResult = DFE.Result.TResult<IProdutoSelectByIDSuccess, IProdutoSelectByIDFail>;
+
+  IProdutoDeleteSuccess = interface['{13CCB0EA-3F5F-4253-B82C-D12BC5AB28B0}']
+    Function GetRowsDeleted : Integer;
   end;
 
+  IProdutoDeleteFail = interface['{3825050D-7EE6-4A63-93B4-1F6B5DCC0CD5}']
+    Function GetErrorMessage()    : String;
+    Function GetExecutedCommand() : String;
+  end;
 
-  IORMProduto = interface['{F49CF2B7-E6F3-44BC-A28C-6FCF75930CDC}']
-    Function Select()  : IProdutoFieldSelection<TStormSelectExecutor<IProduto>>;
-    Function Update() : IProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>;
+  IProdutoExecuteDeleteResult = DFE.Result.TResult<IProdutoDeleteSuccess, IProdutoDeleteFail>;
+
+  IProdutoDeleteExecutor = interface['{78896797-B60F-410B-9149-8110C6341E3E}']
+    Function Execute() : IProdutoExecuteDeleteResult;
   end;
 
 
+  IProdutoInsertSuccess = interface['{F43BC981-65B3-4AED-A87C-47668FAFFB24}']
+    Function GetInserted : IProduto;
+  end;
+
+  IProdutoInsertFail = interface['{F71F683C-6B68-42C2-9F1B-472CE007D78F}']
+    Function GetErrorMessage()    : String;
+    Function GetExecutedCommand() : String;
+  end;
+
+  IProdutoExecuteInsertResult = DFE.Result.TResult<IProdutoInsertSuccess, IProdutoInsertFail>;
+
+  IProdutoInsertExecutor = interface['{D18196B3-C10E-4502-9540-DD410988446E}']
+    Function Execute() : IProdutoExecuteInsertResult;
+  end;
+
+  IProdutoUpdateSuccess = interface['{388A529E-AE19-468F-BA91-09A37C2524F5}']
+    Function GetRowsUpdated : integer;
+  end;
+
+  IProdutoUpdateFail = interface['{9E0EE68B-7846-457B-89E0-F02FA8E956B6}']
+    Function GetErrorMessage()    : String;
+    Function GetExecutedCommand() : String;
+  end;
+
+  IProdutoExecuteUpdateResult = DFE.Result.TResult<IProdutoUpdateSuccess, IProdutoUpdateFail>;
+
+  IProdutoUpdateExecutor = interface['{350CC46D-3CC6-41FC-8899-7804FDD48D2A}']
+    Function Execute() : IProdutoExecuteUpdateResult;
+  end;
+
+  IProdutoSelectSuccess = interface['{23FCA183-991E-48C0-A472-3620F0C9C524}']
+    Function GetDataset : TDataset;
+    Function GetModel   : IStormModel<IProduto>;
+  end;
+
+  IProdutoSelectFail = interface['{2F52D965-EA31-415E-90CF-7785412FE80E}']
+    Function GetErrorMessage()    : String;
+    Function GetExecutedCommand() : String;
+  end;
+
+  IProdutoOpenSelectResult = DFE.Result.TResult<IProdutoSelectSuccess, IProdutoSelectFail>;
+
+  IProdutoSelectExecutor = interface['{6EE28899-6AE6-417B-AF6F-22BD5246F095}']
+    Function Open() : IProdutoOpenSelectResult;
+  end;
+
+  IProdutoWherePartition<IExecutorType : IInterface> = interface;
+
+  IProdutoWhereCompositor<IExecutorType : IInterface> = interface['{C3169555-2341-42BF-8D9F-154595F4224E}']
+    Function _And()             : IProdutoWherePartition<IExecutorType>;
+    Function _Or()              : IProdutoWherePartition<IExecutorType>;
+    Function OpenParenthesis()  : IProdutoWherePartition<IExecutorType>;
+    Function CloseParenthesis() : IProdutoWhereCompositor<IExecutorType>;
+    Function Go()               : IExecutorType;
+  end;
+
+  IProdutoStringWhere<IExecutorType : IInterface> = interface['{C0397762-B903-456A-B5CE-3E458BB9C2CE}']
+    Function IsEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
+    Function IsNotEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
+  end;
+
+  IProdutoWherePartition<IExecutorType : IInterface> = interface['{FF54F2B9-9BF1-4B0E-B318-62C65A693098}']
+    Function Codigo()           : IProdutoStringWhere<IExecutorType>;
+    Function OpenParenthesis()  : IProdutoWherePartition<IExecutorType>;
+  end;
+
+  IProdutoSelectWhere= interface['{748B71BC-FBF0-4330-A7EF-DCA221B24B81}']
+    Function Where() : IProdutoWherePartition<IProdutoSelectExecutor>;
+  end;
+
+  IProdutoFieldAssignmentWithWhere = interface;
+
+  IProdutoStringFieldAssignment = interface['{EA77B048-E679-4928-BBD5-E4E049FE3305}']
+    Function SetTo(Const Value : string) : IProdutoFieldAssignmentWithWhere;
+  end;
+
+  IProdutoFieldAssignmentWithWhere = interface
+    Function Codigo   : IProdutoStringFieldAssignment;
+    Function Where()  : IProdutoWherePartition<IProdutoUpdateExecutor>;
+  end;
+
+  IProdutoFieldAssignment = interface
+    Function Codigo : IProdutoStringFieldAssignment;
+  end;
+
+  IProdutoFieldSelection = interface['{F165348C-AC5D-47C9-A538-A419ECBB02AC}']
+    Function All()  : IProdutoSelectWhere;
+    Function Only(fields : TProdutoSETFieldSelection) : IProdutoSelectWhere;
+  end;
+
+  IProdutoFieldsInsertionWithGo = interface;
+
+  IProdutoStringFieldInsertion = interface['{FF0C363B-373A-4845-A124-630B170D82E0}']
+    Function Insert(Const Value : string) : IProdutoFieldsInsertionWithGo;
+  end;
+
+  IProdutoFieldsInsertionWithGo = interface['{AF81639F-578F-4045-81A0-9289F855024A}']
+    Function Codigo : IProdutoStringFieldInsertion;
+    Function Go     : IProdutoInsertExecutor;
+  end;
+
+  IProdutoFieldsInsertion = interface['{2882508E-A523-415F-82AE-3FA84C5A720A}']
+    Function Codigo : IProdutoStringFieldInsertion;
+  end;
+
+  IProdutoInsertValues = interface['{CA07FE1E-231D-459C-8EE1-250DD1E4A733}']
+    Function Values() : IProdutoFieldsInsertion;
+  end;
+
+  IProdutoDeleteValues = interface['{5CB2A15B-AF15-48EE-8161-D1C14D8D798B}']
+    Function Where() : IProdutoWherePartition<IProdutoDeleteExecutor>;
+  end;
+
+  IProdutoORM = interface['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
+    Function Select() : IProdutoFieldSelection;
+    Function Update() : IProdutoFieldAssignment;
+    Function Insert() : IProdutoInsertValues;
+    Function Delete() : IProdutoDeleteValues;
 
 
+    Function SelectByID(Const Codigo : String) : IProdutoSelectByIDResult;
+  end;
 
 
-
-
-Function ORMProduto : IORMProduto;
-
+  Function NewProdutoORM(DbSQLConnecton: IStormSQLConnection) : IProdutoORM;
 
 implementation
 
-uses
-
-  System.Sysutils;
-
-VAR
-  FSchema : IStormTableSchema;
-
+Uses
+  storm.schema.interfaces,
+  uSchemaProduto,
+  storm.orm.where,
+  storm.orm.base;
 
 Type
+  TProdutoORM = Class;
 
+  TProdutoSelectSuccess = class(TStormSelectSuccess<IProduto>, IProdutoSelectSuccess)
 
-  TProdutoFieldSelection<ExecutorType : TStormSqlPartition> = class
-  (
-    TStormFieldSelection<TProdutoWhereSelection<ExecutorType>,TStormSelectExecutor<IProduto>>,
-    IProdutoFieldSelection<ExecutorType>
-  )
+  end;
+
+  TProdutoSelectFail = class(TStormExecutionFail, IProdutoSelectFail)
   public
-    Constructor Create(sql : string);Reintroduce;
-    Function Only(fields : TProdutoSETFieldSelection) : IWhereNode<TProdutoWhereSelection<ExecutorType>>;
+
+  end;
+
+  TProdutoSelectExecutor = class(TStormSelectExecutor, IProdutoSelectExecutor)
+    Function Open() : IProdutoOpenSelectResult;
+  end;
+
+  TProdutoWhereCompositor<IExecutorType : IInterface> = class(TStormSqlPartition, IProdutoWhereCompositor<IExecutorType>)
+  public
+    Function _And()             : IProdutoWherePartition<IExecutorType>;
+    Function _Or()              : IProdutoWherePartition<IExecutorType>;
+    Function OpenParenthesis()  : IProdutoWherePartition<IExecutorType>;
+    Function CloseParenthesis() : IProdutoWhereCompositor<IExecutorType>;
+    Function Go()               : IExecutorType;
+  end;
+
+  TProdutoStringWhere<IExecutorType: IInterface> = class(TStormStringWhere, IProdutoStringWhere<IExecutorType>)
+  public
+    Function IsEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
+    Function IsNotEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
+  end;
+
+  TProdutoWherePartition<IExecutorType : IInterface> = class(TStormWherePartition, IProdutoWherePartition<IExecutorType>)
+  public
+    Function Codigo()           : IProdutoStringWhere<IExecutorType>;
+    Function OpenParenthesis()  : IProdutoWherePartition<IExecutorType>;
+  end;
+
+  TProdutoSelectWhere = class(TStormWhere, IProdutoSelectWhere)
+  public
+    Function Where() : IProdutoWherePartition<IProdutoSelectExecutor>;
+  end;
+
+  TProdutoFieldSelection = class(TStormFieldSelection, IProdutoFieldSelection)
+  public
+    Function All()  : IProdutoSelectWhere;
+    Function Only(fields : TProdutoSETFieldSelection) : IProdutoSelectWhere;
   end;
 
 
-  TProdutoFieldUpdate<ExecutorType : TStormSqlPartition> = class(TStormSqlPartition, IProdutoFieldUpdate<ExecutorType>)
-  protected
-    Schema : IStormTableSchema;
 
-    Procedure Initialize; Override;
-  public
-  public
-    Function Codigo : IStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>;
-    Function Descricao : IStormStringNullableUpdater<IWhereNode<TProdutoWhereSelection<ExecutorType>>>;
-  end;
-
-  TORMProduto = class(TInterfacedObject, IORMProduto)
+  TProdutoORM = Class(TStormORM, IProdutoORM)
   private
-
-  protected
-
-
-    Procedure Initialize();
-    Procedure Finalize();
+    Function SchemaProduto : TSchemaProduto;
   public
-    Constructor Create(); Reintroduce;
-    Destructor  Destroy(); Override;
+    Constructor Create(DbSQLConnecton : IStormSQLConnection);
   public
-    Function Select()  : IProdutoFieldSelection<TStormSelectExecutor<IProduto>>;
-    Function Update() : IProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>;
-  end;
+    Function Select() : IProdutoFieldSelection;
+    Function Update() : IProdutoFieldAssignment;
+    Function Insert() : IProdutoInsertValues;
+    Function Delete() : IProdutoDeleteValues;
 
 
-Function ORMProduto : IORMProduto;
+    Function SelectByID(Const Codigo : String) : IProdutoSelectByIDResult;
+  End;
+
+Function NewProdutoORM(DbSQLConnecton: IStormSQLConnection) : IProdutoORM;
 begin
-  Result := TORMProduto.Create;
+  Result := TProdutoORM.Create(DbSQLConnecton);
 end;
 
-Procedure InitializeSchema();
+
+
+{ TProdutoORM }
+
+constructor TProdutoORM.Create(DbSQLConnecton: IStormSQLConnection);
 begin
-  FSchema := TSchemaProduto.Create;
+  inherited create(DbSQLConnecton, TSchemaProduto.Create);
 end;
 
-Procedure FinalizeSchema();
-begin
-  FSchema := nil;
-end;
-
-{ TORMProduto }
-
-constructor TORMProduto.Create;
-begin
-  inherited create();
-  Initialize();
-end;
-
-destructor TORMProduto.Destroy;
-begin
-  Finalize();
-  inherited;
-end;
-
-procedure TORMProduto.Finalize;
+function TProdutoORM.Delete: IProdutoDeleteValues;
 begin
 
 end;
 
-procedure TORMProduto.Initialize;
+function TProdutoORM.Insert: IProdutoInsertValues;
 begin
 
 end;
 
-function TORMProduto.Select: IProdutoFieldSelection<TStormSelectExecutor<IProduto>>;
+function TProdutoORM.SchemaProduto: TSchemaProduto;
 begin
-  result := TProdutoFieldSelection<TStormSelectExecutor<IProduto>>.Create('select ');
+  Result := self.TableSchema as TSchemaProduto;
 end;
 
-
-function TORMProduto.Update: IProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>;
+function TProdutoORM.Select: IProdutoFieldSelection;
 begin
-  Result := TProdutoFieldUpdate<TStormUpdateExecutor<IProduto>>.Create();
+  Result := TProdutoFieldSelection.Create(self,nil);
 end;
 
-constructor TProdutoFieldSelection<ExecutorType>.Create(sql : string);
+function TProdutoORM.SelectByID(const Codigo: String): IProdutoSelectByIDResult;
 begin
-  AddSQL(sql);
-  inherited create(self,FSchema,TSchemaProduto(FSchema).Codigo);
 
 end;
 
-function TProdutoFieldSelection<ExecutorType>.Only(fields : TProdutoSETFieldSelection):
-IWhereNode<TProdutoWhereSelection<ExecutorType>>;
+function TProdutoORM.Update: IProdutoFieldAssignment;
+begin
+
+end;
+
+{ TProdutoFieldSelection }
+
+function TProdutoFieldSelection.All: IProdutoSelectWhere;
+begin
+  SelectAll;
+  Result := TProdutoSelectWhere.Create(self);
+end;
+
+
+
+function TProdutoFieldSelection.Only(fields : TProdutoSETFieldSelection): IProdutoSelectWhere;
 VAR
   s : string;
   field : TProdutoPossibleFields;
 begin
   s := '';
+
   for field in fields do
   begin
-    FSchema.ColumnById(integer(field)).Bind
+    TableSchema.ColumnById(integer(field)).Onsome
     (
       procedure(colum : IStormSchemaColumn)
       begin
-        s := s + ', ' + FSchema.GetTableName + '.' + colum.GetColumnName;
+        s := s + ', ' + TableSchema.GetTableName + '.' + colum.GetColumnName;
       end
     );
   end;
 
   AddSQL(Copy(s,2, length(s)));
-  Result := from;
-
+  from;
+  Result := TProdutoSelectWhere.Create(self);
 end;
 
-function TProdutoWhereSelection<ExecutorType>.Codigo : IStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
+{ TProdutoSelectWhere }
+
+function TProdutoSelectWhere.Where: IProdutoWherePartition<IProdutoSelectExecutor>;
 begin
-  result :=
-  TStringWhere<TProdutoWhereSelection<ExecutorType>,ExecutorType>
-  .create(self,Schema,TSchemaProduto(Schema).Codigo);
+  AddWhere;
+  Result :=  TProdutoWherePartition<IProdutoSelectExecutor>.Create(self);
 end;
 
+{ TProdutoWherePartition<IExecutorType> }
 
-function TProdutoWhereSelection<ExecutorType>.Descricao: INullableStringWhere<IStormWhereCompositor<TProdutoWhereSelection<ExecutorType>,ExecutorType>>;
+
+function TProdutoWherePartition<IExecutorType>.Codigo: IProdutoStringWhere<IExecutorType>;
 begin
-  result := TNullableStringWhere<TProdutoWhereSelection<ExecutorType>,ExecutorType>
-  .create(self,Schema,TSchemaProduto(Schema).Descricao);
+  Result := TProdutoStringWhere<IExecutorType>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
 end;
 
-
-procedure TProdutoWhereSelection<ExecutorType>.Initialize;
+function TProdutoWherePartition<IExecutorType>.OpenParenthesis: IProdutoWherePartition<IExecutorType>;
 begin
-  inherited;
-  Self.Schema := TSchemaProduto.Create;
+  Self.AddOpenParenthesis;
+  Result := Self;
 end;
 
-function TProdutoWhereSelection<ExecutorType>.OpenParentheses: TProdutoWhereSelection<ExecutorType>;
+{ TProdutoStringWhere<IExecutorType> }
+
+function TProdutoStringWhere<IExecutorType>.IsEqualsTo(
+  const Value: string): IProdutoWhereCompositor<IExecutorType>;
 begin
-  Result := TStormWhereSelection<TProdutoWhereSelection<ExecutorType>>.Create(self).OpenParentheses;
+  self.AddIsEqualTo(Value);
+  result := TProdutoWhereCompositor<IExecutorType>.Create(self);
 end;
 
-
-{ TProdutoFieldUpdate<ExecutorType> }
-
-function TProdutoFieldUpdate<ExecutorType>.Codigo: IStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+function TProdutoStringWhere<IExecutorType>.IsNotEqualsTo(
+  const Value: string): IProdutoWhereCompositor<IExecutorType>;
 begin
-  Result := TStormStringUpdater<TWhereNode<TProdutoWhereSelection<ExecutorType>>>.Create(self, Schema, TSchemaProduto(Schema).Codigo);
+  self.AddIsNotEqualTo(Value);
+  result := TProdutoWhereCompositor<IExecutorType>.Create(self);
 end;
 
-function TProdutoFieldUpdate<ExecutorType>.Descricao: IStormStringNullableUpdater<IWhereNode<TProdutoWhereSelection<ExecutorType>>>;
+{ TProdutoWhereCompositor<IExecutorType> }
+
+function TProdutoWhereCompositor<IExecutorType>.CloseParenthesis: IProdutoWhereCompositor<IExecutorType>;
 begin
-
+  AddCloseParenthesis;
+  Result := Self;
 end;
 
-procedure TProdutoFieldUpdate<ExecutorType>.Initialize;
+function TProdutoWhereCompositor<IExecutorType>.Go: IExecutorType;
 begin
-  inherited;
-  Self.Schema := TSchemaProduto.Create;
-  AddSQL('UPDATE ' + SQLDriver.GetFullTableName(Self.Schema) + ' SET ');
+  if TypeInfo(IExecutorType) = TypeInfo(IProdutoSelectExecutor) then
+  begin
+    Result := TProdutoSelectExecutor.Create(self);
+  end;
+
 end;
 
-INITIALIZATION
-  InitializeSchema;
+function TProdutoWhereCompositor<IExecutorType>.OpenParenthesis: IProdutoWherePartition<IExecutorType>;
+begin
+  AddOpenParenthesis;
+  Result := TProdutoWherePartition<IExecutorType>.Create(self);
+end;
 
-finalization
-  FinalizeSchema;
+function TProdutoWhereCompositor<IExecutorType>._And: IProdutoWherePartition<IExecutorType>;
+begin
+  AddAnd();
+  Result := TProdutoWherePartition<IExecutorType>.Create(self);
+end;
+
+function TProdutoWhereCompositor<IExecutorType>._Or: IProdutoWherePartition<IExecutorType>;
+begin
+  AddOr();
+  Result := TProdutoWherePartition<IExecutorType>.Create(self);
+end;
+
+{ TProdutoSelectExecutor }
+
+function TProdutoSelectExecutor.Open: IProdutoOpenSelectResult;
+var
+  Return : IProdutoOpenSelectResult;
+begin
+  OpenSQL
+    .OnSuccess
+    (
+      procedure(Dataset : Tdataset)
+      begin
+        Return := TProdutoSelectSuccess.Create(Dataset)
+      end
+    )
+    .OnFail
+    (
+      procedure(ErrorMessage : String)
+      begin
+        Return := TProdutoSelectFail.Create(ErrorMessage,sql)
+      end
+    );
+  Result := Return;
+end;
 
 end.
-

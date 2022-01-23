@@ -10,7 +10,6 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -28,7 +27,7 @@ object vcl_form: Tvcl_form
     Top = 48
     Width = 75
     Height = 25
-    Caption = 'Button1'
+    Caption = 'Select'
     TabOrder = 0
     OnClick = Button1Click
   end
@@ -60,7 +59,7 @@ object vcl_form: Tvcl_form
     Top = 88
     Width = 75
     Height = 25
-    Caption = 'Button2'
+    Caption = 'Update'
     TabOrder = 3
     OnClick = Button2Click
   end
@@ -85,6 +84,42 @@ object vcl_form: Tvcl_form
     Width = 121
     Height = 21
     TabOrder = 6
+  end
+  object Button3: TButton
+    Left = 40
+    Top = 128
+    Width = 75
+    Height = 25
+    Caption = 'Insert'
+    TabOrder = 7
+    OnClick = Button3Click
+  end
+  object Button4: TButton
+    Left = 40
+    Top = 167
+    Width = 75
+    Height = 25
+    Caption = 'Delete'
+    TabOrder = 8
+    OnClick = Button4Click
+  end
+  object Button5: TButton
+    Left = 8
+    Top = 207
+    Width = 121
+    Height = 25
+    Caption = 'Select By ID'
+    TabOrder = 9
+    OnClick = Button5Click
+  end
+  object Button6: TButton
+    Left = 48
+    Top = 288
+    Width = 75
+    Height = 25
+    Caption = 'Button6'
+    TabOrder = 10
+    OnClick = Button6Click
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 

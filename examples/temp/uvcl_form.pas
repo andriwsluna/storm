@@ -51,21 +51,23 @@ type
     Edit1: TEdit;
     Edit2: TEdit;
     Label1: TLabel;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    Button6: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
   private
     procedure freeDataset;
-    procedure ShowSql(sql : string);
-    procedure AtribuirDatasetAoGrid(resultado : IStormSelectSuccessExecution<IProduto>);
-    procedure MostrarMensagemDeErro(resultado : IStormSelectFailExecution);
-    procedure MostrarMensagemDeErroDoUpdate(resultado : IStormUpdateFailExecution);
-    procedure printproduto(produto : Iproduto);
-    procedure showjson(const json : tjsonarray);
-    function  MapperProdutoDeCodigo2(produto : Iproduto) : Maybe<Iproduto>;
-    function  ProdutosCujoDescricaoContem_F(produto : Iproduto) : Boolean;
-    procedure MostrarLinhasAfetadas(resultado : IStormUpdateSuccessExecution);
+
+    Procedure ProcessarResultadoPositivoSelect(resultado : IProdutoSelectSuccess);
+    Procedure ProcessarResultadoNegativoSelect(resultado : IProdutoSelectFail);
   public
 
 
@@ -78,105 +80,111 @@ implementation
 
 {$R *.dfm}
 
-procedure Tvcl_form.MostrarLinhasAfetadas(
-  resultado: IStormUpdateSuccessExecution);
-begin
-  label1.caption := IntToStr(resultado.GetUpdatedRowsCount);
-  ORMproduto
-    .Select
-    .Only([Codigo, Descricao])
-    .Where
-    .Descricao.IsNotNull
-    .Go
-    //.Open(ADOConnection1.StormDriver)
-    .Open(FDConnection1.StormDriver)
-    .OnSuccess(AtribuirDatasetAoGrid)
-    .OnFail(MostrarMensagemDeErro);
-end;
-
-procedure Tvcl_form.MostrarMensagemDeErroDoUpdate(resultado: IStormUpdateFailExecution);
-begin
-  ShowMessage(resultado.GetErrorMessage);
-  ShowSql(resultado.GetSQL);
-end;
-
-procedure Tvcl_form.MostrarMensagemDeErro(resultado: IStormSelectFailExecution);
-begin
-  ShowMessage(resultado.GetErrorMessage);
-  ShowSql(resultado.GetSQL);
-end;
-
-
-procedure Tvcl_form.printproduto(produto: Iproduto);
-begin
-  produto.Codigo.GetValueOrDefault();
-  MemoJson.Lines.Add('produto: ' +
-  produto.Descricao.Value.GetValue.GetValueOrDefault('') + ' Código: ' + produto.Codigo.Value.GetValue.GetValueOrDefault(''));
-end;
-
-procedure Tvcl_form.showjson(const json: tjsonarray);
-begin
-  MemoJson.Lines.add(json.ToString);
-  json.Free;
-end;
-
-procedure Tvcl_form.ShowSql(sql: string);
-begin
-  memosql.Text := sql;
-end;
 
 procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
-  ORMproduto
-    .Select
+  NewProdutoORM(ADOConnection1.StormDriver)
+    .Select()
     .Only([Codigo, Descricao])
     .Where
-    .Descricao.IsNotNull
+    .OpenParenthesis
+    .Codigo.IsEqualsTo('1')
+    ._Or
+    .Codigo.IsEqualsTo('2')
+    .CloseParenthesis
     .Go
-    .Limit(1)
-    .GetSQL(ShowSql)
-    //.Open(ADOConnection1.StormDriver)
-    .Open(FDConnection1.StormDriver)
-    .OnSuccess(AtribuirDatasetAoGrid)
-    .OnFail(MostrarMensagemDeErro);
+    .Open
+    .OnSuccess(ProcessarResultadoPositivoSelect)
+    .OnFail(ProcessarResultadoNegativoSelect);
 end;
 
 
 procedure Tvcl_form.Button2Click(Sender: TObject);
 begin
-  ORMproduto
+  NewProdutoORM(ADOConnection1.StormDriver)
     .Update
-    .Codigo.SetTo(edit2.text)
+    .Codigo.SetTo('1')
     .Where
-    .Codigo.IsEqualsTo(edit1.text)
+    .Codigo.IsEqualsTo('2')
+    ._Or
+    .Codigo.IsEqualsTo('3')
     .Go
-    .GetSQL(showsql)
-    .Execute(FDConnection1.StormDriver)
-    .OnSuccess(mostrarlinhasafetadas)
-    .OnFail(MostrarMensagemDeErroDoUpdate);
+    .Execute
+    .OnSuccess
+    (
+      procedure(resultado : IProdutoUpdateSuccess)
+      begin
+        resultado.GetRowsUpdated;
+      end
+    )
+
+
 end;
 
-function Tvcl_form.MapperProdutoDeCodigo2(produto: Iproduto): Maybe<Iproduto>;
-VAR
-  MyNewProduto : IProduto;
+procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
-  if produto.Codigo.Value.GetValue.GetValueOrDefault('') = '2' then
-  begin
-    MyNewProduto := newProduto;
-    MyNewProduto.Clone(produto);
-    Result := MyNewProduto;
-  end;
+  NewProdutoORM(ADOConnection1.StormDriver)
+    .Insert
+    .Values
+    .Codigo.Insert('2')
+    .Go
+    .Execute
+    .OnSuccess
+    (
+      procedure(resultado : IProdutoInsertSuccess)
+      begin
+        resultado.GetInserted;
+      end
+    )
+
+
 end;
 
-function Tvcl_form.ProdutosCujoDescricaoContem_F(produto: Iproduto): Boolean;
+procedure Tvcl_form.Button4Click(Sender: TObject);
 begin
-  Result := produto.Descricao.Value.GetValue.GetValueOrDefault('').Contains('f');
+  NewProdutoORM(ADOConnection1.StormDriver)
+    .Delete
+    .Where
+    .OpenParenthesis
+    .Codigo.IsEqualsTo('8')
+    .CloseParenthesis
+    .Go
+    .Execute
+    .OnSuccess
+    (
+      procedure(resultado : IProdutoDeleteSuccess)
+      begin
+        resultado.GetRowsDeleted;
+      end
+    )
+
+
+end;
+
+procedure Tvcl_form.Button5Click(Sender: TObject);
+begin
+  NewProdutoORM(ADOConnection1.StormDriver)
+    .SelectByID('8')
+    .OnSuccess
+    (
+      procedure(resultado : IProdutoSelectByIDSuccess)
+      begin
+        resultado.GetEntity;
+      end
+    );
+end;
+
+
+
+procedure Tvcl_form.Button6Click(Sender: TObject);
+begin
+  NewProdutoORM(ADOConnection1.StormDriver)
 end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -192,19 +200,16 @@ begin
   end;
 end;
 
-
-procedure Tvcl_form.AtribuirDatasetAoGrid(resultado: IStormSelectSuccessExecution<IProduto>);
-
+procedure Tvcl_form.ProcessarResultadoNegativoSelect(
+  resultado: IProdutoSelectFail);
 begin
-  freeDataset;
-  DataSource1.DataSet := resultado.GetDataset;
+  memosql.Lines.Add(resultado.GetExecutedCommand);
+  ShowMessage(resultado.GetErrorMessage);
+end;
 
-  resultado.GetModel
-    .ForEach(PrintProduto)
-    .Filter(ProdutosCujoDescricaoContem_F)
-    .Map(MapperProdutoDeCodigo2)
-    .ToJSON(true)
-    .OnSome(showjson)
+procedure Tvcl_form.ProcessarResultadoPositivoSelect(resultado: IProdutoSelectSuccess);
+begin
+  DataSource1.DataSet := resultado.GetDataset;
 end;
 
 end.
