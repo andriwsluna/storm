@@ -31,6 +31,7 @@ Type
 
     Function SQLDriver : IStormSQLDriver;
     Function TableSchema : IStormTableSchema;
+    Function GetFullTableName : String;
   public
     Constructor Create(Const ORM : TStormORM); Reintroduce; Virtual;
     Destructor Destroy(); Override;
@@ -38,7 +39,7 @@ Type
 
   TStormSQLPartition= class(TStormChild)
   protected
-    Owner : TStormSQLPartition;
+
     SQL : String;
     QueryParameters : IStormQueryParameters;
     Procedure AddSQL(const  content : string);
@@ -49,6 +50,7 @@ Type
     Procedure Initialize; Override;
     function  AddParameter(value : variant) : string;
   public
+    Owner : TStormSQLPartition;
     Constructor Create(Const ORM : TStormORM ; Const Owner : TStormSQLPartition); Reintroduce; Overload; Virtual;
     Constructor Create(Const Owner : TStormSQLPartition); Reintroduce;Overload; Virtual;
   end;
@@ -112,10 +114,31 @@ Type
     Function GetModel   : IStormModel<EntityType>;
   end;
 
+  TStormUpdateSuccess = class(TInterfacedObject)
+  protected
+    RowsAffected : integer;
+  public
+    Constructor Create(Const RowsAffected : integer); Reintroduce;
+    Function GetRowsUpdated : integer;
+  end;
+
   TStormSelectExecutor = Class(TStormSQLExecutor)
   protected
     Function OpenSQL : TResult<TDataset, String>;
   End;
+
+   TStormUpdateExecutor = Class(TStormSQLExecutor)
+  protected
+    Function ExecuteSQL : TResult<Integer, String>;
+  End;
+
+  TStormFieldAssignment = Class(TStormSQLPartition)
+  protected
+    Procedure Initialize; Override;
+    Procedure AddWhere();
+  end;
+
+
 
 
 
@@ -188,6 +211,11 @@ end;
 procedure TStormChild.Finalize;
 begin
 
+end;
+
+function TStormChild.GetFullTableName: String;
+begin
+  Result := self.ORM.SQLDriver.GetFullTableName(self.TableSchema);
 end;
 
 procedure TStormChild.Initialize;
@@ -428,6 +456,56 @@ end;
 function TStormSelectSuccess<EntityType>.GetModel: IStormModel<EntityType>;
 begin
   Result := TStormModel<EntityType>.FromDataset(Dataset);
+end;
+
+{ TStormFieldAssignment }
+
+procedure TStormFieldAssignment.AddWhere;
+begin
+  AddSQL('WHERE');
+end;
+
+procedure TStormFieldAssignment.Initialize;
+begin
+  inherited;
+  if self.SQL = '' then
+  begin
+    AddSQL('UPDATE ' + GetFullTableName + ' SET');
+  end;
+
+end;
+
+{ TStormUpdateExecutor }
+
+function TStormUpdateExecutor.ExecuteSQL: TResult<Integer, String>;
+begin
+  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.LoadParameters(QueryParameters.Items);
+  try
+    DbSQLConnecton.Execute;
+
+    result := DbSQLConnecton.RowsAffected;
+
+
+  except
+    on e : exception do
+    begin
+      Result := e.Message;
+    end;
+  end;
+end;
+
+{ TStormUpdateSuccess }
+
+constructor TStormUpdateSuccess.Create(const RowsAffected: integer);
+begin
+  inherited create();
+  Self.RowsAffected := RowsAffected;
+end;
+
+function TStormUpdateSuccess.GetRowsUpdated: integer;
+begin
+   Result := self.RowsAffected;
 end;
 
 end.

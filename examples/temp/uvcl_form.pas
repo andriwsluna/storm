@@ -64,10 +64,12 @@ type
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
   private
+    Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
 
     Procedure ProcessarResultadoPositivoSelect(resultado : IProdutoSelectSuccess);
     Procedure ProcessarResultadoNegativoSelect(resultado : IProdutoSelectFail);
+    Procedure ProcessarResultadoNegativoUpdate(resultado : IProdutoUpdateFail);
   public
 
 
@@ -83,15 +85,11 @@ implementation
 
 procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
-  NewProdutoORM(ADOConnection1.StormDriver)
+  NewProdutoORM(Getconnection)
     .Select()
     .Only([Codigo, Descricao])
     .Where
-    .OpenParenthesis
-    .Codigo.IsEqualsTo('1')
-    ._Or
-    .Codigo.IsEqualsTo('2')
-    .CloseParenthesis
+    .Codigo.IsNotEqualsTo('0')
     .Go
     .Open
     .OnSuccess(ProcessarResultadoPositivoSelect)
@@ -101,12 +99,10 @@ end;
 
 procedure Tvcl_form.Button2Click(Sender: TObject);
 begin
-  NewProdutoORM(ADOConnection1.StormDriver)
+  NewProdutoORM(Getconnection)
     .Update
-    .Codigo.SetTo('1')
+    .Codigo.SetTo('2')
     .Where
-    .Codigo.IsEqualsTo('2')
-    ._Or
     .Codigo.IsEqualsTo('3')
     .Go
     .Execute
@@ -117,13 +113,14 @@ begin
         resultado.GetRowsUpdated;
       end
     )
+    .OnFail(ProcessarResultadoNegativoUpdate);
 
 
 end;
 
 procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
-  NewProdutoORM(ADOConnection1.StormDriver)
+  NewProdutoORM(Getconnection)
     .Insert
     .Values
     .Codigo.Insert('2')
@@ -142,7 +139,7 @@ end;
 
 procedure Tvcl_form.Button4Click(Sender: TObject);
 begin
-  NewProdutoORM(ADOConnection1.StormDriver)
+  NewProdutoORM(Getconnection)
     .Delete
     .Where
     .OpenParenthesis
@@ -163,7 +160,7 @@ end;
 
 procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
-  NewProdutoORM(ADOConnection1.StormDriver)
+  NewProdutoORM(Getconnection)
     .SelectByID('8')
     .OnSuccess
     (
@@ -183,8 +180,8 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -200,8 +197,21 @@ begin
   end;
 end;
 
+function Tvcl_form.GetConnection: IStormSQLConnection;
+begin
+  Result := FDconnection1.StormDriver;
+  //result := Adoconnection1.StormDriver;
+end;
+
 procedure Tvcl_form.ProcessarResultadoNegativoSelect(
   resultado: IProdutoSelectFail);
+begin
+  memosql.Lines.Add(resultado.GetExecutedCommand);
+  ShowMessage(resultado.GetErrorMessage);
+end;
+
+procedure Tvcl_form.ProcessarResultadoNegativoUpdate(
+  resultado: IProdutoUpdateFail);
 begin
   memosql.Lines.Add(resultado.GetExecutedCommand);
   ShowMessage(resultado.GetErrorMessage);

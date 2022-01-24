@@ -7,6 +7,7 @@ uses
   storm.model.interfaces,
   Data.DB,
   storm.data.interfaces,
+  storm.orm.interfaces,
   uEntityProduto;
 
 Type
@@ -117,12 +118,12 @@ Type
   end;
 
   IProdutoFieldAssignmentWithWhere = interface
-    Function Codigo   : IProdutoStringFieldAssignment;
+    Function Codigo   : IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
     Function Where()  : IProdutoWherePartition<IProdutoUpdateExecutor>;
   end;
 
   IProdutoFieldAssignment = interface
-    Function Codigo : IProdutoStringFieldAssignment;
+    Function Codigo : IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
   end;
 
   IProdutoFieldSelection = interface['{F165348C-AC5D-47C9-A538-A419ECBB02AC}']
@@ -170,12 +171,43 @@ implementation
 
 Uses
   storm.schema.interfaces,
+  storm.orm.update,
   uSchemaProduto,
+  System.Sysutils,
   storm.orm.where,
   storm.orm.base;
 
 Type
   TProdutoORM = Class;
+  IExecutorProvider<IExecutorType : IInterface> = interface['{F10E3AE5-9BE3-4E70-A42B-C87E7B1E4CB9}']
+    Function GetExecutorInstance(owner : TStormSqlPartition) : IExecutorType;
+  end;
+
+
+
+  TProdutoUpdateSuccess = class(TStormUpdateSuccess, IProdutoUpdateSuccess)end;
+  TProdutoUpdateFail = class(TStormExecutionFail, IProdutoUpdateFail)end;
+
+  TProdutoUpdateExecutor = class(TStormUpdateExecutor, IProdutoUpdateExecutor)
+    Function Execute() : IProdutoExecuteUpdateResult;
+  end;
+
+  TProdutoFieldAssignment
+  = Class
+  (
+    TStormFieldAssignment,
+    IProdutoFieldAssignment,
+    IProdutoFieldAssignmentWithWhere,
+    IExecutorProvider<IProdutoUpdateExecutor>,
+    IStormGenericReturn<IProdutoFieldAssignmentWithWhere>
+  )
+  public
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldAssignmentWithWhere;
+  public
+    Function GetExecutorInstance(owner : TStormSqlPartition) : IProdutoUpdateExecutor;
+    Function Codigo : IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
+    Function Where()  : IProdutoWherePartition<IProdutoUpdateExecutor>;
+  end;
 
   TProdutoSelectSuccess = class(TStormSelectSuccess<IProduto>, IProdutoSelectSuccess)
 
@@ -190,7 +222,12 @@ Type
     Function Open() : IProdutoOpenSelectResult;
   end;
 
+
+
+
   TProdutoWhereCompositor<IExecutorType : IInterface> = class(TStormSqlPartition, IProdutoWhereCompositor<IExecutorType>)
+  protected
+    Function GetProvider(target : TStormSqlPartition) : IExecutorProvider<IExecutorType>;
   public
     Function _And()             : IProdutoWherePartition<IExecutorType>;
     Function _Or()              : IProdutoWherePartition<IExecutorType>;
@@ -211,9 +248,12 @@ Type
     Function OpenParenthesis()  : IProdutoWherePartition<IExecutorType>;
   end;
 
-  TProdutoSelectWhere = class(TStormWhere, IProdutoSelectWhere)
+  TProdutoSelectWhere = class(TStormWhere, IProdutoSelectWhere, IExecutorProvider<IProdutoSelectExecutor>)
+  private
   public
+    Function GetExecutorInstance(owner : TStormSqlPartition) : IProdutoSelectExecutor;
     Function Where() : IProdutoWherePartition<IProdutoSelectExecutor>;
+
   end;
 
   TProdutoFieldSelection = class(TStormFieldSelection, IProdutoFieldSelection)
@@ -281,6 +321,7 @@ end;
 function TProdutoORM.Update: IProdutoFieldAssignment;
 begin
 
+  Result := TProdutoFieldAssignment.Create(self);
 end;
 
 { TProdutoFieldSelection }
@@ -317,6 +358,12 @@ begin
 end;
 
 { TProdutoSelectWhere }
+
+function TProdutoSelectWhere.GetExecutorInstance(
+  owner: TStormSqlPartition): IProdutoSelectExecutor;
+begin
+  Result := TProdutoSelectExecutor.Create(owner);
+end;
 
 function TProdutoSelectWhere.Where: IProdutoWherePartition<IProdutoSelectExecutor>;
 begin
@@ -362,13 +409,37 @@ begin
   Result := Self;
 end;
 
-function TProdutoWhereCompositor<IExecutorType>.Go: IExecutorType;
+function TProdutoWhereCompositor<IExecutorType>.GetProvider(target : TStormSqlPartition): IExecutorProvider<IExecutorType>;
+VAR
+  Provider : IExecutorProvider<IExecutorType>;
 begin
-  if TypeInfo(IExecutorType) = TypeInfo(IProdutoSelectExecutor) then
+  if assigned(target) then
+  BEGIN
+    if Supports(target, IExecutorProvider<IExecutorType>, Provider) then
+    begin
+      Result := Provider;
+    end
+    else
+    begin
+      Result  := GetProvider(target.Owner);
+    end;
+  END
+  else
   begin
-    Result := TProdutoSelectExecutor.Create(self);
+    result := nil;
   end;
 
+end;
+
+function TProdutoWhereCompositor<IExecutorType>.Go: IExecutorType;
+VAR
+  Provider : IExecutorProvider<IExecutorType>;
+begin
+  Provider := GetProvider(Self.Owner);
+  if assigned(Provider) then
+  begin
+    Result := Provider.GetExecutorInstance(self);
+  end;
 end;
 
 function TProdutoWhereCompositor<IExecutorType>.OpenParenthesis: IProdutoWherePartition<IExecutorType>;
@@ -408,6 +479,58 @@ begin
       procedure(ErrorMessage : String)
       begin
         Return := TProdutoSelectFail.Create(ErrorMessage,sql)
+      end
+    );
+  Result := Return;
+end;
+
+{ TProdutoFieldAssignment }
+
+
+
+function TProdutoFieldAssignment.Codigo: IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
+begin
+  Result := TStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>
+    .Create(self,TSchemaProduto(self.TableSchema).Codigo);
+end;
+
+function TProdutoFieldAssignment.GetExecutorInstance(
+  owner: TStormSqlPartition): IProdutoUpdateExecutor;
+begin
+  Result := TProdutoUpdateExecutor.Create(owner);
+end;
+
+function TProdutoFieldAssignment.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoFieldAssignmentWithWhere;
+begin
+  Result := TProdutoFieldAssignment.Create(Owner);
+end;
+
+function TProdutoFieldAssignment.Where: IProdutoWherePartition<IProdutoUpdateExecutor>;
+begin
+  AddWhere;
+  Result := TProdutoWherePartition<IProdutoUpdateExecutor>.Create(Self);
+end;
+
+{ TProdutoUpdateExecutor }
+
+function TProdutoUpdateExecutor.Execute: IProdutoExecuteUpdateResult;
+var
+  Return : IProdutoExecuteUpdateResult;
+begin
+  ExecuteSQL
+    .OnSuccess
+    (
+      procedure(rows : integer)
+      begin
+        Return := TProdutoUpdateSuccess.Create(rows)
+      end
+    )
+    .OnFail
+    (
+      procedure(ErrorMessage : String)
+      begin
+        Return := TProdutoUpdateFail.Create(ErrorMessage,sql)
       end
     );
   Result := Return;
