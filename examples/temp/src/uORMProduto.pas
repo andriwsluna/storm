@@ -8,6 +8,7 @@ uses
   Data.DB,
   storm.data.interfaces,
   storm.orm.interfaces,
+  System.TypInfo,
   uEntityProduto;
 
 Type
@@ -117,12 +118,12 @@ Type
     Function SetTo(Const Value : string) : IProdutoFieldAssignmentWithWhere;
   end;
 
-  IProdutoFieldAssignmentWithWhere = interface
+  IProdutoFieldAssignmentWithWhere = interface['{5FA6BB69-C0C5-4FD4-BCE9-DF97F0D5FF72}']
     Function Codigo   : IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
     Function Where()  : IProdutoWherePartition<IProdutoUpdateExecutor>;
   end;
 
-  IProdutoFieldAssignment = interface
+  IProdutoFieldAssignment = interface['{5246E7C8-F87C-4B39-A26A-AFD8304963C4}']
     Function Codigo : IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
   end;
 
@@ -171,13 +172,16 @@ implementation
 
 Uses
   storm.schema.interfaces,
-  storm.orm.update,
+  storm.dependency.register,storm.orm.update,
   uSchemaProduto,
   System.Sysutils,
   storm.orm.where,
   storm.orm.base;
 
 Type
+
+
+
   TProdutoORM = Class;
   IExecutorProvider<IExecutorType : IInterface> = interface['{F10E3AE5-9BE3-4E70-A42B-C87E7B1E4CB9}']
     Function GetExecutorInstance(owner : TStormSqlPartition) : IExecutorType;
@@ -197,14 +201,9 @@ Type
   (
     TStormFieldAssignment,
     IProdutoFieldAssignment,
-    IProdutoFieldAssignmentWithWhere,
-    IExecutorProvider<IProdutoUpdateExecutor>,
-    IStormGenericReturn<IProdutoFieldAssignmentWithWhere>
+    IProdutoFieldAssignmentWithWhere
   )
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldAssignmentWithWhere;
-  public
-    Function GetExecutorInstance(owner : TStormSqlPartition) : IProdutoUpdateExecutor;
     Function Codigo : IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
     Function Where()  : IProdutoWherePartition<IProdutoUpdateExecutor>;
   end;
@@ -263,10 +262,30 @@ Type
   end;
 
 
+  TProdutoSelectExecutorConstructor = class(TInterfacedObject, IStormGenericReturn<IProdutoSelectExecutor>)
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoSelectExecutor;
+  end;
+
+  TProdutoUpdateExecutorConstructor = class(TInterfacedObject, IStormGenericReturn<IProdutoUpdateExecutor>)
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoUpdateExecutor;
+  end;
+
+  TProdutoFieldAssignmentConstructor = class(TInterfacedObject, IStormGenericReturn<IProdutoFieldAssignment>)
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldAssignment;
+  end;
+
+  TProdutoFieldAssignmentWithWhereConstructor = class(TInterfacedObject, IStormGenericReturn<IProdutoFieldAssignmentWithwhere>)
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldAssignmentWithwhere;
+  end;
+
 
   TProdutoORM = Class(TStormORM, IProdutoORM)
   private
     Function SchemaProduto : TSchemaProduto;
+  protected
+    function NewProdutoUpdateExecutor(owner : TStormSqlPartition) : TInterfacedObject;
+    procedure Initialize; override;
+
   public
     Constructor Create(DbSQLConnecton : IStormSQLConnection);
   public
@@ -278,6 +297,11 @@ Type
 
     Function SelectByID(Const Codigo : String) : IProdutoSelectByIDResult;
   End;
+
+Function TProdutoORM.NewProdutoUpdateExecutor(owner : TStormSqlPartition) : TInterfacedObject;
+begin
+  Result := TProdutoUpdateExecutor.Create(owner);
+end;
 
 Function NewProdutoORM(DbSQLConnecton: IStormSQLConnection) : IProdutoORM;
 begin
@@ -296,6 +320,15 @@ end;
 function TProdutoORM.Delete: IProdutoDeleteValues;
 begin
 
+end;
+
+procedure TProdutoORM.Initialize;
+begin
+  inherited;
+  FClassConstructor.Add(IProdutoSelectExecutor, TProdutoSelectExecutorConstructor.Create);
+  FClassConstructor.Add(IProdutoUpdateExecutor, TProdutoUpdateExecutorConstructor.Create);
+  FClassConstructor.Add(IProdutoFieldAssignment, TProdutoFieldAssignmentConstructor.Create);
+  FClassConstructor.Add(IProdutoFieldAssignmentWithWhere, TProdutoFieldAssignmentWithWhereConstructor.Create);
 end;
 
 function TProdutoORM.Insert: IProdutoInsertValues;
@@ -433,13 +466,12 @@ end;
 
 function TProdutoWhereCompositor<IExecutorType>.Go: IExecutorType;
 VAR
-  Provider : IExecutorProvider<IExecutorType>;
+  Provider : IStormGenericReturn<IExecutorType>;
+  obj : TInterfacedObject;
 begin
-  Provider := GetProvider(Self.Owner);
-  if assigned(Provider) then
-  begin
-    Result := Provider.GetExecutorInstance(self);
-  end;
+  Provider := self.ORM.FClassConstructor.Items[GetTypeData(TypeInfo(IExecutorType)).GUID]  as IStormGenericReturn<IExecutorType>;
+
+  Result := provider.GetGenericInstance(self);
 end;
 
 function TProdutoWhereCompositor<IExecutorType>.OpenParenthesis: IProdutoWherePartition<IExecutorType>;
@@ -494,17 +526,6 @@ begin
     .Create(self,TSchemaProduto(self.TableSchema).Codigo);
 end;
 
-function TProdutoFieldAssignment.GetExecutorInstance(
-  owner: TStormSqlPartition): IProdutoUpdateExecutor;
-begin
-  Result := TProdutoUpdateExecutor.Create(owner);
-end;
-
-function TProdutoFieldAssignment.GetGenericInstance(
-  Owner: TStormSQLPartition): IProdutoFieldAssignmentWithWhere;
-begin
-  Result := TProdutoFieldAssignment.Create(Owner);
-end;
 
 function TProdutoFieldAssignment.Where: IProdutoWherePartition<IProdutoUpdateExecutor>;
 begin
@@ -534,6 +555,40 @@ begin
       end
     );
   Result := Return;
+end;
+
+{ TProdutoSelectExecutorConstructor }
+
+function TProdutoSelectExecutorConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoSelectExecutor;
+begin
+  Result := TProdutoSelectExecutor.Create(Owner);
+end;
+
+
+
+{ TProdutoUpdateExecutorConstructor }
+
+function TProdutoUpdateExecutorConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoUpdateExecutor;
+begin
+  Result := TProdutoUpdateExecutor.Create(Owner);
+end;
+
+{ TProdutoFieldAssignmentConstructor }
+
+function TProdutoFieldAssignmentConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoFieldAssignment;
+begin
+  Result := TProdutoFieldAssignment.Create(owner);
+end;
+
+{ TProdutoFieldAssignmentWithWhereConstructor }
+
+function TProdutoFieldAssignmentWithWhereConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoFieldAssignmentWithwhere;
+begin
+  Result := TProdutoFieldAssignment.Create(owner);
 end;
 
 end.

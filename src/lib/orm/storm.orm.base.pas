@@ -14,6 +14,7 @@ Uses
   storm.model.base,
   storm.model.interfaces,
   storm.entity.interfaces,
+
   System.Sysutils, System.Classes;
 
 Type
@@ -53,6 +54,14 @@ Type
     Owner : TStormSQLPartition;
     Constructor Create(Const ORM : TStormORM ; Const Owner : TStormSQLPartition); Reintroduce; Overload; Virtual;
     Constructor Create(Const Owner : TStormSQLPartition); Reintroduce;Overload; Virtual;
+  end;
+
+  IStormGenericReturn<ReturnType> = interface['{0E863C1A-53DB-4F54-8A94-BE8F89D9982C}']
+    Function GetGenericInstance(Owner : TStormSQLPartition) : ReturnType;
+  end;
+
+  TStormGenericReturn = class(TInterfacedObject)
+    Function GetReturnInstance<ReturnType>(Target : TStormSQLPartition) : IStormGenericReturn<ReturnType>;
   end;
 
   TStormColumnPartition = class(TInterfacedObject)
@@ -140,25 +149,27 @@ Type
 
 
 
-
-
-
-
   TStormORM = Class(TInterfacedObject)
   protected
     TableSchema     : IStormTableSchema;
     DbSQLConnecton  : IStormSQLConnection;
     SQLDriver       : IStormSQLDriver;
 
+
+
      Procedure Initialize; Virtual;
+     Procedure Finalize; Virtual;
   public
+    FClassConstructor : TDictionary<TGUID, IInterface>;
     Constructor Create(Const DbSQLConnecton : IStormSQLConnection ; Const TableSchema : IStormTableSchema);
+    DEstructor Destroy(); Override;
   End;
 
 
 implementation
 
 Uses
+  System.TypInfo,
   storm.dependency.register;
 
 
@@ -171,6 +182,17 @@ begin
   Self.TableSchema := TableSchema;
   Self.DbSQLConnecton := DbSQLConnecton;
   Initialize();
+end;
+
+destructor TStormORM.DEstroy;
+begin
+  FClassConstructor.Free;
+  inherited;
+end;
+
+procedure TStormORM.Finalize;
+begin
+
 end;
 
 procedure TStormORM.Initialize;
@@ -189,7 +211,9 @@ begin
     begin
       raise Exception.Create('No Sql Driver Registered.');
     end
-  )
+  );
+
+  FClassConstructor := TDictionary<TGUID, IInterface>.Create();
 
 end;
 
@@ -506,6 +530,18 @@ end;
 function TStormUpdateSuccess.GetRowsUpdated: integer;
 begin
    Result := self.RowsAffected;
+end;
+
+{ TStormGenericReturn }
+
+
+
+{ TStormGenericReturn }
+
+function TStormGenericReturn.GetReturnInstance<ReturnType>(
+  Target: TStormSQLPartition): IStormGenericReturn<ReturnType>;
+begin
+  Result := Target.ORM.FClassConstructor.Items[GetTypeData(TypeInfo(ReturnType)).GUID]  as IStormGenericReturn<ReturnType>;
 end;
 
 end.

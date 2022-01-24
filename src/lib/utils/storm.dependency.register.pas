@@ -46,6 +46,9 @@ Type
     Function GetEntityDependency(entity : TGUID): Maybe<Tobject>;
 
 
+
+
+
   public
     Class Procedure Initialize();
     Class Procedure Finalize();
@@ -127,7 +130,6 @@ begin
     DependencyRegister := TStormDependencyRegister.Create;
   end;
 end;
-
 
 function TStormDependencyRegister.RegisterEntityDependency(entity: TGUID;
   dependency: Tobject): boolean;

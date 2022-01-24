@@ -89,11 +89,13 @@ begin
     .Select()
     .Only([Codigo, Descricao])
     .Where
+    .OpenParenthesis
     .Codigo.IsNotEqualsTo('0')
+    .CloseParenthesis
     .Go
     .Open
-    .OnSuccess(ProcessarResultadoPositivoSelect)
-    .OnFail(ProcessarResultadoNegativoSelect);
+      .OnSuccess(ProcessarResultadoPositivoSelect)
+      .OnFail(ProcessarResultadoNegativoSelect);
 end;
 
 
@@ -101,9 +103,9 @@ procedure Tvcl_form.Button2Click(Sender: TObject);
 begin
   NewProdutoORM(Getconnection)
     .Update
-    .Codigo.SetTo('2')
+    .Codigo.SetTo('3')
     .Where
-    .Codigo.IsEqualsTo('3')
+    .Codigo.IsEqualsTo('2')
     .Go
     .Execute
     .OnSuccess
@@ -218,6 +220,9 @@ begin
 end;
 
 procedure Tvcl_form.ProcessarResultadoPositivoSelect(resultado: IProdutoSelectSuccess);
+VAR
+  registros : Tlist<TDataset>;
+  registro : TDataset;
 begin
   DataSource1.DataSet := resultado.GetDataset;
 end;

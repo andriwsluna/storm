@@ -9,19 +9,17 @@ uses
   storm.orm.interfaces;
 
 type
-  IStormGenericReturn<ReturnType> = interface['{0E863C1A-53DB-4F54-8A94-BE8F89D9982C}']
-    Function GetGenericInstance(Owner : TStormSQLPartition) : ReturnType;
-  end;
+  
 
-  TStormGenericReturn<ReturnType> = class(TStormSQLPartition)
-    Function GetReturnInstance(Target : TStormSQLPartition) : ReturnType;
-  end;
 
-  TStormGenericColumnSQLPartition<ReturnType> = Class(TStormGenericReturn<ReturnType>)
+
+  TStormGenericColumnSQLPartition<ReturnType> = Class(TStormSqlPartition)
   protected
+
     ColumnSchema : IStormSchemaColumn;
 
     Function GetColumnName : String;
+    Function GetReturn : ReturnType;
   public
     Constructor Create(Owner : TStormSQLPartition ; Const ColumnSchema : IStormSchemaColumn); Reintroduce;
   End;
@@ -32,27 +30,6 @@ type
   end;
 implementation
 
-
-
-{ TStormGenericReturn<ReturnType> }
-
-function TStormGenericReturn<ReturnType>.GetReturnInstance(
-  Target: TStormSQLPartition): ReturnType;
-VAR
-  provider : IStormGenericReturn<ReturnType>;
-begin
-  if assigned(Owner) then
-  BEGIN
-    if Supports(Target, IStormGenericReturn<ReturnType>, Provider) then
-    begin
-      Result := Provider.GetGenericInstance(Self);
-    end
-    else
-    begin
-      Result  := GetReturnInstance(target.Owner);
-    end;
-  END;
-end;
 
 { TStormGenericColumnSQLPartition<ReturnType> }
 
@@ -68,13 +45,26 @@ begin
   Result := TableSchema.GetTableName + '.' + ColumnSchema.GetColumnName;
 end;
 
+function TStormGenericColumnSQLPartition<ReturnType>.GetReturn: ReturnType;
+var
+  provider : TStormGenericReturn;
+begin
+  provider := TStormGenericReturn.Create;
+  try
+    Result := (provider.GetReturnInstance<ReturnType>(self) as IStormGenericReturn<ReturnType>).GetGenericInstance(self);
+  finally
+    provider.Free;
+  end;
+
+end;
+
 { TStormStringFieldAssignment<ReturnType> }
 
 function TStormStringFieldAssignment<ReturnType>.SetTo(
   const Value: string): ReturnType;
 begin
   AddSQL(self.GetColumnName + ' = ' + self.AddParameter(Value));
-  Result := self.GetReturnInstance(self.Owner);
+  Result := self.GetReturn;
 end;
 
 end.
