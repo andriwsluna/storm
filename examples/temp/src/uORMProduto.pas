@@ -98,13 +98,9 @@ Type
     Function Go()               : IExecutorType;
   end;
 
-  IProdutoStringWhere<IExecutorType : IInterface> = interface['{C0397762-B903-456A-B5CE-3E458BB9C2CE}']
-    Function IsEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
-    Function IsNotEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
-  end;
 
   IProdutoWherePartition<IExecutorType : IInterface> = interface['{FF54F2B9-9BF1-4B0E-B318-62C65A693098}']
-    Function Codigo()           : IProdutoStringWhere<IExecutorType>;
+    Function Codigo()           : IStormStringWhere<IProdutoWhereCompositor<IExecutorType>, IExecutorType>;
     Function OpenParenthesis()  : IProdutoWherePartition<IExecutorType>;
   end;
 
@@ -113,10 +109,6 @@ Type
   end;
 
   IProdutoFieldAssignmentWithWhere = interface;
-
-  IProdutoStringFieldAssignment = interface['{EA77B048-E679-4928-BBD5-E4E049FE3305}']
-    Function SetTo(Const Value : string) : IProdutoFieldAssignmentWithWhere;
-  end;
 
   IProdutoFieldAssignmentWithWhere = interface['{5FA6BB69-C0C5-4FD4-BCE9-DF97F0D5FF72}']
     Function Codigo   : IStormStringFieldAssignment<IProdutoFieldAssignmentWithWhere>;
@@ -235,22 +227,14 @@ Type
     Function Go()               : IExecutorType;
   end;
 
-  TProdutoStringWhere<IExecutorType: IInterface> = class(TStormStringWhere, IProdutoStringWhere<IExecutorType>)
-  public
-    Function IsEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
-    Function IsNotEqualsTo(Const Value : string) : IProdutoWhereCompositor<IExecutorType>;
-  end;
-
   TProdutoWherePartition<IExecutorType : IInterface> = class(TStormWherePartition, IProdutoWherePartition<IExecutorType>)
   public
-    Function Codigo()           : IProdutoStringWhere<IExecutorType>;
+    Function Codigo()           : IStormStringWhere<IProdutoWhereCompositor<IExecutorType>, IExecutorType>;
     Function OpenParenthesis()  : IProdutoWherePartition<IExecutorType>;
   end;
 
-  TProdutoSelectWhere = class(TStormWhere, IProdutoSelectWhere, IExecutorProvider<IProdutoSelectExecutor>)
-  private
+  TProdutoSelectWhere = class(TStormWhere, IProdutoSelectWhere)
   public
-    Function GetExecutorInstance(owner : TStormSqlPartition) : IProdutoSelectExecutor;
     Function Where() : IProdutoWherePartition<IProdutoSelectExecutor>;
 
   end;
@@ -276,6 +260,16 @@ Type
 
   TProdutoFieldAssignmentWithWhereConstructor = class(TInterfacedObject, IStormGenericReturn<IProdutoFieldAssignmentWithwhere>)
     Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldAssignmentWithwhere;
+  end;
+
+  TProdutoWhereCompositorSelectConstructor = class(TInterfacedObject,
+  IStormGenericReturn<IProdutoWhereCompositor<IProdutoSelectExecutor>>)
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereCompositor<IProdutoSelectExecutor>;
+  end;
+
+  TProdutoWhereCompositorUpdateConstructor = class(TInterfacedObject,
+  IStormGenericReturn<IProdutoWhereCompositor<IProdutoUpdateExecutor>>)
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereCompositor<IProdutoUpdateExecutor>;
   end;
 
 
@@ -325,10 +319,28 @@ end;
 procedure TProdutoORM.Initialize;
 begin
   inherited;
-  FClassConstructor.Add(IProdutoSelectExecutor, TProdutoSelectExecutorConstructor.Create);
-  FClassConstructor.Add(IProdutoUpdateExecutor, TProdutoUpdateExecutorConstructor.Create);
-  FClassConstructor.Add(IProdutoFieldAssignment, TProdutoFieldAssignmentConstructor.Create);
-  FClassConstructor.Add(IProdutoFieldAssignmentWithWhere, TProdutoFieldAssignmentWithWhereConstructor.Create);
+  FClassConstructor.Add(TGUID(IProdutoSelectExecutor).ToString, TProdutoSelectExecutorConstructor.Create);
+  FClassConstructor.Add(TGUID(IProdutoUpdateExecutor).ToString, TProdutoUpdateExecutorConstructor.Create);
+  FClassConstructor.Add(TGUID(IProdutoFieldAssignment).ToString, TProdutoFieldAssignmentConstructor.Create);
+  FClassConstructor.Add(TGUID(IProdutoFieldAssignmentWithWhere).ToString, TProdutoFieldAssignmentWithWhereConstructor.Create);
+
+  FClassConstructor.Add
+  (
+    TGUID(IProdutoWhereCompositor<IProdutoSelectExecutor>).ToString +
+    TGUID(IProdutoSelectExecutor).ToString,
+    TProdutoWhereCompositorSelectConstructor.Create
+  );
+
+  FClassConstructor.Add
+  (
+    TGUID(IProdutoWhereCompositor<IProdutoUpdateExecutor>).ToString +
+    TGUID(IProdutoUpdateExecutor).ToString,
+    TProdutoWhereCompositorUpdateConstructor.Create
+  );
+
+
+
+
 end;
 
 function TProdutoORM.Insert: IProdutoInsertValues;
@@ -392,11 +404,6 @@ end;
 
 { TProdutoSelectWhere }
 
-function TProdutoSelectWhere.GetExecutorInstance(
-  owner: TStormSqlPartition): IProdutoSelectExecutor;
-begin
-  Result := TProdutoSelectExecutor.Create(owner);
-end;
 
 function TProdutoSelectWhere.Where: IProdutoWherePartition<IProdutoSelectExecutor>;
 begin
@@ -407,31 +414,15 @@ end;
 { TProdutoWherePartition<IExecutorType> }
 
 
-function TProdutoWherePartition<IExecutorType>.Codigo: IProdutoStringWhere<IExecutorType>;
+function TProdutoWherePartition<IExecutorType>.Codigo: IStormStringWhere<IProdutoWhereCompositor<IExecutorType>, IExecutorType>;
 begin
-  Result := TProdutoStringWhere<IExecutorType>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
+  Result := TStormStringWhere<IProdutoWhereCompositor<IExecutorType>, IExecutorType>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
 end;
 
 function TProdutoWherePartition<IExecutorType>.OpenParenthesis: IProdutoWherePartition<IExecutorType>;
 begin
   Self.AddOpenParenthesis;
   Result := Self;
-end;
-
-{ TProdutoStringWhere<IExecutorType> }
-
-function TProdutoStringWhere<IExecutorType>.IsEqualsTo(
-  const Value: string): IProdutoWhereCompositor<IExecutorType>;
-begin
-  self.AddIsEqualTo(Value);
-  result := TProdutoWhereCompositor<IExecutorType>.Create(self);
-end;
-
-function TProdutoStringWhere<IExecutorType>.IsNotEqualsTo(
-  const Value: string): IProdutoWhereCompositor<IExecutorType>;
-begin
-  self.AddIsNotEqualTo(Value);
-  result := TProdutoWhereCompositor<IExecutorType>.Create(self);
 end;
 
 { TProdutoWhereCompositor<IExecutorType> }
@@ -454,7 +445,7 @@ begin
     end
     else
     begin
-      Result  := GetProvider(target.Owner);
+      Result  := GetProvider(target.GetOwner);
     end;
   END
   else
@@ -469,7 +460,7 @@ VAR
   Provider : IStormGenericReturn<IExecutorType>;
   obj : TInterfacedObject;
 begin
-  Provider := self.ORM.FClassConstructor.Items[GetTypeData(TypeInfo(IExecutorType)).GUID]  as IStormGenericReturn<IExecutorType>;
+  Provider := TProdutoORM(self.ORM).FClassConstructor.Items[GetTypeData(TypeInfo(IExecutorType)).GUID.ToString]  as IStormGenericReturn<IExecutorType>;
 
   Result := provider.GetGenericInstance(self);
 end;
@@ -589,6 +580,22 @@ function TProdutoFieldAssignmentWithWhereConstructor.GetGenericInstance(
   Owner: TStormSQLPartition): IProdutoFieldAssignmentWithwhere;
 begin
   Result := TProdutoFieldAssignment.Create(owner);
+end;
+
+{ TProdutoWhereCompositorSelectConstructor }
+
+function TProdutoWhereCompositorSelectConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoWhereCompositor<IProdutoSelectExecutor>;
+begin
+  Result := TProdutoWhereCompositor<IProdutoSelectExecutor>.Create(owner);
+end;
+
+{ TProdutoWhereCompositorUpdateConstructor }
+
+function TProdutoWhereCompositorUpdateConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoWhereCompositor<IProdutoUpdateExecutor>;
+begin
+  Result := TProdutoWhereCompositor<IProdutoUpdateExecutor>.Create(owner);
 end;
 
 end.

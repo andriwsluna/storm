@@ -182,8 +182,8 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -201,8 +201,8 @@ end;
 
 function Tvcl_form.GetConnection: IStormSQLConnection;
 begin
-  Result := FDconnection1.StormDriver;
-  //result := Adoconnection1.StormDriver;
+  //Result := FDconnection1.StormDriver;
+  result := Adoconnection1.StormDriver;
 end;
 
 procedure Tvcl_form.ProcessarResultadoNegativoSelect(
@@ -220,10 +220,8 @@ begin
 end;
 
 procedure Tvcl_form.ProcessarResultadoPositivoSelect(resultado: IProdutoSelectSuccess);
-VAR
-  registros : Tlist<TDataset>;
-  registro : TDataset;
 begin
+  freeDataset;
   DataSource1.DataSet := resultado.GetDataset;
 end;
 

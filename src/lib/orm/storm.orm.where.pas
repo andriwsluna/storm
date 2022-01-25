@@ -12,30 +12,34 @@ Uses
   System.Sysutils, System.Generics.Collections,System.Classes;
 
 Type
-  TNullableWhere = class(TStormColumnPartition)
+  TStormNullWhere<ReturnType, SubReturnType: IInterface> = class(TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType>)
   protected
-    Procedure AddIsNull;
-    Procedure AddIsNotNull;
+    Function IsNull : ReturnType;
+    Function IsNotNull : ReturnType;
   end;
 
-  TEqualWhere = class(TStormColumnPartition)
+  TStormEqualWhere<ReturnType, SubReturnType: IInterface> = class(TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType>)
   protected
-    Procedure AddIsEqualTo(const value : variant);
-    Procedure AddIsNotEqualTo(const value : variant);
+    Function IsEqualsTo(Const Value : variant) : ReturnType;
+    Function IsNotEqualsTo(Const Value : variant) : ReturnType;
   end;
 
 
-  TStormWhereColumns = Class(TStormSQLPartition)
-  protected
-    ColumnSchema : IStormSchemaColumn;
+  TStormStringWhere<ReturnType, SubReturnType: IInterface>
+  = class
+  (
+    TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType>,
+    IStormStringWhere<ReturnType, SubReturnType>
+  )
   public
-    Constructor Create(Owner : TStormSQLPartition ; Const ColumnSchema : IStormSchemaColumn); Reintroduce;
-  End;
+    Function IsEqualsTo(Const Value : string) : ReturnType;
+    Function IsNotEqualsTo(Const Value : string) : ReturnType;
+  end;
 
-  TStormStringWhere = class(TStormWhereColumns)
-  protected
-    Procedure AddIsEqualTo(const value : string);
-    Procedure AddIsNotEqualTo(const value : string);
+  TStormStringNullableWhere<ReturnType, SubReturnType: IInterface> = class(TStormStringWhere<ReturnType, SubReturnType>)
+  public
+    Function IsNull : ReturnType;
+    Function IsNotNull : ReturnType;
   end;
 
 
@@ -44,73 +48,66 @@ implementation
 
 { TNullableWhere }
 
-procedure TNullableWhere.AddIsNotNull;
-begin
-  AddSQL(GetColumnName + ' is not null');
-end;
-
-procedure TNullableWhere.AddIsNull;
-begin
-  AddSQL(GetColumnName + ' is null');
-end;
 
 { TEqualWhere }
 
-procedure TEqualWhere.AddIsEqualTo(const value: variant);
+
+{ TStormStringWhere<ReturnType> }
+
+function TStormStringWhere<ReturnType, SubReturnType>.IsEqualsTo(
+  const Value: string): ReturnType;
 begin
-  AddSQL(GetColumnName + ' = ' + AddParameter(value));
+  result := TStormEqualWhere<ReturnType, SubReturnType>
+  .Create(self,self.ColumnSchema).IsEqualsTo(Value);
 end;
 
-procedure TEqualWhere.AddIsNotEqualTo(const value: variant);
+function TStormStringWhere<ReturnType, SubReturnType>.IsNotEqualsTo(
+  const Value: string): ReturnType;
 begin
-  AddSQL(GetColumnName + ' <> ' + AddParameter(value));
+  result := TStormEqualWhere<ReturnType, SubReturnType>
+  .Create(self,self.ColumnSchema).IsNotEqualsTo(Value);
 end;
 
-{ TStormWhereColumn }
+{ TStormEqualWhere<ReturnType, SubReturnType> }
 
-
-{ TStormWhereColumn }
-
-
-{ TStormWhereColumn }
-
-
-
-{ TStormWhereColumns }
-
-constructor TStormWhereColumns.Create(Owner: TStormSQLPartition;
-  const ColumnSchema: IStormSchemaColumn);
+function TStormEqualWhere<ReturnType, SubReturnType>.IsEqualsTo(
+  const Value: variant): ReturnType;
 begin
-  inherited create(Owner);
-
-  if assigned(ColumnSchema) then
-  begin
-    self.ColumnSchema := ColumnSchema;
-  end
-  else
-  begin
-    raise Exception.Create('The parameter ColumnSchema must be assigned');
-  end;
+  AddSQL(self.GetColumnName + ' = ' + self.AddParameter(Value));
+  Result := self.GetReturn;
 end;
 
-{ TStormStringWhere }
-
-procedure TStormStringWhere.AddIsEqualTo(const value: string);
-var
-  Where : TEqualWhere;
+function TStormEqualWhere<ReturnType, SubReturnType>.IsNotEqualsTo(
+  const Value: variant): ReturnType;
 begin
-  Where := TEqualWhere.Create(self, self.ColumnSchema);
-  Where.AddIsEqualTo(value);
-  Where.Free;
+  AddSQL(self.GetColumnName + ' <> ' + self.AddParameter(Value));
+  Result := self.GetReturn;
 end;
 
-procedure TStormStringWhere.AddIsNotEqualTo(const value: string);
-var
-  Where : TEqualWhere;
+{ TStormNullWhere<ReturnType, SubReturnType> }
+
+function TStormNullWhere<ReturnType, SubReturnType>.IsNotNull: ReturnType;
 begin
-  Where := TEqualWhere.Create(self, self.ColumnSchema);
-  Where.AddIsNotEqualTo(value);
-  Where.Free;
+  AddSQL(self.GetColumnName + ' IS NOT NULL');
+  Result := self.GetReturn;
+end;
+
+function TStormNullWhere<ReturnType, SubReturnType>.IsNull: ReturnType;
+begin
+  AddSQL(self.GetColumnName + ' IS NULL');
+  Result := self.GetReturn;
+end;
+
+{ TStormStringNullableWhere<ReturnType, SubReturnType> }
+
+function TStormStringNullableWhere<ReturnType, SubReturnType>.IsNotNull: ReturnType;
+begin
+  Result := TStormNullWhere<ReturnType, SubReturnType>.Create(self,self.ColumnSchema).IsNotNull;
+end;
+
+function TStormStringNullableWhere<ReturnType, SubReturnType>.IsNull: ReturnType;
+begin
+  Result := TStormNullWhere<ReturnType, SubReturnType>.Create(self,self.ColumnSchema).IsNull;
 end;
 
 end.

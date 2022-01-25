@@ -38,9 +38,9 @@ Type
     Destructor Destroy(); Override;
   end;
 
-  TStormSQLPartition= class(TStormChild)
+  TStormSQLPartition= class(TStormChild, IStormSQLPartition)
   protected
-
+    Owner : IStormSQLPartition;
     SQL : String;
     QueryParameters : IStormQueryParameters;
     Procedure AddSQL(const  content : string);
@@ -50,8 +50,9 @@ Type
     Procedure AddOr();
     Procedure Initialize; Override;
     function  AddParameter(value : variant) : string;
+
   public
-    Owner : TStormSQLPartition;
+    Function GetOwner : TStormSQLPartition;
     Constructor Create(Const ORM : TStormORM ; Const Owner : TStormSQLPartition); Reintroduce; Overload; Virtual;
     Constructor Create(Const Owner : TStormSQLPartition); Reintroduce;Overload; Virtual;
   end;
@@ -62,7 +63,26 @@ Type
 
   TStormGenericReturn = class(TInterfacedObject)
     Function GetReturnInstance<ReturnType>(Target : TStormSQLPartition) : IStormGenericReturn<ReturnType>;
+    Function GetReturnInstance2<ReturnType, SubReturnType>(Target : TStormSQLPartition) : IStormGenericReturn<ReturnType>;
   end;
+
+  TStormGenericColumnSQLPartition<ReturnType> = Class(TStormSqlPartition)
+  protected
+
+    ColumnSchema : IStormSchemaColumn;
+
+    Function GetColumnName : String;
+    Function GetReturn : ReturnType; Virtual;
+  public
+    Constructor Create(Owner : TStormSQLPartition ; Const ColumnSchema : IStormSchemaColumn); Reintroduce;
+  End;
+
+  TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType> = Class(TStormGenericColumnSQLPartition<ReturnType>)
+  protected
+
+    Function GetReturn : ReturnType; Override;
+  public
+  End;
 
   TStormColumnPartition = class(TInterfacedObject)
   protected
@@ -160,7 +180,7 @@ Type
      Procedure Initialize; Virtual;
      Procedure Finalize; Virtual;
   public
-    FClassConstructor : TDictionary<TGUID, IInterface>;
+    FClassConstructor : TDictionary<string, IInterface>;
     Constructor Create(Const DbSQLConnecton : IStormSQLConnection ; Const TableSchema : IStormTableSchema);
     DEstructor Destroy(); Override;
   End;
@@ -213,7 +233,7 @@ begin
     end
   );
 
-  FClassConstructor := TDictionary<TGUID, IInterface>.Create();
+  FClassConstructor := TDictionary<string, IInterface>.Create();
 
 end;
 
@@ -320,12 +340,17 @@ begin
   end;
 end;
 
+function TStormSQLPartition.GetOwner: TStormSQLPartition;
+begin
+  Result := self.Owner as TStormSQLPartition;
+end;
+
 procedure TStormSQLPartition.Initialize;
 begin
   inherited;
-  if Assigned(owner) and assigned(owner.QueryParameters) then
+  if Assigned(owner) and assigned(GetOwner.QueryParameters) then
   begin
-    self.QueryParameters := owner.QueryParameters;
+    self.QueryParameters := GetOwner.QueryParameters;
   end
   else
   begin
@@ -538,10 +563,64 @@ end;
 
 { TStormGenericReturn }
 
+function TStormGenericReturn.GetReturnInstance2<ReturnType, SubReturnType>(
+  Target: TStormSQLPartition): IStormGenericReturn<ReturnType>;
+VAR
+  x : string;
+begin
+  x := GetTypeData(TypeInfo(ReturnType)).GUID.ToString + GetTypeData(TypeInfo(SubReturnType)).GUID.ToString;
+  Result := TStormORM(Target.ORM).FClassConstructor.Items[x]  as IStormGenericReturn<ReturnType>;
+end;
+
 function TStormGenericReturn.GetReturnInstance<ReturnType>(
   Target: TStormSQLPartition): IStormGenericReturn<ReturnType>;
+VAR
+  x : string;
 begin
-  Result := Target.ORM.FClassConstructor.Items[GetTypeData(TypeInfo(ReturnType)).GUID]  as IStormGenericReturn<ReturnType>;
+  x := GetTypeData(TypeInfo(ReturnType)).GUID.ToString;
+  Result := TStormORM(Target.ORM).FClassConstructor.Items[GetTypeData(TypeInfo(ReturnType)).GUID.ToString]  as IStormGenericReturn<ReturnType>;
+end;
+
+{ TStormGenericColumnSQLPartition<ReturnType> }
+
+constructor TStormGenericColumnSQLPartition<ReturnType>.Create(
+  Owner: TStormSQLPartition; const ColumnSchema: IStormSchemaColumn);
+begin
+  inherited create(Owner);
+  self.ColumnSchema := ColumnSchema;
+end;
+
+function TStormGenericColumnSQLPartition<ReturnType>.GetColumnName: String;
+begin
+  Result := TableSchema.GetTableName + '.' + ColumnSchema.GetColumnName;
+end;
+
+function TStormGenericColumnSQLPartition<ReturnType>.GetReturn: ReturnType;
+var
+  provider : TStormGenericReturn;
+begin
+  provider := TStormGenericReturn.Create;
+  try
+    Result := (provider.GetReturnInstance<ReturnType>(self) as IStormGenericReturn<ReturnType>).GetGenericInstance(self);
+  finally
+    provider.Free;
+  end;
+
+end;
+
+{ TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType> }
+
+function TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType>.GetReturn: ReturnType;
+var
+  provider : TStormGenericReturn;
+begin
+  provider := TStormGenericReturn.Create;
+  try
+    Result := (provider.GetReturnInstance2<ReturnType, SubReturnType>(self) as IStormGenericReturn<ReturnType>).GetGenericInstance(self);
+  finally
+    provider.Free;
+  end;
+
 end;
 
 end.
