@@ -12,102 +12,90 @@ Uses
   System.Sysutils, System.Generics.Collections,System.Classes;
 
 Type
-  TStormNullWhere<ReturnType, SubReturnType: IInterface> = class(TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType>)
-  protected
-    Function IsNull : ReturnType;
-    Function IsNotNull : ReturnType;
+  TStormWhereCompositor<WhereSelector, Executor : IInterface> = class(TStormSqlPartition ,IStormWhereCompositor<WhereSelector, Executor>)
+    Function _And()             : WhereSelector;
+    Function _Or()              : WhereSelector;
+    Function OpenParenthesis()  : WhereSelector;
+    Function CloseParenthesis() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function Go()               : Executor;
   end;
 
-  TStormEqualWhere<ReturnType, SubReturnType: IInterface> = class(TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType>)
-  protected
-    Function IsEqualsTo(Const Value : variant) : ReturnType;
-    Function IsNotEqualsTo(Const Value : variant) : ReturnType;
-  end;
-
-
-  TStormStringWhere<ReturnType, SubReturnType: IInterface>
-  = class
-  (
-    TStormGeneric2ColumnSQLPartition<ReturnType, SubReturnType>,
-    IStormStringWhere<ReturnType, SubReturnType>
-  )
+  TStormEqualsWhere<WhereSelector, Executor : IInterface> = class(TStormColumnSQLPartition)
   public
-    Function IsEqualsTo(Const Value : string) : ReturnType;
-    Function IsNotEqualsTo(Const Value : string) : ReturnType;
+    Function IsEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>;
   end;
 
-  TStormStringNullableWhere<ReturnType, SubReturnType: IInterface> = class(TStormStringWhere<ReturnType, SubReturnType>)
+  TStormStringWhere<WhereSelector, Executor : IInterface>
+  = class(TStormColumnSQLPartition, IStormStringWhere<WhereSelector,Executor>)
   public
-    Function IsNull : ReturnType;
-    Function IsNotNull : ReturnType;
+    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
   end;
-
 
 
 implementation
 
-{ TNullableWhere }
 
+{ TStormStringWhere<WhereSelector, Executor> }
 
-{ TEqualWhere }
-
-
-{ TStormStringWhere<ReturnType> }
-
-function TStormStringWhere<ReturnType, SubReturnType>.IsEqualsTo(
-  const Value: string): ReturnType;
+function TStormStringWhere<WhereSelector, Executor>.IsEqualsTo(
+  const Value: String): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  result := TStormEqualWhere<ReturnType, SubReturnType>
-  .Create(self,self.ColumnSchema).IsEqualsTo(Value);
+  Result := TStormEqualsWhere<WhereSelector,Executor>.Create(Self, self.ColumnSchema).IsEqualsTo(Value);
 end;
 
-function TStormStringWhere<ReturnType, SubReturnType>.IsNotEqualsTo(
-  const Value: string): ReturnType;
+function TStormStringWhere<WhereSelector, Executor>.IsNotEqualsTo(
+  const Value: String): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  result := TStormEqualWhere<ReturnType, SubReturnType>
-  .Create(self,self.ColumnSchema).IsNotEqualsTo(Value);
+  Result := TStormEqualsWhere<WhereSelector,Executor>.Create(Self, self.ColumnSchema).IsNotEqualsTo(Value);
 end;
 
-{ TStormEqualWhere<ReturnType, SubReturnType> }
+{ TStormEqualsWhere<WhereSelector, Executor> }
 
-function TStormEqualWhere<ReturnType, SubReturnType>.IsEqualsTo(
-  const Value: variant): ReturnType;
+function TStormEqualsWhere<WhereSelector, Executor>.IsEqualsTo(
+  const Value: variant): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' = ' + self.AddParameter(Value));
-  Result := self.GetReturn;
+  AddSQL(self.GetColumnName + ' = ' + AddParameter(Value));
+  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
 end;
 
-function TStormEqualWhere<ReturnType, SubReturnType>.IsNotEqualsTo(
-  const Value: variant): ReturnType;
+function TStormEqualsWhere<WhereSelector, Executor>.IsNotEqualsTo(
+  const Value: variant): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' <> ' + self.AddParameter(Value));
-  Result := self.GetReturn;
+  AddSQL(self.GetColumnName + ' <> ' + AddParameter(Value));
+  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
 end;
 
-{ TStormNullWhere<ReturnType, SubReturnType> }
+{ TStormWhereCompositor<WhereSelector, Executor> }
 
-function TStormNullWhere<ReturnType, SubReturnType>.IsNotNull: ReturnType;
+function TStormWhereCompositor<WhereSelector, Executor>.CloseParenthesis: IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' IS NOT NULL');
-  Result := self.GetReturn;
+  AddAnd;
+  Result := Self;
 end;
 
-function TStormNullWhere<ReturnType, SubReturnType>.IsNull: ReturnType;
+function TStormWhereCompositor<WhereSelector, Executor>.Go: Executor;
 begin
-  AddSQL(self.GetColumnName + ' IS NULL');
-  Result := self.GetReturn;
+  Result := self.GetReturnInstance<Executor>();
 end;
 
-{ TStormStringNullableWhere<ReturnType, SubReturnType> }
-
-function TStormStringNullableWhere<ReturnType, SubReturnType>.IsNotNull: ReturnType;
+function TStormWhereCompositor<WhereSelector, Executor>.OpenParenthesis: WhereSelector;
 begin
-  Result := TStormNullWhere<ReturnType, SubReturnType>.Create(self,self.ColumnSchema).IsNotNull;
+  AddOpenParenthesis;
+  Result := self.GetReturnInstance2<WhereSelector, Executor>();
 end;
 
-function TStormStringNullableWhere<ReturnType, SubReturnType>.IsNull: ReturnType;
+function TStormWhereCompositor<WhereSelector, Executor>._And: WhereSelector;
 begin
-  Result := TStormNullWhere<ReturnType, SubReturnType>.Create(self,self.ColumnSchema).IsNull;
+  AddAnd;
+  Result := self.GetReturnInstance2<WhereSelector, Executor>();
+end;
+
+function TStormWhereCompositor<WhereSelector, Executor>._Or: WhereSelector;
+begin
+  AddOr;
+  Result := self.GetReturnInstance2<WhereSelector, Executor>();
 end;
 
 end.

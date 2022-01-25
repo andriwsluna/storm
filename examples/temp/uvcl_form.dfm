@@ -10,6 +10,7 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -24,7 +25,7 @@ object vcl_form: Tvcl_form
   end
   object Button1: TButton
     Left = 40
-    Top = 48
+    Top = 41
     Width = 75
     Height = 25
     Caption = 'Select'
@@ -71,14 +72,14 @@ object vcl_form: Tvcl_form
     ScrollBars = ssVertical
     TabOrder = 4
   end
-  object Edit1: TEdit
+  object EditCodigo: TEdit
     Left = 264
     Top = 248
     Width = 121
     Height = 21
     TabOrder = 5
   end
-  object Edit2: TEdit
+  object EditDescricao: TEdit
     Left = 408
     Top = 248
     Width = 121
@@ -119,7 +120,6 @@ object vcl_form: Tvcl_form
     Height = 25
     Caption = 'Button6'
     TabOrder = 10
-    OnClick = Button6Click
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 
@@ -134,28 +134,6 @@ object vcl_form: Tvcl_form
   object DataSource1: TDataSource
     Left = 304
     Top = 440
-  end
-  object FDMemTable1: TFDMemTable
-    FetchOptions.AssignedValues = [evMode]
-    FetchOptions.Mode = fmAll
-    ResourceOptions.AssignedValues = [rvSilentMode]
-    ResourceOptions.SilentMode = True
-    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
-    UpdateOptions.CheckRequired = False
-    UpdateOptions.AutoCommitUpdates = True
-    Left = 800
-    Top = 264
-  end
-  object FDMemTable2: TFDMemTable
-    FetchOptions.AssignedValues = [evMode]
-    FetchOptions.Mode = fmAll
-    ResourceOptions.AssignedValues = [rvSilentMode]
-    ResourceOptions.SilentMode = True
-    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
-    UpdateOptions.CheckRequired = False
-    UpdateOptions.AutoCommitUpdates = True
-    Left = 568
-    Top = 240
   end
   object FDConnection1: TFDConnection
     Params.Strings = (

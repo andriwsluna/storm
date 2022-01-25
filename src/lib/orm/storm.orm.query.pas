@@ -9,6 +9,12 @@ USES
   System.Generics.Collections;
 
 Type
+  IStormQueryParameters = interface['{45188996-E885-495D-8CCB-B8894EDF2241}']
+    function Add(value : variant) : string;
+    function Items : TList<IQueryParameter>;
+  end;
+
+
   TQueryParameter = class(TInterfacedObject, IQueryParameter)
   private
     FIndex : integer;

@@ -32,7 +32,8 @@ uses
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
   FireDAC.VCLUI.Wait, FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Rtti,
   System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.EngExt,
-  Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope;
+  Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope
+  ;
 
 type
 
@@ -42,14 +43,12 @@ type
     memosql: TMemo;
     DBGrid1: TDBGrid;
     DataSource1: TDataSource;
-    FDMemTable1: TFDMemTable;
-    FDMemTable2: TFDMemTable;
     FDConnection1: TFDConnection;
     FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink;
     Button2: TButton;
     MemoJson: TMemo;
-    Edit1: TEdit;
-    Edit2: TEdit;
+    EditCodigo: TEdit;
+    EditDescricao: TEdit;
     Label1: TLabel;
     Button3: TButton;
     Button4: TButton;
@@ -62,14 +61,13 @@ type
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
-    procedure Button6Click(Sender: TObject);
   private
     Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
+    Procedure ShowDataset(resultado : IStormSelectSuccess<IProduto>);
+    Procedure MostrarErro(resultado : IStormExecutionFail);
+    Function  GetDescricao() : Maybe<String>;
 
-    Procedure ProcessarResultadoPositivoSelect(resultado : IProdutoSelectSuccess);
-    Procedure ProcessarResultadoNegativoSelect(resultado : IProdutoSelectFail);
-    Procedure ProcessarResultadoNegativoUpdate(resultado : IProdutoUpdateFail);
   public
 
 
@@ -85,52 +83,47 @@ implementation
 
 procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
-  NewProdutoORM(Getconnection)
-    .Select()
-    .Only([Codigo, Descricao])
+  Produto_ORM(GetConnection())
+    .Select
+      .Only([Codigo, Descricao])
     .Where
-    .OpenParenthesis
-    .Codigo.IsNotEqualsTo('0')
-    .CloseParenthesis
+      .Codigo.IsNotEqualsTo('0')
     .Go
     .Open
-      .OnSuccess(ProcessarResultadoPositivoSelect)
-      .OnFail(ProcessarResultadoNegativoSelect);
+      .OnSuccess(ShowDataset)
 end;
 
 
 procedure Tvcl_form.Button2Click(Sender: TObject);
 begin
-  NewProdutoORM(Getconnection)
+  Produto_ORM(Getconnection)
     .Update
-    .Codigo.SetTo('3')
+    .Descricao.SetThisOrNull(GetDescricao())
     .Where
-    .Codigo.IsEqualsTo('2')
+    .Codigo.IsEqualsTo(self.DataSource1.DataSet.FieldByName('codigo_produto').AsString)
     .Go
     .Execute
     .OnSuccess
     (
-      procedure(resultado : IProdutoUpdateSuccess)
+      procedure(resultado : IStormUpdateSuccess)
       begin
-        resultado.GetRowsUpdated;
+        self.Label1.Caption := resultado.RowsUpdated.ToString;
+        Button1Click(nil);
       end
     )
-    .OnFail(ProcessarResultadoNegativoUpdate);
-
-
+    .OnFail(MostrarErro)
 end;
 
 procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
-  NewProdutoORM(Getconnection)
+  Produto_ORM(Getconnection)
     .Insert
-    .Values
-    .Codigo.Insert('2')
+    .Codigo.SetValue('2')
     .Go
     .Execute
     .OnSuccess
     (
-      procedure(resultado : IProdutoInsertSuccess)
+      procedure(resultado : IStormInsertSuccess<IProduto>)
       begin
         resultado.GetInserted;
       end
@@ -141,7 +134,7 @@ end;
 
 procedure Tvcl_form.Button4Click(Sender: TObject);
 begin
-  NewProdutoORM(Getconnection)
+  Produto_ORM(Getconnection)
     .Delete
     .Where
     .OpenParenthesis
@@ -151,9 +144,9 @@ begin
     .Execute
     .OnSuccess
     (
-      procedure(resultado : IProdutoDeleteSuccess)
+      procedure(resultado : IStormDeleteSuccess)
       begin
-        resultado.GetRowsDeleted;
+        resultado.RowsDeleted;
       end
     )
 
@@ -162,28 +155,23 @@ end;
 
 procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
-  NewProdutoORM(Getconnection)
-    .SelectByID('8')
-    .OnSuccess
-    (
-      procedure(resultado : IProdutoSelectByIDSuccess)
-      begin
-        resultado.GetEntity;
-      end
-    );
+//  NewProdutoORM(Getconnection)
+//    .SelectByID('8')
+//    .OnSuccess
+//    (
+//      procedure(resultado : IProdutoSelectByIDSuccess)
+//      begin
+//        resultado.GetEntity;
+//      end
+//    );
 end;
 
 
-
-procedure Tvcl_form.Button6Click(Sender: TObject);
-begin
-  NewProdutoORM(ADOConnection1.StormDriver)
-end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -201,25 +189,27 @@ end;
 
 function Tvcl_form.GetConnection: IStormSQLConnection;
 begin
-  //Result := FDconnection1.StormDriver;
-  result := Adoconnection1.StormDriver;
+  Result := FDconnection1.StormDriver;
+  //result := Adoconnection1.StormDriver;
 end;
 
-procedure Tvcl_form.ProcessarResultadoNegativoSelect(
-  resultado: IProdutoSelectFail);
+
+
+function Tvcl_form.GetDescricao: Maybe<String>;
 begin
-  memosql.Lines.Add(resultado.GetExecutedCommand);
+  if EditDescricao.Text <> '' then
+  begin
+    Result := EditDescricao.Text;
+  end;
+end;
+
+procedure Tvcl_form.MostrarErro(resultado: IStormExecutionFail);
+begin
+  memosql.Text := resultado.GetExecutedCommand;
   ShowMessage(resultado.GetErrorMessage);
 end;
 
-procedure Tvcl_form.ProcessarResultadoNegativoUpdate(
-  resultado: IProdutoUpdateFail);
-begin
-  memosql.Lines.Add(resultado.GetExecutedCommand);
-  ShowMessage(resultado.GetErrorMessage);
-end;
-
-procedure Tvcl_form.ProcessarResultadoPositivoSelect(resultado: IProdutoSelectSuccess);
+procedure Tvcl_form.ShowDataset(resultado: IStormSelectSuccess<IProduto>);
 begin
   freeDataset;
   DataSource1.DataSet := resultado.GetDataset;
