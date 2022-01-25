@@ -12,7 +12,8 @@ Uses
   System.Sysutils, System.Generics.Collections,System.Classes;
 
 Type
-  TStormWhereCompositor<WhereSelector, Executor : IInterface> = class(TStormSqlPartition ,IStormWhereCompositor<WhereSelector, Executor>)
+  TStormWhereCompositor<WhereSelector, Executor : IInterface> =
+  class(TStormSqlPartition ,IStormWhereCompositor<WhereSelector, Executor>)
     Function _And()             : WhereSelector;
     Function _Or()              : WhereSelector;
     Function OpenParenthesis()  : WhereSelector;
@@ -26,8 +27,19 @@ Type
     Function IsNotEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>;
   end;
 
+  TStormNullWhere<WhereSelector, Executor : IInterface> = class(TStormColumnSQLPartition)
+  public
+    Function IsNull : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
   TStormStringWhere<WhereSelector, Executor : IInterface>
-  = class(TStormColumnSQLPartition, IStormStringWhere<WhereSelector,Executor>)
+  = class
+  (
+    TStormNullWhere<WhereSelector, Executor>,
+    IStormStringWhere<WhereSelector,Executor>,
+    IStormStringNullableWhere<WhereSelector,Executor>
+    )
   public
     Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
     Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
@@ -71,7 +83,7 @@ end;
 
 function TStormWhereCompositor<WhereSelector, Executor>.CloseParenthesis: IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddAnd;
+  AddCloseParenthesis;
   Result := Self;
 end;
 
@@ -96,6 +108,20 @@ function TStormWhereCompositor<WhereSelector, Executor>._Or: WhereSelector;
 begin
   AddOr;
   Result := self.GetReturnInstance2<WhereSelector, Executor>();
+end;
+
+{ TStormNullWhere<WhereSelector, Executor> }
+
+function TStormNullWhere<WhereSelector, Executor>.IsNotNull: IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddSQL(self.GetColumnName + ' IS NOT NULL');
+  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+end;
+
+function TStormNullWhere<WhereSelector, Executor>.IsNull: IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddSQL(self.GetColumnName + ' IS NULL');
+  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
 end;
 
 end.

@@ -34,6 +34,13 @@ Type
     Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
   end;
 
+  IStormStringnULLABLEWhere<WhereSelector, Executor : IInterface> = interface['{61AC53AD-4C1C-4C61-BB42-015D47C9585C}']
+    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNull : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
   IStormSelectSuccess<EntityType: IStormEntity> = interface['{9CA7139A-020A-4CB7-A1F8-39D705A78E7B}']
     Function GetDataset : TDataset;
     Function GetModel : IStormModel<EntityType>;

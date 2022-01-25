@@ -17,6 +17,7 @@ Type
 
   IProdutoWhereSelector<Executor : IInterface> = interface['{CECF6A72-8A5C-491A-9B1A-BF0DB19A6C9A}']
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
@@ -92,6 +93,7 @@ Type
 
   TProdutoWhereSelector<Executor : IInterface> = class(TStormSqlPartition, IProdutoWhereSelector<Executor>)
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
@@ -256,6 +258,11 @@ end;
 function TProdutoWhereSelector<Executor>.Codigo: IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
   result := TStormStringWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
+end;
+
+function TProdutoWhereSelector<Executor>.Descricao: IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  result := TStormStringWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Descricao);
 end;
 
 function TProdutoWhereSelector<Executor>.OpenParenthesis: IProdutoWhereSelector<Executor>;

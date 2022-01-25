@@ -88,9 +88,16 @@ begin
       .Only([Codigo, Descricao])
     .Where
       .Codigo.IsNotEqualsTo('0')
+      ._And
+      .OpenParenthesis
+      .Descricao.IsNotEqualsTo('')
+      ._Or
+      .Descricao.IsNull
+      .CloseParenthesis
     .Go
     .Open
-      .OnSuccess(ShowDataset)
+    .OnSuccess(ShowDataset)
+    .OnFail(self.MostrarErro)
 end;
 
 
