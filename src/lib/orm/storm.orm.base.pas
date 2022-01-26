@@ -109,10 +109,12 @@ Type
   TStormSelectSuccess<EntityType : IStormEntity> = class(TStormSQLPartition, IStormSelectSuccess<EntityType>)
   protected
     Dataset : TDataset;
+    Procedure Finalize; Override;
   public
     Constructor Create(Owner : TStormSQLPartition ; Dataset : TDataset); Reintroduce;
     Function GetDataset : TDataset;
     Function GetModel : IStormModel<EntityType>;
+    Function IsEmpty : Boolean;
   end;
 
   TStormExecutionFail = class(TStormSQLPartition, IStormExecutionFail)
@@ -499,7 +501,16 @@ begin
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
     DbSQLConnecton.Open;
-    result := TStormSelectSuccess<EntityType>.Create(self, DbSQLConnecton.Dataset);
+//    if Not DbSQLConnecton.IsEmpty then
+//    begin
+      result := TStormSelectSuccess<EntityType>.Create(self, DbSQLConnecton.Dataset);
+//    end
+//    else
+//    begin
+//      Result := TStormExecutionFail.Create(Self, 'No records founded');
+//    end;
+
+
   except
     on e : exception do
     begin
@@ -525,14 +536,30 @@ begin
 
 end;
 
+procedure TStormSelectSuccess<EntityType>.Finalize;
+begin
+  inherited;
+  if assigned(Self.Dataset) then
+  begin
+    Self.Dataset.Free;
+  end;
+
+
+end;
+
 function TStormSelectSuccess<EntityType>.GetDataset: TDataset;
 begin
-  Result := Self.Dataset;
+  Result := self.ORM.DbSQLConnecton.CopyDataset(self.Dataset);
 end;
 
 function TStormSelectSuccess<EntityType>.GetModel: IStormModel<EntityType>;
 begin
   Result := TStormModel<EntityType>.FromDataset(Self.Dataset);
+end;
+
+function TStormSelectSuccess<EntityType>.IsEmpty: Boolean;
+begin
+  Result := Dataset.IsEmpty;
 end;
 
 { TStormExecutionFail }

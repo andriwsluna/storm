@@ -42,6 +42,7 @@ Type
   end;
 
   IStormSelectSuccess<EntityType: IStormEntity> = interface['{9CA7139A-020A-4CB7-A1F8-39D705A78E7B}']
+    Function IsEmpty : Boolean;
     Function GetDataset : TDataset;
     Function GetModel : IStormModel<EntityType>;
   end;

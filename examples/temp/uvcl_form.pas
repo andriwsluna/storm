@@ -145,6 +145,7 @@ type
     Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
     Procedure ShowDataset(resultado : IStormSelectSuccess<IProduto>);
+    procedure ShowJson(json : TJsonObject);
     Procedure MostrarErro(resultado : IStormExecutionFail);
     Function  GetDescricao() : Maybe<String>;
     procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
@@ -232,21 +233,20 @@ begin
       end
     )
     .OnFail(MostrarErro)
-
-
 end;
 
 procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
-//  NewProdutoORM(Getconnection)
-//    .SelectByID('8')
-//    .OnSuccess
-//    (
-//      procedure(resultado : IProdutoSelectByIDSuccess)
-//      begin
-//        resultado.GetEntity;
-//      end
-//    );
+  Produto_ORM(Getconnection)
+    .SelectByID(editcodigo.text)
+    .OnSuccess
+    (
+      procedure(produto : IProduto)
+      begin
+        produto.ToJSON(true).OnSome(showjson)
+      end
+    )
+    .OnFail(mostrarerro)
 end;
 
 
@@ -302,6 +302,13 @@ procedure Tvcl_form.ShowDataset(resultado: IStormSelectSuccess<IProduto>);
 begin
   freeDataset;
   DataSource1.DataSet := resultado.GetDataset;
+end;
+
+procedure Tvcl_form.ShowJson(json: TJsonObject);
+begin
+  MemoJson.lines.add(json.ToString);
+  json.Free;
+
 end;
 
 end.

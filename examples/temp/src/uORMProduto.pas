@@ -15,6 +15,9 @@ Type
   TProdutoPossibleFields = (Codigo=0, Descricao=1);
   TProdutoSETFieldSelection = set of TProdutoPossibleFields;
 
+
+  ISelectByIDResult = TResult<IProduto, IStormExecutionFail>;
+
   IProdutoWhereSelector<Executor : IInterface> = interface['{CECF6A72-8A5C-491A-9B1A-BF0DB19A6C9A}']
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -53,6 +56,8 @@ Type
     Function Update() : IProdutoFieldsAssignment;
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
+
+    Function SelectByID(const Codigo : String) : ISelectByIDResult;
   end;
 
 
@@ -73,6 +78,9 @@ Type
   TProdutoORM = Class(TStormORM, IProdutoORM)
   private
     Function SchemaProduto : TSchemaProduto;
+
+    function ProccessSelectSuccess(res : IStormSelectSuccess<Iproduto>) : ISelectByIDResult;
+    function ProccessSelectFail(res : IStormExecutionFail) : ISelectByIDResult;
   protected
     procedure Initialize; override;
 
@@ -83,6 +91,8 @@ Type
     Function Update() : IProdutoFieldsAssignment;
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
+
+    Function SelectByID(const Codigo : String) : ISelectByIDResult;
   End;
 
 
@@ -243,6 +253,28 @@ begin
   Result := TProdutoFieldsInsertion.Create(self);
 end;
 
+function TProdutoORM.ProccessSelectFail(
+  res: IStormExecutionFail): ISelectByIDResult;
+begin
+  Result := res;
+end;
+
+function TProdutoORM.ProccessSelectSuccess(
+  res: IStormSelectSuccess<Iproduto>): ISelectByIDResult;
+begin
+  if not res.IsEmpty then
+  begin
+    result := res.GetModel.Records[0]
+  end
+  else
+  begin
+    result := TStormExecutionFail.Create
+    (
+      TStormSelectSuccess<Iproduto>(res) , 'Record not found'
+    );
+  end;
+end;
+
 function TProdutoORM.SchemaProduto: TSchemaProduto;
 begin
   Result := self.TableSchema as TSchemaProduto;
@@ -255,6 +287,22 @@ end;
 function TProdutoORM.Select: IProdutoFieldsSelection;
 begin
   Result := TProdutoFieldsSelection.Create(self);
+end;
+
+function TProdutoORM.SelectByID(
+  const Codigo: String): TResult<IProduto, IStormExecutionFail>;
+begin
+  result :=
+  Self
+    .Select
+    .All
+    .Where
+    .Codigo.IsEqualsTo(Codigo)
+    .Go
+    .Open
+    .BindTo<ISelectByIDResult>
+      (ProccessSelectSuccess,ProccessSelectFail);
+
 end;
 
 function TProdutoORM.Update: IProdutoFieldsAssignment;

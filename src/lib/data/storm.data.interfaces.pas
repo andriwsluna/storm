@@ -21,8 +21,10 @@ type
     Procedure LoadParameters(parameters : TList<IQueryParameter>);
     Function  Execute() : Boolean;
     Function  Open() : Boolean;
+    Function  IsEmpty : Boolean;
     Function  Dataset : Tdataset;
     Function  RowsAffected: integer;
+    Function  CopyDataset(target : tDataset) : TDataset;
   end;
 
   IStormSQLDriver = interface['{5FF6388D-A47D-4608-BBE8-5ADB56885E45}']

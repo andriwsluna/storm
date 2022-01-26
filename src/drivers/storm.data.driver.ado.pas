@@ -26,6 +26,8 @@ Type
     Function  Open() : Boolean;
     Function  Dataset : Tdataset;
     Function  RowsAffected: integer;
+    Function  CopyDataset(target : tDataset) : TDataset;
+    Function  IsEmpty : Boolean;
   End;
 
   TStormADOHelper = class helper for TADOConnection
@@ -37,6 +39,12 @@ implementation
 
 { TStormADOConnection }
 
+function TStormADOConnection.CopyDataset(target: tDataset): TDataset;
+begin
+  Result := TADODataSet.Create(nil);
+  TADODataSet(Result).Clone(target as TCustomADODAtaset);
+end;
+
 constructor TStormADOConnection.Create(connection : TADOConnection);
 begin
   inherited create();
@@ -47,8 +55,7 @@ end;
 
 function TStormADOConnection.Dataset: Tdataset;
 begin
-  Result := TADODataSet.Create(nil);
-  TADODataSet(Result).Clone(Fquery);
+  Result := CopyDataset(Fquery);
 end;
 
 destructor TStormADOConnection.Destroy;
@@ -61,6 +68,11 @@ function TStormADOConnection.Execute: Boolean;
 begin
   Fquery.ExecSQL;
   Result := true;
+end;
+
+function TStormADOConnection.IsEmpty: Boolean;
+begin
+  Result := Fquery.IsEmpty;
 end;
 
 procedure TStormADOConnection.LoadParameters(parameters: TList<IQueryParameter>);
