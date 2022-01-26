@@ -37,13 +37,13 @@ Type
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
   end;
 
-  IProdutoFieldsInsertionFinal =  interface['{B8B4616B-7527-4617-A92F-9C0832044F7A}']
-    Function Codigo : IStormStringFieldInsertion<IProdutoFieldsInsertionFinal>;
+  IProdutoFinalFieldsInsertion =  interface['{B8B4616B-7527-4617-A92F-9C0832044F7A}']
+    Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
   end;
 
   IProdutoFieldsInsertion = interface
-    Function Codigo : IStormStringFieldInsertion<IProdutoFieldsInsertionFinal>;
+    Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
   end;
 
   IProdutoORM = interface(IStormORM)['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
@@ -64,6 +64,7 @@ Uses
   uSchemaProduto,
   System.Sysutils,
   storm.orm.where,
+  storm.orm.insert,
   storm.orm.base;
 
 Type
@@ -106,6 +107,12 @@ Type
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
   end;
 
+  TProdutoFieldsInsertion = class(TStormSqlPartition, IProdutoFieldsInsertion, IProdutoFinalFieldsInsertion)
+    Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Go : IStormInsertExecutor<IProduto>;
+  end;
+
+
   {-----------Constructores -----}
   TProdutoWhereSelectorSelectConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>)
@@ -125,12 +132,22 @@ Type
     Function GetGenericInstance(Owner : TStormSQLPartition) : IStormSelectExecutor<IProduto>;
   End;
 
-
-
   TProdutoFieldsAssignmentWithWhereConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoFieldsAssignmentWithWhere>)
   public
     Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldsAssignmentWithWhere;
+  End;
+
+  TProdutoFinalFieldsInsertionConstructor
+  = Class(TInterfacedObject, IStormGenericReturn<IProdutoFinalFieldsInsertion>)
+  public
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFinalFieldsInsertion;
+  End;
+
+  TProdutoEntityConstructor
+  = Class(TInterfacedObject, IStormGenericReturn<IProduto>)
+  public
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProduto;
   End;
 
 
@@ -190,6 +207,23 @@ begin
     TProdutoFieldsAssignmentWithWhereConstructor.Create
   );
 
+  FClassConstructor.Add
+  (
+    TGUID(IProdutoFinalFieldsInsertion).ToString,
+    TProdutoFinalFieldsInsertionConstructor.Create
+  );
+
+  FClassConstructor.Add
+  (
+    TGUID(IProduto).ToString,
+    TProdutoEntityConstructor.Create
+  );
+
+
+
+
+
+
 
 
 end;
@@ -197,7 +231,7 @@ end;
 
 function TProdutoORM.Insert: IProdutoFieldsInsertion;
 begin
-
+  Result := TProdutoFieldsInsertion.Create(self);
 end;
 
 function TProdutoORM.SchemaProduto: TSchemaProduto;
@@ -314,6 +348,34 @@ function TProdutoWhereSelectorUpdateConstructor.GetGenericInstance(
   Owner: TStormSQLPartition): IProdutoWhereSelector<IStormUpdateExecutor>;
 begin
   Result :=  TProdutoWhereSelector<IStormUpdateExecutor>.Create(owner);
+end;
+
+{ TProdutoFieldsInsertion }
+
+function TProdutoFieldsInsertion.Codigo: IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+begin
+  Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Codigo);
+end;
+
+function TProdutoFieldsInsertion.Go: IStormInsertExecutor<IProduto>;
+begin
+  Result := TStormInsertExecutor<IProduto>.Create(Self);
+end;
+
+{ TProdutoFinalFieldsInsertionConstructor }
+
+function TProdutoFinalFieldsInsertionConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoFinalFieldsInsertion;
+begin
+  Result := TProdutoFieldsInsertion.Create(Owner);
+end;
+
+{ TProdutoEntityConstructor }
+
+function TProdutoEntityConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProduto;
+begin
+  Result := NewProduto();
 end;
 
 end.

@@ -126,7 +126,7 @@ Type
 
   TStormUpdateExecutor = Class(TStormSQLExecutor, IStormUpdateExecutor)
   protected
-    procedure initialize; override;
+    procedure Initialize; override;
   public
     Function Execute() : TResult<IStormUpdateSuccess,IStormExecutionFail>;
   end;
@@ -137,6 +137,23 @@ Type
   public
     Constructor Create(Owner : TStormSQLPartition ; RowsAffected : integer); Reintroduce;
     Function RowsUpdated : integer;
+  end;
+
+  TStormInsertExecutor<EntityType: IStormEntity> = class(TStormSQLExecutor,IStormInsertExecutor<EntityType>)
+  protected
+    Procedure Initialize; Override;
+    Procedure PrepareSQL();
+  public
+    Function Execute() : TResult<IStormInsertSuccess<EntityType>,IStormExecutionFail>;
+  end;
+
+  TStormInsertSuccess<EntityType: IStormEntity> = class(TStormSQLPartition, IStormInsertSuccess<EntityType>)
+  protected
+    Dataset : TDataset;
+    Procedure Finalize; Override;
+  public
+     Constructor Create(Owner : TStormSQLPartition ; Dataset : TDataset); Reintroduce;
+    Function GetInserted : EntityType;
   end;
 
 
@@ -150,18 +167,24 @@ Type
 
 
 
+
+
+
   TStormORM = Class(TInterfacedObject)
   protected
     TableSchema     : IStormTableSchema;
     DbSQLConnecton  : IStormSQLConnection;
     SQLDriver       : IStormSQLDriver;
+    InsertColumnList : TDictionary<string, string>;
 
 
 
      Procedure Initialize; Virtual;
      Procedure Finalize; Virtual;
   public
+
     FClassConstructor : TDictionary<string, IInterface>;
+    procedure AddInsertField(const ColumnName : String; const ParamName : string);
     Constructor Create(Const DbSQLConnecton : IStormSQLConnection ; Const TableSchema : IStormTableSchema);
     DEstructor Destroy(); Override;
   End;
@@ -177,6 +200,20 @@ Uses
 
 { TStormORM }
 
+procedure TStormORM.AddInsertField(const ColumnName, ParamName: string);
+begin
+  if Not InsertColumnList.ContainsKey(ColumnName) then
+  begin
+    InsertColumnList.Add(ColumnName,ParamName)
+  end
+  else
+  begin
+    InsertColumnList.Items[ColumnName] := ParamName;
+  end;
+
+
+end;
+
 constructor TStormORM.Create(Const DbSQLConnecton : IStormSQLConnection ;
 Const TableSchema : IStormTableSchema);
 begin
@@ -188,13 +225,14 @@ end;
 
 destructor TStormORM.DEstroy;
 begin
-  FClassConstructor.Free;
+  Finalize();
   inherited;
 end;
 
 procedure TStormORM.Finalize;
 begin
-
+  FClassConstructor.Free;
+  InsertColumnList.Free;
 end;
 
 procedure TStormORM.Initialize;
@@ -216,8 +254,9 @@ begin
   );
 
   FClassConstructor := TDictionary<string, IInterface>.Create();
-
   FClassConstructor.Add(TGUID(IStormUpdateExecutor).ToString, TUpdateExecutorConstructor.Create);
+
+  InsertColumnList := TDictionary<string, string>.Create();
 
 end;
 
@@ -550,6 +589,87 @@ begin
 
   SELF.SQL := stringreplace(self.SQL,' ,','',[])
 
+end;
+
+{ TStormInsertExecutor<EntityType> }
+
+function TStormInsertExecutor<EntityType>.Execute: TResult<IStormInsertSuccess<EntityType>, IStormExecutionFail>;
+begin
+  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.LoadParameters(QueryParameters.Items);
+  try
+    DbSQLConnecton.Open;
+
+    result := TStormInsertSuccess<EntityType>.create(self, DbSQLConnecton.Dataset);
+
+
+  except
+    on e : exception do
+    begin
+      Result := TStormExecutionFail.Create(Self,e.Message);
+    end;
+  end;
+end;
+
+procedure TStormInsertExecutor<EntityType>.Initialize;
+begin
+  inherited;
+  if self.SQL.IsEmpty then
+  begin
+    PrepareSQL();
+  end;
+end;
+
+procedure TStormInsertExecutor<EntityType>.PrepareSQL;
+VAR
+  Columns, Values : string;
+  Item : TPair<String, String>;
+  Output : String;
+  column : IStormSchemaColumn;
+begin
+  Columns := '';
+  Values  := '';
+
+  for item in self.ORM.InsertColumnList do
+  begin
+    Columns := Columns + ', ' + item.Key;
+    Values := Values + ', ' + item.Value;
+  end;
+
+  Output := '';
+
+  for column in self.ORM.TableSchema.GetColumns do
+  begin
+    Output := Output + ', INSERTED.' + column.GetColumnName;
+  end;
+
+  Columns := ' (' + StringReplace(Columns,', ','',[]) + ')';
+  Values := ' (' + StringReplace(Values,', ','',[]) + ')';
+  Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
+
+  AddSQL('INSERT INTO ' + self.GetFullTableName + Columns + Output + ' VALUES' + Values);
+end;
+
+{ TStormInsertSuccess<EntityType> }
+
+constructor TStormInsertSuccess<EntityType>.Create(Owner: TStormSQLPartition;
+  Dataset: TDataset);
+begin
+  self.Dataset := Dataset;
+  inherited create(owner);
+end;
+
+procedure TStormInsertSuccess<EntityType>.Finalize;
+begin
+  Inherited;
+  Self.Dataset.Free;
+
+end;
+
+function TStormInsertSuccess<EntityType>.GetInserted: EntityType;
+begin
+  Result := self.GetReturnInstance<EntityType>;
+  Result.FromDataset(self.Dataset)
 end;
 
 end.
