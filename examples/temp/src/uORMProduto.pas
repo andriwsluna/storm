@@ -39,11 +39,13 @@ Type
 
   IProdutoFinalFieldsInsertion =  interface['{B8B4616B-7527-4617-A92F-9C0832044F7A}']
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
   end;
 
   IProdutoFieldsInsertion = interface
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
   end;
 
   IProdutoORM = interface(IStormORM)['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
@@ -109,6 +111,7 @@ Type
 
   TProdutoFieldsInsertion = class(TStormSqlPartition, IProdutoFieldsInsertion, IProdutoFinalFieldsInsertion)
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
   end;
 
@@ -124,6 +127,12 @@ Type
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormUpdateExecutor>>)
   public
     Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormUpdateExecutor>;
+  End;
+
+  TProdutoWhereSelectorDeleteConstructor
+  = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormDeleteExecutor>>)
+  public
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormDeleteExecutor>;
   End;
 
   TSelectExecutorConstructor
@@ -168,7 +177,7 @@ end;
 
 function TProdutoORM.Delete: IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 begin
-
+  Result := TStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>,IStormDeleteExecutor>.Create(self);
 end;
 
 procedure TProdutoORM.Initialize;
@@ -186,6 +195,13 @@ begin
     TGUID(IProdutoWhereSelector<IStormUpdateExecutor>).ToString +
     TGUID(IStormUpdateExecutor).ToString,
     TProdutoWhereSelectorUpdateConstructor.Create
+  );
+
+  FClassConstructor.Add
+  (
+    TGUID(IProdutoWhereSelector<IStormDeleteExecutor>).ToString +
+    TGUID(IStormDeleteExecutor).ToString,
+    TProdutoWhereSelectorDeleteConstructor.Create
   );
 
 
@@ -357,6 +373,11 @@ begin
   Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Codigo);
 end;
 
+function TProdutoFieldsInsertion.Descricao: IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+begin
+  Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Descricao);
+end;
+
 function TProdutoFieldsInsertion.Go: IStormInsertExecutor<IProduto>;
 begin
   Result := TStormInsertExecutor<IProduto>.Create(Self);
@@ -376,6 +397,14 @@ function TProdutoEntityConstructor.GetGenericInstance(
   Owner: TStormSQLPartition): IProduto;
 begin
   Result := NewProduto();
+end;
+
+{ TProdutoWhereSelectorDeleteConstructor }
+
+function TProdutoWhereSelectorDeleteConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormDeleteExecutor>;
+begin
+  Result :=  TProdutoWhereSelector<IStormDeleteExecutor>.Create(owner);
 end;
 
 end.

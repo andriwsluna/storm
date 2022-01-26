@@ -147,7 +147,7 @@ type
     Procedure ShowDataset(resultado : IStormSelectSuccess<IProduto>);
     Procedure MostrarErro(resultado : IStormExecutionFail);
     Function  GetDescricao() : Maybe<String>;
-
+    procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
   public
 
 
@@ -206,23 +206,10 @@ begin
   Produto_ORM(Getconnection)
     .Insert
     .Codigo.SetValue(editcodigo.text)
+    .Descricao.SetValue(GetDescricao())
     .Go
     .Execute
-    .OnSuccess
-    (
-      procedure(resultado : IStormInsertSuccess<IProduto>)
-      begin
-       resultado.GetInserted.ToJSON(true)
-        .OnSome
-        (
-          procedure(json: tJsonObject)
-          begin
-            self.MemoJson.Text := json.ToString;
-            json.Free;
-          end
-        )
-      end
-    )
+    .OnSuccess(MostrarResultadoInsertPositivo)
     .OnFail(MostrarErro)
 
 end;
@@ -233,7 +220,7 @@ begin
     .Delete
     .Where
     .OpenParenthesis
-    .Codigo.IsEqualsTo('8')
+    .Codigo.IsEqualsTo(editcodigo.text)
     .CloseParenthesis
     .Go
     .Execute
@@ -241,9 +228,10 @@ begin
     (
       procedure(resultado : IStormDeleteSuccess)
       begin
-        resultado.RowsDeleted;
+        showmessage(resultado.RowsDeleted.ToString);
       end
     )
+    .OnFail(MostrarErro)
 
 
 end;
@@ -265,8 +253,8 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -284,8 +272,8 @@ end;
 
 function Tvcl_form.GetConnection: IStormSQLConnection;
 begin
-  //Result := FDconnection1.StormDriver;
-  result := Adoconnection1.StormDriver;
+  Result := FDconnection1.StormDriver;
+  //result := Adoconnection1.StormDriver;
 end;
 
 
@@ -302,6 +290,12 @@ procedure Tvcl_form.MostrarErro(resultado: IStormExecutionFail);
 begin
   memosql.Text := resultado.GetExecutedCommand;
   ShowMessage(resultado.GetErrorMessage);
+end;
+
+procedure Tvcl_form.MostrarResultadoInsertPositivo(
+  resultado: IStormInsertSuccess);
+begin
+  ShowMessage('Dados inseriods com sucesso');
 end;
 
 procedure Tvcl_form.ShowDataset(resultado: IStormSelectSuccess<IProduto>);

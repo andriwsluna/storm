@@ -144,16 +144,28 @@ Type
     Procedure Initialize; Override;
     Procedure PrepareSQL();
   public
-    Function Execute() : TResult<IStormInsertSuccess<EntityType>,IStormExecutionFail>;
+    Function Execute() : TResult<IStormInsertSuccess,IStormExecutionFail>;
   end;
 
-  TStormInsertSuccess<EntityType: IStormEntity> = class(TStormSQLPartition, IStormInsertSuccess<EntityType>)
+  TStormInsertSuccess<EntityType: IStormEntity> = class(TStormSQLPartition, IStormInsertSuccess)
   protected
-    Dataset : TDataset;
-    Procedure Finalize; Override;
+
   public
-     Constructor Create(Owner : TStormSQLPartition ; Dataset : TDataset); Reintroduce;
-    Function GetInserted : EntityType;
+  end;
+
+  TStormDeleteExecutor = Class(TStormSQLExecutor, IStormDeleteExecutor)
+  protected
+    Procedure Initialize; Override;
+  public
+    Function Execute() : TResult<IStormDeleteSuccess,IStormExecutionFail>;
+  end;
+
+  TStormDeleteSuccess = class(TStormSQLPartition, IStormDeleteSuccess)
+  protected
+    RowsAffected : Integer;
+  public
+    Constructor Create(Owner : TStormSQLPartition ; RowsAffected : integer); Reintroduce;
+    Function RowsDeleted : integer;
   end;
 
 
@@ -161,6 +173,12 @@ Type
   = Class(TInterfacedObject, IStormGenericReturn<IStormUpdateExecutor>)
   public
     Function GetGenericInstance(Owner : TStormSQLPartition) : IStormUpdateExecutor;
+  End;
+
+  TDeleteExecutorConstructor
+  = Class(TInterfacedObject, IStormGenericReturn<IStormDeleteExecutor>)
+  public
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IStormDeleteExecutor;
   End;
 
 
@@ -255,6 +273,7 @@ begin
 
   FClassConstructor := TDictionary<string, IInterface>.Create();
   FClassConstructor.Add(TGUID(IStormUpdateExecutor).ToString, TUpdateExecutorConstructor.Create);
+  FClassConstructor.Add(TGUID(IStormDeleteExecutor).ToString, TDeleteExecutorConstructor.Create);
 
   InsertColumnList := TDictionary<string, string>.Create();
 
@@ -593,14 +612,14 @@ end;
 
 { TStormInsertExecutor<EntityType> }
 
-function TStormInsertExecutor<EntityType>.Execute: TResult<IStormInsertSuccess<EntityType>, IStormExecutionFail>;
+function TStormInsertExecutor<EntityType>.Execute: TResult<IStormInsertSuccess, IStormExecutionFail>;
 begin
   DbSQLConnecton.SetSQL(SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
-    DbSQLConnecton.Open;
+    DbSQLConnecton.Execute;
 
-    result := TStormInsertSuccess<EntityType>.create(self, DbSQLConnecton.Dataset);
+    result := TStormInsertSuccess<EntityType>.create(self);
 
 
   except
@@ -624,7 +643,7 @@ procedure TStormInsertExecutor<EntityType>.PrepareSQL;
 VAR
   Columns, Values : string;
   Item : TPair<String, String>;
-  Output : String;
+  //Output : String;
   column : IStormSchemaColumn;
 begin
   Columns := '';
@@ -636,40 +655,69 @@ begin
     Values := Values + ', ' + item.Value;
   end;
 
-  Output := '';
+  //Output := '';
 
-  for column in self.ORM.TableSchema.GetColumns do
-  begin
-    Output := Output + ', INSERTED.' + column.GetColumnName;
-  end;
+//  for column in self.ORM.TableSchema.GetColumns do
+//  begin
+//    Output := Output + ', INSERTED.' + column.GetColumnName;
+//  end;
 
   Columns := ' (' + StringReplace(Columns,', ','',[]) + ')';
   Values := ' (' + StringReplace(Values,', ','',[]) + ')';
-  Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
+  //Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
 
-  AddSQL('INSERT INTO ' + self.GetFullTableName + Columns + Output + ' VALUES' + Values);
+  AddSQL('INSERT INTO ' + self.GetFullTableName + Columns {+ Output} + ' VALUES' + Values);
 end;
 
 { TStormInsertSuccess<EntityType> }
 
-constructor TStormInsertSuccess<EntityType>.Create(Owner: TStormSQLPartition;
-  Dataset: TDataset);
+
+{ TStormDeleteSuccess }
+
+constructor TStormDeleteSuccess.Create(Owner: TStormSQLPartition;
+  RowsAffected: integer);
 begin
-  self.Dataset := Dataset;
-  inherited create(owner);
+  inherited create(Owner);
+  self.RowsAffected := RowsAffected;
 end;
 
-procedure TStormInsertSuccess<EntityType>.Finalize;
+function TStormDeleteSuccess.RowsDeleted: integer;
 begin
-  Inherited;
-  Self.Dataset.Free;
-
+  Result := SELF.RowsAffected;
 end;
 
-function TStormInsertSuccess<EntityType>.GetInserted: EntityType;
+{ TStormDeleteExecutor }
+
+function TStormDeleteExecutor.Execute: TResult<IStormDeleteSuccess, IStormExecutionFail>;
 begin
-  Result := self.GetReturnInstance<EntityType>;
-  Result.FromDataset(self.Dataset)
+  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.LoadParameters(QueryParameters.Items);
+  try
+    DbSQLConnecton.Execute;
+
+    result := TStormDeleteSuccess.create(self, DbSQLConnecton.RowsAffected);
+
+
+  except
+    on e : exception do
+    begin
+      Result := TStormExecutionFail.Create(Self,e.Message);
+    end;
+  end;
+end;
+
+procedure TStormDeleteExecutor.Initialize;
+begin
+  inherited;
+  self.SQL := 'DELETE FROM ' + SELF.GetFullTableName  + ' ' + SELF.SQL;
+end;
+
+{ TDeleteExecutorConstructor }
+
+function TDeleteExecutorConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IStormDeleteExecutor;
+begin
+  Result := TStormDeleteExecutor.Create(Owner);
 end;
 
 end.

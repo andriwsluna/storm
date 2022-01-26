@@ -64,12 +64,12 @@ Type
     Function Execute() : TResult<IStormUpdateSuccess,IStormExecutionFail>;
   end;
 
-  IStormInsertSuccess<EntityType: IStormEntity> = interface['{47C1D2B5-2926-4D26-9079-E38B9C56F349}']
-    Function GetInserted : EntityType;
+  IStormInsertSuccess = interface['{47C1D2B5-2926-4D26-9079-E38B9C56F349}']
+
   end;
 
   IStormInsertExecutor<EntityType: IStormEntity> = interface['{476BEC3B-9FD0-4882-A745-5CDF8778877E}']
-    Function Execute() : TResult<IStormInsertSuccess<EntityType>,IStormExecutionFail>;
+    Function Execute() : TResult<IStormInsertSuccess,IStormExecutionFail>;
   end;
 
   IStormDeleteSuccess = interface['{5B081229-3376-4ACB-9502-C6EBE9913ACB}']
@@ -92,7 +92,12 @@ Type
   end;
 
   IStormStringFieldInsertion<FieldInsertion> = interface['{250D96B0-B9C0-43DE-98CF-14D73DE02352}']
-    Function SetValue(Const Value : String) : FieldInsertion;
+    Function SetValue(Const Value : String) : FieldInsertion; Overload;
+  end;
+
+  IStormStringNullableFieldInsertion<FieldInsertion> = interface['{BA05DFB9-3EDC-4C0F-8948-60E668017803}']
+    Function SetValue(Const Value : String) : FieldInsertion; Overload;
+    Function SetValue( Value : Maybe<String>) : FieldInsertion; Overload;
   end;
 
 
