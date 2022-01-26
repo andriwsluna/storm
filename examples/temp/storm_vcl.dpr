@@ -31,13 +31,13 @@ uses
   storm.values.base in '..\..\src\lib\values\storm.values.base.pas',
   storm.values.interfaces in '..\..\src\lib\values\storm.values.interfaces.pas',
   storm.values.str in '..\..\src\lib\values\storm.values.str.pas',
-  DFE.Interfaces in '..\..\src\dependencies\DFE.Interfaces.pas',
-  DFE.Iterator in '..\..\src\dependencies\DFE.Iterator.pas',
-  DFE.Maybe in '..\..\src\dependencies\DFE.Maybe.pas',
-  DFE.Result in '..\..\src\dependencies\DFE.Result.pas',
-  storm.values.int in '..\..\src\lib\values\storm.values.int.pas' {$R *.res},
+  storm.values.int in '..\..\src\lib\values\storm.values.int.pas',
   storm.orm.update in '..\..\src\lib\orm\storm.orm.update.pas',
-  storm.orm.insert in '..\..\src\lib\orm\storm.orm.insert.pas';
+  storm.orm.insert in '..\..\src\lib\orm\storm.orm.insert.pas',
+  DFE.Interfaces in '..\..\modules\delphi-functional-extensions\src\DFE.Interfaces.pas',
+  DFE.Iterator in '..\..\modules\delphi-functional-extensions\src\DFE.Iterator.pas',
+  DFE.Maybe in '..\..\modules\delphi-functional-extensions\src\DFE.Maybe.pas',
+  DFE.Result in '..\..\modules\delphi-functional-extensions\src\DFE.Result.pas';
 
 {$R *.res}
 

@@ -1,0 +1,11 @@
+{
+	"name": "storm",
+	"description": "storm",
+	"version": "0.0.0",
+	"homepage": "https://github.com/andriwsluna/storm",
+	"mainsrc": "./src",
+	"projects": [],
+	"dependencies": {
+		"https://github.com/andriwsluna/delphi-functional-extensions": "^v0.0.1-alpha"
+	}
+}

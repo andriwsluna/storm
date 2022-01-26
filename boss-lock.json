@@ -1,0 +1,14 @@
+{
+	"hash": "d41d8cd98f00b204e9800998ecf8427e",
+	"updated": "2022-01-26T15:17:18.656816-03:00",
+	"installedModules": {
+		"https://github.com/andriwsluna/delphi-functional-extensions": {
+			"name": "delphi-functional-extensions",
+			"version": "v0.0.1-alpha",
+			"hash": "8c498ef31e7e85cc913581dd98e3f36c",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		}
+	}
+}
