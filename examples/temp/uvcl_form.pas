@@ -149,6 +149,7 @@ type
     Procedure MostrarErro(resultado : IStormExecutionFail);
     Function  GetDescricao() : Maybe<String>;
     procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
+    Procedure ProdutoToJson(produto : IProduto);
   public
 
 
@@ -166,19 +167,15 @@ procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
   Produto_ORM(GetConnection())
     .Select
-      .Only([Codigo, Descricao])
+    .Only([Codigo, Descricao])
     .Where
-      .Codigo.IsNotEqualsTo('0')
-      ._And
-      .OpenParenthesis
-      .Descricao.IsNotEqualsTo('')
-      ._Or
-      .Descricao.IsNull
-      .CloseParenthesis
+    .Codigo.IsIn(['1','2','3'])
+    ._And
+    .Descricao.IsNull
     .Go
     .Open
     .OnSuccess(ShowDataset)
-    .OnFail(self.MostrarErro)
+    .OnFail(MostrarErro)
 end;
 
 
@@ -239,14 +236,8 @@ procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
   Produto_ORM(Getconnection)
     .SelectByID(editcodigo.text)
-    .OnSuccess
-    (
-      procedure(produto : IProduto)
-      begin
-        produto.ToJSON(true).OnSome(showjson)
-      end
-    )
-    .OnFail(mostrarerro)
+    .OnSuccess(ProdutoToJson)
+    .OnFail(MostrarErro)
 end;
 
 
@@ -296,6 +287,11 @@ procedure Tvcl_form.MostrarResultadoInsertPositivo(
   resultado: IStormInsertSuccess);
 begin
   ShowMessage('Dados inseriods com sucesso');
+end;
+
+procedure Tvcl_form.ProdutoToJson(produto: IProduto);
+begin
+  produto.ToJSON(true).OnSome(showJson);
 end;
 
 procedure Tvcl_form.ShowDataset(resultado: IStormSelectSuccess<IProduto>);

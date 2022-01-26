@@ -32,13 +32,33 @@ Type
   IStormStringWhere<WhereSelector, Executor : IInterface> = interface['{A5061AC4-1881-4D81-A50A-FAACB39316E1}']
     Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
     Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
   end;
 
-  IStormStringnULLABLEWhere<WhereSelector, Executor : IInterface> = interface['{61AC53AD-4C1C-4C61-BB42-015D47C9585C}']
+  IStormStringNullableWhere<WhereSelector, Executor : IInterface> = interface['{61AC53AD-4C1C-4C61-BB42-015D47C9585C}']
     Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
     Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
     Function IsNull : IStormWhereCompositor<WhereSelector, Executor>;
     Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
   end;
 
   IStormSelectSuccess<EntityType: IStormEntity> = interface['{9CA7139A-020A-4CB7-A1F8-39D705A78E7B}']
