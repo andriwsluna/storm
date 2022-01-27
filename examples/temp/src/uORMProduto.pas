@@ -26,6 +26,7 @@ Type
 
 
   ISelectByIDResult = TResult<IProduto, IStormExecutionFail>;
+  IUpdateEntityResult = TResult<IProduto, IStormExecutionFail>;
 
   IProdutoWhereSelector<Executor : IInterface> = interface['{CECF6A72-8A5C-491A-9B1A-BF0DB19A6C9A}']
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -62,6 +63,7 @@ Type
     Function Preco : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function DataCriacao : IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function FromEntyity(Entity : IProduto) : IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
   end;
 
   IProdutoFinalFieldsInsertion =  interface['{B8B4616B-7527-4617-A92F-9C0832044F7A}']
@@ -92,6 +94,7 @@ Type
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
     Function SelectByID(const Codigo : String) : ISelectByIDResult;
+    Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
   end;
 
 
@@ -115,6 +118,7 @@ Type
 
     function ProccessSelectSuccess(res : IStormSelectSuccess<Iproduto>) : ISelectByIDResult;
     function ProccessSelectFail(res : IStormExecutionFail) : ISelectByIDResult;
+
   protected
     procedure Initialize; override;
 
@@ -127,6 +131,7 @@ Type
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
     Function SelectByID(const Codigo : String) : ISelectByIDResult;
+    Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
   End;
 
 
@@ -161,6 +166,7 @@ Type
     Function Ativo : IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function DataCriacao : IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function FromEntyity(Entity : IProduto) : IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
   end;
 
   TProdutoFieldsInsertion = class(TStormSqlPartition, IProdutoFieldsInsertion, IProdutoFinalFieldsInsertion)
@@ -324,6 +330,7 @@ begin
   end;
 end;
 
+
 function TProdutoORM.SchemaProduto: TSchemaProduto;
 begin
   Result := self.TableSchema as TSchemaProduto;
@@ -351,6 +358,35 @@ begin
     .Open
     .BindTo<ISelectByIDResult>
       (ProccessSelectSuccess,ProccessSelectFail);
+
+end;
+
+function TProdutoORM.UpdateEntity(Entity: IProduto): IUpdateEntityResult;
+begin
+  Result := Update()
+  .FromEntyity(Entity)
+  .Where
+  .Codigo.IsEqualsTo(Entity.Codigo.GetValue.GetValueOrDefault(''))
+  .Go
+  .Execute
+  .BindTo<IUpdateEntityResult>
+  (
+    function(res : IStormUpdateSuccess) : IUpdateEntityResult
+    begin
+      if res.RowsUpdated >= 1 then
+      begin
+        result := Entity;
+      end
+      else
+      begin
+        Result := TStormExecutionFail.Create(TStormSqlPartition(res),'Record not found');
+      end;
+    end,
+    function(res : IStormExecutionFail) : IUpdateEntityResult
+    begin
+      Result := res;
+    end
+  );
 
 end;
 
@@ -474,6 +510,22 @@ end;
 function TProdutoFieldsAssignment.Descricao: IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
   Result := TStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Descricao);
+end;
+
+function TProdutoFieldsAssignment.FromEntyity(
+  Entity: IProduto): IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
+begin
+  Result := TStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>,IStormUpdateExecutor>.Create
+  (
+    Self
+    .Descricao.SetThisOrNull(Entity.Descricao.GetValue())
+    .CodigoMarca.SetThisOrNull(Entity.CodigoMarca.GetValue())
+    .Preco.SetThisOrNull(Entity.Preco.GetValue())
+    .Ativo.SetThisOrNull(Entity.Ativo.GetValue())
+    .DataCriacao.SetThisOrNull(Entity.DataCriacao.GetValue())
+    .DataAlteracao.SetThisOrNull(Entity.DataAlteracao.GetValue())
+    as TStormSqlPartition
+  );
 end;
 
 procedure TProdutoFieldsAssignment.initialize;

@@ -17,7 +17,7 @@ object vcl_form: Tvcl_form
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 48
+    Left = 768
     Top = 251
     Width = 31
     Height = 13
@@ -233,8 +233,8 @@ object vcl_form: Tvcl_form
   object EditDataCriacao: TMaskEdit
     Left = 288
     Top = 304
-    Width = 105
-    Height = 22
+    Width = 121
+    Height = 21
     EditMask = '!00/00/0000;1;_'
     MaxLength = 10
     TabOrder = 16
@@ -243,12 +243,21 @@ object vcl_form: Tvcl_form
   object EditDataAlteracao: TMaskEdit
     Left = 427
     Top = 304
-    Width = 150
-    Height = 22
+    Width = 118
+    Height = 21
     EditMask = '!00/00/0000 00:00:00;1;_'
     MaxLength = 19
     TabOrder = 17
     Text = '  /  /       :  :  '
+  end
+  object Button7: TButton
+    Left = 8
+    Top = 238
+    Width = 121
+    Height = 25
+    Caption = 'Update By Entity'
+    TabOrder = 18
+    OnClick = Button7Click
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 

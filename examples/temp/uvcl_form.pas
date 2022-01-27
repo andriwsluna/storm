@@ -68,6 +68,7 @@ type
     SpeedButton1: TSpeedButton;
     EditDataCriacao: TMaskEdit;
     EditDataAlteracao: TMaskEdit;
+    Button7: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -76,6 +77,7 @@ type
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
   private
     Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
@@ -190,6 +192,21 @@ begin
 end;
 
 
+
+procedure Tvcl_form.Button7Click(Sender: TObject);
+VAR
+  produto : IProduto;
+begin
+  produto := NewProduto();
+  if produto.FromDataset(datasource1.dataset) then
+  begin
+    produto.Descricao.SetValue(editdescricao.Text);
+    Produto_ORM(Getconnection)
+    .UpdateEntity(produto)
+    .OnSuccess(ProdutoToJson)
+    .OnFail(MostrarErro)
+  end;
+end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin

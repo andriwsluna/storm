@@ -10,6 +10,7 @@ USES
   Data.DB,
   DFE.Interfaces,
   DFE.Maybe,
+  DFE.REsult,
   system.Generics.Collections,
   storm.fields.str,
   storm.fields.int,
@@ -29,6 +30,8 @@ Type
     function CodigoMarca : IIntegerField;
     function Preco : IFloatField;
     function Ativo : IBooleanField;
+    function DataCriacao : IDateField;
+    function DataAlteracao  : IDateTimeField;
     Function Clone( Target : Iproduto) : Boolean;
   end;
 
@@ -47,7 +50,9 @@ implementation
 
 
 
-  type
+type
+
+
   TProduto = class(TStormEntity, IStormEntity, IProduto, ICloneable<IProduto>)
   private
 
@@ -71,7 +76,9 @@ implementation
     function DataCriacao  : IDateField;
     function DataAlteracao  : IDateTimeField;
 
+
     Function Clone( Target : Iproduto) : Boolean;
+
   end;
 
 Procedure RegisterEntityConstructor;
@@ -160,6 +167,7 @@ Function NewEntity() : IStormEntity;
 begin
   result := NewProduto;
 end;
+
 
 INITIALIZATION
   RegisterEntityConstructor();
