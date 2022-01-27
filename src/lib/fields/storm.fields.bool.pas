@@ -32,7 +32,7 @@ function TStormBooleanField.FromDataField(field: TField): boolean;
 begin
   Result := false;
   try
-    if assigned(field) then
+    if assigned(field) and (Not field.IsNull) then
     begin
       Result := Value.SetValue(field.AsBoolean);
     end
