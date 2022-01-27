@@ -60,7 +60,11 @@ function TStringValue.Clone(target: IStormValue): Boolean;
 begin
   if Assigned(target) then
   begin
-    Result := target.ToString.Bind(SetValue);
+    Result := target.ToString.BindTo<Boolean>(SetValue,
+    Function() : Boolean
+        begin
+          result := false;
+        end);
   end
   else
   begin

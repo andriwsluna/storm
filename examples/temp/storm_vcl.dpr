@@ -37,7 +37,8 @@ uses
   DFE.Interfaces in '..\..\modules\delphi-functional-extensions\src\DFE.Interfaces.pas',
   DFE.Iterator in '..\..\modules\delphi-functional-extensions\src\DFE.Iterator.pas',
   DFE.Maybe in '..\..\modules\delphi-functional-extensions\src\DFE.Maybe.pas',
-  DFE.Result in '..\..\modules\delphi-functional-extensions\src\DFE.Result.pas';
+  DFE.Result in '..\..\modules\delphi-functional-extensions\src\DFE.Result.pas',
+  storm.fields.int in '..\..\src\lib\fields\storm.fields.int.pas';
 
 {$R *.res}
 

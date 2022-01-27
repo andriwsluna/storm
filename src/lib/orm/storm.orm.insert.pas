@@ -29,6 +29,17 @@ Type
     Function SetValue( Value : Maybe<String>) : FieldInsertion; Reintroduce; Overload;
   end;
 
+  TStormIntegerFieldInsertion<FieldInsertion> =
+  class
+  (
+    TStormFieldInsertion<FieldInsertion>,
+    IStormIntegerFieldInsertion<FieldInsertion>,
+    IStormIntegerNullableFieldInsertion<FieldInsertion>
+  )
+    Function SetValue(Const Value : Integer) : FieldInsertion; Reintroduce; Overload;
+    Function SetValue( Value : Maybe<Integer>) : FieldInsertion; Reintroduce; Overload;
+  end;
+
 
 implementation
 
@@ -56,28 +67,22 @@ end;
 
 function TStormStringFieldInsertion<FieldInsertion>.SetValue(
   Value: Maybe<String>): FieldInsertion;
-VAR
-  return : FieldInsertion;
 begin
-  Value
-  .OnSome
-  (
-    procedure(v : string)
-    begin
-      return := inherited SetValue(v);
-    end
-  )
-  .OnNone
-  (
-    procedure()
-    begin
-      return := self.GetReturn;
-    end
-  );
 
-  result := Return;
+end;
 
+{ TStormIntegerFieldInsertion<FieldInsertion> }
 
+function TStormIntegerFieldInsertion<FieldInsertion>.SetValue(
+  Value: Maybe<Integer>): FieldInsertion;
+begin
+  Value.BindTo<FieldInsertion>(SetValue, GetReturn);
+end;
+
+function TStormIntegerFieldInsertion<FieldInsertion>.SetValue(
+  const Value: Integer): FieldInsertion;
+begin
+  Result := inherited SetValue(Value);
 end;
 
 end.

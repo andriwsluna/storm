@@ -21,57 +21,81 @@ Type
     Function Go()               : Executor;
   end;
 
-  TStormEqualsWhere<WhereSelector, Executor : IInterface> = class(TStormColumnSQLPartition)
-  public
-    Function IsEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>;
-  end;
-
-  TStormGroupWhere<WhereSelector, Executor : IInterface> = class(TStormColumnSQLPartition)
-  private
+  TStormGenericWhere<WhereSelector, Executor : IInterface> = class( TStormColumnSQLPartition)
+  protected
     Function GetGroupString(values : TArray<variant>) : string;
+    Function GetResult() : IStormWhereCompositor<WhereSelector, Executor>;
+    Procedure AddOperation(op : String ; Value : Variant);
+
+
   public
-    Function IsIn(value : TArray<variant>) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotIn(Value : TArray<variant>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsNotEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsIn(value : TArray<variant>) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsNotIn(Value : TArray<variant>) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsBetween(StartValue : Variant ; EndValue : Variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsNotBetween(StartValue : Variant ; EndValue : Variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsGreaterThan(Value : Variant) : IStormWhereCompositor<WhereSelector, Executor>;   Virtual;
+    Function IsGreaterOrEqualTo(Value : Variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsLessThan(Value : Variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsLessOrEqualTo(Value : Variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsNull : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
+    Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
   end;
 
 
-  TStormNullWhere<WhereSelector, Executor : IInterface> = class(TStormColumnSQLPartition)
-  public
-    Function IsNull : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>;
-  end;
 
   TStormStringWhere<WhereSelector, Executor : IInterface>
   = class
   (
-    TStormNullWhere<WhereSelector, Executor>,
+    TStormGenericWhere<WhereSelector, Executor>,
     IStormStringWhere<WhereSelector,Executor>,
     IStormStringNullableWhere<WhereSelector,Executor>
-    )
+  )
   private
     Function AddBegins(Const Value : String) : String;
     Function AddContains(Const Value : String) : String;
     Function AddEnds(Const Value : String) : String;
-
     Function ConvertoToArrayOfVariant(values : TArray<string>) : TArray<variant>;
   public
-    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
+    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
+    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
+    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsBetween(Const StartValue : String ; EndValue : String) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotBetween(Const StartValue : String ; EndValue : String) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
 
-    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
 
-    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
 
-
+  TStormIntegerWhere<WhereSelector, Executor : IInterface>
+  = class
+  (
+    TStormGenericWhere<WhereSelector, Executor>,
+    IStormIntegerWhere<WhereSelector,Executor>,
+    IStormIntegerNullableWhere<WhereSelector,Executor>
+  )
+  private
+    Function ConvertoToArrayOfVariant(values : TArray<integer>) : TArray<variant>;
+  public
+    Function IsEqualsTo(Const Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotEqualsTo(Const Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsIn(value : TArray<Integer>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotIn(Value : TArray<Integer>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsBetween(Const StartValue : Integer ; EndValue : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotBetween(Const StartValue : Integer ; EndValue : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterThan(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterOrEqualTo(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsLessThan(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
+    Function IsLessOrEqualTo(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
   end;
 
 
@@ -101,15 +125,15 @@ end;
 function TStormStringWhere<WhereSelector, Executor>.BeginsWith(
   const Value: string): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' LIKE ' + AddParameter(AddBegins(Value)) );
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('LIKE', AddBegins(Value));
+  Result := GetResult;
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.Contains(
   const Value: string): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' LIKE ' + AddParameter(AddContains(Value)));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('LIKE', AddContains(Value));
+  Result := GetResult;
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.ConvertoToArrayOfVariant(
@@ -128,8 +152,15 @@ end;
 function TStormStringWhere<WhereSelector, Executor>.EndsWith(
   const Value: string): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' LIKE' + AddParameter(AddEnds(Value)));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('LIKE', AddEnds(Value));
+  Result := GetResult;
+end;
+
+function TStormStringWhere<WhereSelector, Executor>.IsBetween(
+  const StartValue: String;
+  EndValue: String): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsBetween(StartValue,EndValue);
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.IsEmpty: IStormWhereCompositor<WhereSelector, Executor>;
@@ -140,13 +171,20 @@ end;
 function TStormStringWhere<WhereSelector, Executor>.IsEqualsTo(
   const Value: String): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  Result := TStormEqualsWhere<WhereSelector,Executor>.Create(Self, self.ColumnSchema).IsEqualsTo(Value);
+  Result := inherited IsEqualsTo(Value);
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.IsIn(
   value: TArray<String>): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  Result := TStormGroupWhere<WhereSelector, Executor>.create(self, self.ColumnSchema).IsIn(ConvertoToArrayOfVariant(value));
+  Result := inherited IsIn(ConvertoToArrayOfVariant(value));
+end;
+
+function TStormStringWhere<WhereSelector, Executor>.IsNotBetween(
+  const StartValue: String;
+  EndValue: String): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsNotBetween(StartValue,EndValue);
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.IsNotEmpty: IStormWhereCompositor<WhereSelector, Executor>;
@@ -157,50 +195,50 @@ end;
 function TStormStringWhere<WhereSelector, Executor>.IsNotEqualsTo(
   const Value: String): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  Result := TStormEqualsWhere<WhereSelector,Executor>.Create(Self, self.ColumnSchema).IsNotEqualsTo(Value);
+  Result := inherited IsNotEqualsTo(Value);
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.IsNotIn(
   Value: TArray<String>): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  Result := TStormGroupWhere<WhereSelector, Executor>.create(self, self.ColumnSchema).IsNotIn(ConvertoToArrayOfVariant(value));
+  Result := inherited IsNotIn(ConvertoToArrayOfVariant(value));
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.NotBeginsWith(
   const Value: string): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' NOT LIKE ' + AddParameter(AddBegins(Value)));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('NOT LIKE', AddBegins(Value));
+  Result := GetResult;
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.NotContains(
   const Value: string): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' NOT LIKE ' + AddParameter(AddContains(Value)));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('NOT LIKE', AddContains(Value));
+  Result := GetResult;
 end;
 
 function TStormStringWhere<WhereSelector, Executor>.NotEndsWith(
   const Value: string): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' NOT LIKE ' + AddParameter(AddEnds(Value)));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('NOT LIKE', AddEnds(Value));
+  Result := GetResult;
 end;
 
-{ TStormEqualsWhere<WhereSelector, Executor> }
+{ TStormGenericWhere<WhereSelector, Executor> }
 
-function TStormEqualsWhere<WhereSelector, Executor>.IsEqualsTo(
+function TStormGenericWhere<WhereSelector, Executor>.IsEqualsTo(
   const Value: variant): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' = ' + AddParameter(Value));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('=', Value);
+  Result := GetResult;
 end;
 
-function TStormEqualsWhere<WhereSelector, Executor>.IsNotEqualsTo(
+function TStormGenericWhere<WhereSelector, Executor>.IsNotEqualsTo(
   const Value: variant): IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  AddSQL(self.GetColumnName + ' <> ' + AddParameter(Value));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  AddOperation('<>', Value);
+  Result := GetResult;
 end;
 
 { TStormWhereCompositor<WhereSelector, Executor> }
@@ -234,23 +272,23 @@ begin
   Result := self.GetReturnInstance2<WhereSelector, Executor>();
 end;
 
-{ TStormNullWhere<WhereSelector, Executor> }
+{ TStormGenericWhere<WhereSelector, Executor> }
 
-function TStormNullWhere<WhereSelector, Executor>.IsNotNull: IStormWhereCompositor<WhereSelector, Executor>;
+function TStormGenericWhere<WhereSelector, Executor>.IsNotNull: IStormWhereCompositor<WhereSelector, Executor>;
 begin
   AddSQL(self.GetColumnName + ' IS NOT NULL');
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  Result := GetResult;
 end;
 
-function TStormNullWhere<WhereSelector, Executor>.IsNull: IStormWhereCompositor<WhereSelector, Executor>;
+function TStormGenericWhere<WhereSelector, Executor>.IsNull: IStormWhereCompositor<WhereSelector, Executor>;
 begin
   AddSQL(self.GetColumnName + ' IS NULL');
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  Result := GetResult;
 end;
 
-{ TStormGroupWhere<WhereSelector, Executor> }
+{ TStormGenericWhere<WhereSelector, Executor> }
 
-function TStormGroupWhere<WhereSelector, Executor>.GetGroupString(
+function TStormGenericWhere<WhereSelector, Executor>.GetGroupString(
   values: TArray<variant>): string;
 VAR
   value : variant;
@@ -266,18 +304,154 @@ begin
 
 end;
 
-function TStormGroupWhere<WhereSelector, Executor>.IsIn(
+function TStormGenericWhere<WhereSelector, Executor>.IsIn(
   value: TArray<variant>): IStormWhereCompositor<WhereSelector, Executor>;
 begin
   AddSQL(GetColumnName + ' IN ' + GetGroupString(value));
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  Result := GetResult;
 end;
 
-function TStormGroupWhere<WhereSelector, Executor>.IsNotIn(
+function TStormGenericWhere<WhereSelector, Executor>.IsNotIn(
   Value: TArray<variant>): IStormWhereCompositor<WhereSelector, Executor>;
 begin
   AddSQL(GetColumnName + ' NOT IN ' + GetGroupString(value));
+  Result := GetResult;
+end;
+
+{ TStormGenericWhere<WhereSelector, Executor> }
+
+function TStormGenericWhere<WhereSelector, Executor>.IsBetween(StartValue,
+  EndValue: Variant): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddSQL(self.GetColumnName + ' BETWEEN ' + AddParameter(StartValue) + ' AND ' +  AddParameter(EndValue));
+  Result := GetResult;
+end;
+
+function TStormGenericWhere<WhereSelector, Executor>.IsNotBetween(StartValue,
+  EndValue: Variant): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddSQL(self.GetColumnName + ' NOT BETWEEN ' + AddParameter(StartValue) + ' AND ' +  AddParameter(EndValue));
+  Result := GetResult;
+end;
+
+{ TStormGenericWhere<WhereSelector, Executor> }
+
+function TStormGenericWhere<WhereSelector, Executor>.IsGreaterOrEqualTo(
+  Value: Variant): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddOperation('>=', Value);
+  Result := GetResult;
+end;
+
+function TStormGenericWhere<WhereSelector, Executor>.IsGreaterThan(
+  Value: Variant): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddOperation('<', Value);
+  Result := GetResult;
+end;
+
+function TStormGenericWhere<WhereSelector, Executor>.IsLessOrEqualTo(
+  Value: Variant): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddOperation('<=', Value);
+  Result := GetResult();
+end;
+
+function TStormGenericWhere<WhereSelector, Executor>.IsLessThan(
+  Value: Variant): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  AddOperation('<', Value);
+  Result := GetResult();
+end;
+
+{ TStormGenericWhere<WhereSelector, Executor> }
+
+procedure TStormGenericWhere<WhereSelector, Executor>.AddOperation(
+  op: String; Value: Variant);
+begin
+  AddSQL(self.GetColumnName + ' ' + op + ' '  + AddParameter(Value));
+end;
+
+function TStormGenericWhere<WhereSelector, Executor>.GetResult: IStormWhereCompositor<WhereSelector, Executor>;
+begin
   Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+end;
+
+{ TStormIntegerWhere<WhereSelector, Executor> }
+
+function TStormIntegerWhere<WhereSelector, Executor>.ConvertoToArrayOfVariant(
+  values: TArray<integer>): TArray<variant>;
+VAR
+  i : integer;
+begin
+  SetLength(result,length(values));
+
+  for i := 0 to length(values)-1 do
+  begin
+    result[i] := values[i];
+  end;
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsBetween(
+  const StartValue: Integer;
+  EndValue: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsBetween(StartValue, EndValue);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsEqualsTo(
+  const Value: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsEqualsTo(Value);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsGreaterOrEqualTo(
+  Value: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterOrEqualTo(Value);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsGreaterThan(
+  Value: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterThan(Value);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsIn(
+  value: TArray<Integer>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsIn(ConvertoToArrayOfVariant(value));
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsLessOrEqualTo(
+  Value: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessOrEqualTo(Value);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsLessThan(
+  Value: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessThan(Value);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsNotBetween(
+  const StartValue: Integer;
+  EndValue: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsNotBetween(StartValue, EndValue);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsNotEqualsTo(
+  const Value: Integer): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsNotEqualsTo(value);
+end;
+
+function TStormIntegerWhere<WhereSelector, Executor>.IsNotIn(
+  Value: TArray<Integer>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+   result := inherited  IsNotIn(self.ConvertoToArrayOfVariant(value));
 end;
 
 end.

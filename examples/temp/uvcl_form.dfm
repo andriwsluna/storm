@@ -10,7 +10,6 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -54,6 +53,25 @@ object vcl_form: Tvcl_form
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'codigo_produto'
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'descricao'
+        Width = 200
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'codigo_marca'
+        Width = 200
+        Visible = True
+      end>
   end
   object Button2: TButton
     Left = 40
@@ -120,6 +138,14 @@ object vcl_form: Tvcl_form
     Height = 25
     Caption = 'Button6'
     TabOrder = 10
+  end
+  object EditCodigoMarca: TEdit
+    Left = 568
+    Top = 248
+    Width = 121
+    Height = 21
+    NumbersOnly = True
+    TabOrder = 11
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 

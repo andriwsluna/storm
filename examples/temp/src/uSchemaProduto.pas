@@ -18,11 +18,13 @@ TSchemaProduto = class(TStormTableSchema)
   private
     FCodigo : IStormSchemaColumn;
     FDescricao : IStormSchemaColumn;
+    FCodigoMarca : IStormSchemaColumn;
   protected
     Procedure Initialize(); Override;
   public
     property Codigo: IStormSchemaColumn read FCodigo;
     property Descricao: IStormSchemaColumn read FDescricao;
+    property CodigoMarca: IStormSchemaColumn read FCodigoMarca;
     Constructor Create(); Reintroduce;
     Destructor Destroy(); Override;
 end;
@@ -59,11 +61,19 @@ begin
     'descricao',
     'Descricao',
     TStormVarchar.Create(200),
-    [NotNull]
+    []
+  );
+
+  FCodigoMarca := TStormColumnSchema.Create(
+    'codigo_marca',
+    'CodigoMarca',
+    TStormInt.Create,
+    []
   );
 
   AddColumn(Codigo);
   AddColumn(Descricao);
+  AddColumn(CodigoMarca);
 end;
 
 end.

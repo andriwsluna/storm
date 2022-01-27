@@ -30,10 +30,18 @@ Type
     Function SetThisOrNull(const value : Maybe<String>) : FieldAssignment;
   end;
 
+  TStormIntegerFieldAssignement<FieldAssignment>
+  = Class
+  (
+    TStormFieldAssignement<FieldAssignment> ,
+    IStormIntegerFieldAssignement<FieldAssignment>,
+    IStormIntegerNullableFieldAssignement<FieldAssignment>
+  )
+    Function SetTo(Const Value : Integer) : FieldAssignment; Reintroduce;
+    Function SetThisOrNull(const value : Maybe<Integer>) : FieldAssignment;
+  end;
+
 implementation
-
-
-
 
 
 
@@ -41,26 +49,8 @@ implementation
 
 function TStormStringFieldAssignement<FieldAssignment>.SetThisOrNull(
   const value: Maybe<String>): FieldAssignment;
-var
-  return : FieldAssignment;
 begin
-  value.OnSome
-  (
-    procedure(value : string)
-    begin
-      return := self.SetTo(value);
-    end
-  )
-  .OnNone
-  (
-    procedure()
-    begin
-      return := self.SetNull();
-    end
-  );
-
-  Result := return;
-
+  Result := value.BindTo<FieldAssignment>(SetTo,SetNull);
 end;
 
 function TStormStringFieldAssignement<FieldAssignment>.SetTo(
@@ -87,6 +77,20 @@ function TStormFieldAssignement<FieldAssignment>.SetTo(
 begin
   AddSQL(GetPrefix + ' = ' + self.AddParameter(Value));
   Result := self.GetReturnInstance<FieldAssignment>();
+end;
+
+{ TStormIntegerFieldAssignement<FieldAssignment> }
+
+function TStormIntegerFieldAssignement<FieldAssignment>.SetThisOrNull(
+  const value: Maybe<Integer>): FieldAssignment;
+begin
+  Result := value.BindTo<FieldAssignment>(SetTo,SetNull);
+end;
+
+function TStormIntegerFieldAssignement<FieldAssignment>.SetTo(
+  const Value: Integer): FieldAssignment;
+begin
+     Result := inherited SetTo(Value);
 end;
 
 end.

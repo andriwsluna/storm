@@ -25,6 +25,10 @@ Type
 
   End;
 
+  TStormInt = Class(TInterfacedObject, IStormSchemaType)
+    Function GetType() : String;
+  End;
+
 
 implementation
 
@@ -39,6 +43,13 @@ end;
 function TStormVarchar.GetType: String;
 begin
   Result := Format('VARCHAR(%d)', [FLength]);
+end;
+
+{ TStormInt }
+
+function TStormInt.GetType: String;
+begin
+   Result := 'INT';
 end;
 
 end.

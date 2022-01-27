@@ -134,6 +134,7 @@ type
     Button4: TButton;
     Button5: TButton;
     Button6: TButton;
+    EditCodigoMarca: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -148,6 +149,7 @@ type
     procedure ShowJson(json : TJsonObject);
     Procedure MostrarErro(resultado : IStormExecutionFail);
     Function  GetDescricao() : Maybe<String>;
+    Function  GetCodigoMarca() : Maybe<integer>;
     procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
     Procedure ProdutoToJson(produto : IProduto);
   public
@@ -167,11 +169,11 @@ procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
   Produto_ORM(GetConnection())
     .Select
-    .Only([Codigo, Descricao])
+    .Only([Codigo, Descricao, CodigoMarca])
     .Where
-    .Codigo.IsIn(['1','2','3'])
+    .Codigo.IsBetween('1','10')
     ._And
-    .Descricao.IsNull
+    .CodigoMarca.IsNotNull
     .Go
     .Open
     .OnSuccess(ShowDataset)
@@ -184,6 +186,7 @@ begin
   Produto_ORM(Getconnection)
     .Update
     .Descricao.SetThisOrNull(GetDescricao())
+    .CodigoMarca.SetThisOrNull(GetCodigoMarca())
     .Where
     .Codigo.IsEqualsTo(self.DataSource1.DataSet.FieldByName('codigo_produto').AsString)
     .Go
@@ -244,8 +247,8 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -261,10 +264,24 @@ begin
   end;
 end;
 
+function Tvcl_form.GetCodigoMarca: Maybe<integer>;
+var
+  i : integer;
+begin
+  if EditCodigoMarca.Text <> '' then
+  begin
+    if TryStrToInt(EditCodigoMarca.Text, i) then
+    begin
+      result := i;
+    end;
+
+  end;
+end;
+
 function Tvcl_form.GetConnection: IStormSQLConnection;
 begin
-  Result := FDconnection1.StormDriver;
-  //result := Adoconnection1.StormDriver;
+  //Result := FDconnection1.StormDriver;
+  result := Adoconnection1.StormDriver;
 end;
 
 

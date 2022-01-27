@@ -12,7 +12,7 @@ uses
   uEntityProduto;
 
 Type
-  TProdutoPossibleFields = (Codigo=0, Descricao=1);
+  TProdutoPossibleFields = (Codigo=0, Descricao=1, CodigoMarca=2);
   TProdutoSETFieldSelection = set of TProdutoPossibleFields;
 
 
@@ -21,6 +21,7 @@ Type
   IProdutoWhereSelector<Executor : IInterface> = interface['{CECF6A72-8A5C-491A-9B1A-BF0DB19A6C9A}']
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function CodigoMarca : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
@@ -32,23 +33,27 @@ Type
   IProdutoFieldsAssignmentWithWhere=  interface['{990EF674-B643-4063-987E-6C28E5821B90}']
     Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Where : IProdutoWhereSelector<IStormUpdateExecutor>;
   end;
 
   IProdutoFieldsAssignment = interface['{C36AB855-61F1-4BEE-9FE2-F0D134EA5809}']
     Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
   end;
 
   IProdutoFinalFieldsInsertion =  interface['{B8B4616B-7527-4617-A92F-9C0832044F7A}']
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
   end;
 
   IProdutoFieldsInsertion = interface
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
   end;
 
   IProdutoORM = interface(IStormORM)['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
@@ -107,6 +112,7 @@ Type
   TProdutoWhereSelector<Executor : IInterface> = class(TStormSqlPartition, IProdutoWhereSelector<Executor>)
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function CodigoMarca : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
@@ -117,11 +123,13 @@ Type
   public
     Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
   end;
 
   TProdutoFieldsInsertion = class(TStormSqlPartition, IProdutoFieldsInsertion, IProdutoFinalFieldsInsertion)
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
   end;
 
@@ -351,6 +359,11 @@ begin
   result := TStormStringWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
 end;
 
+function TProdutoWhereSelector<Executor>.CodigoMarca: IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  Result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
+end;
+
 function TProdutoWhereSelector<Executor>.Descricao: IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
   result := TStormStringWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Descricao);
@@ -375,6 +388,11 @@ end;
 function TProdutoFieldsAssignment.Codigo: IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
   Result := TStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
+end;
+
+function TProdutoFieldsAssignment.CodigoMarca: IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  Result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
 end;
 
 function TProdutoFieldsAssignment.Descricao: IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -412,6 +430,11 @@ end;
 function TProdutoFieldsInsertion.Codigo: IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
   Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Codigo);
+end;
+
+function TProdutoFieldsInsertion.CodigoMarca: IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+begin
+  Result := TStormIntegerFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).CodigoMarca);
 end;
 
 function TProdutoFieldsInsertion.Descricao: IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;

@@ -61,7 +61,10 @@ function TIntegerValue.Clone(target: IStormValue): Boolean;
 begin
   if Assigned(target) then
   begin
-    Result := target.ToInt.Bind(SetValue);
+    Result := target.ToInt.BindTo<Boolean>(SetValue, Function() : Boolean
+        begin
+          result := false;
+        end);
   end
   else
   begin

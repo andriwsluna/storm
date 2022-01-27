@@ -29,38 +29,6 @@ Type
     Function Go()               : Executor;
   end;
 
-  IStormStringWhere<WhereSelector, Executor : IInterface> = interface['{A5061AC4-1881-4D81-A50A-FAACB39316E1}']
-    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
-  end;
-
-  IStormStringNullableWhere<WhereSelector, Executor : IInterface> = interface['{61AC53AD-4C1C-4C61-BB42-015D47C9585C}']
-    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNull : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
-    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
-  end;
-
   IStormSelectSuccess<EntityType: IStormEntity> = interface['{9CA7139A-020A-4CB7-A1F8-39D705A78E7B}']
     Function IsEmpty : Boolean;
     Function GetDataset : TDataset;
@@ -112,6 +80,16 @@ Type
     Function SetThisOrNull(const value : Maybe<String>) : FieldAssignment;
   end;
 
+  IStormIntegerFieldAssignement<FieldAssignment> = interface['{FEB775C5-27F5-4505-997A-6A0E1954CFB6}']
+    Function SetTo(Const Value : Integer) : FieldAssignment;
+  end;
+
+  IStormIntegerNullableFieldAssignement<FieldAssignment> = interface['{FE03A51C-F5A7-4205-914D-C11E902D6313}']
+    Function SetTo(Const Value : Integer) : FieldAssignment;
+    Function SetNull : FieldAssignment;
+    Function SetThisOrNull(const value : Maybe<Integer>) : FieldAssignment;
+  end;
+
   IStormStringFieldInsertion<FieldInsertion> = interface['{250D96B0-B9C0-43DE-98CF-14D73DE02352}']
     Function SetValue(Const Value : String) : FieldInsertion; Overload;
   end;
@@ -121,10 +99,87 @@ Type
     Function SetValue( Value : Maybe<String>) : FieldInsertion; Overload;
   end;
 
+  IStormIntegerFieldInsertion<FieldInsertion> = interface['{250D96B0-B9C0-43DE-98CF-14D73DE02352}']
+    Function SetValue(Const Value : Integer) : FieldInsertion; Overload;
+  end;
+
+  IStormIntegerNullableFieldInsertion<FieldInsertion> = interface['{BA05DFB9-3EDC-4C0F-8948-60E668017803}']
+    Function SetValue(Const Value : Integer) : FieldInsertion; Overload;
+    Function SetValue( Value : Maybe<Integer>) : FieldInsertion; Overload;
+  end;
+
+
 
   IStormORM = interface['{41151E4E-BF3A-46F5-B46B-DC836717449B}']
 
   end;
+
+  IStormStringWhere<WhereSelector, Executor : IInterface> = interface['{A5061AC4-1881-4D81-A50A-FAACB39316E1}']
+    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsBetween(Const StartValue : String ; EndValue : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotBetween(Const StartValue : String ; EndValue : String) : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
+  IStormStringNullableWhere<WhereSelector, Executor : IInterface> = interface['{61AC53AD-4C1C-4C61-BB42-015D47C9585C}']
+    Function IsEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEqualsTo(Const Value : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function BeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function Contains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function EndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotBeginsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotContains(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function NotEndsWith(Const Value : string) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsEmpty() : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsIn(value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotIn(Value : TArray<String>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsBetween(Const StartValue : String ; EndValue : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotBetween(Const StartValue : String ; EndValue : String) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNull : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
+
+  IStormIntegerWhere<WhereSelector, Executor : IInterface> = interface['{85B69C3B-C067-427B-B5FA-B729EC6CACC3}']
+    Function IsEqualsTo(Const Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEqualsTo(Const Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsIn(value : TArray<Integer>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotIn(Value : TArray<Integer>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsBetween(Const StartValue : Integer ; EndValue : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotBetween(Const StartValue : Integer ; EndValue : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsGreaterThan(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsGreaterOrEqualTo(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsLessThan(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsLessOrEqualTo(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
+  IStormIntegerNullableWhere<WhereSelector, Executor : IInterface> = interface['{85B69C3B-C067-427B-B5FA-B729EC6CACC3}']
+    Function IsEqualsTo(Const Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotEqualsTo(Const Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsIn(value : TArray<Integer>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotIn(Value : TArray<Integer>) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsBetween(Const StartValue : Integer ; EndValue : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotBetween(Const StartValue : Integer ; EndValue : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsGreaterThan(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsGreaterOrEqualTo(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsLessThan(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsLessOrEqualTo(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNull : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsNotNull : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
+
 
 
 implementation

@@ -58,11 +58,16 @@ begin
     Result := true;
     for field in FFieldList do
     begin
-      Result := Result and Target.FieldByName(field.FieldName).Bind
+      Result := Result and Target.FieldByName(field.FieldName).BindTo<Boolean>
       (
         function(targetField : IStormField) : Boolean
         begin
           result := field.Clone(targetField);
+        end
+        ,
+        Function() : Boolean
+        begin
+          result := false;
         end
       );
     end;
