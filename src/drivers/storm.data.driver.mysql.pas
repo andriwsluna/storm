@@ -13,6 +13,7 @@ Type
   public
     Function GetFullTableName(Table : IStormTableSchema) : string;
     Function GetLimitSyntax(Limit : integer ; Sql : string) : string;
+    Function GetBooleanType : String;
   end;
 
 implementation
@@ -21,6 +22,11 @@ uses
   System.StrUtils;
 
 { TStormMySqlDriver }
+
+function TStormMySqlDriver.GetBooleanType: String;
+begin
+  Result := 'BOOLEAN';
+end;
 
 function TStormMySqlDriver.GetFullTableName(Table: IStormTableSchema): string;
 begin

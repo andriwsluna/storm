@@ -61,7 +61,7 @@ function TDateTimeValue.Clone(target: IStormValue): Boolean;
 begin
   if Assigned(target) then
   begin
-    Result := target.ToDateTime.Bind(SetValue);
+    Result := target.ToDateTime.BindTo<Boolean>(SetValue, FalseByDEfault);
   end
   else
   begin

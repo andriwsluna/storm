@@ -12,7 +12,16 @@ uses
   uEntityProduto;
 
 Type
-  TProdutoPossibleFields = (Codigo=0, Descricao=1, CodigoMarca=2);
+  TProdutoPossibleFields =
+  (
+     Codigo         = 0
+    ,Descricao      = 1
+    ,CodigoMarca    = 2
+    ,Preco          = 3
+    ,Ativo          = 4
+    ,DataCriacao    = 5
+    ,DataAlteracao  = 6
+  );
   TProdutoSETFieldSelection = set of TProdutoPossibleFields;
 
 
@@ -22,6 +31,10 @@ Type
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function CodigoMarca : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Preco : IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Ativo : IStormBooleanNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function DataCriacao : IStormDateNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function DataAlteracao : IStormDateTimeNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
@@ -34,6 +47,10 @@ Type
     Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Preco : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Ativo : IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function DataCriacao : IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Where : IProdutoWhereSelector<IStormUpdateExecutor>;
   end;
 
@@ -41,12 +58,20 @@ Type
     Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Ativo : IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Preco : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function DataCriacao : IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
   end;
 
   IProdutoFinalFieldsInsertion =  interface['{B8B4616B-7527-4617-A92F-9C0832044F7A}']
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Preco : IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Ativo : IStormBooleanNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function DataCriacao : IStormDateNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
   end;
 
@@ -54,6 +79,10 @@ Type
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Preco : IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Ativo : IStormBooleanNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function DataCriacao : IStormDateNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
   end;
 
   IProdutoORM = interface(IStormORM)['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
@@ -113,6 +142,10 @@ Type
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function CodigoMarca : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Preco : IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Ativo : IStormBooleanNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function DataCriacao : IStormDateNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function DataAlteracao : IStormDateTimeNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
@@ -124,12 +157,20 @@ Type
     Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Preco : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Ativo : IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function DataCriacao : IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
   end;
 
   TProdutoFieldsInsertion = class(TStormSqlPartition, IProdutoFieldsInsertion, IProdutoFinalFieldsInsertion)
     Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Preco : IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Ativo : IStormBooleanNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function DataCriacao : IStormDateNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
   end;
 
@@ -354,6 +395,11 @@ end;
 
 { TProdutoWhereSelector<Executor> }
 
+function TProdutoWhereSelector<Executor>.Ativo: IStormBooleanNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  Result := TStormBooleanWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
+end;
+
 function TProdutoWhereSelector<Executor>.Codigo: IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
   result := TStormStringWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
@@ -362,6 +408,16 @@ end;
 function TProdutoWhereSelector<Executor>.CodigoMarca: IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
   Result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
+end;
+
+function TProdutoWhereSelector<Executor>.DataAlteracao: IStormDateTimeNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  Result := TStormDateTimeWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.DataAlteracao);
+end;
+
+function TProdutoWhereSelector<Executor>.DataCriacao: IStormDateNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  Result := TStormDateWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.DataCriacao);
 end;
 
 function TProdutoWhereSelector<Executor>.Descricao: IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -375,6 +431,11 @@ begin
   Result := Self;
 end;
 
+function TProdutoWhereSelector<Executor>.Preco: IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  Result := TStormFloatWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Preco);
+end;
+
 { TSelectExecutorConstructor }
 
 function TSelectExecutorConstructor.GetGenericInstance(
@@ -385,6 +446,11 @@ end;
 
 { TProdutoFieldsAssignment }
 
+function TProdutoFieldsAssignment.Ativo: IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  Result := TStormBooleanFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
+end;
+
 function TProdutoFieldsAssignment.Codigo: IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
   Result := TStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
@@ -393,6 +459,16 @@ end;
 function TProdutoFieldsAssignment.CodigoMarca: IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
   Result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
+end;
+
+function TProdutoFieldsAssignment.DataAlteracao: IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  Result := TStormDateTimeFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.DataAlteracao);
+end;
+
+function TProdutoFieldsAssignment.DataCriacao: IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  Result := TStormDateFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.DataCriacao);
 end;
 
 function TProdutoFieldsAssignment.Descricao: IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -407,6 +483,11 @@ begin
   begin
     AddSQL('UPDATE ' + self.GetFullTableName + ' SET');
   end;
+end;
+
+function TProdutoFieldsAssignment.Preco: IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  Result := TStormFloatFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Preco);
 end;
 
 { TProdutoFieldsAssignmentWithWhereConstructor }
@@ -427,6 +508,11 @@ end;
 
 { TProdutoFieldsInsertion }
 
+function TProdutoFieldsInsertion.Ativo: IStormBooleanNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+begin
+  Result := TStormBooleanFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Ativo);
+end;
+
 function TProdutoFieldsInsertion.Codigo: IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
   Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Codigo);
@@ -437,6 +523,16 @@ begin
   Result := TStormIntegerFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).CodigoMarca);
 end;
 
+function TProdutoFieldsInsertion.DataAlteracao: IStormDateTimeNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+begin
+  Result := TStormDateTimeFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).DataAlteracao);
+end;
+
+function TProdutoFieldsInsertion.DataCriacao: IStormDateNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+begin
+  Result := TStormDateFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).DataCriacao);
+end;
+
 function TProdutoFieldsInsertion.Descricao: IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
   Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Descricao);
@@ -445,6 +541,11 @@ end;
 function TProdutoFieldsInsertion.Go: IStormInsertExecutor<IProduto>;
 begin
   Result := TStormInsertExecutor<IProduto>.Create(Self);
+end;
+
+function TProdutoFieldsInsertion.Preco: IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+begin
+  Result := TStormFloatFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Preco);
 end;
 
 { TProdutoFinalFieldsInsertionConstructor }

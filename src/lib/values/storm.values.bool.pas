@@ -60,7 +60,7 @@ function TBooleanValue.Clone(target: IStormValue): Boolean;
 begin
   if Assigned(target) then
   begin
-    Result := target.ToBool.Bind(SetValue);
+    Result := target.ToBool.BindTo<Boolean>(SetValue, FalseByDEfault);
   end
   else
   begin

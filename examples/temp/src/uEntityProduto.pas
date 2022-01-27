@@ -13,6 +13,11 @@ USES
   system.Generics.Collections,
   storm.fields.str,
   storm.fields.int,
+  storm.fields.float,
+  storm.fields.date,
+  storm.fields.datetime,
+
+  storm.fields.bool,
   storm.entity.base;
 
 
@@ -22,6 +27,8 @@ Type
     function Codigo: IStringField;
     function Descricao: IStringField;
     function CodigoMarca : IIntegerField;
+    function Preco : IFloatField;
+    function Ativo : IBooleanField;
     Function Clone( Target : Iproduto) : Boolean;
   end;
 
@@ -48,6 +55,10 @@ implementation
     FCodigo     : IStringField;
     FDescricao  : IStringField;
     FCodigoMarca  : IIntegerField;
+    FPreco  : IFloatField;
+    FAtivo  : IBooleanField;
+    FDataCriacao  : IDateField;
+    FDataAlteracao  : IDateTimeField;
 
     Procedure Initialize();  Override;
     procedure Finalize(); Override;
@@ -55,6 +66,11 @@ implementation
     function Codigo: IStringField;
     function Descricao: IStringField;
     function CodigoMarca : IIntegerField;
+    function Preco  : IFloatField;
+    function Ativo  : IBooleanField;
+    function DataCriacao  : IDateField;
+    function DataAlteracao  : IDateTimeField;
+
     Function Clone( Target : Iproduto) : Boolean;
   end;
 
@@ -69,6 +85,11 @@ end;
 
 { TProduto }
 
+function TProduto.Ativo: IBooleanField;
+begin
+  Result := self.FAtivo;
+end;
+
 function TProduto.Clone(Target: Iproduto): Boolean;
 begin
   Result := TStormEntity(self).Clone(Target);
@@ -82,6 +103,16 @@ end;
 function TProduto.CodigoMarca: IIntegerField;
 begin
   Result := FCodigoMarca;
+end;
+
+function TProduto.DataAlteracao: IDateTimeField;
+begin
+  Result := self.FDataAlteracao
+end;
+
+function TProduto.DataCriacao: IDateField;
+begin
+  Result := self.FDataCriacao;
 end;
 
 function TProduto.Descricao: IStringField;
@@ -100,12 +131,25 @@ begin
   FCodigo     := TStormStringField.Create('codigo_produto');
   FDescricao  := TStormStringField.Create('descricao');
   FCodigoMarca  := TStormIntegerField.Create('codigo_marca');
+  FPreco  := TStormFloatField.Create('preco');
+  FAtivo  := TStormBooleanField.Create('ativo');
+  FDataCriacao  := TStormDateField.Create('data_criacao');
+  FDataAlteracao  := TStormDateTimeField.Create('data_alteracao');
 
   AddStormField(FCodigo as IStormField);
   AddStormField(FDescricao as IStormField);
   AddStormField(FCodigoMarca as IStormField);
+  AddStormField(FPreco as IStormField);
+  AddStormField(FAtivo as IStormField);
+  AddStormField(FDataCriacao as IStormField);
+  AddStormField(FDataAlteracao as IStormField);
 end;
 
+
+function TProduto.Preco: IFloatField;
+begin
+  Result := self.FPreco;
+end;
 
 Function NewProduto() : IProduto;
 begin

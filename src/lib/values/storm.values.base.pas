@@ -17,7 +17,8 @@ Type
       Procedure Inititalize();  Virtual;
 
       class function LoadFromJSON(Target : IStormValue ; Value: TJSONValue): Boolean;
-
+      Function TrueByDefault() : Boolean;
+      Function FalseByDefault() : Boolean;
     public
 
 
@@ -44,6 +45,11 @@ begin
   Inititalize();
 end;
 
+
+function TStormValue.FalseByDefault: Boolean;
+begin
+  Result := False;
+end;
 
 procedure TStormValue.Inititalize;
 begin
@@ -83,5 +89,10 @@ begin
   END;
 end;
 
+
+function TStormValue.TrueByDefault: Boolean;
+begin
+  Result := True;
+end;
 
 end.

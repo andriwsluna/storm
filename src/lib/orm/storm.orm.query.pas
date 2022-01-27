@@ -6,6 +6,7 @@ USES
   System.Sysutils,
   storm.orm.interfaces,
   storm.data.interfaces,
+  System.Variants,
   System.Generics.Collections;
 
 Type

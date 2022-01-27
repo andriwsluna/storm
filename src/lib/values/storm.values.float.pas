@@ -60,7 +60,7 @@ function TFloatValue.Clone(target: IStormValue): Boolean;
 begin
   if Assigned(target) then
   begin
-    Result := target.ToFloat.Bind(SetValue);
+    Result := target.ToFloat.BindTo<Boolean>(SetValue,FalseByDefault);
   end
   else
   begin

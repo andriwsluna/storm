@@ -10,17 +10,26 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 144
-    Top = 248
+    Left = 48
+    Top = 251
     Width = 31
     Height = 13
     Caption = 'Label1'
+  end
+  object SpeedButton1: TSpeedButton
+    Left = 247
+    Top = 304
+    Width = 23
+    Height = 22
+    Caption = 'x'
+    OnClick = SpeedButton1Click
   end
   object Button1: TButton
     Left = 40
@@ -55,27 +64,70 @@ object vcl_form: Tvcl_form
     TitleFont.Style = []
     Columns = <
       item
+        Alignment = taCenter
         Expanded = False
         FieldName = 'codigo_produto'
+        Title.Alignment = taCenter
+        Title.Caption = 'C'#243'digo'
         Width = 80
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'descricao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Descri'#231#227'o'
         Width = 200
         Visible = True
       end
       item
+        Alignment = taCenter
         Expanded = False
         FieldName = 'codigo_marca'
-        Width = 200
+        Title.Alignment = taCenter
+        Title.Caption = 'Marca'
+        Width = 50
+        Visible = True
+      end
+      item
+        Alignment = taRightJustify
+        Expanded = False
+        FieldName = 'preco'
+        Title.Alignment = taCenter
+        Title.Caption = 'Pre'#231'o'
+        Width = 80
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'ativo'
+        Title.Alignment = taCenter
+        Width = 60
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'data_criacao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Cria'#231#227'o'
+        Width = 100
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Expanded = False
+        FieldName = 'data_alteracao'
+        Title.Alignment = taCenter
+        Title.Caption = 'Altera'#231#227'o'
+        Width = 100
         Visible = True
       end>
   end
   object Button2: TButton
     Left = 40
-    Top = 88
+    Top = 97
     Width = 75
     Height = 25
     Caption = 'Update'
@@ -91,14 +143,14 @@ object vcl_form: Tvcl_form
     TabOrder = 4
   end
   object EditCodigo: TEdit
-    Left = 264
+    Left = 144
     Top = 248
     Width = 121
     Height = 21
     TabOrder = 5
   end
   object EditDescricao: TEdit
-    Left = 408
+    Left = 288
     Top = 248
     Width = 121
     Height = 21
@@ -140,12 +192,63 @@ object vcl_form: Tvcl_form
     TabOrder = 10
   end
   object EditCodigoMarca: TEdit
-    Left = 568
+    Left = 424
     Top = 248
     Width = 121
     Height = 21
     NumbersOnly = True
     TabOrder = 11
+  end
+  object EditPreco: TEdit
+    Left = 584
+    Top = 248
+    Width = 121
+    Height = 21
+    TabOrder = 12
+  end
+  object RadioGroup: TRadioGroup
+    Left = 144
+    Top = 288
+    Width = 97
+    Height = 38
+    Caption = 'ESt'#225' ativo ?'
+    TabOrder = 13
+  end
+  object RadioButtonSim: TRadioButton
+    Left = 152
+    Top = 306
+    Width = 41
+    Height = 17
+    Caption = 'Sim'
+    TabOrder = 14
+  end
+  object RadioButtonNao: TRadioButton
+    Left = 199
+    Top = 306
+    Width = 38
+    Height = 17
+    Caption = 'N'#227'o'
+    TabOrder = 15
+  end
+  object EditDataCriacao: TMaskEdit
+    Left = 288
+    Top = 304
+    Width = 105
+    Height = 22
+    EditMask = '!00/00/0000;1;_'
+    MaxLength = 10
+    TabOrder = 16
+    Text = '  /  /    '
+  end
+  object EditDataAlteracao: TMaskEdit
+    Left = 427
+    Top = 304
+    Width = 150
+    Height = 22
+    EditMask = '!00/00/0000 00:00:00;1;_'
+    MaxLength = 19
+    TabOrder = 17
+    Text = '  /  /       :  :  '
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 

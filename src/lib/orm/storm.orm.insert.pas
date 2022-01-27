@@ -40,6 +40,50 @@ Type
     Function SetValue( Value : Maybe<Integer>) : FieldInsertion; Reintroduce; Overload;
   end;
 
+  TStormFloatFieldInsertion<FieldInsertion> =
+  class
+  (
+    TStormFieldInsertion<FieldInsertion>,
+    IStormFloatFieldInsertion<FieldInsertion>,
+    IStormFloatNullableFieldInsertion<FieldInsertion>
+  )
+    Function SetValue(Const Value : Extended) : FieldInsertion; Reintroduce; Overload;
+    Function SetValue( Value : Maybe<Extended>) : FieldInsertion; Reintroduce; Overload;
+  end;
+
+  TStormBooleanFieldInsertion<FieldInsertion> =
+  class
+  (
+    TStormFieldInsertion<FieldInsertion>,
+    IStormBooleanFieldInsertion<FieldInsertion>,
+    IStormBooleanNullableFieldInsertion<FieldInsertion>
+  )
+    Function SetValue(Const Value : Boolean) : FieldInsertion; Reintroduce; Overload;
+    Function SetValue( Value : Maybe<Boolean>) : FieldInsertion; Reintroduce; Overload;
+  end;
+
+  TStormDateFieldInsertion<FieldInsertion> =
+  class
+  (
+    TStormFieldInsertion<FieldInsertion>,
+    IStormDateFieldInsertion<FieldInsertion>,
+    IStormDateNullableFieldInsertion<FieldInsertion>
+  )
+    Function SetValue(Const Value : TDate) : FieldInsertion; Reintroduce; Overload;
+    Function SetValue( Value : Maybe<TDate>) : FieldInsertion; Reintroduce; Overload;
+  end;
+
+  TStormDateTimeFieldInsertion<FieldInsertion> =
+  class
+  (
+    TStormFieldInsertion<FieldInsertion>,
+    IStormDateTimeFieldInsertion<FieldInsertion>,
+    IStormDateTimeNullableFieldInsertion<FieldInsertion>
+  )
+    Function SetValue(Const Value : TDateTime) : FieldInsertion; Reintroduce; Overload;
+    Function SetValue( Value : Maybe<TDateTime>) : FieldInsertion; Reintroduce; Overload;
+  end;
+
 
 implementation
 
@@ -68,7 +112,7 @@ end;
 function TStormStringFieldInsertion<FieldInsertion>.SetValue(
   Value: Maybe<String>): FieldInsertion;
 begin
-
+  Result := Value.BindTo<FieldInsertion>(SetValue, GetReturn);
 end;
 
 { TStormIntegerFieldInsertion<FieldInsertion> }
@@ -76,7 +120,7 @@ end;
 function TStormIntegerFieldInsertion<FieldInsertion>.SetValue(
   Value: Maybe<Integer>): FieldInsertion;
 begin
-  Value.BindTo<FieldInsertion>(SetValue, GetReturn);
+  Result := Value.BindTo<FieldInsertion>(SetValue, GetReturn);
 end;
 
 function TStormIntegerFieldInsertion<FieldInsertion>.SetValue(
@@ -84,5 +128,63 @@ function TStormIntegerFieldInsertion<FieldInsertion>.SetValue(
 begin
   Result := inherited SetValue(Value);
 end;
+
+
+{ TStormFloatFieldInsertion<FieldInsertion> }
+
+function TStormFloatFieldInsertion<FieldInsertion>.SetValue(
+  Value: Maybe<Extended>): FieldInsertion;
+begin
+  Result := Value.BindTo<FieldInsertion>(SetValue, GetReturn);
+end;
+
+function TStormFloatFieldInsertion<FieldInsertion>.SetValue(
+  const Value: Extended): FieldInsertion;
+begin
+  Result := inherited SetValue(Value);
+end;
+
+{ TStormBooleanFieldInsertion<FieldInsertion> }
+
+function TStormBooleanFieldInsertion<FieldInsertion>.SetValue(
+  Value: Maybe<Boolean>): FieldInsertion;
+begin
+  Result := Value.BindTo<FieldInsertion>(SetValue, GetReturn);
+end;
+
+function TStormBooleanFieldInsertion<FieldInsertion>.SetValue(
+  const Value: Boolean): FieldInsertion;
+begin
+  Result := inherited SetValue(Value);
+end;
+
+{ TStormDateFieldInsertion<FieldInsertion> }
+
+function TStormDateFieldInsertion<FieldInsertion>.SetValue(
+  Value: Maybe<TDate>): FieldInsertion;
+begin
+  Result := Value.BindTo<FieldInsertion>(SetValue, GetReturn);
+end;
+
+function TStormDateFieldInsertion<FieldInsertion>.SetValue(
+  const Value: TDate): FieldInsertion;
+begin
+  Result := inherited SetValue(Value);
+end;
+
+{ TStormDateTimeFieldInsertion<FieldInsertion> }
+
+function TStormDateTimeFieldInsertion<FieldInsertion>.SetValue(
+  Value: Maybe<TDateTime>): FieldInsertion;
+begin
+  Result := Value.BindTo<FieldInsertion>(SetValue, GetReturn);
+end;
+
+function TStormDateTimeFieldInsertion<FieldInsertion>.SetValue(
+  const Value: TDateTime): FieldInsertion;
+begin
+  Result := inherited SetValue(Value);
+end;
+
 
 end.

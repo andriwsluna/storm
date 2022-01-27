@@ -14,8 +14,8 @@ Uses
 Type
   TStormWhereCompositor<WhereSelector, Executor : IInterface> =
   class(TStormSqlPartition ,IStormWhereCompositor<WhereSelector, Executor>)
-    Function _And()             : WhereSelector;
-    Function _Or()              : WhereSelector;
+    Function And_()             : WhereSelector;
+    Function Or_()              : WhereSelector;
     Function OpenParenthesis()  : WhereSelector;
     Function CloseParenthesis() : IStormWhereCompositor<WhereSelector, Executor>;
     Function Go()               : Executor;
@@ -97,6 +97,85 @@ Type
     Function IsLessThan(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
     Function IsLessOrEqualTo(Value : Integer) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
   end;
+
+  TStormFloatWhere<WhereSelector, Executor : IInterface>
+  = class
+  (
+    TStormGenericWhere<WhereSelector, Executor>,
+    IStormFloatWhere<WhereSelector,Executor>,
+    IStormFloatNullableWhere<WhereSelector,Executor>
+  )
+  private
+    Function ConvertoToArrayOfVariant(values : TArray<Extended>) : TArray<variant>;
+  public
+    Function IsEqualsTo(Const Value : Extended) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotEqualsTo(Const Value : Extended) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsIn(value : TArray<Extended>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotIn(Value : TArray<Extended>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsBetween(Const StartValue : Extended ; EndValue : Extended) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotBetween(Const StartValue : Extended ; EndValue : Extended) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterThan(Value : Extended) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterOrEqualTo(Value : Extended) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsLessThan(Value : Extended) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
+    Function IsLessOrEqualTo(Value : Extended) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+  end;
+
+  TStormBooleanWhere<WhereSelector, Executor : IInterface>
+  = class
+  (
+    TStormGenericWhere<WhereSelector, Executor>,
+    IStormBooleanWhere<WhereSelector,Executor>,
+    IStormBooleanNullableWhere<WhereSelector,Executor>
+  )
+  public
+    Function IsTrue : IStormWhereCompositor<WhereSelector, Executor>;
+    Function IsFalse : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
+  TStormDateWhere<WhereSelector, Executor : IInterface>
+  = class
+  (
+    TStormGenericWhere<WhereSelector, Executor>,
+    IStormDateWhere<WhereSelector,Executor>,
+    IStormDateNullableWhere<WhereSelector,Executor>
+  )
+  private
+    Function ConvertoToArrayOfVariant(values : TArray<TDate>) : TArray<variant>;
+  public
+    Function IsEqualsTo(Const Value : TDate) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotEqualsTo(Const Value : TDate) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsIn(value : TArray<TDate>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotIn(Value : TArray<TDate>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsBetween(Const StartValue : TDate ; EndValue : TDate) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotBetween(Const StartValue : TDate ; EndValue : TDate) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterThan(Value : TDate) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterOrEqualTo(Value : TDate) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsLessThan(Value : TDate) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
+    Function IsLessOrEqualTo(Value : TDate) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+  end;
+
+  TStormDateTimeWhere<WhereSelector, Executor : IInterface>
+  = class
+  (
+    TStormGenericWhere<WhereSelector, Executor>,
+    IStormDateTimeWhere<WhereSelector,Executor>,
+    IStormDateTimeNullableWhere<WhereSelector,Executor>
+  )
+  private
+    Function ConvertoToArrayOfVariant(values : TArray<TDateTime>) : TArray<variant>;
+  public
+    Function IsEqualsTo(Const Value : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotEqualsTo(Const Value : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsIn(value : TArray<TDateTime>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotIn(Value : TArray<TDateTime>) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsBetween(Const StartValue : TDateTime ; EndValue : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsNotBetween(Const StartValue : TDateTime ; EndValue : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterThan(Value : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsGreaterOrEqualTo(Value : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+    Function IsLessThan(Value : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>;  Reintroduce;
+    Function IsLessOrEqualTo(Value : TDateTime) : IStormWhereCompositor<WhereSelector, Executor>; Reintroduce;
+  end;
+
 
 
 implementation
@@ -260,13 +339,13 @@ begin
   Result := self.GetReturnInstance2<WhereSelector, Executor>();
 end;
 
-function TStormWhereCompositor<WhereSelector, Executor>._And: WhereSelector;
+function TStormWhereCompositor<WhereSelector, Executor>.And_: WhereSelector;
 begin
   AddAnd;
   Result := self.GetReturnInstance2<WhereSelector, Executor>();
 end;
 
-function TStormWhereCompositor<WhereSelector, Executor>._Or: WhereSelector;
+function TStormWhereCompositor<WhereSelector, Executor>.Or_: WhereSelector;
 begin
   AddOr;
   Result := self.GetReturnInstance2<WhereSelector, Executor>();
@@ -453,5 +532,255 @@ function TStormIntegerWhere<WhereSelector, Executor>.IsNotIn(
 begin
    result := inherited  IsNotIn(self.ConvertoToArrayOfVariant(value));
 end;
+
+
+{ TStormFloatWhere<WhereSelector, Executor> }
+
+function TStormFloatWhere<WhereSelector, Executor>.ConvertoToArrayOfVariant(
+  values: TArray<Extended>): TArray<variant>;
+VAR
+  i : integer;
+begin
+  SetLength(result,length(values));
+
+  for i := 0 to length(values)-1 do
+  begin
+    result[i] := values[i];
+  end;
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsBetween(
+  const StartValue: Extended;
+  EndValue: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsBetween(StartValue, EndValue);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsEqualsTo(
+  const Value: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsEqualsTo(Value);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsGreaterOrEqualTo(
+  Value: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterOrEqualTo(Value);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsGreaterThan(
+  Value: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterThan(Value);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsIn(
+  value: TArray<Extended>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsIn(ConvertoToArrayOfVariant(value));
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsLessOrEqualTo(
+  Value: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessOrEqualTo(Value);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsLessThan(
+  Value: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessThan(Value);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsNotBetween(
+  const StartValue: Extended;
+  EndValue: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsNotBetween(StartValue, EndValue);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsNotEqualsTo(
+  const Value: Extended): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsNotEqualsTo(value);
+end;
+
+function TStormFloatWhere<WhereSelector, Executor>.IsNotIn(
+  Value: TArray<Extended>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+   result := inherited  IsNotIn(self.ConvertoToArrayOfVariant(value));
+end;
+
+{ TStormBooleanWhere<WhereSelector, Executor> }
+
+
+function TStormBooleanWhere<WhereSelector, Executor>.IsFalse: IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := self.IsEqualsTo(False);
+end;
+
+
+
+function TStormBooleanWhere<WhereSelector, Executor>.IsTrue: IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := self.IsEqualsTo(True);
+end;
+
+{ TStormDateWhere<WhereSelector, Executor> }
+
+function TStormDateWhere<WhereSelector, Executor>.ConvertoToArrayOfVariant(
+  values: TArray<TDate>): TArray<variant>;
+VAR
+  i : integer;
+begin
+  SetLength(result,length(values));
+
+  for i := 0 to length(values)-1 do
+  begin
+    result[i] := values[i];
+  end;
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsBetween(
+  const StartValue: TDate;
+  EndValue: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsBetween(StartValue, EndValue);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsEqualsTo(
+  const Value: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsEqualsTo(Value);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsGreaterOrEqualTo(
+  Value: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterOrEqualTo(Value);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsGreaterThan(
+  Value: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterThan(Value);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsIn(
+  value: TArray<TDate>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsIn(ConvertoToArrayOfVariant(value));
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsLessOrEqualTo(
+  Value: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessOrEqualTo(Value);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsLessThan(
+  Value: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessThan(Value);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsNotBetween(
+  const StartValue: TDate;
+  EndValue: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsNotBetween(StartValue, EndValue);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsNotEqualsTo(
+  const Value: TDate): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsNotEqualsTo(value);
+end;
+
+function TStormDateWhere<WhereSelector, Executor>.IsNotIn(
+  Value: TArray<TDate>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+   result := inherited  IsNotIn(self.ConvertoToArrayOfVariant(value));
+end;
+
+
+{ TStormDateTimeWhere<WhereSelector, Executor> }
+
+function TStormDateTimeWhere<WhereSelector, Executor>.ConvertoToArrayOfVariant(
+  values: TArray<TDateTime>): TArray<variant>;
+VAR
+  i : integer;
+begin
+  SetLength(result,length(values));
+
+  for i := 0 to length(values)-1 do
+  begin
+    result[i] := values[i];
+  end;
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsBetween(
+  const StartValue: TDateTime;
+  EndValue: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsBetween(StartValue, EndValue);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsEqualsTo(
+  const Value: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsEqualsTo(Value);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsGreaterOrEqualTo(
+  Value: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterOrEqualTo(Value);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsGreaterThan(
+  Value: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsGreaterThan(Value);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsIn(
+  value: TArray<TDateTime>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsIn(ConvertoToArrayOfVariant(value));
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsLessOrEqualTo(
+  Value: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessOrEqualTo(Value);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsLessThan(
+  Value: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsLessThan(Value);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsNotBetween(
+  const StartValue: TDateTime;
+  EndValue: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  Result := inherited IsNotBetween(StartValue, EndValue);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsNotEqualsTo(
+  const Value: TDateTime): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  result := inherited  IsNotEqualsTo(value);
+end;
+
+function TStormDateTimeWhere<WhereSelector, Executor>.IsNotIn(
+  Value: TArray<TDateTime>): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+   result := inherited  IsNotIn(self.ConvertoToArrayOfVariant(value));
+end;
+
+
 
 end.

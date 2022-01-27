@@ -3,81 +3,6 @@
 {$MAXSTACKSIZE $00100000}
 {$IMAGEBASE $00400000}
 {$APPTYPE GUI}
-{$WARN SYMBOL_DEPRECATED ON}
-{$WARN SYMBOL_LIBRARY ON}
-{$WARN SYMBOL_PLATFORM ON}
-{$WARN SYMBOL_EXPERIMENTAL ON}
-{$WARN UNIT_LIBRARY ON}
-{$WARN UNIT_PLATFORM ON}
-{$WARN UNIT_DEPRECATED ON}
-{$WARN UNIT_EXPERIMENTAL ON}
-{$WARN HRESULT_COMPAT ON}
-{$WARN HIDING_MEMBER ON}
-{$WARN HIDDEN_VIRTUAL ON}
-{$WARN GARBAGE ON}
-{$WARN BOUNDS_ERROR ON}
-{$WARN ZERO_NIL_COMPAT ON}
-{$WARN STRING_CONST_TRUNCED ON}
-{$WARN FOR_LOOP_VAR_VARPAR ON}
-{$WARN TYPED_CONST_VARPAR ON}
-{$WARN ASG_TO_TYPED_CONST ON}
-{$WARN CASE_LABEL_RANGE ON}
-{$WARN FOR_VARIABLE ON}
-{$WARN CONSTRUCTING_ABSTRACT ON}
-{$WARN COMPARISON_FALSE ON}
-{$WARN COMPARISON_TRUE ON}
-{$WARN COMPARING_SIGNED_UNSIGNED ON}
-{$WARN COMBINING_SIGNED_UNSIGNED ON}
-{$WARN UNSUPPORTED_CONSTRUCT ON}
-{$WARN FILE_OPEN ON}
-{$WARN FILE_OPEN_UNITSRC ON}
-{$WARN BAD_GLOBAL_SYMBOL ON}
-{$WARN DUPLICATE_CTOR_DTOR ON}
-{$WARN INVALID_DIRECTIVE ON}
-{$WARN PACKAGE_NO_LINK ON}
-{$WARN PACKAGED_THREADVAR ON}
-{$WARN IMPLICIT_IMPORT ON}
-{$WARN HPPEMIT_IGNORED ON}
-{$WARN NO_RETVAL ON}
-{$WARN USE_BEFORE_DEF ON}
-{$WARN FOR_LOOP_VAR_UNDEF ON}
-{$WARN UNIT_NAME_MISMATCH ON}
-{$WARN NO_CFG_FILE_FOUND ON}
-{$WARN IMPLICIT_VARIANTS ON}
-{$WARN UNICODE_TO_LOCALE ON}
-{$WARN LOCALE_TO_UNICODE ON}
-{$WARN IMAGEBASE_MULTIPLE ON}
-{$WARN SUSPICIOUS_TYPECAST ON}
-{$WARN PRIVATE_PROPACCESSOR ON}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
-{$WARN OPTION_TRUNCATED ON}
-{$WARN WIDECHAR_REDUCED ON}
-{$WARN DUPLICATES_IGNORED ON}
-{$WARN UNIT_INIT_SEQ ON}
-{$WARN LOCAL_PINVOKE ON}
-{$WARN MESSAGE_DIRECTIVE ON}
-{$WARN TYPEINFO_IMPLICITLY_ADDED ON}
-{$WARN RLINK_WARNING ON}
-{$WARN IMPLICIT_STRING_CAST ON}
-{$WARN IMPLICIT_STRING_CAST_LOSS ON}
-{$WARN EXPLICIT_STRING_CAST OFF}
-{$WARN EXPLICIT_STRING_CAST_LOSS OFF}
-{$WARN CVT_WCHAR_TO_ACHAR ON}
-{$WARN CVT_NARROWING_STRING_LOST ON}
-{$WARN CVT_ACHAR_TO_WCHAR ON}
-{$WARN CVT_WIDENING_STRING_LOST ON}
-{$WARN NON_PORTABLE_TYPECAST ON}
-{$WARN XML_WHITESPACE_NOT_ALLOWED ON}
-{$WARN XML_UNKNOWN_ENTITY ON}
-{$WARN XML_INVALID_NAME_START ON}
-{$WARN XML_INVALID_NAME ON}
-{$WARN XML_EXPECTED_CHARACTER ON}
-{$WARN XML_CREF_NO_RESOLVE ON}
-{$WARN XML_NO_PARM ON}
-{$WARN XML_NO_MATCHING_PARM ON}
-{$WARN IMMUTABLE_STRINGS OFF}
 unit uvcl_form;
 
 interface
@@ -112,7 +37,8 @@ uses
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
   FireDAC.VCLUI.Wait, FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Rtti,
   System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.EngExt,
-  Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope
+  Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope, Vcl.Mask,
+  Vcl.ExtCtrls, Vcl.Buttons
   ;
 
 type
@@ -135,6 +61,13 @@ type
     Button5: TButton;
     Button6: TButton;
     EditCodigoMarca: TEdit;
+    EditPreco: TEdit;
+    RadioGroup: TRadioGroup;
+    RadioButtonSim: TRadioButton;
+    RadioButtonNao: TRadioButton;
+    SpeedButton1: TSpeedButton;
+    EditDataCriacao: TMaskEdit;
+    EditDataAlteracao: TMaskEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -142,14 +75,20 @@ type
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
     Procedure ShowDataset(resultado : IStormSelectSuccess<IProduto>);
     procedure ShowJson(json : TJsonObject);
+    procedure ShowJsonModel(json : TJsonArray);
     Procedure MostrarErro(resultado : IStormExecutionFail);
     Function  GetDescricao() : Maybe<String>;
     Function  GetCodigoMarca() : Maybe<integer>;
+    Function  GetPreco() : Maybe<Extended>;
+    Function  GetAtivo() : Maybe<Boolean>;
+    Function  GetDataCriacao() : Maybe<TDate>;
+    Function  GetDataAlteracao() : Maybe<TDateTime>;
     procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
     Procedure ProdutoToJson(produto : IProduto);
   public
@@ -169,11 +108,9 @@ procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
   Produto_ORM(GetConnection())
     .Select
-    .Only([Codigo, Descricao, CodigoMarca])
+    .All
     .Where
-    .Codigo.IsBetween('1','10')
-    ._And
-    .CodigoMarca.IsNotNull
+    .Codigo.IsNotNull
     .Go
     .Open
     .OnSuccess(ShowDataset)
@@ -187,6 +124,10 @@ begin
     .Update
     .Descricao.SetThisOrNull(GetDescricao())
     .CodigoMarca.SetThisOrNull(GetCodigoMarca())
+    .Preco.SetThisOrNull(GetPreco())
+    .Ativo.SetThisOrNull(GetAtivo())
+    .DataCriacao.SetThisOrNull(GetDataCriacao())
+    .DataAlteracao.SetThisOrNull(GetDataAlteracao())
     .Where
     .Codigo.IsEqualsTo(self.DataSource1.DataSet.FieldByName('codigo_produto').AsString)
     .Go
@@ -208,6 +149,11 @@ begin
     .Insert
     .Codigo.SetValue(editcodigo.text)
     .Descricao.SetValue(GetDescricao())
+    .CodigoMarca.SetValue(GetCodigoMarca())
+    .Preco.SetValue(GetPreco())
+    .Ativo.SetValue(GetAtivo())
+    .DataCriacao.SetValue(GetDataCriacao())
+    .DataAlteracao.SetValue(GetDataAlteracao())
     .Go
     .Execute
     .OnSuccess(MostrarResultadoInsertPositivo)
@@ -247,8 +193,8 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -261,6 +207,19 @@ begin
   if Assigned(DataSource1.DataSet) then
   begin
     DataSource1.DataSet.Free;
+  end;
+end;
+
+function Tvcl_form.GetAtivo: Maybe<Boolean>;
+begin
+  if RadioButtonSim.Checked then
+  begin
+    result := true;
+  end
+  else
+  if RadioButtonNao.Checked then
+  begin
+    result := false;
   end;
 end;
 
@@ -280,11 +239,37 @@ end;
 
 function Tvcl_form.GetConnection: IStormSQLConnection;
 begin
-  //Result := FDconnection1.StormDriver;
-  result := Adoconnection1.StormDriver;
+  Result := FDconnection1.StormDriver;
+  //result := Adoconnection1.StormDriver;
 end;
 
 
+
+function Tvcl_form.GetDataAlteracao: Maybe<TDateTime>;
+VAR
+  d : TDateTime;
+begin
+  if EditDataAlteracao.Text <> '__/__/____ __:__:__' then
+  begin
+    if TryStrToDateTime(EditDataAlteracao.Text, d) then
+    begin
+      result := d;
+    end;
+  end;
+end;
+
+function Tvcl_form.GetDataCriacao: Maybe<TDate>;
+VAR
+  d : TDateTime;
+begin
+  if EditDataCriacao.Text <> '__/__/____' then
+  begin
+    if TryStrToDate(EditDataCriacao.Text, d) then
+    begin
+      result := TDate(d);
+    end;
+  end;
+end;
 
 function Tvcl_form.GetDescricao: Maybe<String>;
 begin
@@ -294,10 +279,25 @@ begin
   end;
 end;
 
+function Tvcl_form.GetPreco: Maybe<Extended>;
+VAR
+  f : Extended;
+begin
+  if EditPreco.Text <> '' then
+  begin
+    if TryStrToFloat(EditPreco.Text, f) then
+    begin
+      result := f;
+    end;
+  end;
+end;
+
 procedure Tvcl_form.MostrarErro(resultado: IStormExecutionFail);
 begin
-  memosql.Text := resultado.GetExecutedCommand;
-  ShowMessage(resultado.GetErrorMessage);
+  memosql.Text := resultado.GetErrorMessage;
+  memosql.lines.add('');
+  memosql.lines.add(resultado.GetExecutedCommand);
+
 end;
 
 procedure Tvcl_form.MostrarResultadoInsertPositivo(
@@ -315,6 +315,7 @@ procedure Tvcl_form.ShowDataset(resultado: IStormSelectSuccess<IProduto>);
 begin
   freeDataset;
   DataSource1.DataSet := resultado.GetDataset;
+  resultado.GetModel.ToJSON(true).OnSome(ShowJsonModel)
 end;
 
 procedure Tvcl_form.ShowJson(json: TJsonObject);
@@ -322,6 +323,18 @@ begin
   MemoJson.lines.add(json.ToString);
   json.Free;
 
+end;
+
+procedure Tvcl_form.ShowJsonModel(json: TJsonArray);
+begin
+  MemoJson.lines.add(json.ToString);
+  json.Free;
+end;
+
+procedure Tvcl_form.SpeedButton1Click(Sender: TObject);
+begin
+  RadioButtonSim.Checked := false;
+  RadioButtonNao.Checked := false;
 end;
 
 end.
