@@ -9,6 +9,7 @@ uses
   Data.DB,
   System.Generics.Collections,
   storm.fields.interfaces,
+  storm.schema.interfaces,
   DFE.Maybe;
 
 Type
@@ -19,6 +20,8 @@ Type
     Function FromJSON(Value : TJSONObject) : Boolean;
     Function FromDataset(Value : TDataset) : Boolean;
     Function FieldByName(Name : String) : Maybe<IStormField>;
+    Function ThisFieldIsAssigned(Name : String) : Boolean;
+
   end;
 
 implementation

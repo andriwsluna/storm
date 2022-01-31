@@ -45,12 +45,14 @@ Type
     ); Reintroduce;
   End;
 
+  function ThisColumnIsPrimaryKey(column : IStormSchemaColumn) : boolean;
+
 implementation
 
-{ TStormTableSchema }
-
-
-
+function ThisColumnIsPrimaryKey(column : IStormSchemaColumn) : boolean;
+begin
+  Result := column.IsPrimaryKey
+end;
 { TStormColumnSchema }
 
 constructor TStormColumnSchema.Create(ColumnName, FieldName: string;

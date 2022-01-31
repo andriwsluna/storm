@@ -46,7 +46,9 @@ uses
   storm.fields.float in '..\..\src\lib\fields\storm.fields.float.pas',
   storm.fields.int in '..\..\src\lib\fields\storm.fields.int.pas',
   storm.fields.interfaces in '..\..\src\lib\fields\storm.fields.interfaces.pas',
-  storm.fields.str in '..\..\src\lib\fields\storm.fields.str.pas';
+  storm.fields.str in '..\..\src\lib\fields\storm.fields.str.pas',
+  storm.fields.utils in '..\..\src\lib\fields\storm.fields.utils.pas',
+  DFE.Utils in '..\..\..\DelphiFunctionalExtensions\src\DFE.Utils.pas';
 
 {$R *.res}
 

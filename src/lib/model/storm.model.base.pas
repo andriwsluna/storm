@@ -19,7 +19,7 @@ USES
 Type
 
   TStormModel<EntityType : IStormEntity> =
-  class(TIterator<EntityType, IStormModel<EntityType>>, IStormModel<EntityType>)
+  class(TIteratorEx<EntityType, IStormModel<EntityType>>, IStormModel<EntityType>)
   private
 
 
@@ -35,9 +35,9 @@ Type
   public
     Constructor FromDataset(Dataset : TDataset);
     Procedure AddRecord(entity : EntityType);
-    Function Records() : TList<EntityType>;
-    Function LoadFromDataset(Dataset : TDataset) : Boolean;
-    Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONArray>;
+    Function  Records() : TList<EntityType>;
+    Function  LoadFromDataset(Dataset : TDataset) : Boolean;
+    Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONArray>;
     function  ForEach(proc : TForEachFunction<EntityType>) : IStormModel<EntityType>;
     function  Map(func : TMapFunction<EntityType>) : IStormModel<EntityType>;
     function  Filter(func : TFilterFunction<EntityType>) : IStormModel<EntityType>;

@@ -190,6 +190,7 @@ object vcl_form: Tvcl_form
     Height = 25
     Caption = 'Button6'
     TabOrder = 10
+    OnClick = Button6Click
   end
   object EditCodigoMarca: TEdit
     Left = 424

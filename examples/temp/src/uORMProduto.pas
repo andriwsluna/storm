@@ -363,30 +363,35 @@ end;
 
 function TProdutoORM.UpdateEntity(Entity: IProduto): IUpdateEntityResult;
 begin
-  Result := Update()
-  .FromEntyity(Entity)
-  .Where
-  .Codigo.IsEqualsTo(Entity.Codigo.GetValue.GetValueOrDefault(''))
-  .Go
-  .Execute
-  .BindTo<IUpdateEntityResult>
-  (
-    function(res : IStormUpdateSuccess) : IUpdateEntityResult
-    begin
-      if res.RowsUpdated >= 1 then
+  if VerifyPrimaryKeyFields(Entity) then
+  begin
+    Result := Update()
+    .FromEntyity(Entity)
+    .Where
+    .Codigo.IsEqualsTo(Entity.Codigo.GetValue.GetValueOrDefault(''))
+    .Go
+    .Execute
+    .BindTo<IUpdateEntityResult>
+    (
+      function(res : IStormUpdateSuccess) : IUpdateEntityResult
       begin
-        result := Entity;
+        if res.RowsUpdated >= 1 then
+        begin
+          result := Entity;
+        end
+        else
+        begin
+          Result := TStormExecutionFail.Create(TStormSqlPartition(res),'Record not found');
+        end;
+      end,
+      function(res : IStormExecutionFail) : IUpdateEntityResult
+      begin
+        Result := res;
       end
-      else
-      begin
-        Result := TStormExecutionFail.Create(TStormSqlPartition(res),'Record not found');
-      end;
-    end,
-    function(res : IStormExecutionFail) : IUpdateEntityResult
-    begin
-      Result := res;
-    end
-  );
+    );
+  end;
+
+
 
 end;
 

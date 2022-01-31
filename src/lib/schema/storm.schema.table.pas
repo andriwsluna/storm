@@ -5,6 +5,7 @@ interface
 Uses
   storm.schema.interfaces,
   DFE.Maybe,
+  DFE.interfaces,
   System.Generics.Collections,
   System.Classes,
   System.Sysutils;
@@ -12,7 +13,7 @@ Uses
 Type
   TStormTableSchema = Class Abstract(TInterfacedObject, IStormTableSchema)
   private
-    FColumns : TList<IStormSchemaColumn>;
+    FColumns : IIterator<IStormSchemaColumn>;
     FColumnsDictionary : TDictionary<string,IStormSchemaColumn>;
   protected
 
@@ -33,7 +34,7 @@ Type
     property TableName  : String read FTableName;
     property EntityName : String read GetEntityName;
 
-    Function  GetColumns : TList<IStormSchemaColumn>;
+    Function  GetColumns : IIterator<IStormSchemaColumn>;
 
     Function ColumnByName(name : string) : Maybe<IStormSchemaColumn>;
     Function ColumnById(id : integer) : Maybe<IStormSchemaColumn>;
@@ -47,6 +48,10 @@ Type
 
 implementation
 
+USES
+  DFE.Iterator;
+
+
 { TStormTableSchema }
 
 procedure TStormTableSchema.AddColumn(column: IStormSchemaColumn);
@@ -57,10 +62,7 @@ end;
 
 function TStormTableSchema.ColumnById(id: integer): Maybe<IStormSchemaColumn>;
 begin
-  if Assigned(FColumns.Items[id]) then
-  begin
-    result := FColumns.Items[id];
-  end;
+  Result := FColumns.GetItem(id);
 end;
 
 function TStormTableSchema.ColumnByName(
@@ -90,11 +92,10 @@ end;
 
 procedure TStormTableSchema.Finalize;
 begin
-  FColumns.Free;
   FColumnsDictionary.Free;
 end;
 
-function TStormTableSchema.GetColumns: TList<IStormSchemaColumn>;
+function TStormTableSchema.GetColumns: IIterator<IStormSchemaColumn>;
 begin
   Result := FColumns;
 end;
@@ -116,7 +117,7 @@ end;
 
 procedure TStormTableSchema.Initialize;
 begin
-  FColumns := TList<IStormSchemaColumn>.Create;
+  FColumns := TIterator<IStormSchemaColumn>.Create;
   FColumnsDictionary := TDictionary<string,IStormSchemaColumn>.Create();
 end;
 

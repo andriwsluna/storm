@@ -12,9 +12,10 @@ Uses
   storm.orm.interfaces,
   storm.orm.query,
   storm.model.base,
+  storm.fields.interfaces,
   storm.model.interfaces,
   storm.entity.interfaces,
-
+  storm.entity.base,
   System.Sysutils, System.Classes;
 
 Type
@@ -201,6 +202,8 @@ Type
 
      Procedure Initialize; Virtual;
      Procedure Finalize; Virtual;
+
+     Function VerifyPrimaryKeyFields(Entity : IStormEntity) : Boolean;
   public
 
     FClassConstructor : TDictionary<string, IInterface>;
@@ -213,6 +216,7 @@ Type
 implementation
 
 Uses
+  storm.schema.column,
   System.TypInfo,
   System.Strutils,
   storm.dependency.register;
@@ -279,6 +283,16 @@ begin
 
   InsertColumnList := TDictionary<string, string>.Create();
 
+end;
+
+function TStormORM.VerifyPrimaryKeyFields(Entity: IStormEntity): Boolean;
+begin
+  result :=
+  TableSchema
+    .GetColumns
+    .Filter(ThisColumnIsPrimaryKey)
+    .Filter(TStormEntity(Entity).ThisColumnIsNotAssigned)
+    .Count = 0 ;
 end;
 
 { TStormChild }

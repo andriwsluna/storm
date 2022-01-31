@@ -42,7 +42,7 @@ uses
   ;
 
 type
-
+  Tx = function(item : tobject)  : Boolean of object;
   Tvcl_form = class(TForm)
     ADOConnection1: TADOConnection;
     Button1: TButton;
@@ -78,6 +78,7 @@ type
     procedure Button5Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
   private
     Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
@@ -93,15 +94,23 @@ type
     Function  GetDataAlteracao() : Maybe<TDateTime>;
     procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
     Procedure ProdutoToJson(produto : IProduto);
+    function xnxx(Sender: TObject) : boolean;
   public
 
 
   end;
 
+procedure dofunc(x : Tx);
+
 var
   vcl_form : Tvcl_form;
 
 implementation
+
+procedure dofunc(x : Tx);
+begin
+  x(nil);
+end;
 
 {$R *.dfm}
 
@@ -192,6 +201,11 @@ begin
 end;
 
 
+
+procedure Tvcl_form.Button6Click(Sender: TObject);
+begin
+  dofunc(Tvcl_form.Create(nil).xnxx)
+end;
 
 procedure Tvcl_form.Button7Click(Sender: TObject);
 VAR
@@ -352,6 +366,11 @@ procedure Tvcl_form.SpeedButton1Click(Sender: TObject);
 begin
   RadioButtonSim.Checked := false;
   RadioButtonNao.Checked := false;
+end;
+
+function Tvcl_form.xnxx(Sender: TObject): boolean;
+begin
+  result := false;
 end;
 
 end.

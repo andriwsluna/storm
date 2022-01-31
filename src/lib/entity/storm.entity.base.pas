@@ -6,6 +6,7 @@ USES
   storm.entity.interfaces,
   storm.values.interfaces,
   storm.fields.interfaces,
+  storm.schema.interfaces,
   DFE.Maybe,
 
   Data.DB,
@@ -34,12 +35,20 @@ type
     Function StormFields() : TList<IStormField>;
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONObject>;
     Function FieldByName(Name : String) : Maybe<IStormField>;
+    Function ThisFieldIsAssigned(Name : String) : Boolean;
+    Function ThisColumnIsNotAssigned(SchemaColumn : IStormSchemaColumn) : Boolean;
     Function FromJSON(Value : TJSONObject) : Boolean;
     Function FromDataset(Value : TDataset) : Boolean;
     Function Clone( Target : IStormEntity) : Boolean;
   end;
 
+
 implementation
+
+uses
+  DFE.Utils,
+  storm.fields.utils;
+
 
 { TStormEntity }
 
@@ -150,6 +159,19 @@ function TStormEntity.StormFields: TList<IStormField>;
 begin
   Result := FFieldList;
 end;
+
+function TStormEntity.ThisColumnIsNotAssigned(
+  SchemaColumn: IStormSchemaColumn): Boolean;
+begin
+  Result := Not ThisFieldIsAssigned(SchemaColumn.GetColumnName);
+end;
+
+function TStormEntity.ThisFieldIsAssigned(Name: String): Boolean;
+begin
+  Result := FieldByName(Name).BindTo<Boolean>(FieldsIsAssigned, ReturnFalse)
+end;
+
+
 
 function TStormEntity.ToJSON(ConvertNulls: Boolean): Maybe<TJSONObject>;
 var
