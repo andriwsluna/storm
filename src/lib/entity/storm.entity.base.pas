@@ -15,6 +15,7 @@ USES
   System.Generics.Collections,
   System.SysUtils;
 
+
 type
   TStormEntity = class(TInterfacedObject, IStormEntity)
   private
@@ -46,10 +47,12 @@ type
 implementation
 
 uses
-  DFE.Utils,
   storm.fields.utils;
 
-
+Function ReturnFalse() : Boolean;
+BEGIN
+  Result := False;
+End;
 { TStormEntity }
 
 procedure TStormEntity.AddStormField(Field: IStormField);
