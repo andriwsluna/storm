@@ -38,7 +38,7 @@ uses
   FireDAC.VCLUI.Wait, FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Rtti,
   System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.EngExt,
   Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope, Vcl.Mask,
-  Vcl.ExtCtrls, Vcl.Buttons
+  Vcl.ExtCtrls, Vcl.Buttons, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef
   ;
 
 type
@@ -60,8 +60,6 @@ type
     Button4: TButton;
     Button5: TButton;
     Button6: TButton;
-    EditCodigoMarca: TEdit;
-    EditPreco: TEdit;
     RadioGroup: TRadioGroup;
     RadioButtonSim: TRadioButton;
     RadioButtonNao: TRadioButton;
@@ -69,6 +67,12 @@ type
     EditDataCriacao: TMaskEdit;
     EditDataAlteracao: TMaskEdit;
     Button7: TButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    ComboBoxMarca: TComboBox;
+    EditPreco: TMaskEdit;
+    Label4: TLabel;
+    Label5: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -258,9 +262,9 @@ function Tvcl_form.GetCodigoMarca: Maybe<integer>;
 var
   i : integer;
 begin
-  if EditCodigoMarca.Text <> '' then
+  if ComboBoxMarca.ItemIndex > -1 then
   begin
-    if TryStrToInt(EditCodigoMarca.Text, i) then
+    if TryStrToInt(ComboBoxMarca.Items[ComboBoxMarca.ItemIndex], i) then
     begin
       result := i;
     end;
@@ -270,8 +274,8 @@ end;
 
 function Tvcl_form.GetConnection: IStormSQLConnection;
 begin
-  Result := FDconnection1.StormDriver;
-  //result := Adoconnection1.StormDriver;
+  //Result := FDconnection1.StormDriver;
+  result := Adoconnection1.StormDriver;
 end;
 
 

@@ -10,7 +10,6 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -30,6 +29,34 @@ object vcl_form: Tvcl_form
     Height = 22
     Caption = 'x'
     OnClick = SpeedButton1Click
+  end
+  object Label2: TLabel
+    Left = 152
+    Top = 230
+    Width = 33
+    Height = 13
+    Caption = 'C'#243'digo'
+  end
+  object Label3: TLabel
+    Left = 288
+    Top = 230
+    Width = 46
+    Height = 13
+    Caption = 'Descri'#231#227'o'
+  end
+  object Label4: TLabel
+    Left = 433
+    Top = 230
+    Width = 29
+    Height = 13
+    Caption = 'Marca'
+  end
+  object Label5: TLabel
+    Left = 608
+    Top = 230
+    Width = 27
+    Height = 13
+    Caption = 'Pre'#231'o'
   end
   object Button1: TButton
     Left = 40
@@ -192,28 +219,13 @@ object vcl_form: Tvcl_form
     TabOrder = 10
     OnClick = Button6Click
   end
-  object EditCodigoMarca: TEdit
-    Left = 424
-    Top = 248
-    Width = 121
-    Height = 21
-    NumbersOnly = True
-    TabOrder = 11
-  end
-  object EditPreco: TEdit
-    Left = 584
-    Top = 248
-    Width = 121
-    Height = 21
-    TabOrder = 12
-  end
   object RadioGroup: TRadioGroup
     Left = 144
     Top = 288
     Width = 97
     Height = 38
     Caption = 'ESt'#225' ativo ?'
-    TabOrder = 13
+    TabOrder = 11
   end
   object RadioButtonSim: TRadioButton
     Left = 152
@@ -221,7 +233,7 @@ object vcl_form: Tvcl_form
     Width = 41
     Height = 17
     Caption = 'Sim'
-    TabOrder = 14
+    TabOrder = 12
   end
   object RadioButtonNao: TRadioButton
     Left = 199
@@ -229,7 +241,7 @@ object vcl_form: Tvcl_form
     Width = 38
     Height = 17
     Caption = 'N'#227'o'
-    TabOrder = 15
+    TabOrder = 13
   end
   object EditDataCriacao: TMaskEdit
     Left = 288
@@ -238,7 +250,7 @@ object vcl_form: Tvcl_form
     Height = 21
     EditMask = '!00/00/0000;1;_'
     MaxLength = 10
-    TabOrder = 16
+    TabOrder = 14
     Text = '  /  /    '
   end
   object EditDataAlteracao: TMaskEdit
@@ -248,7 +260,7 @@ object vcl_form: Tvcl_form
     Height = 21
     EditMask = '!00/00/0000 00:00:00;1;_'
     MaxLength = 19
-    TabOrder = 17
+    TabOrder = 15
     Text = '  /  /       :  :  '
   end
   object Button7: TButton
@@ -257,14 +269,38 @@ object vcl_form: Tvcl_form
     Width = 121
     Height = 25
     Caption = 'Update By Entity'
-    TabOrder = 18
+    TabOrder = 16
     OnClick = Button7Click
+  end
+  object ComboBoxMarca: TComboBox
+    Left = 433
+    Top = 248
+    Width = 104
+    Height = 21
+    Style = csDropDownList
+    ItemIndex = 0
+    TabOrder = 17
+    Text = '1'
+    Items.Strings = (
+      '1'
+      '2'
+      '3'
+      '4')
+  end
+  object EditPreco: TMaskEdit
+    Left = 608
+    Top = 248
+    Width = 112
+    Height = 21
+    EditMask = '9,99;1; '
+    MaxLength = 4
+    TabOrder = 18
+    Text = ' ,  '
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 
-      'Provider=SQLOLEDB.1;Password=admserver01;Persist Security Info=T' +
-      'rue;User ID=sa;Initial Catalog=banco_de_testes;Data Source=sql_s' +
-      'erver'
+      'Provider=SQLOLEDB.1;Password=QWER@1234;Persist Security Info=Tru' +
+      'e;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mssql'
     LoginPrompt = False
     Provider = 'SQLOLEDB.1'
     Left = 632
@@ -276,12 +312,11 @@ object vcl_form: Tvcl_form
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Database=bancodetestes'
+      'Server=mssql'
+      'Password=QWER@1234'
       'User_Name=sa'
-      'Password=S@geBr.2014'
-      'Port=5003'
-      'Server=localhost'
-      'DriverID=MySQL')
+      'Database=BancoDeTestes'
+      'DriverID=MSSQL')
     LoginPrompt = False
     Left = 480
     Top = 312
