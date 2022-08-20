@@ -22,6 +22,7 @@ Type
     Function  GetValue() :  Maybe<Boolean>;
     Function  GetValueOrDefault(default : Boolean = false) :  Boolean;
     Function  FromDataField(field : TField) : boolean; Override;
+    Function  PopulateDataField(field : TField) : boolean; Override;
   end;
 
 implementation
@@ -55,6 +56,34 @@ procedure TStormBooleanField.InitializeStormValue;
 begin
   inherited;
   FStormValue := TbooleanValue.Create;
+end;
+
+function TStormBooleanField.PopulateDataField(field: TField): boolean;
+begin
+  Result := false;
+  try
+    if assigned(field) then
+    begin
+      Value.GetValue
+      .OnSome
+      (
+        procedure(v : boolean)
+        begin
+          field.AsBoolean := v;
+        end
+      )
+      .OnNone
+      (
+        procedure
+        begin
+          field.Value := varNull;
+        end
+      );
+      Result := True;
+    end
+  except
+    {TODO -oOwner -cGeneral : PopulateDataField}
+  end;
 end;
 
 function TStormBooleanField.SetValue(value: Boolean): Boolean;

@@ -40,6 +40,8 @@ Type
       Function  FromJSON(Value : TJSONObject) : Boolean; Overload;
       Function  FromDataField(field : TField) : boolean; Virtual;
       Function  FromDataSet(dataset : TDataset) : boolean;
+      Function  PopulateDataset(dataset : TDataset) : boolean;
+      Function  PopulateDataField(field : TField) : boolean; Virtual;
 
       Function  Clone(Target : IStormField) : Boolean;
 
@@ -148,6 +150,32 @@ end;
 function TStormField.JSONName: String;
 begin
   Result := FJSONName;
+end;
+
+function TStormField.PopulateDataField(field: TField): boolean;
+begin
+  Result := false;
+end;
+
+function TStormField.PopulateDataset(dataset: TDataset): boolean;
+begin
+  Result := false;
+  try
+    if Self.IsAssigned then
+    begin
+       Result := PopulateDataField(dataset.FieldByName(self.FFieldName));
+    end
+    else
+    begin
+      dataset.FieldByName(self.FFieldName).Clear;
+      Result := true;
+    end;
+  except
+    on e : Exception do
+    begin
+      {TODO -oError -cGeneral : PopulateDataset}
+    end;
+  end;
 end;
 
 function TStormField.StormValue: IStormValue;

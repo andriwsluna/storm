@@ -20,6 +20,8 @@ Type
     Function  FromJSON(Value : TJSONObject) : Boolean; Overload;
     Function  FromDataField(field : TField) : boolean;
     Function  FromDataset(dataset : TDataset) : boolean;
+    Function  PopulateDataset(dataset : TDataset) : boolean;
+    Function  PopulateDataField(field : TField) : boolean;
 
     Function StormValue() : IStormValue;
 

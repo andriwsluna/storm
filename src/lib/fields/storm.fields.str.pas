@@ -30,6 +30,7 @@ Type
       Function  GetValue() :  Maybe<String>;
       Function  GetValueOrDefault(default : string = '') :  string;
       Function  FromDataField(field : TField) : boolean; Override;
+      Function  PopulateDataField(field : TField) : boolean; Override;
   End;
 
 implementation
@@ -72,6 +73,34 @@ begin
 end;
 
 
+
+function TStormStringField.PopulateDataField(field: TField): boolean;
+begin
+  Result := false;
+  try
+    if assigned(field) then
+    begin
+      Value.GetValue
+      .OnSome
+      (
+        procedure(v : string)
+        begin
+          field.AsString := v;
+        end
+      )
+      .OnNone
+      (
+        procedure
+        begin
+          field.Value := varNull;
+        end
+      );
+      Result := True;
+    end
+  except
+    {TODO -oOwner -cGeneral : PopulateDataField}
+  end;
+end;
 
 function TStormStringField.SetValue(value: String): Boolean;
 begin

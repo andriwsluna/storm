@@ -73,6 +73,7 @@ type
     EditPreco: TMaskEdit;
     Label4: TLabel;
     Label5: TLabel;
+    FDMemTable1: TFDMemTable;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -82,7 +83,7 @@ type
     procedure Button5Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
-    procedure Button6Click(Sender: TObject);
+    procedure DataSource1DataChange(Sender: TObject; Field: TField);
   private
     Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
@@ -98,7 +99,8 @@ type
     Function  GetDataAlteracao() : Maybe<TDateTime>;
     procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
     Procedure ProdutoToJson(produto : IProduto);
-    function xnxx(Sender: TObject) : boolean;
+    Procedure AtualizarGridDoProduto(produto : IProduto);
+    Procedure CarregarProduto();
   public
 
 
@@ -118,6 +120,11 @@ end;
 
 {$R *.dfm}
 
+
+procedure Tvcl_form.AtualizarGridDoProduto(produto: IProduto);
+begin
+  produto.PopulateDataset(FDMemTable1);
+end;
 
 procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
@@ -206,11 +213,6 @@ end;
 
 
 
-procedure Tvcl_form.Button6Click(Sender: TObject);
-begin
-  dofunc(Tvcl_form.Create(nil).xnxx)
-end;
-
 procedure Tvcl_form.Button7Click(Sender: TObject);
 VAR
   produto : IProduto;
@@ -219,11 +221,26 @@ begin
   if produto.FromDataset(datasource1.dataset) then
   begin
     produto.Descricao.SetValue(editdescricao.Text);
+    produto.CodigoMarca.SetValue(StrToInt(ComboBoxMarca.Text));
+    produto.Preco.Value.SetThisOrClear(getpreco());
     Produto_ORM(Getconnection)
     .UpdateEntity(produto)
-    .OnSuccess(ProdutoToJson)
+    .OnSuccess(AtualizarGridDoProduto)
     .OnFail(MostrarErro)
   end;
+end;
+
+procedure Tvcl_form.CarregarProduto;
+begin
+  EditCodigo.Text := FDMemTable1.FieldByName('codigo_produto').AsString;
+  EditDescricao.Text := FDMemTable1.FieldByName('descricao').AsString;
+  ComboBoxMarca.Text := FDMemTable1.FieldByName('codigo_marca').AsString;
+  EditPreco.Text := FloatTostr(FDMemTable1.FieldByName('preco').AsFloat);
+end;
+
+procedure Tvcl_form.DataSource1DataChange(Sender: TObject; Field: TField);
+begin
+  CarregarProduto();
 end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
@@ -347,9 +364,12 @@ begin
 end;
 
 procedure Tvcl_form.ShowDataset(resultado: IStormSelectSuccess<IProduto>);
+VAR
+  ds : tdataset;
 begin
-  freeDataset;
-  DataSource1.DataSet := resultado.GetDataset;
+  ds :=  resultado.GetDataset;
+  FDMemTable1.CopyDataSet(ds,[coStructure,coAppend,coRestart]);
+  ds.Free;
   resultado.GetModel.ToJSON(true).OnSome(ShowJsonModel)
 end;
 
@@ -372,9 +392,6 @@ begin
   RadioButtonNao.Checked := false;
 end;
 
-function Tvcl_form.xnxx(Sender: TObject): boolean;
-begin
-  result := false;
-end;
+
 
 end.

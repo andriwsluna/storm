@@ -40,6 +40,7 @@ type
     Function ThisColumnIsNotAssigned(SchemaColumn : IStormSchemaColumn) : Boolean;
     Function FromJSON(Value : TJSONObject) : Boolean;
     Function FromDataset(Value : TDataset) : Boolean;
+    Function PopulateDataset(Dataset : TDataset) : Boolean;
     Function Clone( Target : IStormEntity) : Boolean;
   end;
 
@@ -156,6 +157,45 @@ procedure TStormEntity.Initialize;
 begin
   FFieldList        := TList<IStormField>.Create;
   FFieldDictionary  := TDictionary<String,IStormField>.Create();
+end;
+
+function TStormEntity.PopulateDataset(Dataset: TDataset): Boolean;
+var
+  field : IStormField;
+begin
+  Result := false;
+  if Assigned(Dataset) then
+  BEGIN
+    if Not Dataset.IsEmpty then
+    begin
+      Dataset.DisableControls;
+      try
+        Dataset.Edit;
+        try
+          for field in FFieldList do
+          begin
+            Result := field.PopulateDataset(Dataset) or result;
+          end;
+
+          if Result then
+          begin
+            Dataset.Post;
+          end
+          else
+          begin
+            Dataset.Cancel;
+          end;
+        except
+          Dataset.Cancel;
+        end;
+      finally
+        Dataset.EnableControls;
+      end;
+
+    end;
+
+
+  END
 end;
 
 function TStormEntity.StormFields: TList<IStormField>;

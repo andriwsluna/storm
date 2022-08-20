@@ -27,6 +27,7 @@ type
     public
 
       Function  SetValue(value : Extended) : Boolean;
+      Function  SetThisOrClear(value : Maybe<Extended>) : Boolean;
       Function  GetValue() :  Maybe<Extended>;
 
       Function  Clone(target : IStormValue) : Boolean;
@@ -190,6 +191,21 @@ begin
   end;
 end;
 
+
+function TFloatValue.SetThisOrClear(value: Maybe<Extended>): Boolean;
+begin
+  Result := value
+  .BindTo<Boolean>
+  (
+    self.SetValue,
+    function : boolean
+    begin
+      self.Clear;
+      result := true;
+    end
+  ) ;
+
+end;
 
 function TFloatValue.SetValue(value: Extended): Boolean;
 begin

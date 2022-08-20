@@ -30,6 +30,7 @@ Type
       Function  GetValue() :  Maybe<integer>;
       Function  GetValueOrDefault(default : integer = 0) :  integer;
       Function  FromDataField(field : TField) : boolean; Override;
+      Function  PopulateDataField(field : TField) : boolean; Override;
   End;
 
 implementation
@@ -67,6 +68,34 @@ procedure TStormIntegerField.InitializeStormValue;
 begin
   inherited;
   FStormValue := TIntegerValue.Create;
+end;
+
+function TStormIntegerField.PopulateDataField(field: TField): boolean;
+begin
+  Result := false;
+  try
+    if assigned(field) then
+    begin
+      Value.GetValue
+      .OnSome
+      (
+        procedure(v : Integer)
+        begin
+          field.AsInteger := v;
+        end
+      )
+      .OnNone
+      (
+        procedure
+        begin
+          field.Value := varNull;
+        end
+      );
+      Result := True;
+    end
+  except
+    {TODO -oOwner -cGeneral : PopulateDataField}
+  end;
 end;
 
 function TStormIntegerField.SetValue(value: integer): Boolean;

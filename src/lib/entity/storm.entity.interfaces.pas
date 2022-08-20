@@ -21,6 +21,7 @@ Type
     Function FromDataset(Value : TDataset) : Boolean;
     Function FieldByName(Name : String) : Maybe<IStormField>;
     Function ThisFieldIsAssigned(Name : String) : Boolean;
+    Function PopulateDataset(Dataset : TDataset) : Boolean;
 
   end;
 

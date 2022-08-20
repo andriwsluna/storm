@@ -30,6 +30,7 @@ Type
       Function  GetValue() :  Maybe<extended>;
       Function  GetValueOrDefault(default : extended = 0.0) :  extended;
       Function  FromDataField(field : TField) : boolean; Override;
+      Function  PopulateDataField(field : TField) : boolean; Override;
   End;
 
 implementation
@@ -72,6 +73,34 @@ begin
 end;
 
 
+
+function TStormFloatField.PopulateDataField(field: TField): boolean;
+begin
+  Result := false;
+  try
+    if assigned(field) then
+    begin
+      Value.GetValue
+      .OnSome
+      (
+        procedure(v : Extended)
+        begin
+          field.AsExtended := v;
+        end
+      )
+      .OnNone
+      (
+        procedure
+        begin
+          field.Value := varNull;
+        end
+      );
+      Result := True;
+    end
+  except
+    {TODO -oOwner -cGeneral : PopulateDataField}
+  end;
+end;
 
 function TStormFloatField.SetValue(value: extended): Boolean;
 begin

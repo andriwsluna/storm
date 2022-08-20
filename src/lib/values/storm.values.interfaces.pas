@@ -49,6 +49,7 @@ Type
   IFloatValue = interface(IStormValue)['{40C2EB6F-A3EF-463D-AF32-6E207791FEA5}']
     Function  SetValue(value : extended) : Boolean;
     Function  GetValue() :  Maybe<extended>;
+    Function  SetThisOrClear(value : Maybe<Extended>) : Boolean;
   end;
 
   IBooleanValue = interface(IStormValue)['{7C1C0C8A-0EC6-4C52-BE2D-2543DC8235B7}']

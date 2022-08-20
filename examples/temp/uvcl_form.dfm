@@ -217,7 +217,6 @@ object vcl_form: Tvcl_form
     Height = 25
     Caption = 'Button6'
     TabOrder = 10
-    OnClick = Button6Click
   end
   object RadioGroup: TRadioGroup
     Left = 144
@@ -289,7 +288,7 @@ object vcl_form: Tvcl_form
   end
   object EditPreco: TMaskEdit
     Left = 608
-    Top = 248
+    Top = 249
     Width = 112
     Height = 21
     EditMask = '9,99;1; '
@@ -299,14 +298,18 @@ object vcl_form: Tvcl_form
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 
-      'Provider=SQLOLEDB.1;Password=QWER@1234;Persist Security Info=Tru' +
-      'e;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mssql'
+      'Provider=MSOLEDBSQL19.1;Password=QWER@1234;Persist Security Info' +
+      '=True;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mssql' +
+      ';Initial File Name="";Trust Server Certificate=True;Server SPN="' +
+      '";Authentication="";Access Token="";Host Name In Certificate=""'
     LoginPrompt = False
-    Provider = 'SQLOLEDB.1'
+    Provider = 'MSOLEDBSQL19.1'
     Left = 632
     Top = 304
   end
   object DataSource1: TDataSource
+    DataSet = FDMemTable1
+    OnDataChange = DataSource1DataChange
     Left = 304
     Top = 440
   end
@@ -325,5 +328,16 @@ object vcl_form: Tvcl_form
     VendorLib = '.\libmysql.dll'
     Left = 328
     Top = 296
+  end
+  object FDMemTable1: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 416
+    Top = 432
   end
 end

@@ -30,6 +30,7 @@ Type
       Function  GetValue() :  Maybe<TDateTime>;
       Function  GetValueOrDefault(default : TDateTime = 0.0) :  TDateTime;
       Function  FromDataField(field : TField) : boolean; Override;
+      Function  PopulateDataField(field : TField) : boolean; Override;
   End;
 
 implementation
@@ -72,6 +73,34 @@ begin
 end;
 
 
+
+function TStormDateTimeField.PopulateDataField(field: TField): boolean;
+begin
+  Result := false;
+  try
+    if assigned(field) then
+    begin
+      Value.GetValue
+      .OnSome
+      (
+        procedure(v : TDateTime)
+        begin
+          field.AsDateTime := v;
+        end
+      )
+      .OnNone
+      (
+        procedure
+        begin
+          field.Value := varNull;
+        end
+      );
+      Result := True;
+    end
+  except
+    {TODO -oOwner -cGeneral : PopulateDataField}
+  end;
+end;
 
 function TStormDateTimeField.SetValue(value: TDateTime): Boolean;
 begin
