@@ -211,12 +211,13 @@ object vcl_form: Tvcl_form
     OnClick = Button5Click
   end
   object Button6: TButton
-    Left = 48
-    Top = 288
-    Width = 75
+    Left = 8
+    Top = 269
+    Width = 121
     Height = 25
-    Caption = 'Button6'
+    Caption = 'Insert By Entity'
     TabOrder = 10
+    OnClick = Button6Click
   end
   object RadioGroup: TRadioGroup
     Left = 144
@@ -298,10 +299,11 @@ object vcl_form: Tvcl_form
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 
-      'Provider=MSOLEDBSQL19.1;Password=QWER@1234;Persist Security Info' +
-      '=True;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mssql' +
-      ';Initial File Name="";Trust Server Certificate=True;Server SPN="' +
-      '";Authentication="";Access Token="";Host Name In Certificate=""'
+      'Provider=MSOLEDBSQL19.1;Password=S@geBr.2014;Persist Security In' +
+      'fo=True;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mss' +
+      'ql;Initial File Name="";Trust Server Certificate=True;Server SPN' +
+      '="";Authentication="";Access Token="";Host Name In Certificate="' +
+      '"'
     LoginPrompt = False
     Provider = 'MSOLEDBSQL19.1'
     Left = 632
@@ -316,7 +318,7 @@ object vcl_form: Tvcl_form
   object FDConnection1: TFDConnection
     Params.Strings = (
       'Server=mssql'
-      'Password=QWER@1234'
+      'Password=S@geBr.2014'
       'User_Name=sa'
       'Database=BancoDeTestes'
       'DriverID=MSSQL')

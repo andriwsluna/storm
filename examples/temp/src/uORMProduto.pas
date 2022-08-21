@@ -27,6 +27,7 @@ Type
 
   ISelectByIDResult = TResult<IProduto, IStormExecutionFail>;
   IUpdateEntityResult = TResult<IProduto, IStormExecutionFail>;
+  IInsertEntityResult = TResult<IProduto, IStormExecutionFail>;
 
   IProdutoWhereSelector<Executor : IInterface> = interface['{CECF6A72-8A5C-491A-9B1A-BF0DB19A6C9A}']
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -85,6 +86,7 @@ Type
     Function Ativo : IStormBooleanNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function DataCriacao : IStormDateNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function FromEntyity(Entity : IProduto) : IStormInsertExecutor<IProduto>;
   end;
 
   IProdutoORM = interface(IStormORM)['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
@@ -95,6 +97,7 @@ Type
 
     Function SelectByID(const Codigo : String) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
+    Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
   end;
 
 
@@ -132,6 +135,7 @@ Type
 
     Function SelectByID(const Codigo : String) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
+    Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
   End;
 
 
@@ -178,6 +182,7 @@ Type
     Function DataCriacao : IStormDateNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Go : IStormInsertExecutor<IProduto>;
+    Function FromEntyity(Entity : IProduto) : IStormInsertExecutor<IProduto>;
   end;
 
 
@@ -308,6 +313,31 @@ begin
   Result := TProdutoFieldsInsertion.Create(self);
 end;
 
+function TProdutoORM.InsertEntity(Entity: IProduto): IInsertEntityResult;
+begin
+  if VerifyPrimaryKeyFields(Entity) then
+  begin
+    Result := Insert()
+    .FromEntyity(Entity)
+    .Execute
+    .BindTo<IInsertEntityResult>
+    (
+      function(res : IStormInsertSuccess) : IInsertEntityResult
+      begin
+        result := Entity;
+      end,
+      function(res : IStormExecutionFail) : IInsertEntityResult
+      begin
+        Result := res;
+      end
+    );
+  end
+  else
+  begin
+    Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
+  end;
+end;
+
 function TProdutoORM.ProccessSelectFail(
   res: IStormExecutionFail): ISelectByIDResult;
 begin
@@ -389,6 +419,10 @@ begin
         Result := res;
       end
     );
+  end
+  else
+  begin
+    Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
   end;
 
 
@@ -593,6 +627,23 @@ end;
 function TProdutoFieldsInsertion.Descricao: IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
   Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Descricao);
+end;
+
+function TProdutoFieldsInsertion.FromEntyity(
+  Entity: IProduto): IStormInsertExecutor<IProduto>;
+begin
+  Result := TStormInsertExecutor<IProduto>.Create
+  (
+    Self
+    .Codigo.SetValue(Entity.codigo.GetValueOrDefault())
+    .Descricao.SetValue(Entity.Descricao.GetValue())
+    .CodigoMarca.SetValue(Entity.CodigoMarca.GetValue())
+    .Preco.SetValue(Entity.Preco.GetValue())
+    .Ativo.SetValue(Entity.Ativo.GetValue())
+    .DataCriacao.SetValue(Entity.DataCriacao.GetValue())
+    .DataAlteracao.SetValue(Entity.DataAlteracao.GetValue())
+    as TStormSqlPartition
+  );
 end;
 
 function TProdutoFieldsInsertion.Go: IStormInsertExecutor<IProduto>;

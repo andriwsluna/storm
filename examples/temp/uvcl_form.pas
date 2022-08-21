@@ -81,16 +81,19 @@ type
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure DataSource1DataChange(Sender: TObject; Field: TField);
   private
+    ProdutoAtual :  IProduto;
     Function  GetConnection : IStormSQLConnection;
     procedure freeDataset;
     Procedure ShowDataset(resultado : IStormSelectSuccess<IProduto>);
     procedure ShowJson(json : TJsonObject);
     procedure ShowJsonModel(json : TJsonArray);
     Procedure MostrarErro(resultado : IStormExecutionFail);
+    Function  GetCodigo() : Maybe<String>;
     Function  GetDescricao() : Maybe<String>;
     Function  GetCodigoMarca() : Maybe<integer>;
     Function  GetPreco() : Maybe<Extended>;
@@ -100,7 +103,9 @@ type
     procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
     Procedure ProdutoToJson(produto : IProduto);
     Procedure AtualizarGridDoProduto(produto : IProduto);
+    Procedure AtualizarGridAposInsercao(produto : IProduto);
     Procedure CarregarProduto();
+    Procedure AlimentarProduto(produto : Iproduto);
   public
 
 
@@ -121,9 +126,49 @@ end;
 {$R *.dfm}
 
 
+procedure Tvcl_form.AlimentarProduto(produto: Iproduto);
+begin
+  produto.Codigo.Value.SetValue(getCodigo());
+  produto.Descricao.Value.SetValue(GetDescricao());
+  produto.CodigoMarca.Value.SetValue(GetCodigoMarca());
+  produto.Preco.Value.SetValue(getpreco());
+  produto.Ativo.Value.SetValue(GetAtivo());
+  produto.DataCriacao.Value.SetValue(GetDataCriacao());
+  produto.DataAlteracao.Value.SetValue(GetDataAlteracao());
+end;
+
+procedure Tvcl_form.AtualizarGridAposInsercao(produto: IProduto);
+begin
+  Produto_ORM(GetConnection())
+    .Select
+    .All
+    .Where
+    .Codigo.IsNotNull
+    .Go
+    .Open
+    .OnSuccess(ShowDataset)
+    .OnFail(MostrarErro);
+
+    FDMemTable1.Locate('codigo_produto',produto.Codigo.GetValueOrDefault());
+end;
+
 procedure Tvcl_form.AtualizarGridDoProduto(produto: IProduto);
 begin
-  produto.PopulateDataset(FDMemTable1);
+  FDMemTable1.DisableControls;
+  try
+    if produto.PopulateDataset(FDMemTable1) then
+    begin
+      FDMemTable1.Post;
+    end
+    else
+    begin
+      FDMemTable1.Cancel;
+    end;
+
+  finally
+    FDMemTable1.EnableControls;
+  end;
+
 end;
 
 procedure Tvcl_form.Button1Click(Sender: TObject);
@@ -211,35 +256,44 @@ begin
     .OnFail(MostrarErro)
 end;
 
-
-
-procedure Tvcl_form.Button7Click(Sender: TObject);
+procedure Tvcl_form.Button6Click(Sender: TObject);
 VAR
   produto : IProduto;
 begin
   produto := NewProduto();
-  if produto.FromDataset(datasource1.dataset) then
-  begin
-    produto.Descricao.SetValue(editdescricao.Text);
-    produto.CodigoMarca.SetValue(StrToInt(ComboBoxMarca.Text));
-    produto.Preco.Value.SetThisOrClear(getpreco());
-    Produto_ORM(Getconnection)
-    .UpdateEntity(produto)
-    .OnSuccess(AtualizarGridDoProduto)
-    .OnFail(MostrarErro)
-  end;
+  AlimentarProduto(produto);
+
+
+  Produto_ORM(Getconnection)
+  .InsertEntity(produto)
+  .OnSuccess(AtualizarGridAposInsercao)
+  .OnFail(MostrarErro)
+end;
+
+
+
+procedure Tvcl_form.Button7Click(Sender: TObject);
+
+begin
+  AlimentarProduto(ProdutoAtual);
+  Produto_ORM(Getconnection)
+  .UpdateEntity(ProdutoAtual)
+  .OnSuccess(AtualizarGridDoProduto)
+  .OnFail(MostrarErro)
+
 end;
 
 procedure Tvcl_form.CarregarProduto;
 begin
-  EditCodigo.Text := FDMemTable1.FieldByName('codigo_produto').AsString;
-  EditDescricao.Text := FDMemTable1.FieldByName('descricao').AsString;
-  ComboBoxMarca.Text := FDMemTable1.FieldByName('codigo_marca').AsString;
-  EditPreco.Text := FloatTostr(FDMemTable1.FieldByName('preco').AsFloat);
+    EditCodigo.Text := ProdutoAtual.Codigo.GetValueOrDefault();
+    EditDescricao.Text := ProdutoAtual.Descricao.GetValueOrDefault();
+    ComboBoxMarca.Text := ProdutoAtual.CodigoMarca.GetValueOrDefault().ToString;
+    EditPreco.Text := ProdutoAtual.Preco.GetValueOrDefault().ToString;
 end;
 
 procedure Tvcl_form.DataSource1DataChange(Sender: TObject; Field: TField);
 begin
+  ProdutoAtual.FromDataset(datasource1.dataset);
   CarregarProduto();
 end;
 
@@ -247,6 +301,8 @@ procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
   DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
   //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+
+  ProdutoAtual := NewProduto();
 end;
 
 procedure Tvcl_form.FormDestroy(Sender: TObject);
@@ -275,6 +331,14 @@ begin
   end;
 end;
 
+function Tvcl_form.GetCodigo: Maybe<String>;
+begin
+  if EditCodigo.Text <> '' then
+  begin
+    Result := EditCodigo.Text;
+  end;
+end;
+
 function Tvcl_form.GetCodigoMarca: Maybe<integer>;
 var
   i : integer;
@@ -291,8 +355,8 @@ end;
 
 function Tvcl_form.GetConnection: IStormSQLConnection;
 begin
-  //Result := FDconnection1.StormDriver;
-  result := Adoconnection1.StormDriver;
+  Result := FDconnection1.StormDriver;
+  //result := Adoconnection1.StormDriver;
 end;
 
 
