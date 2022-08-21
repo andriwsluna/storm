@@ -26,8 +26,8 @@ type
       Procedure Inititalize();  Override;
     public
 
-      Function  SetValue(value : Extended) : Boolean;
-      Function  SetThisOrClear(value : Maybe<Extended>) : Boolean;
+      Function  SetValue(value : Extended) : Boolean;  Overload;
+      Function  SetValue(value : Maybe<Extended>) : Boolean;  Overload;
       Function  GetValue() :  Maybe<Extended>;
 
       Function  Clone(target : IStormValue) : Boolean;
@@ -192,9 +192,9 @@ begin
 end;
 
 
-function TFloatValue.SetThisOrClear(value: Maybe<Extended>): Boolean;
+function TFloatValue.SetValue(Value: Maybe<Extended>): Boolean;
 begin
-  Result := value
+  Result := Value
   .BindTo<Boolean>
   (
     self.SetValue,

@@ -26,7 +26,8 @@ type
       Procedure Inititalize();  Override;
     public
 
-      Function  SetValue(value : boolean) : Boolean;
+      Function  SetValue(value : boolean) : Boolean; Overload;
+      Function  SetValue(value : Maybe<boolean>) : Boolean;  Overload;
       Function  GetValue() :  Maybe<boolean>;
 
       Function  Clone(target : IStormValue) : Boolean;
@@ -144,6 +145,20 @@ end;
 procedure TBooleanValue.Inititalize;
 begin
   inherited;
+end;
+
+function TBooleanValue.SetValue(value: Maybe<boolean>): Boolean;
+begin
+  Result := Value
+  .BindTo<Boolean>
+  (
+    self.SetValue,
+    function : boolean
+    begin
+      self.Clear;
+      result := true;
+    end
+  ) ;
 end;
 
 function TBooleanValue.ToBool: Maybe<Boolean>;

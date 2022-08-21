@@ -17,7 +17,8 @@ Type
   protected
 
   public
-    Function  SetValue(value : TDate) : Boolean; Reintroduce;
+    Function  SetValue(value : TDate) : Boolean; Reintroduce; Overload;
+    Function  SetValue(value : Maybe<TDate>) : Boolean;  Overload;
     Function  GetValue() :  Maybe<TDate>; Reintroduce;
     Function  ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONValue>; Override;
     Function  ToString : Maybe<String>; Override;
@@ -38,6 +39,20 @@ end;
 function TDateValue.SetValue(value: TDate): Boolean;
 begin
   result := inherited SetValue(value);
+end;
+
+function TDateValue.SetValue(value: Maybe<TDate>): Boolean;
+begin
+  Result := Value
+  .BindTo<Boolean>
+  (
+    self.SetValue,
+    function : boolean
+    begin
+      self.Clear;
+      result := true;
+    end
+  ) ;
 end;
 
 function TDateValue.ToJSON(ConvertNulls: Boolean): Maybe<TJSONValue>;

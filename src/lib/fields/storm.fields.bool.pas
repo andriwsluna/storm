@@ -27,6 +27,9 @@ Type
 
 implementation
 
+Uses
+  storm.fields.utils;
+
 { TStormBooleanField }
 
 function TStormBooleanField.FromDataField(field: TField): boolean;
@@ -58,25 +61,25 @@ begin
   FStormValue := TbooleanValue.Create;
 end;
 
-function TStormBooleanField.PopulateDataField(field: TField): boolean;
+function TStormBooleanField.PopulateDataField(Field: TField): boolean;
 begin
   Result := false;
   try
-    if assigned(field) then
+    if assigned(Field) then
     begin
       Value.GetValue
       .OnSome
       (
         procedure(v : boolean)
         begin
-          field.AsBoolean := v;
+          Field.AsBoolean := v;
         end
       )
       .OnNone
       (
         procedure
         begin
-          field.Value := varNull;
+          Field.Clear;
         end
       );
       Result := True;

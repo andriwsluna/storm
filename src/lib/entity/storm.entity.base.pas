@@ -168,33 +168,16 @@ begin
   BEGIN
     if Not Dataset.IsEmpty then
     begin
-      Dataset.DisableControls;
-      try
+      if Not (Dataset.State = TDataSetState.dsEdit) then
+      begin
         Dataset.Edit;
-        try
-          for field in FFieldList do
-          begin
-            Result := field.PopulateDataset(Dataset) or result;
-          end;
-
-          if Result then
-          begin
-            Dataset.Post;
-          end
-          else
-          begin
-            Dataset.Cancel;
-          end;
-        except
-          Dataset.Cancel;
-        end;
-      finally
-        Dataset.EnableControls;
       end;
 
+      for field in FFieldList do
+      begin
+        Result := field.PopulateDataset(Dataset) or result;
+      end;
     end;
-
-
   END
 end;
 

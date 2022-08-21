@@ -27,7 +27,8 @@ type
       Procedure Inititalize();  Override;
     public
 
-      Function  SetValue(value : TDateTime) : Boolean;
+      Function  SetValue(value : TDateTime) : Boolean; Overload;
+      Function  SetValue(value : Maybe<TDateTime>) : Boolean;  Overload;
       Function  GetValue() :  Maybe<TDateTime>;
 
       Function  Clone(target : IStormValue) : Boolean;
@@ -120,6 +121,20 @@ end;
 procedure TDateTimeValue.Inititalize;
 begin
   inherited;
+end;
+
+function TDateTimeValue.SetValue(value: Maybe<TDateTime>): Boolean;
+begin
+  Result := Value
+  .BindTo<Boolean>
+  (
+    self.SetValue,
+    function : boolean
+    begin
+      self.Clear;
+      result := true;
+    end
+  ) ;
 end;
 
 function TDateTimeValue.ToBool: Maybe<Boolean>;

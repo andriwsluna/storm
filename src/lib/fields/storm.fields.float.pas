@@ -92,7 +92,7 @@ begin
       (
         procedure
         begin
-          field.Value := varNull;
+          Field.Clear();
         end
       );
       Result := True;

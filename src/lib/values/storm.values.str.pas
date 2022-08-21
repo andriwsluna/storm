@@ -26,7 +26,8 @@ type
       Procedure Inititalize();  Override;
     public
 
-      Function  SetValue(value : String) : Boolean;
+      Function  SetValue(value : String) : Boolean; Overload;
+      Function  SetValue(value : Maybe<String>) : Boolean;  Overload;
       Function  GetValue() :  Maybe<String>;
 
       Function  Clone(target : IStormValue) : Boolean;
@@ -122,6 +123,20 @@ end;
 procedure TStringValue.Inititalize;
 begin
   inherited;
+end;
+
+function TStringValue.SetValue(value: Maybe<String>): Boolean;
+begin
+  Result := Value
+  .BindTo<Boolean>
+  (
+    self.SetValue,
+    function : boolean
+    begin
+      self.Clear;
+      result := true;
+    end
+  );
 end;
 
 function TStringValue.ToBool: Maybe<Boolean>;
