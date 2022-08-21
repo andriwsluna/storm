@@ -169,7 +169,7 @@ end;
 function TStormDateFieldInsertion<FieldInsertion>.SetValue(
   const Value: TDate): FieldInsertion;
 begin
-  Result := inherited SetValue(Value);
+  Result := inherited SetValue(TDateTime(Value));
 end;
 
 { TStormDateTimeFieldInsertion<FieldInsertion> }
