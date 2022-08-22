@@ -2,8 +2,8 @@ object vcl_form: Tvcl_form
   Left = 0
   Top = 0
   Caption = 'vcl_form'
-  ClientHeight = 548
-  ClientWidth = 852
+  ClientHeight = 661
+  ClientWidth = 1100
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -59,8 +59,8 @@ object vcl_form: Tvcl_form
     Caption = 'Pre'#231'o'
   end
   object Button1: TButton
-    Left = 40
-    Top = 41
+    Left = 8
+    Top = 8
     Width = 75
     Height = 25
     Caption = 'Select'
@@ -78,8 +78,8 @@ object vcl_form: Tvcl_form
   end
   object DBGrid1: TDBGrid
     Left = 0
-    Top = 360
-    Width = 852
+    Top = 473
+    Width = 1100
     Height = 188
     Align = alBottom
     DataSource = DataSource1
@@ -153,8 +153,8 @@ object vcl_form: Tvcl_form
       end>
   end
   object Button2: TButton
-    Left = 40
-    Top = 97
+    Left = 8
+    Top = 39
     Width = 75
     Height = 25
     Caption = 'Update'
@@ -184,8 +184,8 @@ object vcl_form: Tvcl_form
     TabOrder = 6
   end
   object Button3: TButton
-    Left = 40
-    Top = 128
+    Left = 8
+    Top = 70
     Width = 75
     Height = 25
     Caption = 'Insert'
@@ -193,8 +193,8 @@ object vcl_form: Tvcl_form
     OnClick = Button3Click
   end
   object Button4: TButton
-    Left = 40
-    Top = 167
+    Left = 8
+    Top = 101
     Width = 75
     Height = 25
     Caption = 'Delete'
@@ -296,6 +296,32 @@ object vcl_form: Tvcl_form
     MaxLength = 4
     TabOrder = 18
     Text = ' ,  '
+  end
+  object Button8: TButton
+    Left = 8
+    Top = 300
+    Width = 121
+    Height = 25
+    Caption = 'Delete By Entity'
+    TabOrder = 19
+    OnClick = Button8Click
+  end
+  object Button9: TButton
+    Left = 8
+    Top = 144
+    Width = 75
+    Height = 25
+    Caption = 'Select Limit'
+    TabOrder = 20
+    OnClick = Button9Click
+  end
+  object NumberBoxLimit: TNumberBox
+    Left = 8
+    Top = 175
+    Width = 75
+    Height = 21
+    TabOrder = 21
+    Value = 5.000000000000000000
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 

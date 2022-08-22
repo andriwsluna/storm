@@ -28,6 +28,7 @@ Type
   ISelectByIDResult = TResult<IProduto, IStormExecutionFail>;
   IUpdateEntityResult = TResult<IProduto, IStormExecutionFail>;
   IInsertEntityResult = TResult<IProduto, IStormExecutionFail>;
+  IDeleteEntityResult = TResult<IProduto, IStormExecutionFail>;
 
   IProdutoWhereSelector<Executor : IInterface> = interface['{CECF6A72-8A5C-491A-9B1A-BF0DB19A6C9A}']
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -41,8 +42,19 @@ Type
   end;
 
   IProdutoFieldsSelection = interface['{20985878-707D-4DCD-B38E-0728934F48BC}']
-    Function All() : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
-    Function Only(fields : TProdutoSETFieldSelection) : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+    Function AllColumns() : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+    Function Codigo() : IProdutoFieldsSelection;
+    Function Descricao() : IProdutoFieldsSelection;
+    Function CodigoMarca() : IProdutoFieldsSelection;
+    Function Preco() : IProdutoFieldsSelection;
+    Function Ativo() : IProdutoFieldsSelection;
+    Function DataCriacao() : IProdutoFieldsSelection;
+    Function DataAlteracao() : IProdutoFieldsSelection;
+    Function From : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+  end;
+
+  IProdutoFieldsSelectionWithLimit = interface(IProdutoFieldsSelection)['{20985878-707D-4DCD-B38E-0728934F48BC}']
+    Function Limit(Const Count : Integer) : IProdutoFieldsSelection;
   end;
 
   IProdutoFieldsAssignmentWithWhere=  interface['{990EF674-B643-4063-987E-6C28E5821B90}']
@@ -90,7 +102,7 @@ Type
   end;
 
   IProdutoORM = interface(IStormORM)['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
-    Function Select() : IProdutoFieldsSelection;
+    Function Select() : IProdutoFieldsSelectionWithLimit;
     Function Update() : IProdutoFieldsAssignment;
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
@@ -98,16 +110,19 @@ Type
     Function SelectByID(const Codigo : String) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
     Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
+    Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
   end;
 
 
-  Function Produto_ORM(DbSQLConnecton: IStormSQLConnection) : IProdutoORM;
+  function Produto_ORM(DbSQLConnecton: IStormSQLConnection): IProdutoORM;  Overload;
+  Function Produto_ORM() : IProdutoORM; Overload;
 
 implementation
 
 Uses
   storm.schema.interfaces,
-  storm.dependency.register,storm.orm.update,
+  storm.dependency.register,
+  storm.orm.update,
   uSchemaProduto,
   System.Sysutils,
   storm.orm.where,
@@ -128,7 +143,7 @@ Type
   public
     Constructor Create(DbSQLConnecton : IStormSQLConnection);
   public
-    Function Select() : IProdutoFieldsSelection;
+    Function Select() : IProdutoFieldsSelectionWithLimit;
     Function Update() : IProdutoFieldsAssignment;
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
@@ -136,15 +151,25 @@ Type
     Function SelectByID(const Codigo : String) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
     Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
+    Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
   End;
 
 
   TProdutoFieldsSelection = Class
   (
     TStormFieldsSelection<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>, IStormSelectExecutor<IProduto>>,
-    IProdutoFieldsSelection
+    IProdutoFieldsSelection,
+    IProdutoFieldsSelectionWithLimit
   )
     Function Only(fields : TProdutoSETFieldSelection) : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+    Function Limit(Const Count : Integer) : IProdutoFieldsSelection;
+    Function Codigo() : IProdutoFieldsSelection;
+    Function Descricao() : IProdutoFieldsSelection;
+    Function CodigoMarca() : IProdutoFieldsSelection;
+    Function Preco() : IProdutoFieldsSelection;
+    Function Ativo() : IProdutoFieldsSelection;
+    Function DataCriacao() : IProdutoFieldsSelection;
+    Function DataAlteracao() : IProdutoFieldsSelection;
   end;
 
   TProdutoWhereSelector<Executor : IInterface> = class(TStormSqlPartition, IProdutoWhereSelector<Executor>)
@@ -235,6 +260,20 @@ begin
   Result := TProdutoORM.Create(DbSQLConnecton);
 end;
 
+Function Produto_ORM() : IProdutoORM;
+begin
+  Result :=
+  storm.dependency.register.DependencyRegister.GetSQLConnectionInstance.
+  BindTo<IProdutoORM>
+  (
+    Produto_ORM,
+    Function : IProdutoORM
+    begin
+      Result := nil;
+    end
+  );
+end;
+
 
 
 { TProdutoORM }
@@ -248,6 +287,33 @@ end;
 function TProdutoORM.Delete: IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 begin
   Result := TStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>,IStormDeleteExecutor>.Create(self);
+end;
+
+function TProdutoORM.DeleteEntity(Entity: IProduto): IDeleteEntityResult;
+begin
+  if VerifyPrimaryKeyFields(Entity) then
+  begin
+    Result := Delete()
+    .Where
+    .Codigo.IsEqualsTo(Entity.Codigo.GetValueOrDefault())
+    .Go
+    .Execute
+    .BindTo<IDeleteEntityResult>
+    (
+      function(res : IStormDeleteSuccess) : IDeleteEntityResult
+      begin
+        result := Entity;
+      end,
+      function(res : IStormExecutionFail) : IDeleteEntityResult
+      begin
+        Result := res;
+      end
+    );
+  end
+  else
+  begin
+    Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
+  end;
 end;
 
 procedure TProdutoORM.Initialize;
@@ -370,7 +436,7 @@ end;
 
 
 
-function TProdutoORM.Select: IProdutoFieldsSelection;
+function TProdutoORM.Select: IProdutoFieldsSelectionWithLimit;
 begin
   Result := TProdutoFieldsSelection.Create(self);
 end;
@@ -381,7 +447,7 @@ begin
   result :=
   Self
     .Select
-    .All
+    .AllColumns
     .Where
     .Codigo.IsEqualsTo(Codigo)
     .Go
@@ -436,6 +502,50 @@ end;
 
 { TProdutoFieldsSelection }
 
+function TProdutoFieldsSelection.Ativo: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.Ativo));
+  Result := Self;
+end;
+
+function TProdutoFieldsSelection.Codigo: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.Codigo));
+  Result := Self;
+end;
+
+function TProdutoFieldsSelection.CodigoMarca: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.CodigoMarca));
+  Result := Self;
+end;
+
+function TProdutoFieldsSelection.DataAlteracao: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.DataAlteracao));
+  Result := Self;
+end;
+
+function TProdutoFieldsSelection.DataCriacao: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.DataCriacao));
+  Result := Self;
+end;
+
+function TProdutoFieldsSelection.Descricao: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.Descricao));
+  Result := Self;
+end;
+
+
+function TProdutoFieldsSelection.Limit(
+  const Count: Integer): IProdutoFieldsSelection;
+begin
+  AddSQL('TOP ' + Count.ToString);
+  Result := Self;
+end;
+
 function TProdutoFieldsSelection.Only(
   fields: TProdutoSETFieldSelection): IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
 VAR
@@ -458,6 +568,14 @@ begin
   AddSQL(Copy(s,2, length(s)));
   AddFrom;
   Result := TStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>, IStormSelectExecutor<IProduto>>.Create(self);
+end;
+
+
+
+function TProdutoFieldsSelection.Preco: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.Preco));
+  Result := Self;
 end;
 
 { TProdutoWhereSelectorSelectConstructor }

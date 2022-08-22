@@ -38,7 +38,8 @@ uses
   FireDAC.VCLUI.Wait, FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Rtti,
   System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.EngExt,
   Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope, Vcl.Mask,
-  Vcl.ExtCtrls, Vcl.Buttons, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef
+  Vcl.ExtCtrls, Vcl.Buttons, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef,
+  Vcl.NumberBox
   ;
 
 type
@@ -74,6 +75,9 @@ type
     Label4: TLabel;
     Label5: TLabel;
     FDMemTable1: TFDMemTable;
+    Button8: TButton;
+    Button9: TButton;
+    NumberBoxLimit: TNumberBox;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -84,10 +88,12 @@ type
     procedure Button6Click(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
     procedure DataSource1DataChange(Sender: TObject; Field: TField);
   private
     ProdutoAtual :  IProduto;
-    Function  GetConnection : IStormSQLConnection;
+
     procedure freeDataset;
     Procedure ShowDataset(resultado : IStormSelectSuccess<IProduto>);
     procedure ShowJson(json : TJsonObject);
@@ -104,6 +110,7 @@ type
     Procedure ProdutoToJson(produto : IProduto);
     Procedure AtualizarGridDoProduto(produto : IProduto);
     Procedure AtualizarGridAposInsercao(produto : IProduto);
+    Procedure AtualizarGridAposExclusao(produto : IProduto);
     Procedure CarregarProduto();
     Procedure AlimentarProduto(produto : Iproduto);
   public
@@ -137,11 +144,17 @@ begin
   produto.DataAlteracao.Value.SetValue(GetDataAlteracao());
 end;
 
+procedure Tvcl_form.AtualizarGridAposExclusao(produto: IProduto);
+begin
+  FDMemTable1.Locate('codigo_produto',produto.Codigo.GetValueOrDefault());
+  FDMemTable1.Delete;
+end;
+
 procedure Tvcl_form.AtualizarGridAposInsercao(produto: IProduto);
 begin
-  Produto_ORM(GetConnection())
+  Produto_ORM()
     .Select
-    .All
+    .AllColumns
     .Where
     .Codigo.IsNotNull
     .Go
@@ -173,21 +186,28 @@ end;
 
 procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
-  Produto_ORM(GetConnection())
+  Produto_ORM
     .Select
-    .All
+      .Codigo
+      .Descricao
+      .CodigoMarca
+      .Ativo
+      .Preco
+      .DataCriacao
+      .DataAlteracao
+    .From
     .Where
-    .Codigo.IsNotNull
+      .Codigo.IsNotNull
     .Go
     .Open
-    .OnSuccess(ShowDataset)
-    .OnFail(MostrarErro)
+      .OnSuccess(ShowDataset)
+      .OnFail(MostrarErro);
 end;
 
 
 procedure Tvcl_form.Button2Click(Sender: TObject);
 begin
-  Produto_ORM(Getconnection)
+  Produto_ORM()
     .Update
     .Descricao.SetThisOrNull(GetDescricao())
     .CodigoMarca.SetThisOrNull(GetCodigoMarca())
@@ -196,7 +216,7 @@ begin
     .DataCriacao.SetThisOrNull(GetDataCriacao())
     .DataAlteracao.SetThisOrNull(GetDataAlteracao())
     .Where
-    .Codigo.IsEqualsTo(self.DataSource1.DataSet.FieldByName('codigo_produto').AsString)
+    .Codigo.IsEqualsTo(produtoatual.Codigo.GetValueOrDefault())
     .Go
     .Execute
     .OnSuccess
@@ -212,7 +232,7 @@ end;
 
 procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
-  Produto_ORM(Getconnection)
+  Produto_ORM()
     .Insert
     .Codigo.SetValue(editcodigo.text)
     .Descricao.SetValue(GetDescricao())
@@ -230,7 +250,7 @@ end;
 
 procedure Tvcl_form.Button4Click(Sender: TObject);
 begin
-  Produto_ORM(Getconnection)
+  Produto_ORM()
     .Delete
     .Where
     .OpenParenthesis
@@ -250,7 +270,7 @@ end;
 
 procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
-  Produto_ORM(Getconnection)
+  Produto_ORM()
     .SelectByID(editcodigo.text)
     .OnSuccess(ProdutoToJson)
     .OnFail(MostrarErro)
@@ -264,7 +284,7 @@ begin
   AlimentarProduto(produto);
 
 
-  Produto_ORM(Getconnection)
+  Produto_ORM()
   .InsertEntity(produto)
   .OnSuccess(AtualizarGridAposInsercao)
   .OnFail(MostrarErro)
@@ -276,11 +296,39 @@ procedure Tvcl_form.Button7Click(Sender: TObject);
 
 begin
   AlimentarProduto(ProdutoAtual);
-  Produto_ORM(Getconnection)
+  Produto_ORM()
   .UpdateEntity(ProdutoAtual)
   .OnSuccess(AtualizarGridDoProduto)
   .OnFail(MostrarErro)
 
+end;
+
+procedure Tvcl_form.Button8Click(Sender: TObject);
+VAR
+  produto : IProduto;
+begin
+  produto := NewProduto();
+  AlimentarProduto(produto);
+
+
+  Produto_ORM()
+  .DeleteEntity(produto)
+  .OnSuccess(AtualizarGridAposExclusao)
+  .OnFail(MostrarErro)
+end;
+
+procedure Tvcl_form.Button9Click(Sender: TObject);
+begin
+  uORMProduto.Produto_ORM
+  .Select
+  .Limit(NumberBoxLimit.ValueInt)
+  .AllColumns
+  .Where
+  .Codigo.IsNotNull
+  .Go
+  .Open
+  .OnSuccess(ShowDataset)
+  .OnFail(MostrarErro);
 end;
 
 procedure Tvcl_form.CarregarProduto;
@@ -301,6 +349,8 @@ procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
   DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
   //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+
+  DependencyRegister.RegisterSQLConnection(FDConnection1.StormDriver);
 
   ProdutoAtual := NewProduto();
 end;
@@ -353,11 +403,6 @@ begin
   end;
 end;
 
-function Tvcl_form.GetConnection: IStormSQLConnection;
-begin
-  Result := FDconnection1.StormDriver;
-  //result := Adoconnection1.StormDriver;
-end;
 
 
 
@@ -418,8 +463,21 @@ end;
 
 procedure Tvcl_form.MostrarResultadoInsertPositivo(
   resultado: IStormInsertSuccess);
+  VAR
+    cod : string;
 begin
-  ShowMessage('Dados inseriods com sucesso');
+  cod := EditCodigo.Text;
+  Produto_ORM()
+    .Select
+    .AllColumns
+    .Where
+    .Codigo.IsNotNull
+    .Go
+    .Open
+    .OnSuccess(ShowDataset)
+    .OnFail(MostrarErro);
+
+    FDMemTable1.Locate('codigo_produto',cod);
 end;
 
 procedure Tvcl_form.ProdutoToJson(produto: IProduto);
