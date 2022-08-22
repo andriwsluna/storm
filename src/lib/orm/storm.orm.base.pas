@@ -87,9 +87,11 @@ Type
   = class(TStormSQLPartition)
   protected
     procedure Initialize; override;
-
+    Procedure AddColumn(Const index : Integer);
+    Procedure RemoveLastComma();
   public
-    Function All() : IStormWherePoint<WhereSelector>;
+    Function AllColumns() : IStormWherePoint<WhereSelector>;
+    Function From : IStormWherePoint<WhereSelector>;
   end;
 
   TStormWherePoint<WhereSelector, Executor : IInterface>
@@ -492,11 +494,30 @@ end;
 
 { TStormFieldsSelection<WhereSelector> }
 
-function TStormFieldsSelection<WhereSelector, Executor>.All: IStormWherePoint<WhereSelector>;
+procedure TStormFieldsSelection<WhereSelector, Executor>.AddColumn(
+  const index: Integer);
+begin
+   TableSchema.ColumnById(index).Onsome
+  (
+    procedure(colum : IStormSchemaColumn)
+    begin
+      Self.AddSQL(TableSchema.GetTableName + '.' + colum.GetColumnName + ',');
+    end
+  );
+end;
+
+function TStormFieldsSelection<WhereSelector, Executor>.AllColumns: IStormWherePoint<WhereSelector>;
 begin
   AddSQL('*');
   AddFrom;
   Result := TStormWherePoint<WhereSelector, Executor>.Create(Self);
+end;
+
+function TStormFieldsSelection<WhereSelector, Executor>.From: IStormWherePoint<WhereSelector>;
+begin
+  RemoveLastComma;
+  AddFrom;
+  Result := TStormWherePoint<WhereSelector, Executor>.Create(self);
 end;
 
 { TStormWherePoint<WhereSelector> }
@@ -599,6 +620,16 @@ procedure TStormFieldsSelection<WhereSelector, Executor>.Initialize;
 begin
   inherited;
   AddSQL('SELECT');
+end;
+
+procedure TStormFieldsSelection<WhereSelector, Executor>.RemoveLastComma;
+begin
+  if self.SQL[Length(self.SQL)] = ',' then
+  begin
+    self.SQL := copy(self.SQL,1,Length(self.SQL)-1);
+  end;
+
+
 end;
 
 { TUpdateExecutorConstructor }

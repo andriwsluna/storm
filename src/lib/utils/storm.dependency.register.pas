@@ -34,6 +34,7 @@ Type
   private
     FRegisteredSqlDriver : IStormSQLDriver;
     FRegisteredEntityDependencies : TObjectDictionary<TGUID, Tobject>;
+    FStormSQLConnection  : IStormSQLConnection;
     Constructor Create(); Reintroduce;
     Destructor  Destroy(); Reintroduce;
   protected
@@ -41,6 +42,9 @@ Type
   public
     Function RegisterSQLDriver(SQLDriverInstance : IStormSQLDriver) : Boolean;
     Function GetSQLDriverInstance : Maybe<IStormSQLDriver>;
+
+    Function RegisterSQLConnection(StormSQLConnection : IStormSQLConnection) : Boolean;
+    Function GetSQLConnectionInstance : Maybe<IStormSQLConnection>;
 
     Function RegisterEntityDependency(entity : TGUID ; dependency : Tobject): boolean;
     Function GetEntityDependency(entity : TGUID): Maybe<Tobject>;
@@ -113,6 +117,11 @@ begin
   Result := DependencyRegister;
 end;
 
+function TStormDependencyRegister.GetSQLConnectionInstance: Maybe<IStormSQLConnection>;
+begin
+  Result := FStormSQLConnection;
+end;
+
 function TStormDependencyRegister.GetSQLDriverInstance(
   ): Maybe<IStormSQLDriver>;
 begin
@@ -136,6 +145,13 @@ function TStormDependencyRegister.RegisterEntityDependency(entity: TGUID;
 begin
   FRegisteredEntityDependencies.Add(entity,dependency);
   result := true;
+end;
+
+function TStormDependencyRegister.RegisterSQLConnection(
+  StormSQLConnection: IStormSQLConnection): Boolean;
+begin
+  FStormSQLConnection := StormSQLConnection;
+  Result := true;
 end;
 
 function TStormDependencyRegister.RegisterSQLDriver(
