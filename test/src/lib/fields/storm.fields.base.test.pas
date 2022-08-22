@@ -111,10 +111,8 @@ procedure TStormField_Test.FromJSON_Pair_Check;
 VAR
   pair : TJSONPair;
 begin
-
-  {$WARN USE_BEFORE_DEF ON}
+  pair := nil;
   Assert.IsFalse(field.FromJSON(pair));
-  {$WARN USE_BEFORE_DEF OFF}
   Assert.IsFalse(field.FromJSON(TJSONPair.Create('aloha','arola')));
   Assert.IsTrue(field.FromJSON(TJSONPair.Create(My_Field_Name,'arola')));
 end;

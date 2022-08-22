@@ -72,3 +72,5 @@ modules/
 #Tests
 test/Reports/
 !CodeCoverage.exe
+test/TestInsightSettings.ini
+test/dunitx-results.xml
