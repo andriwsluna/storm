@@ -3,6 +3,7 @@ unit storm.data.driver.mssql;
 interface
 
 Uses
+  DFE.Maybe,
   storm.schema.interfaces,
   storm.data.interfaces;
 
@@ -12,7 +13,8 @@ Type
 
   public
     Function GetFullTableName(Table : IStormTableSchema) : string;
-    Function GetLimitSyntax(Limit : integer ; Sql : string) : string;
+    Function GetInitialLimitSyntax(Limit : integer) : Maybe<string>;
+    Function GetFinalLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetBooleanType : String;
   end;
 
@@ -29,14 +31,21 @@ begin
   Result := 'BIT';
 end;
 
+function TStormMSSQlDriver.GetFinalLimitSyntax(Limit: integer): Maybe<string>;
+begin
+
+end;
+
 function TStormMSSQlDriver.GetFullTableName(Table: IStormTableSchema): string;
 begin
   Result := Table.GetSchemaName + '.' + Table.GetTableName;
 end;
 
-function TStormMSSQlDriver.GetLimitSyntax(Limit: integer; Sql: string): string;
+
+
+function TStormMSSQlDriver.GetInitialLimitSyntax(Limit: integer): Maybe<string>;
 begin
-  Result := ReplaceStr(Sql,'select', 'select top ' + IntToStr(Limit));
+  Result := 'TOP ' + Limit.ToString;
 end;
 
 end.

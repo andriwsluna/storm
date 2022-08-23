@@ -348,6 +348,8 @@ object vcl_form: Tvcl_form
       'Password=S@geBr.2014'
       'Server=localhost'
       'User_Name=sa'
+      'Port=5003'
+      'Database=bancodetestes'
       'DriverID=MySQL')
     LoginPrompt = False
     Left = 848

@@ -3,6 +3,7 @@ unit storm.data.interfaces;
 interface
 
 USES
+  DFE.Maybe,
   Data.DB,
   storm.schema.interfaces,
   System.Generics.Collections;
@@ -25,11 +26,13 @@ type
     Function  Dataset : Tdataset;
     Function  RowsAffected: integer;
     Function  CopyDataset(target : tDataset) : TDataset;
+    Procedure Clear();
   end;
 
   IStormSQLDriver = interface['{5FF6388D-A47D-4608-BBE8-5ADB56885E45}']
     Function GetFullTableName(Table : IStormTableSchema) : string;
-    Function GetLimitSyntax(Limit : integer ; Sql : string) : string;
+    Function GetInitialLimitSyntax(Limit : integer) : Maybe<string>;
+    Function GetFinalLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetBooleanType : String;
   end;
 

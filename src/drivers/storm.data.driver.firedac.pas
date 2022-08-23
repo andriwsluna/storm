@@ -87,6 +87,7 @@ USES
   FireDAC.Comp.Client,
   FireDAC.Comp.DataSet,
   Data.DB,
+  System.Variants,
   storm.data.interfaces,
   storm.orm.interfaces;
 
@@ -109,6 +110,7 @@ Type
     Function  RowsAffected: integer;
     Function  CopyDataset(target : tDataset) : TDataset;
     Function  IsEmpty : Boolean;
+    Procedure Clear();
   End;
 
   TStormFireDacHelper = class helper for TFDConnection
@@ -122,6 +124,12 @@ USES
   FireDAC.Stan.Param;
 
 { TStormFireDACConnection }
+
+procedure TStormFireDACConnection.Clear;
+begin
+  Self.FQuery.SQL.Clear;
+  Self.FQuery.Params.Clear;
+end;
 
 function TStormFireDACConnection.CopyDataset(target: tDataset): TDataset;
 begin

@@ -6,6 +6,7 @@ USES
   System.Generics.Collections,
   Data.Win.ADODB,
   Data.DB,
+  System.Variants,
   storm.data.interfaces,
   storm.orm.interfaces;
 
@@ -20,6 +21,7 @@ Type
     Constructor Create(connection : TADOConnection); Reintroduce;
     Destructor  Destroy(); Override;
   public
+    Procedure Clear();
     Procedure SetSQL(sql : string);
     Procedure LoadParameters(parameters : TList<IQueryParameter>);
     Function  Execute() : Boolean;
@@ -38,6 +40,12 @@ Type
 implementation
 
 { TStormADOConnection }
+
+procedure TStormADOConnection.Clear;
+begin
+  Self.Fquery.SQL.Clear;
+  Self.Fquery.Parameters.Clear;
+end;
 
 function TStormADOConnection.CopyDataset(target: tDataset): TDataset;
 begin
@@ -81,7 +89,7 @@ VAR
 begin
   for parameter in Parameters do
   begin
-    Fquery.Parameters.ParamByName(parameter.getParamName).Value := parameter.getValue;
+    FQuery.Parameters.ParamByName(parameter.getParamName).Value := parameter.getValue;
   end;
 end;
 

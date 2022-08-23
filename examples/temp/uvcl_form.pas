@@ -149,12 +149,12 @@ begin
   FDMemTable1.Delete;
 end;
 
-procedure Tvcl_form.nb(produto: IProduto);
+procedure Tvcl_form.AtualizarGridAposInsercao(produto: IProduto);
 begin
   Produto_ORM()
     .Select
     .AllColumns
-    .Where
+    .where
     .Codigo.IsNotNull
     .Go
     .Open
@@ -319,14 +319,11 @@ procedure Tvcl_form.Button9Click(Sender: TObject);
 begin
   Produto_ORM()
   .Select
-    .Limit(10)
-    .Codigo
-  .From
+    .Limit(StrToInt(EditLimit.Text))
+    .AllColumns
   .Where
     .OpenParenthesis
-      .Codigo.IsEqualsTo('2')
-      .Or_
-      .Codigo.IsEmpty
+      .Codigo.IsNotEmpty
     .CloseParenthesis
   .Go
   .OrderBy
@@ -356,10 +353,11 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 
-  DependencyRegister.RegisterSQLConnection(adoConnection1.StormDriver);
+  DependencyRegister.RegisterSQLConnection(fdconnection1.StormDriver);
+  //DependencyRegister.RegisterSQLConnection(adoconnection1.StormDriver);
 
   ProdutoAtual := NewProduto();
 end;

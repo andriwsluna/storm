@@ -3,6 +3,7 @@ unit storm.data.driver.mysql;
 interface
 
 Uses
+  DFE.Maybe,
   storm.schema.interfaces,
   storm.data.interfaces;
 
@@ -12,7 +13,8 @@ Type
 
   public
     Function GetFullTableName(Table : IStormTableSchema) : string;
-    Function GetLimitSyntax(Limit : integer ; Sql : string) : string;
+    Function GetInitialLimitSyntax(Limit : integer) : Maybe<string>;
+    Function GetFinalLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetBooleanType : String;
   end;
 
@@ -28,14 +30,20 @@ begin
   Result := 'BOOLEAN';
 end;
 
+function TStormMySqlDriver.GetFinalLimitSyntax(Limit: integer): Maybe<string>;
+begin
+  Result := 'LIMIT ' + Limit.ToString;
+end;
+
 function TStormMySqlDriver.GetFullTableName(Table: IStormTableSchema): string;
 begin
   Result := Table.GetTableName;
 end;
 
-function TStormMySqlDriver.GetLimitSyntax(Limit: integer; Sql: string): string;
+
+function TStormMySqlDriver.GetInitialLimitSyntax(Limit: integer): Maybe<string>;
 begin
-  Result := sql + ' limit ' + IntToStr(Limit);
+
 end;
 
 end.

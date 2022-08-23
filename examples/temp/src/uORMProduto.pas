@@ -123,7 +123,7 @@ Type
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
-    Function SelectByID(const Codigo : String) : ISelectByIDResult;
+    Function SelectByID(Const Codigo : String) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
     Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
     Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
@@ -150,8 +150,8 @@ Type
   private
     Function SchemaProduto : TSchemaProduto;
 
-    function ProccessSelectSuccess(res : IStormSelectSuccess<Iproduto>) : ISelectByIDResult;
-    function ProccessSelectFail(res : IStormExecutionFail) : ISelectByIDResult;
+    function ProccessSelectSuccess(Res : IStormSelectSuccess<Iproduto>) : ISelectByIDResult;
+    function ProccessSelectFail(Res : IStormExecutionFail) : ISelectByIDResult;
 
   protected
     procedure Initialize; override;
@@ -164,7 +164,7 @@ Type
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
-    Function SelectByID(const Codigo : String) : ISelectByIDResult;
+    Function SelectByID(Const Codigo : String) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
     Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
     Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
@@ -177,7 +177,6 @@ Type
     IProdutoFieldsSelection,
     IProdutoFieldsSelectionWithLimit
   )
-    Function Only(fields : TProdutoSETFieldSelection) : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>;
     Function Limit(Const Count : Integer) : IProdutoFieldsSelection;
     Function Codigo() : IProdutoFieldsSelection;
     Function Descricao() : IProdutoFieldsSelection;
@@ -460,13 +459,13 @@ begin
 end;
 
 function TProdutoORM.ProccessSelectFail(
-  res: IStormExecutionFail): ISelectByIDResult;
+  Res: IStormExecutionFail): ISelectByIDResult;
 begin
   Result := res;
 end;
 
 function TProdutoORM.ProccessSelectSuccess(
-  res: IStormSelectSuccess<Iproduto>): ISelectByIDResult;
+  Res: IStormSelectSuccess<Iproduto>): ISelectByIDResult;
 begin
   if not res.IsEmpty then
   begin
@@ -597,32 +596,8 @@ end;
 function TProdutoFieldsSelection.Limit(
   const Count: Integer): IProdutoFieldsSelection;
 begin
-  AddSQL('TOP ' + Count.ToString);
+  AddLimit(Count);
   Result := Self;
-end;
-
-function TProdutoFieldsSelection.Only(
-  fields: TProdutoSETFieldSelection): IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>;
-VAR
-  s : string;
-  field : TProdutoPossibleFields;
-begin
-  s := '';
-
-  for field in fields do
-  begin
-    TableSchema.ColumnById(integer(field)).Onsome
-    (
-      procedure(colum : IStormSchemaColumn)
-      begin
-        s := s + ', ' + TableSchema.GetTableName + '.' + colum.GetColumnName;
-      end
-    );
-  end;
-
-  AddSQL(Copy(s,2, length(s)));
-  AddFrom;
-  Result := TStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>, IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>.Create(self);
 end;
 
 
@@ -743,9 +718,9 @@ end;
 procedure TProdutoFieldsAssignment.initialize;
 begin
   inherited;
-  if self.SQL.IsEmpty then
+  if SQL.IsEmpty then
   begin
-    AddSQL('UPDATE ' + self.GetFullTableName + ' SET');
+    AddUpdate();
   end;
 end;
 

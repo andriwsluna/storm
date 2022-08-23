@@ -41,6 +41,7 @@ Type
     Owner : IStormSQLPartition;
     SQL : String;
     QueryParameters : IStormQueryParameters;
+    SelectLimit : Maybe<integer>;
     Procedure AddSQL(const  content : string);
     Procedure AddOpenParenthesis();
     Procedure AddCloseParenthesis();
@@ -49,9 +50,11 @@ Type
     Procedure AddWhere();
     Procedure AddOrderBy();
     Procedure AddFrom();
+    Procedure AddUpdate();
     Procedure Initialize; Override;
     function  AddParameter(value : variant) : string;
     Procedure RemoveLastSqlCharacter();
+    Procedure ResolveFinalLimit();
 
     Function GetReturnInstance<ReturnType>() : ReturnType;
     Function GetReturnInstance2<ReturnType, SubReturnType>() : ReturnType;
@@ -91,6 +94,7 @@ Type
     procedure Initialize; override;
     Procedure AddColumn(Const index : Integer);
     Procedure RemoveLastComma();
+    Procedure AddLimit(Const Limit : Integer); Virtual;
   public
     Function AllColumns() : IStormWherePoint<WhereSelector>;
     Function From : IStormWherePoint<WhereSelector>;
@@ -401,6 +405,11 @@ begin
   end;
 end;
 
+procedure TStormSQLPartition.AddUpdate;
+begin
+  AddSQL('UPDATE ' + self.GetFullTableName + ' SET');
+end;
+
 procedure TStormSQLPartition.AddWhere;
 begin
   AddSQL('WHERE');
@@ -413,6 +422,7 @@ begin
   begin
     Self.Owner := Owner;
     Self.SQL := Owner.SQL;
+    Self.SelectLimit := Owner.SelectLimit;
   end;
   inherited Create(ORM);
 
@@ -480,6 +490,21 @@ begin
   self.SQL := copy(sql,1,length(sql)-1);
 end;
 
+procedure TStormSQLPartition.ResolveFinalLimit;
+begin
+  SelectLimit
+  .OnSome
+  (
+    procedure(Limit :  integer)
+    begin
+      SQLDriver
+      .GetFinalLimitSyntax(Limit)
+      .OnSome(AddSql);
+    end
+  )
+      
+end;
+
 { TStormGenericReturn }
 
 function TStormGenericReturn.GetReturnInstance2<ReturnType, SubReturnType>(
@@ -531,6 +556,17 @@ begin
   );
 end;
 
+procedure TStormFieldsSelection<WhereSelector, Executor>.AddLimit(
+  const Limit: Integer);
+begin
+  Self.SelectLimit := Limit;
+  
+ 
+  SQLDriver
+  .GetInitialLimitSyntax(Limit)
+  .OnSome(AddSql);
+end;
+
 function TStormFieldsSelection<WhereSelector, Executor>.AllColumns: IStormWherePoint<WhereSelector>;
 begin
   AddSQL('*');
@@ -557,7 +593,10 @@ end;
 
 function TStormSelectExecutor<EntityType,OrderSelection>.Open: TResult<IStormSelectSuccess<EntityType>, IStormExecutionFail>;
 begin
+  ResolveFinalLimit();
+  DbSQLConnecton.Clear();
   DbSQLConnecton.SetSQL(SQL);
+  
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
     DbSQLConnecton.Open;
@@ -683,6 +722,7 @@ end;
 
 function TStormUpdateExecutor.Execute: TResult<IStormUpdateSuccess, IStormExecutionFail>;
 begin
+  DbSQLConnecton.Clear();
   DbSQLConnecton.SetSQL(SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
@@ -711,6 +751,7 @@ end;
 
 function TStormInsertExecutor<EntityType>.Execute: TResult<IStormInsertSuccess, IStormExecutionFail>;
 begin
+  DbSQLConnecton.Clear();
   DbSQLConnecton.SetSQL(SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
@@ -787,6 +828,7 @@ end;
 
 function TStormDeleteExecutor.Execute: TResult<IStormDeleteSuccess, IStormExecutionFail>;
 begin
+  DbSQLConnecton.Clear();
   DbSQLConnecton.SetSQL(SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
