@@ -321,14 +321,19 @@ procedure Tvcl_form.Button9Click(Sender: TObject);
 begin
   uORMProduto.Produto_ORM
   .Select
-  .Limit(NumberBoxLimit.ValueInt)
-  .AllColumns
+    .Limit(NumberBoxLimit.ValueInt)
+    .AllColumns
   .Where
-  .Codigo.IsNotNull
+    .Codigo.IsNotNull
   .Go
+  .OrderBy
+    .Codigo.ASC
+    .Descricao.ASC
+    .CodigoMarca.DESC
+    .Preco.DESC
   .Open
-  .OnSuccess(ShowDataset)
-  .OnFail(MostrarErro);
+    .OnSuccess(ShowDataset)
+    .OnFail(MostrarErro);
 end;
 
 procedure Tvcl_form.CarregarProduto;

@@ -47,6 +47,7 @@ Type
     Procedure AddAnd();
     Procedure AddOr();
     Procedure AddWhere();
+    Procedure AddOrderBy();
     Procedure AddFrom();
     Procedure Initialize; Override;
     function  AddParameter(value : variant) : string;
@@ -105,9 +106,20 @@ Type
     Function DbSQLConnecton  : IStormSQLConnection;
   end;
 
-  TStormSelectExecutor<EntityType: IStormEntity> = Class(TStormSQLExecutor, IStormSelectExecutor<EntityType>)
+  TStormSelectExecutor<EntityType: IStormEntity ; OrderSelection : IInterface> = Class(TStormSQLExecutor, IStormSelectExecutor<EntityType,OrderSelection>)
     Function Open() : TResult<IStormSelectSuccess<EntityType>,IStormExecutionFail>;
+    Function OrderBy() : OrderSelection;
   end;
+
+  TStormOrderBySelector<OrderSelection> = Class(TStormSQLPartition,IStormOrderBySelector<OrderSelection>)
+  protected
+    Column : IStormSchemaColumn;
+  public
+    Function ASC() : OrderSelection;
+    Function DESC() : OrderSelection;
+
+    Constructor Create(Const ColumnIndex : Integer ; Const Owner : TStormSQLPartition); Reintroduce;Overload;
+  End;
 
   TStormSelectSuccess<EntityType : IStormEntity> = class(TStormSQLPartition, IStormSelectSuccess<EntityType>)
   protected
@@ -185,6 +197,8 @@ Type
   public
     Function GetGenericInstance(Owner : TStormSQLPartition) : IStormDeleteExecutor;
   End;
+
+
 
 
 
@@ -364,6 +378,11 @@ begin
   AddSQL('OR');
 end;
 
+procedure TStormSQLPartition.AddOrderBy;
+begin
+  AddSQL('ORDER BY');
+end;
+
 function TStormSQLPartition.AddParameter(value: variant): string;
 begin
   Result := QueryParameters.Add(value);
@@ -530,7 +549,7 @@ end;
 
 { TStormSelectExecutor<EntityType> }
 
-function TStormSelectExecutor<EntityType>.Open: TResult<IStormSelectSuccess<EntityType>, IStormExecutionFail>;
+function TStormSelectExecutor<EntityType,OrderSelection>.Open: TResult<IStormSelectSuccess<EntityType>, IStormExecutionFail>;
 begin
   DbSQLConnecton.SetSQL(SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
@@ -790,6 +809,33 @@ function TDeleteExecutorConstructor.GetGenericInstance(
   Owner: TStormSQLPartition): IStormDeleteExecutor;
 begin
   Result := TStormDeleteExecutor.Create(Owner);
+end;
+
+function TStormSelectExecutor<EntityType, OrderSelection>.OrderBy: OrderSelection;
+begin
+  AddOrderBy;
+  result := self.GetReturnInstance<OrderSelection>();
+end;
+
+{ TStormOrderBySelector<OrderSelection> }
+
+function TStormOrderBySelector<OrderSelection>.ASC: OrderSelection;
+begin
+  AddSQL(Self.Column.GetColumnName + ' ASC,');
+  result := self.GetReturnInstance<OrderSelection>();
+end;
+
+constructor TStormOrderBySelector<OrderSelection>.Create(
+  const ColumnIndex: Integer; const Owner: TStormSQLPartition);
+begin
+  Inherited Create(Owner);
+  Self.Column := TableSchema.ColumnById(ColumnIndex).GetValueOrDefault(nil);
+end;
+
+function TStormOrderBySelector<OrderSelection>.DESC: OrderSelection;
+begin
+  AddSQL(Self.Column.GetColumnName + ' DESC,');
+  result := self.GetReturnInstance<OrderSelection>();
 end;
 
 end.

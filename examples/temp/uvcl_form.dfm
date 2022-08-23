@@ -1,7 +1,7 @@
 object vcl_form: Tvcl_form
   Left = 0
   Top = 0
-  Caption = 'vcl_form'
+  Caption = '||'
   ClientHeight = 661
   ClientWidth = 1100
   Color = clBtnFace

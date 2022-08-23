@@ -41,8 +41,24 @@ Type
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
+  IProdutoOrderBySelected = interface;
+
+  IProdutoOrderBySelection = interface['{9A4F96B3-4161-451D-85A7-EAD1A94561BF}']
+    Function Codigo : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function Descricao : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function CodigoMarca : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function Preco : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function Ativo : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function DataCriacao : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function DataAlteracao : IStormOrderBySelector<IProdutoOrderBySelected>;
+  end;
+
+  IProdutoOrderBySelected = interface(IProdutoOrderBySelection)['{09A69EC3-FE09-4648-B195-BA8E63F7E2F0}']
+    Function Open() : TResult<IStormSelectSuccess<Iproduto>,IStormExecutionFail>;
+  end;
+
   IProdutoFieldsSelection = interface['{20985878-707D-4DCD-B38E-0728934F48BC}']
-    Function AllColumns() : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+    Function AllColumns() : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>;
     Function Codigo() : IProdutoFieldsSelection;
     Function Descricao() : IProdutoFieldsSelection;
     Function CodigoMarca() : IProdutoFieldsSelection;
@@ -50,7 +66,7 @@ Type
     Function Ativo() : IProdutoFieldsSelection;
     Function DataCriacao() : IProdutoFieldsSelection;
     Function DataAlteracao() : IProdutoFieldsSelection;
-    Function From : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+    Function From : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>;
   end;
 
   IProdutoFieldsSelectionWithLimit = interface(IProdutoFieldsSelection)['{20985878-707D-4DCD-B38E-0728934F48BC}']
@@ -157,11 +173,11 @@ Type
 
   TProdutoFieldsSelection = Class
   (
-    TStormFieldsSelection<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>, IStormSelectExecutor<IProduto>>,
+    TStormFieldsSelection<IProdutoWhereSelector<IStormSelectExecutor<IProduto, IProdutoOrderBySelection>>, IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>,
     IProdutoFieldsSelection,
     IProdutoFieldsSelectionWithLimit
   )
-    Function Only(fields : TProdutoSETFieldSelection) : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+    Function Only(fields : TProdutoSETFieldSelection) : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>;
     Function Limit(Const Count : Integer) : IProdutoFieldsSelection;
     Function Codigo() : IProdutoFieldsSelection;
     Function Descricao() : IProdutoFieldsSelection;
@@ -171,6 +187,18 @@ Type
     Function DataCriacao() : IProdutoFieldsSelection;
     Function DataAlteracao() : IProdutoFieldsSelection;
   end;
+
+  TProdutoOrderBySelection = Class(TStormSqlPartition,IProdutoOrderBySelection,IProdutoOrderBySelected)
+  public
+    Function Codigo : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function Descricao : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function CodigoMarca : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function Preco : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function Ativo : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function DataCriacao : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function DataAlteracao : IStormOrderBySelector<IProdutoOrderBySelected>;
+    Function Open() : TResult<IStormSelectSuccess<Iproduto>,IStormExecutionFail>;
+  End;
 
   TProdutoWhereSelector<Executor : IInterface> = class(TStormSqlPartition, IProdutoWhereSelector<Executor>)
     Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -213,9 +241,9 @@ Type
 
   {-----------Constructores -----}
   TProdutoWhereSelectorSelectConstructor
-  = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>)
+  = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormSelectExecutor<IProduto>>;
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>;
   End;
 
   TProdutoWhereSelectorUpdateConstructor
@@ -231,9 +259,9 @@ Type
   End;
 
   TSelectExecutorConstructor
-  = Class(TInterfacedObject, IStormGenericReturn<IStormSelectExecutor<IProduto>>)
+  = Class(TInterfacedObject, IStormGenericReturn<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IStormSelectExecutor<IProduto>;
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IStormSelectExecutor<IProduto,IProdutoOrderBySelection>;
   End;
 
   TProdutoFieldsAssignmentWithWhereConstructor
@@ -253,6 +281,20 @@ Type
   public
     Function GetGenericInstance(Owner : TStormSQLPartition) : IProduto;
   End;
+
+  TProdutoOrderBySelectionConstructor
+  = Class(TInterfacedObject, IStormGenericReturn<IProdutoOrderBySelection>)
+  public
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoOrderBySelection;
+  End;
+
+  TIProdutoOrderBySelectedConstructor
+  = Class(TInterfacedObject, IStormGenericReturn<IProdutoOrderBySelected>)
+  public
+    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoOrderBySelected;
+  End;
+
+
 
 
 Function Produto_ORM(DbSQLConnecton: IStormSQLConnection) : IProdutoORM;
@@ -321,8 +363,8 @@ begin
   inherited;
   FClassConstructor.Add
   (
-    TGUID(IProdutoWhereSelector<IStormSelectExecutor<IProduto>>).ToString +
-    TGUID(IStormSelectExecutor<IProduto>).ToString,
+    TGUID(IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>).ToString +
+    TGUID(IStormSelectExecutor<IProduto,IProdutoOrderBySelection>).ToString,
     TProdutoWhereSelectorSelectConstructor.Create
   );
 
@@ -343,7 +385,7 @@ begin
 
   FClassConstructor.Add
   (
-    TGUID(IStormSelectExecutor<IProduto>).ToString,
+    TGUID(IStormSelectExecutor<IProduto,IProdutoOrderBySelection>).ToString,
     TSelectExecutorConstructor.Create
   );
 
@@ -370,6 +412,19 @@ begin
     TGUID(IProduto).ToString,
     TProdutoEntityConstructor.Create
   );
+
+  FClassConstructor.Add
+  (
+    TGUID(IProdutoOrderBySelection).ToString,
+    TProdutoOrderBySelectionConstructor.Create
+  );
+
+  FClassConstructor.Add
+  (
+    TGUID(IProdutoOrderBySelected).ToString,
+    TIProdutoOrderBySelectedConstructor.Create
+  );
+
 
 end;
 
@@ -547,7 +602,7 @@ begin
 end;
 
 function TProdutoFieldsSelection.Only(
-  fields: TProdutoSETFieldSelection): IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>>;
+  fields: TProdutoSETFieldSelection): IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>;
 VAR
   s : string;
   field : TProdutoPossibleFields;
@@ -567,7 +622,7 @@ begin
 
   AddSQL(Copy(s,2, length(s)));
   AddFrom;
-  Result := TStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto>>, IStormSelectExecutor<IProduto>>.Create(self);
+  Result := TStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>, IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>.Create(self);
 end;
 
 
@@ -581,9 +636,9 @@ end;
 { TProdutoWhereSelectorSelectConstructor }
 
 function TProdutoWhereSelectorSelectConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormSelectExecutor<IProduto>>;
+  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>;
 begin
-  Result := TProdutoWhereSelector<IStormSelectExecutor<IProduto>>.Create(Owner);
+  Result := TProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>.Create(Owner);
 end;
 
 { TProdutoWhereSelector<Executor> }
@@ -632,9 +687,9 @@ end;
 { TSelectExecutorConstructor }
 
 function TSelectExecutorConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IStormSelectExecutor<IProduto>;
+  Owner: TStormSQLPartition): IStormSelectExecutor<IProduto,IProdutoOrderBySelection>;
 begin
-  Result := TStormSelectExecutor<IProduto>.Create(Owner);
+  Result := TStormSelectExecutor<IProduto,IProdutoOrderBySelection>.Create(Owner);
 end;
 
 { TProdutoFieldsAssignment }
@@ -796,6 +851,64 @@ function TProdutoWhereSelectorDeleteConstructor.GetGenericInstance(
   Owner: TStormSQLPartition): IProdutoWhereSelector<IStormDeleteExecutor>;
 begin
   Result :=  TProdutoWhereSelector<IStormDeleteExecutor>.Create(owner);
+end;
+
+{ TProdutoOrderBySelection }
+
+function TProdutoOrderBySelection.Ativo: IStormOrderBySelector<IProdutoOrderBySelected>;
+begin
+  Result := TStormOrderBySelector<IProdutoOrderBySelected>.Create(Integer(TProdutoPossibleFields.Ativo),Self);
+end;
+
+function TProdutoOrderBySelection.Codigo: IStormOrderBySelector<IProdutoOrderBySelected>;
+begin
+  Result := TStormOrderBySelector<IProdutoOrderBySelected>.Create(Integer(TProdutoPossibleFields.Codigo),Self);
+end;
+
+function TProdutoOrderBySelection.CodigoMarca: IStormOrderBySelector<IProdutoOrderBySelected>;
+begin
+  Result := TStormOrderBySelector<IProdutoOrderBySelected>.Create(Integer(TProdutoPossibleFields.CodigoMarca),Self);
+end;
+
+function TProdutoOrderBySelection.DataAlteracao: IStormOrderBySelector<IProdutoOrderBySelected>;
+begin
+  Result := TStormOrderBySelector<IProdutoOrderBySelected>.Create(Integer(TProdutoPossibleFields.DataAlteracao),Self);
+end;
+
+function TProdutoOrderBySelection.DataCriacao: IStormOrderBySelector<IProdutoOrderBySelected>;
+begin
+  Result := TStormOrderBySelector<IProdutoOrderBySelected>.Create(Integer(TProdutoPossibleFields.DataCriacao),Self);
+end;
+
+function TProdutoOrderBySelection.Descricao: IStormOrderBySelector<IProdutoOrderBySelected>;
+begin
+  Result := TStormOrderBySelector<IProdutoOrderBySelected>.Create(Integer(TProdutoPossibleFields.Descricao),Self);
+end;
+
+function TProdutoOrderBySelection.Open: TResult<IStormSelectSuccess<Iproduto>, IStormExecutionFail>;
+begin
+  Result := T;
+end;
+
+function TProdutoOrderBySelection.Preco: IStormOrderBySelector<IProdutoOrderBySelected>;
+begin
+  Result := TStormOrderBySelector<IProdutoOrderBySelected>.Create(Integer(TProdutoPossibleFields.Preco),Self);
+end;
+
+{ TProdutoOrderBySelectionConstructor }
+
+function TProdutoOrderBySelectionConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoOrderBySelection;
+begin
+  Result := TProdutoOrderBySelection.Create(Owner);
+end;
+
+{ TIProdutoOrderBySelectedConstructor }
+
+function TIProdutoOrderBySelectedConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoOrderBySelected;
+begin
+  Result := TProdutoOrderBySelection.Create(Owner);
 end;
 
 end.

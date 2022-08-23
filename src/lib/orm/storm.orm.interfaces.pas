@@ -41,8 +41,14 @@ Type
   end;
 
 
-  IStormSelectExecutor<EntityType: IStormEntity> = interface['{15C9397A-A7E8-413D-84D1-4EC51863B3AC}']
+  IStormSelectExecutor<EntityType: IStormEntity ; OrderSelection : IInterface> = interface['{15C9397A-A7E8-413D-84D1-4EC51863B3AC}']
     Function Open() : TResult<IStormSelectSuccess<EntityType>,IStormExecutionFail>;
+    Function OrderBy() : OrderSelection;
+  end;
+
+  IStormOrderBySelector<OrderSelection> =  interface['{25933949-7FE4-4FA9-85AF-1F89D9BE4D1F}']
+    Function ASC() : OrderSelection;
+    Function DESC() : OrderSelection;
   end;
 
   IStormUpdateSuccess = interface['{22F9D1B0-7820-4D14-B100-411B1BCE4FA0}']
