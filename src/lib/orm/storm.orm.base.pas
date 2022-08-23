@@ -51,6 +51,7 @@ Type
     Procedure AddFrom();
     Procedure Initialize; Override;
     function  AddParameter(value : variant) : string;
+    Procedure RemoveLastSqlCharacter();
 
     Function GetReturnInstance<ReturnType>() : ReturnType;
     Function GetReturnInstance2<ReturnType, SubReturnType>() : ReturnType;
@@ -473,6 +474,11 @@ end;
 
 
 
+
+procedure TStormSQLPartition.RemoveLastSqlCharacter;
+begin
+  self.SQL := copy(sql,1,length(sql)-1);
+end;
 
 { TStormGenericReturn }
 

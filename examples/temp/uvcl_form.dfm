@@ -10,6 +10,7 @@ object vcl_form: Tvcl_form
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  OldCreateOrder = True
   Position = poDesktopCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -315,25 +316,26 @@ object vcl_form: Tvcl_form
     TabOrder = 20
     OnClick = Button9Click
   end
-  object NumberBoxLimit: TNumberBox
+  object EditLimit: TEdit
     Left = 8
     Top = 175
-    Width = 75
+    Width = 121
     Height = 21
+    NumbersOnly = True
     TabOrder = 21
-    Value = 5.000000000000000000
+    Text = '2'
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 
       'Provider=MSOLEDBSQL19.1;Password=S@geBr.2014;Persist Security In' +
       'fo=True;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mss' +
-      'ql;Initial File Name="";Trust Server Certificate=True;Server SPN' +
-      '="";Authentication="";Access Token="";Host Name In Certificate="' +
-      '"'
+      'ql;Initial File Name="";Use Encryption for Data=Optional;Trust S' +
+      'erver Certificate=True;Server SPN="";Authentication="";Access To' +
+      'ken="";Host Name In Certificate=""'
     LoginPrompt = False
     Provider = 'MSOLEDBSQL19.1'
-    Left = 632
-    Top = 304
+    Left = 616
+    Top = 320
   end
   object DataSource1: TDataSource
     DataSet = FDMemTable1
@@ -343,14 +345,13 @@ object vcl_form: Tvcl_form
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Server=mssql'
       'Password=S@geBr.2014'
+      'Server=localhost'
       'User_Name=sa'
-      'Database=BancoDeTestes'
-      'DriverID=MSSQL')
+      'DriverID=MySQL')
     LoginPrompt = False
-    Left = 480
-    Top = 312
+    Left = 848
+    Top = 336
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     VendorLib = '.\libmysql.dll'

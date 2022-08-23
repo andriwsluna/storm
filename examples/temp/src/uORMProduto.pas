@@ -887,7 +887,8 @@ end;
 
 function TProdutoOrderBySelection.Open: TResult<IStormSelectSuccess<Iproduto>, IStormExecutionFail>;
 begin
-  Result := T;
+  RemoveLastSqlCharacter();
+  Result := TStormSelectExecutor<Iproduto,IProdutoOrderBySelection>.Create(Self).Open();
 end;
 
 function TProdutoOrderBySelection.Preco: IStormOrderBySelector<IProdutoOrderBySelected>;

@@ -38,8 +38,7 @@ uses
   FireDAC.VCLUI.Wait, FireDAC.Phys.MySQLDef, FireDAC.Phys.MySQL, System.Rtti,
   System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.EngExt,
   Vcl.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope, Vcl.Mask,
-  Vcl.ExtCtrls, Vcl.Buttons, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef,
-  Vcl.NumberBox
+  Vcl.ExtCtrls, Vcl.Buttons
   ;
 
 type
@@ -77,7 +76,7 @@ type
     FDMemTable1: TFDMemTable;
     Button8: TButton;
     Button9: TButton;
-    NumberBoxLimit: TNumberBox;
+    EditLimit: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -150,7 +149,7 @@ begin
   FDMemTable1.Delete;
 end;
 
-procedure Tvcl_form.AtualizarGridAposInsercao(produto: IProduto);
+procedure Tvcl_form.nb(produto: IProduto);
 begin
   Produto_ORM()
     .Select
@@ -300,7 +299,6 @@ begin
   .UpdateEntity(ProdutoAtual)
   .OnSuccess(AtualizarGridDoProduto)
   .OnFail(MostrarErro)
-
 end;
 
 procedure Tvcl_form.Button8Click(Sender: TObject);
@@ -319,25 +317,31 @@ end;
 
 procedure Tvcl_form.Button9Click(Sender: TObject);
 begin
-  uORMProduto.Produto_ORM
+  Produto_ORM()
   .Select
-    .Limit(NumberBoxLimit.ValueInt)
-    .AllColumns
+    .Limit(10)
+    .Codigo
+  .From
   .Where
-    .Codigo.IsNotNull
+    .OpenParenthesis
+      .Codigo.IsEqualsTo('2')
+      .Or_
+      .Codigo.IsEmpty
+    .CloseParenthesis
   .Go
   .OrderBy
-    .Codigo.ASC
+    .Codigo.DESC
     .Descricao.ASC
-    .CodigoMarca.DESC
     .Preco.DESC
   .Open
-    .OnSuccess(ShowDataset)
-    .OnFail(MostrarErro);
+  .OnSuccess(ShowDataset)
+  .OnFail(MostrarErro);
+
 end;
 
 procedure Tvcl_form.CarregarProduto;
 begin
+
     EditCodigo.Text := ProdutoAtual.Codigo.GetValueOrDefault();
     EditDescricao.Text := ProdutoAtual.Descricao.GetValueOrDefault();
     ComboBoxMarca.Text := ProdutoAtual.CodigoMarca.GetValueOrDefault().ToString;
@@ -352,10 +356,10 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 
-  DependencyRegister.RegisterSQLConnection(FDConnection1.StormDriver);
+  DependencyRegister.RegisterSQLConnection(adoConnection1.StormDriver);
 
   ProdutoAtual := NewProduto();
 end;
