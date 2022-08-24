@@ -25,7 +25,7 @@ USES
 Type
 
   IProduto = interface(IStormEntity)['{F266C56E-C11D-442F-8FAF-502E648431F7}']
-    function Codigo: IStringField;
+    function Codigo: IIntegerField;
     function Descricao: IStringField;
     function CodigoMarca : IIntegerField;
     function Preco : IFloatField;
@@ -57,7 +57,7 @@ type
   private
 
   protected
-    FCodigo     : IStringField;
+    FCodigo     : IIntegerField;
     FDescricao  : IStringField;
     FCodigoMarca  : IIntegerField;
     FPreco  : IFloatField;
@@ -68,7 +68,7 @@ type
     Procedure Initialize();  Override;
     procedure Finalize(); Override;
   public
-    function Codigo: IStringField;
+    function Codigo: IIntegerField;
     function Descricao: IStringField;
     function CodigoMarca : IIntegerField;
     function Preco  : IFloatField;
@@ -102,7 +102,7 @@ begin
   Result := TStormEntity(self).Clone(Target);
 end;
 
-function TProduto.Codigo: IStringField;
+function TProduto.Codigo: IIntegerField;
 begin
   result := FCodigo;
 end;
@@ -135,7 +135,7 @@ end;
 procedure TProduto.Initialize;
 begin
   inherited;
-  FCodigo     := TStormStringField.Create('codigo_produto');
+  FCodigo     := TStormIntegerField.Create('codigo_produto');
   FDescricao  := TStormStringField.Create('descricao');
   FCodigoMarca  := TStormIntegerField.Create('codigo_marca');
   FPreco  := TStormFloatField.Create('preco');

@@ -16,6 +16,7 @@ Type
     Function GetFieldName() : String;
     Function GetColumnType() : IStormSchemaType;
     Function IsPrimaryKey() : Boolean;
+    Function IsAutoIncrement() : Boolean;
   end;
 
   IStormTableSchema = interface['{383E3F0E-7185-425D-AFAA-567585AD36E5}']

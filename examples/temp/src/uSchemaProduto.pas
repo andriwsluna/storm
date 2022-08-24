@@ -61,8 +61,8 @@ begin
   FCodigo := TStormColumnSchema.Create(
     'codigo_produto',
     'Codigo',
-    TStormVarchar.Create(50),
-    [PrimaryKey, NotNull]
+    TStormInt.Create(),
+    [PrimaryKey, AutoIncrement, NotNull]
   );
 
   FDescricao := TStormColumnSchema.Create(

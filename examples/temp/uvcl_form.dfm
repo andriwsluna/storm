@@ -175,7 +175,9 @@ object vcl_form: Tvcl_form
     Top = 248
     Width = 121
     Height = 21
+    NumbersOnly = True
     TabOrder = 5
+    Text = '0'
   end
   object EditDescricao: TEdit
     Left = 288

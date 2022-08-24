@@ -30,6 +30,7 @@ Type
     Function GetColumnType() : IStormSchemaType;
 
     Function IsPrimaryKey() : Boolean;
+    Function IsAutoIncrement() : Boolean;
   public
     property ColumnName       : String            read GetColumnName;
     property FieldName        : String            read GetFieldName;
@@ -46,12 +47,24 @@ Type
   End;
 
   function ThisColumnIsPrimaryKey(column : IStormSchemaColumn) : boolean;
+  function ThisColumnIsPrimaryKeyAndNotAutoIncrement(column : IStormSchemaColumn) : boolean;
+  function ThisColumnIsAutoIncrement(column : IStormSchemaColumn) : boolean;
 
 implementation
 
 function ThisColumnIsPrimaryKey(column : IStormSchemaColumn) : boolean;
 begin
-  Result := column.IsPrimaryKey
+  Result := column.IsPrimaryKey();
+end;
+
+function ThisColumnIsPrimaryKeyAndNotAutoIncrement(column : IStormSchemaColumn) : boolean;
+begin
+  Result := (column.IsPrimaryKey() and not column.IsAutoIncrement);
+end;
+
+function ThisColumnIsAutoIncrement(column : IStormSchemaColumn) : boolean;
+begin
+  Result := column.IsAutoIncrement;
 end;
 { TStormColumnSchema }
 
@@ -78,6 +91,11 @@ end;
 function TStormColumnSchema.GetFieldName: String;
 begin
   Result := FFieldName;
+end;
+
+function TStormColumnSchema.IsAutoIncrement: Boolean;
+begin
+  Result := (AutoIncrement in ColumnAtributes);
 end;
 
 function TStormColumnSchema.IsPrimaryKey: Boolean;

@@ -102,6 +102,7 @@ begin
   end;
 end;
 
+
 function TStormStringField.SetValue(value: String): Boolean;
 begin
   Result := self.Value.SetValue(value);

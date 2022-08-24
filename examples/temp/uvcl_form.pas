@@ -95,23 +95,24 @@ type
 
     procedure freeDataset;
     Procedure ShowDataset(resultado : IStormSelectSuccess<IProduto>);
-    procedure ShowJson(json : TJsonObject);
+    procedure ShowJson(json : TJsonObject );
     procedure ShowJsonModel(json : TJsonArray);
     Procedure MostrarErro(resultado : IStormExecutionFail);
-    Function  GetCodigo() : Maybe<String>;
+    Function  GetCodigo() : Maybe<Integer>;
     Function  GetDescricao() : Maybe<String>;
     Function  GetCodigoMarca() : Maybe<integer>;
     Function  GetPreco() : Maybe<Extended>;
     Function  GetAtivo() : Maybe<Boolean>;
     Function  GetDataCriacao() : Maybe<TDate>;
     Function  GetDataAlteracao() : Maybe<TDateTime>;
-    procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess);
+    procedure MostrarResultadoInsertPositivo(resultado : IStormInsertSuccess<IProduto>);
     Procedure ProdutoToJson(produto : IProduto);
     Procedure AtualizarGridDoProduto(produto : IProduto);
     Procedure AtualizarGridAposInsercao(produto : IProduto);
     Procedure AtualizarGridAposExclusao(produto : IProduto);
-    Procedure CarregarProduto();
+    Procedure CarregarProduto(produto : Iproduto);
     Procedure AlimentarProduto(produto : Iproduto);
+    Procedure AlimentarProdutoParaInsert(produto : Iproduto);
   public
 
 
@@ -135,6 +136,12 @@ end;
 procedure Tvcl_form.AlimentarProduto(produto: Iproduto);
 begin
   produto.Codigo.Value.SetValue(getCodigo());
+  AlimentarProdutoParainsert(produto);
+
+end;
+
+procedure Tvcl_form.AlimentarProdutoParaInsert(produto: Iproduto);
+begin
   produto.Descricao.Value.SetValue(GetDescricao());
   produto.CodigoMarca.Value.SetValue(GetCodigoMarca());
   produto.Preco.Value.SetValue(getpreco());
@@ -233,13 +240,13 @@ procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
   Produto_ORM()
     .Insert
-    .Codigo.SetValue(editcodigo.text)
-    .Descricao.SetValue(GetDescricao())
-    .CodigoMarca.SetValue(GetCodigoMarca())
-    .Preco.SetValue(GetPreco())
-    .Ativo.SetValue(GetAtivo())
-    .DataCriacao.SetValue(GetDataCriacao())
-    .DataAlteracao.SetValue(GetDataAlteracao())
+    .Codigo.SetValue(getcodigo().GetValueOrDefault(0))
+    .Descricao.SetValue('meu código')
+    .CodigoMarca.SetValue(3)
+    .Preco.SetValue(12.18)
+    .Ativo.SetValue(false)
+    .DataCriacao.SetValue(now)
+    .DataAlteracao.SetValue(now)
     .Go
     .Execute
     .OnSuccess(MostrarResultadoInsertPositivo)
@@ -253,7 +260,7 @@ begin
     .Delete
     .Where
     .OpenParenthesis
-    .Codigo.IsEqualsTo(editcodigo.text)
+    .Codigo.IsEqualsTo(getcodigo().GetValueOrDefault(0))
     .CloseParenthesis
     .Go
     .Execute
@@ -270,7 +277,7 @@ end;
 procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
   Produto_ORM()
-    .SelectByID(editcodigo.text)
+    .SelectByID(getcodigo().GetValueOrDefault(0))
     .OnSuccess(ProdutoToJson)
     .OnFail(MostrarErro)
 end;
@@ -280,7 +287,7 @@ VAR
   produto : IProduto;
 begin
   produto := NewProduto();
-  AlimentarProduto(produto);
+  AlimentarProdutoParaInsert(produto);
 
 
   Produto_ORM()
@@ -323,7 +330,7 @@ begin
     .AllColumns
   .Where
     .OpenParenthesis
-      .Codigo.IsNotEmpty
+      .Codigo.IsNotNull
     .CloseParenthesis
   .Go
   .OrderBy
@@ -336,28 +343,28 @@ begin
 
 end;
 
-procedure Tvcl_form.CarregarProduto;
+procedure Tvcl_form.CarregarProduto(produto : Iproduto);
 begin
 
-    EditCodigo.Text := ProdutoAtual.Codigo.GetValueOrDefault();
-    EditDescricao.Text := ProdutoAtual.Descricao.GetValueOrDefault();
-    ComboBoxMarca.Text := ProdutoAtual.CodigoMarca.GetValueOrDefault().ToString;
-    EditPreco.Text := ProdutoAtual.Preco.GetValueOrDefault().ToString;
+    EditCodigo.Text := produto.Codigo.GetValueOrDefault().ToString;
+    EditDescricao.Text := produto.Descricao.GetValueOrDefault();
+    ComboBoxMarca.Text := produto.CodigoMarca.GetValueOrDefault().ToString;
+    EditPreco.Text := produto.Preco.GetValueOrDefault().ToString;
 end;
 
 procedure Tvcl_form.DataSource1DataChange(Sender: TObject; Field: TField);
 begin
   ProdutoAtual.FromDataset(datasource1.dataset);
-  CarregarProduto();
+  CarregarProduto(ProdutoAtual);
 end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 
-  DependencyRegister.RegisterSQLConnection(fdconnection1.StormDriver);
-  //DependencyRegister.RegisterSQLConnection(adoconnection1.StormDriver);
+  //0DependencyRegister.RegisterSQLConnection(fdconnection1.StormDriver);
+  DependencyRegister.RegisterSQLConnection(adoconnection1.StormDriver);
 
   ProdutoAtual := NewProduto();
 end;
@@ -388,11 +395,11 @@ begin
   end;
 end;
 
-function Tvcl_form.GetCodigo: Maybe<String>;
+function Tvcl_form.GetCodigo: Maybe<Integer>;
 begin
   if EditCodigo.Text <> '' then
   begin
-    Result := EditCodigo.Text;
+    Result := StrToInt(EditCodigo.Text);
   end;
 end;
 
@@ -469,22 +476,24 @@ begin
 end;
 
 procedure Tvcl_form.MostrarResultadoInsertPositivo(
-  resultado: IStormInsertSuccess);
+  resultado: IStormInsertSuccess<IProduto>);
   VAR
     cod : string;
 begin
+  //resultado.GetInserted.ToJSON().OnSome(ShowJson);
+  CarregarProduto(resultado.GetInserted);
   cod := EditCodigo.Text;
-  Produto_ORM()
-    .Select
-    .AllColumns
-    .Where
-    .Codigo.IsNotNull
-    .Go
-    .Open
-    .OnSuccess(ShowDataset)
-    .OnFail(MostrarErro);
-
-    FDMemTable1.Locate('codigo_produto',cod);
+//  Produto_ORM()
+//    .Select
+//    .AllColumns
+//    .Where
+//    .Codigo.IsNotNull
+//    .Go
+//    .Open
+//    .OnSuccess(ShowDataset)
+//    .OnFail(MostrarErro);
+//
+//    FDMemTable1.Locate('codigo_produto',cod);
 end;
 
 procedure Tvcl_form.ProdutoToJson(produto: IProduto);
@@ -505,7 +514,10 @@ end;
 procedure Tvcl_form.ShowJson(json: TJsonObject);
 begin
   MemoJson.lines.add(json.ToString);
+
   json.Free;
+
+
 
 end;
 

@@ -6,6 +6,7 @@ Uses
   DAta.DB,
   DFE.Maybe,
   DFE.Result,
+  DFE.Interfaces,
   storm.schema.interfaces,
   System.Generics.Collections,
   storm.data.interfaces,
@@ -163,16 +164,28 @@ Type
 
   TStormInsertExecutor<EntityType: IStormEntity> = class(TStormSQLExecutor,IStormInsertExecutor<EntityType>)
   protected
+    InsertedEntity :EntityType;
     Procedure Initialize; Override;
     Procedure PrepareSQL();
   public
-    Function Execute() : TResult<IStormInsertSuccess,IStormExecutionFail>;
+    Function Execute() : TResult<IStormInsertSuccess<EntityType>,IStormExecutionFail>;
+    Constructor Create
+    (
+      Const Owner : TStormSQLPartition;
+      InsertedEntity : EntityType
+    ); Reintroduce;
   end;
 
-  TStormInsertSuccess<EntityType: IStormEntity> = class(TStormSQLPartition, IStormInsertSuccess)
+  TStormInsertSuccess<EntityType: IStormEntity> = class(TStormSQLPartition, IStormInsertSuccess<EntityType>)
   protected
-
+    InsertedEntity : EntityType;
   public
+    Function GetInserted() : EntityType;
+    Constructor Create
+    (
+      Const Owner : TStormSQLPartition;
+      InsertedEntity : EntityType
+    ); Reintroduce;
   end;
 
   TStormDeleteExecutor = Class(TStormSQLExecutor, IStormDeleteExecutor)
@@ -221,10 +234,12 @@ Type
 
 
 
+
+
      Procedure Initialize; Virtual;
      Procedure Finalize; Virtual;
 
-     Function VerifyPrimaryKeyFields(Entity : IStormEntity) : Boolean;
+     Function VerifyPrimaryKeyFields(Entity : IStormEntity ; ExcludeAutIncFields: Boolean = False) : Boolean;
   public
 
     FClassConstructor : TDictionary<string, IInterface>;
@@ -280,6 +295,8 @@ begin
   InsertColumnList.Free;
 end;
 
+
+
 procedure TStormORM.Initialize;
 begin
   DependencyRegister.GetSQLDriverInstance
@@ -306,14 +323,23 @@ begin
 
 end;
 
-function TStormORM.VerifyPrimaryKeyFields(Entity: IStormEntity): Boolean;
+function TStormORM.VerifyPrimaryKeyFields(Entity: IStormEntity ; ExcludeAutIncFields: Boolean): Boolean;
+VAR
+  Columns : DFE.Interfaces.IIterator<IStormSchemaColumn>;
 begin
-  result :=
-  TableSchema
-    .GetColumns
-    .Filter(ThisColumnIsPrimaryKey)
-    .Filter(TStormEntity(Entity).ThisColumnIsNotAssigned)
-    .Count = 0 ;
+  Columns := TableSchema.GetColumns();
+  if ExcludeAutIncFields then
+  begin
+    Columns := Columns.Filter(ThisColumnIsPrimaryKeyAndNotAutoIncrement);
+  end
+  else
+  begin
+    Columns := Columns.Filter(ThisColumnIsPrimaryKey);
+  end;
+
+
+  Columns := Columns.Filter(TStormEntity(Entity).ThisColumnIsNotAssigned);
+  Result := Columns.Count = 0 ;
 end;
 
 { TStormChild }
@@ -749,15 +775,32 @@ end;
 
 { TStormInsertExecutor<EntityType> }
 
-function TStormInsertExecutor<EntityType>.Execute: TResult<IStormInsertSuccess, IStormExecutionFail>;
+constructor TStormInsertExecutor<EntityType>.Create(
+  const Owner: TStormSQLPartition; InsertedEntity: EntityType);
+begin
+ inherited Create(Owner);
+ Self.InsertedEntity := InsertedEntity;
+end;
+
+function TStormInsertExecutor<EntityType>.Execute: TResult<IStormInsertSuccess<EntityType>, IStormExecutionFail>;
+var
+  i : integer;
+  DS : TDataset;
 begin
   DbSQLConnecton.Clear();
   DbSQLConnecton.SetSQL(SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
-    DbSQLConnecton.Execute;
 
-    result := TStormInsertSuccess<EntityType>.create(self);
+
+
+    DbSQLConnecton.Open;
+    ds := DbSQLConnecton.Dataset;
+    IStormEntity(InsertedEntity).FromDataset(ds);
+    ds.Free;
+
+
+    result := TStormInsertSuccess<EntityType>.create(self,self.InsertedEntity);
 
 
   except
@@ -781,7 +824,7 @@ procedure TStormInsertExecutor<EntityType>.PrepareSQL;
 VAR
   Columns, Values : string;
   Item : TPair<String, String>;
-  //Output : String;
+  Output : String;
   column : IStormSchemaColumn;
 begin
   Columns := '';
@@ -793,18 +836,24 @@ begin
     Values := Values + ', ' + item.Value;
   end;
 
-  //Output := '';
+  Output := '';
 
-//  for column in self.ORM.TableSchema.GetColumns do
-//  begin
-//    Output := Output + ', INSERTED.' + column.GetColumnName;
-//  end;
+
+  self.ORM.TableSchema
+  .GetColumns
+  .Filter(ThisColumnIsAutoIncrement).ForEach
+  (
+    procedure(column : IStormSchemaColumn)
+    begin
+      Output := Output + ', INSERTED.' + column.GetColumnName;
+    end
+  );
 
   Columns := ' (' + StringReplace(Columns,', ','',[]) + ')';
   Values := ' (' + StringReplace(Values,', ','',[]) + ')';
-  //Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
+  Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
 
-  AddSQL('INSERT INTO ' + self.GetFullTableName + Columns {+ Output} + ' VALUES' + Values);
+  AddSQL('INSERT INTO ' + self.GetFullTableName + Columns + Output + ' VALUES' + Values);
 end;
 
 { TStormInsertSuccess<EntityType> }
@@ -884,6 +933,20 @@ function TStormOrderBySelector<OrderSelection>.DESC: OrderSelection;
 begin
   AddSQL(Self.Column.GetColumnName + ' DESC,');
   result := self.GetReturnInstance<OrderSelection>();
+end;
+
+{ TStormInsertSuccess<EntityType> }
+
+constructor TStormInsertSuccess<EntityType>.Create(
+  const Owner: TStormSQLPartition; InsertedEntity: EntityType);
+begin
+  inherited Create(Owner);
+  self.InsertedEntity := InsertedEntity;
+end;
+
+function TStormInsertSuccess<EntityType>.GetInserted: EntityType;
+begin
+  Result := InsertedEntity;
 end;
 
 end.

@@ -59,12 +59,12 @@ Type
     Function Execute() : TResult<IStormUpdateSuccess,IStormExecutionFail>;
   end;
 
-  IStormInsertSuccess = interface['{47C1D2B5-2926-4D26-9079-E38B9C56F349}']
-
+  IStormInsertSuccess<EntityType: IStormEntity> = interface['{47C1D2B5-2926-4D26-9079-E38B9C56F349}']
+    Function GetInserted() : EntityType;
   end;
 
   IStormInsertExecutor<EntityType: IStormEntity> = interface['{476BEC3B-9FD0-4882-A745-5CDF8778877E}']
-    Function Execute() : TResult<IStormInsertSuccess,IStormExecutionFail>;
+    Function Execute() : TResult<IStormInsertSuccess<EntityType>,IStormExecutionFail>;
   end;
 
   IStormDeleteSuccess = interface['{5B081229-3376-4ACB-9502-C6EBE9913ACB}']

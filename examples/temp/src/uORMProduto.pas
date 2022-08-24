@@ -4,10 +4,12 @@ interface
 
 uses
   DFE.Result,
+  DFE.Maybe,
   storm.model.interfaces,
   Data.DB,
   storm.data.interfaces,
   storm.orm.interfaces,
+  storm.entity.interfaces,
   System.TypInfo,
   uEntityProduto;
 
@@ -31,7 +33,7 @@ Type
   IDeleteEntityResult = TResult<IProduto, IStormExecutionFail>;
 
   IProdutoWhereSelector<Executor : IInterface> = interface['{CECF6A72-8A5C-491A-9B1A-BF0DB19A6C9A}']
-    Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Codigo : IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function CodigoMarca : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Preco : IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -74,7 +76,7 @@ Type
   end;
 
   IProdutoFieldsAssignmentWithWhere=  interface['{990EF674-B643-4063-987E-6C28E5821B90}']
-    Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Codigo : IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Preco : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -85,7 +87,7 @@ Type
   end;
 
   IProdutoFieldsAssignment = interface['{C36AB855-61F1-4BEE-9FE2-F0D134EA5809}']
-    Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Codigo : IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Ativo : IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -96,7 +98,7 @@ Type
   end;
 
   IProdutoFinalFieldsInsertion =  interface['{B8B4616B-7527-4617-A92F-9C0832044F7A}']
-    Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Codigo : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Preco : IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
@@ -107,7 +109,7 @@ Type
   end;
 
   IProdutoFieldsInsertion = interface
-    Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Codigo : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Preco : IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
@@ -123,7 +125,7 @@ Type
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
-    Function SelectByID(Const Codigo : String) : ISelectByIDResult;
+    Function SelectByID(Const Codigo : Integer) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
     Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
     Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
@@ -154,7 +156,18 @@ Type
     function ProccessSelectFail(Res : IStormExecutionFail) : ISelectByIDResult;
 
   protected
+    InsertedEntity : IProduto;
     procedure Initialize; override;
+    Function GetInsertedEntity<IProduto>() : uEntityProduto.IProduto; Reintroduce;
+
+    function OnInsertedSetValueToCodigo(value : Maybe<Integer>) : Boolean;
+    function OnInsertedSetValueToDescricao(value : Maybe<String>) : Boolean;
+    function OnInsertedSetValueToCodigoMarca(value : Maybe<Integer>) : Boolean;
+    function OnInsertedSetValueToPreco(value : Maybe<Extended>) : Boolean;
+    function OnInsertedSetValueToAtivo(value : Maybe<Boolean>) : Boolean;
+    function OnInsertedSetValueToDataCriacao(value : Maybe<TDate>) : Boolean;
+    function OnInsertedSetValueToDataAlteracao(value : Maybe<TDateTime>) : Boolean;
+
 
   public
     Constructor Create(DbSQLConnecton : IStormSQLConnection);
@@ -164,7 +177,7 @@ Type
     Function Insert() : IProdutoFieldsInsertion;
     Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
-    Function SelectByID(Const Codigo : String) : ISelectByIDResult;
+    Function SelectByID(Const Codigo : Integer) : ISelectByIDResult;
     Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
     Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
     Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
@@ -200,7 +213,7 @@ Type
   End;
 
   TProdutoWhereSelector<Executor : IInterface> = class(TStormSqlPartition, IProdutoWhereSelector<Executor>)
-    Function Codigo : IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
+    Function Codigo : IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function CodigoMarca : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function Preco : IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -215,7 +228,7 @@ Type
   protected
     procedure Initialize; Override;
   public
-    Function Codigo : IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    Function Codigo : IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     Function Preco : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -226,7 +239,7 @@ Type
   end;
 
   TProdutoFieldsInsertion = class(TStormSqlPartition, IProdutoFieldsInsertion, IProdutoFinalFieldsInsertion)
-    Function Codigo : IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+    Function Codigo : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Descricao : IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
     Function Preco : IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
@@ -357,6 +370,12 @@ begin
   end;
 end;
 
+
+function TProdutoORM.GetInsertedEntity<IProduto>: uEntityProduto.IProduto;
+begin
+  Result := self.InsertedEntity;
+end;
+
 procedure TProdutoORM.Initialize;
 begin
   inherited;
@@ -429,20 +448,25 @@ end;
 
 
 function TProdutoORM.Insert: IProdutoFieldsInsertion;
+VAR
+  s : String;
 begin
+  InsertedEntity := newProduto();
   Result := TProdutoFieldsInsertion.Create(self);
+
+
 end;
 
 function TProdutoORM.InsertEntity(Entity: IProduto): IInsertEntityResult;
 begin
-  if VerifyPrimaryKeyFields(Entity) then
+  if VerifyPrimaryKeyFields(Entity,True) then
   begin
     Result := Insert()
     .FromEntyity(Entity)
     .Execute
     .BindTo<IInsertEntityResult>
     (
-      function(res : IStormInsertSuccess) : IInsertEntityResult
+      function(res : IStormInsertSuccess<Iproduto>) : IInsertEntityResult
       begin
         result := Entity;
       end,
@@ -456,6 +480,44 @@ begin
   begin
     Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
   end;
+end;
+
+function TProdutoORM.OnInsertedSetValueToAtivo(value: Maybe<Boolean>): Boolean;
+begin
+  Result := InsertedEntity.Ativo.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToCodigo(value: Maybe<Integer>): Boolean;
+begin
+  Result := InsertedEntity.Codigo.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToCodigoMarca(
+  value: Maybe<Integer>): Boolean;
+begin
+  Result := InsertedEntity.CodigoMarca.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToDataAlteracao(
+  value: Maybe<TDateTime>): Boolean;
+begin
+  Result := InsertedEntity.DataAlteracao.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToDataCriacao(
+  value: Maybe<TDate>): Boolean;
+begin
+  Result := InsertedEntity.DataCriacao.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToDescricao(value: Maybe<String>): Boolean;
+begin
+  Result := InsertedEntity.Descricao.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToPreco(value: Maybe<Extended>): Boolean;
+begin
+  Result := InsertedEntity.Preco.Value.SetValue(value);
 end;
 
 function TProdutoORM.ProccessSelectFail(
@@ -496,7 +558,7 @@ begin
 end;
 
 function TProdutoORM.SelectByID(
-  const Codigo: String): TResult<IProduto, IStormExecutionFail>;
+  const Codigo: Integer): TResult<IProduto, IStormExecutionFail>;
 begin
   result :=
   Self
@@ -518,7 +580,7 @@ begin
     Result := Update()
     .FromEntyity(Entity)
     .Where
-    .Codigo.IsEqualsTo(Entity.Codigo.GetValue.GetValueOrDefault(''))
+    .Codigo.IsEqualsTo(Entity.Codigo.GetValue.GetValueOrDefault(0))
     .Go
     .Execute
     .BindTo<IUpdateEntityResult>
@@ -623,9 +685,9 @@ begin
   Result := TStormBooleanWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
 end;
 
-function TProdutoWhereSelector<Executor>.Codigo: IStormStringWhere<IProdutoWhereSelector<Executor>, Executor>;
+function TProdutoWhereSelector<Executor>.Codigo: IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
-  result := TStormStringWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
+  result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
 end;
 
 function TProdutoWhereSelector<Executor>.CodigoMarca: IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -674,9 +736,9 @@ begin
   Result := TStormBooleanFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
 end;
 
-function TProdutoFieldsAssignment.Codigo: IStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+function TProdutoFieldsAssignment.Codigo: IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
-  Result := TStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
+  Result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
 end;
 
 function TProdutoFieldsAssignment.CodigoMarca: IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -749,32 +811,62 @@ end;
 
 function TProdutoFieldsInsertion.Ativo: IStormBooleanNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
-  Result := TStormBooleanFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Ativo);
+  Result := TStormBooleanFieldInsertion<IProdutoFinalFieldsInsertion>.Create
+  (
+    Self,
+    TSchemaProduto(Self.TableSchema).Ativo,
+    TProdutoORM(Self.ORM).OnInsertedSetValueToAtivo
+  );
 end;
 
-function TProdutoFieldsInsertion.Codigo: IStormStringFieldInsertion<IProdutoFinalFieldsInsertion>;
+function TProdutoFieldsInsertion.Codigo: IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
-  Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Codigo);
+  Result := TStormIntegerFieldInsertion<IProdutoFinalFieldsInsertion>.Create
+  (
+    Self,
+    TSchemaProduto(Self.TableSchema).Codigo,
+    TProdutoORM(Self.ORM).OnInsertedSetValueToCodigo
+  );
 end;
 
 function TProdutoFieldsInsertion.CodigoMarca: IStormIntegerNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
-  Result := TStormIntegerFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).CodigoMarca);
+  Result := TStormIntegerFieldInsertion<IProdutoFinalFieldsInsertion>.Create
+  (
+    Self,
+    TSchemaProduto(Self.TableSchema).CodigoMarca,
+    TProdutoORM(self.ORM).OnInsertedSetValueToCodigoMarca
+  );
 end;
 
 function TProdutoFieldsInsertion.DataAlteracao: IStormDateTimeNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
-  Result := TStormDateTimeFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).DataAlteracao);
+  Result := TStormDateTimeFieldInsertion<IProdutoFinalFieldsInsertion>.Create
+  (
+    Self,
+    TSchemaProduto(Self.TableSchema).DataAlteracao,
+    TProdutoORM(Self.ORM).OnInsertedSetValueToDataAlteracao
+  );
 end;
 
 function TProdutoFieldsInsertion.DataCriacao: IStormDateNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
-  Result := TStormDateFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).DataCriacao);
+  Result := TStormDateFieldInsertion<IProdutoFinalFieldsInsertion>.Create
+  (
+    Self,
+    TSchemaProduto(Self.TableSchema).DataCriacao,
+    TProdutoORM(Self.ORM).OnInsertedSetValueToDataCriacao
+  );
 end;
 
 function TProdutoFieldsInsertion.Descricao: IStormStringNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
-  Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Descricao);
+  Result := TStormStringFieldInsertion<IProdutoFinalFieldsInsertion>.Create
+  (
+    Self,
+    TSchemaProduto(Self.TableSchema).Descricao,
+    TProdutoORM(Self.ORM).OnInsertedSetValueToDescricao
+  );
 end;
 
 function TProdutoFieldsInsertion.FromEntyity(
@@ -783,25 +875,31 @@ begin
   Result := TStormInsertExecutor<IProduto>.Create
   (
     Self
-    .Codigo.SetValue(Entity.codigo.GetValueOrDefault())
+    .Codigo.SetValue(Entity.codigo.GetValue())
     .Descricao.SetValue(Entity.Descricao.GetValue())
     .CodigoMarca.SetValue(Entity.CodigoMarca.GetValue())
     .Preco.SetValue(Entity.Preco.GetValue())
     .Ativo.SetValue(Entity.Ativo.GetValue())
     .DataCriacao.SetValue(Entity.DataCriacao.GetValue())
     .DataAlteracao.SetValue(Entity.DataAlteracao.GetValue())
-    as TStormSqlPartition
+    as TStormSqlPartition,
+    TprodutoORM(self.ORM).InsertedEntity
   );
 end;
 
 function TProdutoFieldsInsertion.Go: IStormInsertExecutor<IProduto>;
 begin
-  Result := TStormInsertExecutor<IProduto>.Create(Self);
+  Result := TStormInsertExecutor<IProduto>.Create(Self, TprodutoORM(self.ORM).InsertedEntity);
 end;
 
 function TProdutoFieldsInsertion.Preco: IStormFloatNullableFieldInsertion<IProdutoFinalFieldsInsertion>;
 begin
-  Result := TStormFloatFieldInsertion<IProdutoFinalFieldsInsertion>.Create(Self, TSchemaProduto(Self.TableSchema).Preco);
+  Result := TStormFloatFieldInsertion<IProdutoFinalFieldsInsertion>.Create
+  (
+    Self,
+    TSchemaProduto(Self.TableSchema).Preco,
+    TProdutoORM(self.ORM).OnInsertedSetValueToPreco
+  );
 end;
 
 { TProdutoFinalFieldsInsertionConstructor }
