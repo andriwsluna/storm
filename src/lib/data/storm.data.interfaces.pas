@@ -34,6 +34,8 @@ type
     Function GetInitialLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetFinalLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetBooleanType : String;
+    Procedure ProccessInsertOutput(Var OutPutString : String ; column : IStormSchemaColumn);
+    Procedure ProccessInsertSelect(Var InmsertedSelect : String ; column : IStormSchemaColumn);
   end;
 
 

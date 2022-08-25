@@ -16,6 +16,8 @@ Type
     Function GetInitialLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetFinalLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetBooleanType : String;
+    Procedure ProccessInsertOutput(Var OutPutString : String ; column : IStormSchemaColumn);
+    Procedure ProccessInsertSelect(Var InmsertedSelect : String ; column : IStormSchemaColumn);
   end;
 
 implementation
@@ -46,6 +48,18 @@ end;
 function TStormMSSQlDriver.GetInitialLimitSyntax(Limit: integer): Maybe<string>;
 begin
   Result := 'TOP ' + Limit.ToString;
+end;
+
+procedure TStormMSSQlDriver.ProccessInsertOutput(var OutPutString: String;
+  column: IStormSchemaColumn);
+begin
+  OutPutString := OutPutString + ', INSERTED.' + column.GetColumnName;
+end;
+
+procedure TStormMSSQlDriver.ProccessInsertSelect(var InmsertedSelect: String;
+  column: IStormSchemaColumn);
+begin
+  //nothing to do
 end;
 
 end.

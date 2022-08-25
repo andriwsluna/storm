@@ -57,7 +57,7 @@ USES
 procedure TStormTableSchema.AddColumn(column: IStormSchemaColumn);
 begin
   FColumns.Add(column);
-  FColumnsDictionary.Add(column.GetFieldName, column);
+  FColumnsDictionary.Add(column.GetColumnName, column);
 end;
 
 function TStormTableSchema.ColumnById(id: integer): Maybe<IStormSchemaColumn>;

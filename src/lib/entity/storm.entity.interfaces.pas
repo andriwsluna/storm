@@ -19,6 +19,7 @@ Type
     Function ToJSON(ConvertNulls : Boolean = false) : Maybe<TJSONObject>;
     Function FromJSON(Value : TJSONObject) : Boolean;
     Function FromDataset(Value : TDataset) : Boolean;
+    Function LoadAutoFieldsFromDataset(Value : TDataset) : Boolean;
     Function FieldByName(Name : String) : Maybe<IStormField>;
     Function ThisFieldIsAssigned(Name : String) : Boolean;
     Function PopulateDataset(Dataset : TDataset) : Boolean;

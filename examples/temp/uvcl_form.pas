@@ -240,7 +240,7 @@ procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
   Produto_ORM()
     .Insert
-    .Codigo.SetValue(getcodigo().GetValueOrDefault(0))
+    //.Codigo.SetValue(getcodigo().GetValueOrDefault(0))
     .Descricao.SetValue('meu código')
     .CodigoMarca.SetValue(3)
     .Preco.SetValue(12.18)
@@ -360,11 +360,11 @@ end;
 
 procedure Tvcl_form.FormCreate(Sender: TObject);
 begin
-  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
-  DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
+  DependencyRegister.RegisterSQLDriver(storm.data.driver.mysql.TStormMySqlDriver.Create);
+  //DependencyRegister.RegisterSQLDriver(storm.data.driver.mssql.TStormMSSQlDriver.Create);
 
-  //0DependencyRegister.RegisterSQLConnection(fdconnection1.StormDriver);
-  DependencyRegister.RegisterSQLConnection(adoconnection1.StormDriver);
+  DependencyRegister.RegisterSQLConnection(fdconnection1.StormDriver);
+  //DependencyRegister.RegisterSQLConnection(adoconnection1.StormDriver);
 
   ProdutoAtual := NewProduto();
 end;

@@ -796,7 +796,7 @@ begin
 
     DbSQLConnecton.Open;
     ds := DbSQLConnecton.Dataset;
-    IStormEntity(InsertedEntity).FromDataset(ds);
+    IStormEntity(InsertedEntity).LoadAutoFieldsFromDataset(ds);
     ds.Free;
 
 
@@ -825,6 +825,7 @@ VAR
   Columns, Values : string;
   Item : TPair<String, String>;
   Output : String;
+  InsertedSelect : String;
   column : IStormSchemaColumn;
 begin
   Columns := '';
@@ -837,7 +838,7 @@ begin
   end;
 
   Output := '';
-
+  InsertedSelect := '';
 
   self.ORM.TableSchema
   .GetColumns
@@ -845,15 +846,28 @@ begin
   (
     procedure(column : IStormSchemaColumn)
     begin
-      Output := Output + ', INSERTED.' + column.GetColumnName;
+      SQLDriver.ProccessInsertOutput(Output,column);
+      SQLDriver.ProccessInsertSelect(InsertedSelect,column);
     end
   );
 
+
+
   Columns := ' (' + StringReplace(Columns,', ','',[]) + ')';
   Values := ' (' + StringReplace(Values,', ','',[]) + ')';
-  Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
 
-  AddSQL('INSERT INTO ' + self.GetFullTableName + Columns + Output + ' VALUES' + Values);
+  if nOT Output.IsEmpty then
+  BEGIN
+    Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
+  END;
+
+
+  if Not InsertedSelect.IsEmpty then
+  begin
+    InsertedSelect := InsertedSelect + ' FROM ' + self.GetFullTableName;
+  end;
+
+  AddSQL('INSERT INTO ' + self.GetFullTableName + Columns + Output + ' VALUES' + Values + InsertedSelect);
 end;
 
 { TStormInsertSuccess<EntityType> }

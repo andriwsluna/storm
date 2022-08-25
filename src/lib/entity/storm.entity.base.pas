@@ -21,6 +21,7 @@ type
   private
 
   protected
+    FTableSchema : IStormTableSchema;
     FFieldList        : TList<IStormField>;
     FFieldDictionary  : TDictionary<String,IStormField>;
 
@@ -30,7 +31,7 @@ type
     Procedure AddStormField(Field : IStormField);
   public
 
-    Constructor Create(); Reintroduce;
+    Constructor Create(schema : IStormTableSchema); Reintroduce;
     Destructor  Destroy(); override;
 
     Function StormFields() : TList<IStormField>;
@@ -40,6 +41,7 @@ type
     Function ThisColumnIsNotAssigned(SchemaColumn : IStormSchemaColumn) : Boolean;
     Function FromJSON(Value : TJSONObject) : Boolean;
     Function FromDataset(Value : TDataset) : Boolean;
+    Function LoadAutoFieldsFromDataset(Value : TDataset) : Boolean;
     Function PopulateDataset(Dataset : TDataset) : Boolean;
     Function Clone( Target : IStormEntity) : Boolean;
   end;
@@ -48,6 +50,7 @@ type
 implementation
 
 uses
+  storm.schema.column,
   storm.fields.utils;
 
 Function ReturnFalse() : Boolean;
@@ -91,9 +94,11 @@ begin
   end;
 end;
 
-constructor TStormEntity.Create;
+constructor TStormEntity.Create(schema : IStormTableSchema);
 begin
-  inherited;
+  FTableSchema := schema;
+  inherited Create();
+
   Initialize;
 end;
 
@@ -157,6 +162,38 @@ procedure TStormEntity.Initialize;
 begin
   FFieldList        := TList<IStormField>.Create;
   FFieldDictionary  := TDictionary<String,IStormField>.Create();
+end;
+
+function TStormEntity.LoadAutoFieldsFromDataset(Value: TDataset): Boolean;
+  var
+  field : IStormField;
+  return : Boolean;
+begin
+  Result := false;
+  return := False;
+  if Assigned(Value) then
+  BEGIN
+
+    for field in FFieldList do
+    begin
+      FTableSchema.ColumnByName(field.FieldName)
+      .OnSome
+      (
+        procedure(column : IStormSchemaColumn)
+        begin
+          if ThisColumnIsAutoIncrement(column) then
+          begin
+            Return := field.FromDataset(Value) or Return;
+          end;
+        end
+      );
+
+
+
+    end;
+  END;
+
+  Result := Return;
 end;
 
 function TStormEntity.PopulateDataset(Dataset: TDataset): Boolean;

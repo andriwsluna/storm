@@ -47,7 +47,8 @@ Type
 
 implementation
 
-
+Uses
+  uSchemaProduto;
 
 
 type
@@ -68,6 +69,8 @@ type
     Procedure Initialize();  Override;
     procedure Finalize(); Override;
   public
+    Constructor Create(); Reintroduce;
+
     function Codigo: IIntegerField;
     function Descricao: IStringField;
     function CodigoMarca : IIntegerField;
@@ -110,6 +113,11 @@ end;
 function TProduto.CodigoMarca: IIntegerField;
 begin
   Result := FCodigoMarca;
+end;
+
+constructor TProduto.Create;
+begin
+  inherited Create(uSchemaProduto.TSchemaProduto.Create());
 end;
 
 function TProduto.DataAlteracao: IDateTimeField;

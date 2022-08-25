@@ -16,6 +16,8 @@ Type
     Function GetInitialLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetFinalLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetBooleanType : String;
+    Procedure ProccessInsertOutput(Var OutPutString : String ; column : IStormSchemaColumn);
+    Procedure ProccessInsertSelect(Var InmsertedSelect : String ; column : IStormSchemaColumn);
   end;
 
 implementation
@@ -44,6 +46,23 @@ end;
 function TStormMySqlDriver.GetInitialLimitSyntax(Limit: integer): Maybe<string>;
 begin
 
+end;
+
+procedure TStormMySqlDriver.ProccessInsertOutput(var OutPutString: String;
+  column: IStormSchemaColumn);
+begin
+  //nothing to do
+end;
+
+procedure TStormMySqlDriver.ProccessInsertSelect(var InmsertedSelect: String;
+  column: IStormSchemaColumn);
+begin
+  if InmsertedSelect.IsEmpty then
+  begin
+    InmsertedSelect := ';SELECT ';
+  end;
+
+  InmsertedSelect := InmsertedSelect + 'LAST_INSERT_ID() as ' + column.GetColumnName;
 end;
 
 end.
