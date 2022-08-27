@@ -77,6 +77,7 @@ type
     Button8: TButton;
     Button9: TButton;
     EditLimit: TEdit;
+    Button10: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -194,6 +195,7 @@ procedure Tvcl_form.Button1Click(Sender: TObject);
 begin
   Produto_ORM
     .Select
+    .Limit(100)
       .Codigo
       .Descricao
       .CodigoMarca
@@ -203,8 +205,18 @@ begin
       .DataAlteracao
     .From
     .Where
-      .Codigo.IsNotNull
+      .Codigo.IsEqualsTo(2)
+      .And_
+      .Preco.IsEqualsTo(2.0)
+      .OpenParenthesis
+        .Descricao.IsEqualsTo('Farinha')
+        .Or_
+        .Descricao.IsNull
+      .CloseParenthesis
     .Go
+    .OrderBy
+      .Codigo.ASC
+      .Descricao.DESC
     .Open
       .OnSuccess(ShowDataset)
       .OnFail(MostrarErro);
@@ -240,7 +252,6 @@ procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
   Produto_ORM()
     .Insert
-    //.Codigo.SetValue(getcodigo().GetValueOrDefault(0))
     .Descricao.SetValue('meu código')
     .CodigoMarca.SetValue(3)
     .Preco.SetValue(12.18)
@@ -277,7 +288,7 @@ end;
 procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
   Produto_ORM()
-    .SelectByID(getcodigo().GetValueOrDefault(0))
+    .SelectByID(1)
     .OnSuccess(ProdutoToJson)
     .OnFail(MostrarErro)
 end;
@@ -299,11 +310,19 @@ end;
 
 
 procedure Tvcl_form.Button7Click(Sender: TObject);
-
+VAR
+  produto : IProduto;
 begin
-  AlimentarProduto(ProdutoAtual);
+  //AlimentarProduto(ProdutoAtual);
+
+  produto.Codigo.SetValue(1);
+  produto.Descricao.SetValue('Farinha');
+
   Produto_ORM()
-  .UpdateEntity(ProdutoAtual)
+  .UpdateEntity(produto)
+
+
+
   .OnSuccess(AtualizarGridDoProduto)
   .OnFail(MostrarErro)
 end;
@@ -448,7 +467,7 @@ end;
 
 function Tvcl_form.GetDescricao: Maybe<String>;
 begin
-  if EditDescricao.Text <> '' then
+  if Not String(EditDescricao.Text).IsEmpty  then
   begin
     Result := EditDescricao.Text;
   end;
@@ -479,7 +498,9 @@ procedure Tvcl_form.MostrarResultadoInsertPositivo(
   resultado: IStormInsertSuccess<IProduto>);
   VAR
     cod : string;
+    v : IProduto;
 begin
+
   //resultado.GetInserted.ToJSON().OnSome(ShowJson);
   CarregarProduto(resultado.GetInserted);
   cod := EditCodigo.Text;

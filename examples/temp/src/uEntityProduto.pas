@@ -66,7 +66,7 @@ type
     FDataCriacao  : IDateField;
     FDataAlteracao  : IDateTimeField;
 
-    Procedure Initialize();  Override;
+    procedure Initialize(); override;
     procedure Finalize(); Override;
   public
     Constructor Create(); Reintroduce;
@@ -140,7 +140,7 @@ begin
   inherited;
 end;
 
-procedure TProduto.Initialize;
+procedure TProduto.Initialize();
 begin
   inherited;
   FCodigo     := TStormIntegerField.Create('codigo_produto');

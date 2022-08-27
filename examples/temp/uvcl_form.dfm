@@ -327,6 +327,15 @@ object vcl_form: Tvcl_form
     TabOrder = 21
     Text = '2'
   end
+  object Button10: TButton
+    Left = 8
+    Top = 344
+    Width = 121
+    Height = 25
+    Caption = 'Select Order BY'
+    TabOrder = 22
+    OnClick = Button9Click
+  end
   object ADOConnection1: TADOConnection
     ConnectionString = 
       'Provider=MSOLEDBSQL19.1;Password=S@geBr.2014;Persist Security In' +
@@ -336,14 +345,14 @@ object vcl_form: Tvcl_form
       'ken="";Host Name In Certificate=""'
     LoginPrompt = False
     Provider = 'MSOLEDBSQL19.1'
-    Left = 616
-    Top = 320
+    Left = 536
+    Top = 344
   end
   object DataSource1: TDataSource
     DataSet = FDMemTable1
     OnDataChange = DataSource1DataChange
-    Left = 304
-    Top = 440
+    Left = 312
+    Top = 416
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -354,13 +363,13 @@ object vcl_form: Tvcl_form
       'Database=bancodetestes'
       'DriverID=MySQL')
     LoginPrompt = False
-    Left = 848
-    Top = 336
+    Left = 544
+    Top = 400
   end
   object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
     VendorLib = '.\libmysql.dll'
-    Left = 328
-    Top = 296
+    Left = 736
+    Top = 336
   end
   object FDMemTable1: TFDMemTable
     FetchOptions.AssignedValues = [evMode]
@@ -371,6 +380,6 @@ object vcl_form: Tvcl_form
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
     Left = 416
-    Top = 432
+    Top = 408
   end
 end
