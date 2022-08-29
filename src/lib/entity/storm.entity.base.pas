@@ -169,7 +169,6 @@ function TStormEntity.LoadAutoFieldsFromDataset(Value: TDataset): Boolean;
   field : IStormField;
   return : Boolean;
 begin
-  Result := false;
   return := False;
   if Assigned(Value) then
   BEGIN

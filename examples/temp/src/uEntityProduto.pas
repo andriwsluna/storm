@@ -2,87 +2,41 @@ unit uEntityProduto;
 
 interface
 USES
+  DFE.Interfaces,
+
   storm.fields.interfaces,
   storm.dependency.register,
   storm.entity.interfaces,
-  storm.model.base,
-  system.JSON,
-  Data.DB,
-  DFE.Interfaces,
-  DFE.Maybe,
-  DFE.REsult,
-  system.Generics.Collections,
   storm.fields.str,
   storm.fields.int,
   storm.fields.float,
   storm.fields.date,
   storm.fields.datetime,
-
   storm.fields.bool,
   storm.entity.base;
-
 
 Type
 
   IProduto = interface(IStormEntity)['{F266C56E-C11D-442F-8FAF-502E648431F7}']
-    function Codigo: IIntegerField;
-    function Descricao: IStringField;
-    function CodigoMarca : IIntegerField;
-    function Preco : IFloatField;
-    function Ativo : IBooleanField;
-    function DataCriacao : IDateField;
-    function DataAlteracao  : IDateTimeField;
+    Function CodigoProduto : IIntegerField;
+    Function Descricao     : IStringField;
+    Function CodigoMarca   : IIntegerField;
+    Function Preco         : IFloatField;
+    Function Ativo         : IBooleanField;
+    Function DataCriacao   : IDateField;
+    Function DataAlteracao : IDateTimeField;
     Function Clone( Target : Iproduto) : Boolean;
   end;
-
 
   Function NewProduto() : IProduto;
   Function NewEntity() : IStormEntity;
 
-
-
   Procedure RegisterEntityConstructor;
-
-
 
 implementation
 
 Uses
   uSchemaProduto;
-
-
-type
-
-
-  TProduto = class(TStormEntity, IStormEntity, IProduto, ICloneable<IProduto>)
-  private
-
-  protected
-    FCodigo     : IIntegerField;
-    FDescricao  : IStringField;
-    FCodigoMarca  : IIntegerField;
-    FPreco  : IFloatField;
-    FAtivo  : IBooleanField;
-    FDataCriacao  : IDateField;
-    FDataAlteracao  : IDateTimeField;
-
-    procedure Initialize(); override;
-    procedure Finalize(); Override;
-  public
-    Constructor Create(); Reintroduce;
-
-    function Codigo: IIntegerField;
-    function Descricao: IStringField;
-    function CodigoMarca : IIntegerField;
-    function Preco  : IFloatField;
-    function Ativo  : IBooleanField;
-    function DataCriacao  : IDateField;
-    function DataAlteracao  : IDateTimeField;
-
-
-    Function Clone( Target : Iproduto) : Boolean;
-
-  end;
 
 Procedure RegisterEntityConstructor;
 begin
@@ -92,6 +46,39 @@ begin
     TStormEntityDependency<IProduto>.Create(NewProduto)
   );
 end;
+
+Type
+
+  TProduto = class(TStormEntity, IStormEntity, IProduto, ICloneable<IProduto>)
+  private
+
+  protected
+    FCodigoProduto : IIntegerField;
+    FDescricao     : IStringField;
+    FCodigoMarca   : IIntegerField;
+    FPreco         : IFloatField;
+    FAtivo         : IBooleanField;
+    FDataCriacao   : IDateField;
+    FDataAlteracao : IDateTimeField;
+
+    procedure Initialize(); override;
+    procedure Finalize(); Override;
+  public
+    Constructor Create(); Reintroduce;
+
+    Function CodigoProduto : IIntegerField;
+    Function Descricao     : IStringField;
+    Function CodigoMarca   : IIntegerField;
+    Function Preco         : IFloatField;
+    Function Ativo         : IBooleanField;
+    Function DataCriacao   : IDateField;
+    Function DataAlteracao : IDateTimeField;
+
+
+    Function Clone( Target : Iproduto) : Boolean;
+
+  end;
+
 
 { TProduto }
 
@@ -105,9 +92,9 @@ begin
   Result := TStormEntity(self).Clone(Target);
 end;
 
-function TProduto.Codigo: IIntegerField;
+function TProduto.CodigoProduto: IIntegerField;
 begin
-  result := FCodigo;
+  result := FCodigoProduto;
 end;
 
 function TProduto.CodigoMarca: IIntegerField;
@@ -143,7 +130,7 @@ end;
 procedure TProduto.Initialize();
 begin
   inherited;
-  FCodigo     := TStormIntegerField.Create('codigo_produto');
+  FCodigoProduto     := TStormIntegerField.Create('codigo_produto');
   FDescricao  := TStormStringField.Create('descricao');
   FCodigoMarca  := TStormIntegerField.Create('codigo_marca');
   FPreco  := TStormFloatField.Create('preco');
@@ -151,7 +138,7 @@ begin
   FDataCriacao  := TStormDateField.Create('data_criacao');
   FDataAlteracao  := TStormDateTimeField.Create('data_alteracao');
 
-  AddStormField(FCodigo as IStormField);
+  AddStormField(FCodigoProduto as IStormField);
   AddStormField(FDescricao as IStormField);
   AddStormField(FCodigoMarca as IStormField);
   AddStormField(FPreco as IStormField);

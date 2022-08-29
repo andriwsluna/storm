@@ -349,7 +349,7 @@ begin
   begin
     Result := Delete()
     .Where
-    .Codigo.IsEqualsTo(Entity.Codigo.GetValueOrDefault())
+    .Codigo.IsEqualsTo(Entity.CodigoProduto.GetValueOrDefault())
     .Go
     .Execute
     .BindTo<IDeleteEntityResult>
@@ -448,13 +448,9 @@ end;
 
 
 function TProdutoORM.Insert: IProdutoFieldsInsertion;
-VAR
-  s : String;
 begin
   InsertedEntity := newProduto();
   Result := TProdutoFieldsInsertion.Create(self);
-
-
 end;
 
 function TProdutoORM.InsertEntity(Entity: IProduto): IInsertEntityResult;
@@ -489,7 +485,7 @@ end;
 
 function TProdutoORM.OnInsertedSetValueToCodigo(value: Maybe<Integer>): Boolean;
 begin
-  Result := InsertedEntity.Codigo.Value.SetValue(value);
+  Result := InsertedEntity.CodigoProduto.Value.SetValue(value);
 end;
 
 function TProdutoORM.OnInsertedSetValueToCodigoMarca(
@@ -580,7 +576,7 @@ begin
     Result := Update()
     .FromEntyity(Entity)
     .Where
-    .Codigo.IsEqualsTo(Entity.Codigo.GetValue.GetValueOrDefault(0))
+    .Codigo.IsEqualsTo(Entity.CodigoProduto.GetValue.GetValueOrDefault(0))
     .Go
     .Execute
     .BindTo<IUpdateEntityResult>
@@ -875,7 +871,7 @@ begin
   Result := TStormInsertExecutor<IProduto>.Create
   (
     Self
-    .Codigo.SetValue(Entity.codigo.GetValue())
+    .Codigo.SetValue(Entity.CodigoProduto.GetValue())
     .Descricao.SetValue(Entity.Descricao.GetValue())
     .CodigoMarca.SetValue(Entity.CodigoMarca.GetValue())
     .Preco.SetValue(Entity.Preco.GetValue())

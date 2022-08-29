@@ -10,7 +10,6 @@ object Form2: TForm2
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
   object Button1: TButton
@@ -33,21 +32,37 @@ object Form2: TForm2
     Font.Height = -13
     Font.Name = 'Courier New'
     Font.Style = []
+    Font.Quality = fqClearTypeNatural
     TabOrder = 1
-    CodeFolding.CollapsedLineColor = clGrayText
-    CodeFolding.FolderBarLinesColor = clGrayText
     CodeFolding.ShowCollapsedLine = True
-    CodeFolding.IndentGuidesColor = clGray
-    CodeFolding.IndentGuides = True
     UseCodeFolding = False
     Gutter.Font.Charset = DEFAULT_CHARSET
     Gutter.Font.Color = clWindowText
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Courier New'
     Gutter.Font.Style = []
+    Gutter.Font.Quality = fqClearTypeNatural
+    Gutter.Bands = <
+      item
+        Kind = gbkMarks
+        Width = 13
+      end
+      item
+        Kind = gbkLineNumbers
+      end
+      item
+        Kind = gbkFold
+      end
+      item
+        Kind = gbkTrackChanges
+      end
+      item
+        Kind = gbkMargin
+        Width = 3
+      end>
     Highlighter = SynPasSyn1
     ReadOnly = True
-    FontSmoothing = fsmNone
+    SelectedColor.Alpha = 0.400000005960464500
   end
   object ADOConnection1: TADOConnection
     Connected = True
@@ -98,9 +113,6 @@ object Form2: TForm2
     Top = 280
   end
   object SynPasSyn1: TSynPasSyn
-    Options.AutoDetectEnabled = False
-    Options.AutoDetectLineLimit = 0
-    Options.Visible = False
     IdentifierAttri.Foreground = clBlack
     KeyAttri.Foreground = clHotLight
     SymbolAttri.Foreground = clHotLight

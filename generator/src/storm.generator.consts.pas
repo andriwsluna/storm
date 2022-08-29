@@ -9,6 +9,10 @@ Const
   KEYWORD_PROCEDURE   : String = 'Procedure';
   KEYWORD_INTERFACE   : String = 'Interface';
   KEYWORD_CLASS       : String = 'Class';
+  KEYWORD_RESULT      : String = 'Result';
+  KEYWORD_BEGIN       : String = 'Begin';
+  KEYWORD_END         : String = 'End';
+  KEYWORD_SELF        : String = 'Self';
 
 
 

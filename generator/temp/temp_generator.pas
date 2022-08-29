@@ -7,7 +7,7 @@ uses
   storm.generator.sql,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Data.Win.ADODB, Vcl.StdCtrls,
-  SynEditHighlighter, SynHighlighterPas, SynEdit;
+  SynEditHighlighter, SynHighlighterPas, SynEdit, SynEditCodeFolding;
 
 type
   TForm2 = class(TForm)
@@ -44,21 +44,30 @@ begin
     ADOQuery1.Next;
   end;
 
+  table.IncIdentyLevel();
+
   for col in  table.Getcolumns do
   begin
-    SynEdit.Lines.Add(col.GetEntityFieldDeclaration());
+    col.GenerateEntityFieldDeclaration()
   end;
 
   SynEdit.Lines.Add('');
 
   for col in  table.Getcolumns do
   begin
-    SynEdit.Lines.Add(col.GetEntityProtectedFieldDeclaration());
+    col.GenrateEntityProtectedFieldDeclaration();
+  end;
+
+  SynEdit.Lines.Add('');
+
+  for col in  table.Getcolumns do
+  begin
+    col.GenerateEntityFieldImplementation();
   end;
 
 
 
-
+  SynEdit.Text := table.GetSQL();
 
   ADOQuery1.Close;
 

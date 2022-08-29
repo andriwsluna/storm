@@ -20,6 +20,14 @@ Type
     Procedure AddColumn(Col : IDBColumn);
     Function GetMaxLengthOfcolumns() : Integer;
     Function Getcolumns : TList<IDBColumn>;
+    Function EntityName() : String;
+    Function EntityType() : String;
+    Function EntityInterface() : String;
+    Function GetSQL() : String;
+
+
+    procedure IncIdentyLevel(value : integer = 1);
+    procedure DecIdentyLevel(value : integer = 1);
   end;
 
   IDBColumn =  interface['{6E5D6CAF-369D-41D3-B4BB-7315A6DDD156}']
@@ -33,8 +41,9 @@ Type
     Function IsIdentity: Boolean;
     Function IsNulable: Boolean;
 
-    Function GetEntityFieldDeclaration() : String;
-    Function GetEntityProtectedFieldDeclaration() : String;
+    procedure GenerateEntityFieldDeclaration();
+    procedure GenrateEntityProtectedFieldDeclaration();
+    procedure GenerateEntityFieldImplementation();
     Function GetFieldType() : String;
   end;
 
@@ -47,15 +56,35 @@ implementation
 
 Type
 
+  TSQLGenerator = class(TInterfacedObject)
+  strict private
+    SQL : TStringList;
+  private
 
+  protected
+    function GetIdentyLevel: Integer;Virtual; Abstract;
+    procedure SetIdentyLevel(const Value: Integer); Virtual; Abstract;
+    procedure IncIdentyLevel(value : integer = 1);
+    procedure DecIdentyLevel(value : integer = 1);
 
-  TDBTable = class(TInterfacedObject,IDBTable)
+    property IdentyLevel: Integer read GetIdentyLevel write SetIdentyLevel;
+    Procedure AddSQL(Const Text : String);
+    Function GetSQL() : String;
+  public
+    Constructor Create(); Reintroduce; Virtual;
+    Destructor  Destroy();Override;
+  end;
+
+  TDBTable = class(TSQLGenerator,IDBTable)
   private
 
   protected
     FColumns : TList<IDBColumn>;
     FMaxLengthOfcolumns : Integer;
+    FIdentyLevel : Integer;
 
+    function GetIdentyLevel: Integer;Override;
+    procedure SetIdentyLevel(const Value: Integer); Override;
   public
 
 
@@ -66,6 +95,9 @@ Type
     Procedure AddColumn(Col : IDBColumn);
     Function GetMaxLengthOfcolumns() : Integer;
     Function Getcolumns : TList<IDBColumn>;
+    Function EntityName() : String;
+    Function EntityType() : String;
+    Function EntityInterface() : String;
 
   end;
 
@@ -73,6 +105,8 @@ Type
 
   TDBColumn = Class(TInterfacedObject,IDBColumn)
   private
+    function GetIdentyLevel: Integer;
+    procedure SetIdentyLevel(const Value: Integer);
 
   protected
     FDBTable          : IDBTable;
@@ -87,6 +121,7 @@ Type
     FIsNulable        : Boolean;
 
 
+    Procedure AddSql(const text : String);
 
 
   public
@@ -103,8 +138,9 @@ Type
     Constructor FromDataset(Dataset : TDataset); Virtual;
 
     Function GetFieldType() : String; Virtual; Abstract;
-    Function GetEntityFieldDeclaration() : String; Virtual;
-    Function GetEntityProtectedFieldDeclaration() : String; Virtual;
+    Procedure GenerateEntityFieldDeclaration(); Virtual;
+    Procedure GenrateEntityProtectedFieldDeclaration(); Virtual;
+    Procedure GenerateEntityFieldImplementation();
   end;
 
   TVarcharColumn = Class(TDBColumn)
@@ -153,6 +189,11 @@ Type
 
 { TDBColumn }
 
+procedure TDBColumn.AddSql(const text: String);
+begin
+  TDBTable(Self.FDBTable).AddSQL(Text);
+end;
+
 function TDBColumn.FieldName: String;
 begin
   Result := Self.FFieldName;
@@ -160,20 +201,40 @@ end;
 
 
 
-function TDBColumn.GetEntityFieldDeclaration: String;
+procedure TDBColumn.GenerateEntityFieldDeclaration;
 begin
-  Result :=
+  AddSql(
   'F' +
   CompleteWithBlanks(FieldName,fdbtable.GetMaxLengthOfcolumns) +
-  ' : ' + GetFieldType() + ';';
+  ' : ' + GetFieldType() + ';');
+
 end;
 
-function TDBColumn.GetEntityProtectedFieldDeclaration: String;
+Procedure TDBColumn.GenerateEntityFieldImplementation;
 begin
-  Result :=
+
+  AddSql(KEYWORD_FUNCTION + ' ' + FDBTable.EntityType +'.' + Self.FieldName + '(): '+Self.GetFieldType +';');
+  AddSql(KEYWORD_BEGIN);
+  FDBTable.IncIdentyLevel();
+  AddSql(KEYWORD_RESULT+' := '+KEYWORD_SELF+'.F'+ Self.FieldName +';');
+  FDBTable.DecIdentyLevel();
+  AddSql(KEYWORD_END + ';');
+
+
+end;
+
+Procedure TDBColumn.GenrateEntityProtectedFieldDeclaration;
+begin
+  AddSQL(
   KEYWORD_FUNCTION + ' ' +
   CompleteWithBlanks(FieldName,fdbtable.GetMaxLengthOfcolumns) +
-  ' : ' + GetFieldType() + ';';
+  ' : ' + GetFieldType() + ';'
+  );
+end;
+
+function TDBColumn.GetIdentyLevel: Integer;
+begin
+  Result := TDBTable(Self.FDBTable).GetIdentyLevel;
 end;
 
 function TDBColumn.ID: integer;
@@ -221,6 +282,11 @@ end;
 function TDBColumn.Schema: String;
 begin
   Result := Self.FSchema;
+end;
+
+procedure TDBColumn.SetIdentyLevel(const Value: Integer);
+begin
+ TDBColumn(Self.FDBTable).SetIdentyLevel(Value);
 end;
 
 function TDBColumn.TableName: String;
@@ -327,9 +393,29 @@ begin
   FMaxLengthOfcolumns := 0;
 end;
 
+function TDBTable.EntityInterface: String;
+begin
+  Result := 'I' + self.EntityName;
+end;
+
+function TDBTable.EntityName: String;
+begin
+  Result := 'Produto';
+end;
+
+function TDBTable.EntityType: String;
+begin
+   Result := 'T' + self.EntityName;
+end;
+
 function TDBTable.Getcolumns: TList<IDBColumn>;
 begin
   Result := Self.FColumns;
+end;
+
+function TDBTable.GetIdentyLevel: Integer;
+begin
+  Result := self.FIdentyLevel;
 end;
 
 function TDBTable.GetMaxLengthOfcolumns: Integer;
@@ -337,9 +423,62 @@ begin
   Result := FMaxLengthOfcolumns;
 end;
 
+procedure TDBTable.SetIdentyLevel(const Value: Integer);
+begin
+   Self.FIdentyLevel := Value;
+end;
+
 Function NewDbTable() : IDBTable;
 begin
   Result := TDBTable.Create;
+end;
+
+{ TSQLGenerator }
+
+procedure TSQLGenerator.AddSQL(const Text: String);
+begin
+  Self.SQL.Add( StringOfChar(' ',2 * IdentyLevel) + Text);
+end;
+
+constructor TSQLGenerator.Create;
+begin
+  Self.SQL := TStringList.Create();
+  inherited;
+
+end;
+
+procedure TSQLGenerator.DecIdentyLevel(value: integer);
+VAR
+  i : integer;
+begin
+  i := IdentyLevel;
+  DEC(i,value);
+  IdentyLevel := i;
+end;
+
+destructor TSQLGenerator.Destroy;
+begin
+  sql.Free;
+  inherited;
+end;
+
+
+
+function TSQLGenerator.GetSQL: String;
+begin
+  Result := SQL.Text;
+  SQL.Clear();
+end;
+
+
+
+procedure TSQLGenerator.IncIdentyLevel(value: integer);
+VAR
+  i : integer;
+begin
+  i := IdentyLevel;
+  INC(i,value);
+  IdentyLevel := i;
 end;
 
 end.

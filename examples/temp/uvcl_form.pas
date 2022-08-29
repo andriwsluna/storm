@@ -136,7 +136,7 @@ end;
 
 procedure Tvcl_form.AlimentarProduto(produto: Iproduto);
 begin
-  produto.Codigo.Value.SetValue(getCodigo());
+  produto.CodigoProduto.Value.SetValue(getCodigo());
   AlimentarProdutoParainsert(produto);
 
 end;
@@ -153,7 +153,7 @@ end;
 
 procedure Tvcl_form.AtualizarGridAposExclusao(produto: IProduto);
 begin
-  FDMemTable1.Locate('codigo_produto',produto.Codigo.GetValueOrDefault());
+  FDMemTable1.Locate('codigo_produto',produto.CodigoProduto.GetValueOrDefault());
   FDMemTable1.Delete;
 end;
 
@@ -169,7 +169,7 @@ begin
     .OnSuccess(ShowDataset)
     .OnFail(MostrarErro);
 
-    FDMemTable1.Locate('codigo_produto',produto.Codigo.GetValueOrDefault());
+    FDMemTable1.Locate('codigo_produto',produto.CodigoProduto.GetValueOrDefault());
 end;
 
 procedure Tvcl_form.AtualizarGridDoProduto(produto: IProduto);
@@ -234,7 +234,7 @@ begin
     .DataCriacao.SetThisOrNull(GetDataCriacao())
     .DataAlteracao.SetThisOrNull(GetDataAlteracao())
     .Where
-    .Codigo.IsEqualsTo(produtoatual.Codigo.GetValueOrDefault())
+    .Codigo.IsEqualsTo(produtoatual.CodigoProduto.GetValueOrDefault())
     .Go
     .Execute
     .OnSuccess
@@ -315,7 +315,7 @@ VAR
 begin
   //AlimentarProduto(ProdutoAtual);
 
-  produto.Codigo.SetValue(1);
+  produto.CodigoProduto.SetValue(1);
   produto.Descricao.SetValue('Farinha');
 
   Produto_ORM()
@@ -365,7 +365,7 @@ end;
 procedure Tvcl_form.CarregarProduto(produto : Iproduto);
 begin
 
-    EditCodigo.Text := produto.Codigo.GetValueOrDefault().ToString;
+    EditCodigo.Text := produto.CodigoProduto.GetValueOrDefault().ToString;
     EditDescricao.Text := produto.Descricao.GetValueOrDefault();
     ComboBoxMarca.Text := produto.CodigoMarca.GetValueOrDefault().ToString;
     EditPreco.Text := produto.Preco.GetValueOrDefault().ToString;
@@ -498,23 +498,11 @@ procedure Tvcl_form.MostrarResultadoInsertPositivo(
   resultado: IStormInsertSuccess<IProduto>);
   VAR
     cod : string;
-    v : IProduto;
 begin
 
-  //resultado.GetInserted.ToJSON().OnSome(ShowJson);
   CarregarProduto(resultado.GetInserted);
   cod := EditCodigo.Text;
-//  Produto_ORM()
-//    .Select
-//    .AllColumns
-//    .Where
-//    .Codigo.IsNotNull
-//    .Go
-//    .Open
-//    .OnSuccess(ShowDataset)
-//    .OnFail(MostrarErro);
-//
-//    FDMemTable1.Locate('codigo_produto',cod);
+
 end;
 
 procedure Tvcl_form.ProdutoToJson(produto: IProduto);

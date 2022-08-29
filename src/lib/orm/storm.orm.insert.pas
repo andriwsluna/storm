@@ -236,6 +236,7 @@ function TStormIntegerFieldInsertion<FieldInsertion>.SetValue(
   const Value: Integer): FieldInsertion;
 begin
   Result := inherited SetValue(Value);
+  CallBack(Value);
 end;
 
 

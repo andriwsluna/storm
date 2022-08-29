@@ -25,7 +25,6 @@ var
 begin
  if Text<>'' then
     begin
-      c := #0;
       s := '';
       Upper := True;
 
