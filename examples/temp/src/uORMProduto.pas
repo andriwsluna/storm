@@ -683,7 +683,7 @@ end;
 
 function TProdutoWhereSelector<Executor>.Codigo: IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
-  result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
+  result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.CodigoProduto);
 end;
 
 function TProdutoWhereSelector<Executor>.CodigoMarca: IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -734,7 +734,7 @@ end;
 
 function TProdutoFieldsAssignment.Codigo: IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
-  Result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Codigo);
+  Result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.CodigoProduto);
 end;
 
 function TProdutoFieldsAssignment.CodigoMarca: IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -820,7 +820,7 @@ begin
   Result := TStormIntegerFieldInsertion<IProdutoFinalFieldsInsertion>.Create
   (
     Self,
-    TSchemaProduto(Self.TableSchema).Codigo,
+    TSchemaProduto(Self.TableSchema).CodigoProduto,
     TProdutoORM(Self.ORM).OnInsertedSetValueToCodigo
   );
 end;

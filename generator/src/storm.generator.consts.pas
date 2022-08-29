@@ -23,8 +23,12 @@ Const
   KEYWORD_OVERRIDE        : String = 'override';
   KEYWORD_REINTRODUCE     : String = 'reintroduce';
   KEYWORD_CONSTRUCTOR     : String = 'constructor';
+  KEYWORD_DESTRUCTOR      : String = 'destructor';
   KEYWORD_INITIALIZATION  : String = 'INITIALIZATION';
   KEYWORD_FINALIZATION    : String = 'FINALIZATION';
+  KEYWORD_PROPERTY        : String = 'property';
+  KEYWORD_READ            : String = 'read';
+  KEYWORD_WRITE           : String = 'write';
 
 
 

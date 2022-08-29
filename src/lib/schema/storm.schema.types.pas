@@ -1,4 +1,4 @@
-unit storm.schema.types.varchar;
+unit storm.schema.types;
 
 interface
 

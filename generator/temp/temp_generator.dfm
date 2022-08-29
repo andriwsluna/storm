@@ -64,7 +64,6 @@ object Form2: TForm2
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitLeft = 983
     object Button1: TButton
       Left = 224
       Top = 48

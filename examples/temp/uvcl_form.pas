@@ -205,14 +205,7 @@ begin
       .DataAlteracao
     .From
     .Where
-      .Codigo.IsEqualsTo(2)
-      .And_
-      .Preco.IsEqualsTo(2.0)
-      .OpenParenthesis
-        .Descricao.IsEqualsTo('Farinha')
-        .Or_
-        .Descricao.IsNull
-      .CloseParenthesis
+      .Codigo.IsNotNull
     .Go
     .OrderBy
       .Codigo.ASC
@@ -310,16 +303,12 @@ end;
 
 
 procedure Tvcl_form.Button7Click(Sender: TObject);
-VAR
-  produto : IProduto;
 begin
-  //AlimentarProduto(ProdutoAtual);
+  AlimentarProduto(ProdutoAtual);
 
-  produto.CodigoProduto.SetValue(1);
-  produto.Descricao.SetValue('Farinha');
 
   Produto_ORM()
-  .UpdateEntity(produto)
+  .UpdateEntity(ProdutoAtual)
 
 
 

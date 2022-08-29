@@ -2,112 +2,115 @@ unit uSchemaProduto;
 
 interface
 
-Uses
+uses
   storm.schema.table,
   storm.schema.column,
   storm.schema.interfaces,
-  storm.schema.types.varchar,
+  storm.schema.types,
 
   System.Classes,
   System.Sysutils;
 
+type
 
-Type
-
-TSchemaProduto = class(TStormTableSchema)
+  TSchemaProduto = class(TStormTableSchema)
   private
-    FCodigo : IStormSchemaColumn;
-    FDescricao : IStormSchemaColumn;
-    FCodigoMarca : IStormSchemaColumn;
-    FPreco  : IStormSchemaColumn;
-    FAtivo  : IStormSchemaColumn;
-    FDataCriacao  : IStormSchemaColumn;
-    FDataAlteracao  : IStormSchemaColumn;
+    FCodigoProduto : IStormSchemaColumn;
+    FDescricao     : IStormSchemaColumn;
+    FCodigoMarca   : IStormSchemaColumn;
+    FPreco         : IStormSchemaColumn;
+    FAtivo         : IStormSchemaColumn;
+    FDataCriacao   : IStormSchemaColumn;
+    FDataAlteracao : IStormSchemaColumn;
+
   protected
-    Procedure Initialize(); Override;
+    procedure Initialize(); override;
+
   public
-    property Codigo: IStormSchemaColumn read FCodigo;
-    property Descricao: IStormSchemaColumn read FDescricao;
-    property CodigoMarca: IStormSchemaColumn read FCodigoMarca;
-    property Preco: IStormSchemaColumn read FPreco;
-    property Ativo: IStormSchemaColumn read FAtivo;
-    property DataCriacao: IStormSchemaColumn read FDataCriacao;
-    property DataAlteracao: IStormSchemaColumn read FDataAlteracao;
-    Constructor Create(); Reintroduce;
-    Destructor Destroy(); Override;
-end;
+    property CodigoProduto : IStormSchemaColumn read FCodigoProduto;
+    property Descricao     : IStormSchemaColumn read FDescricao;
+    property CodigoMarca   : IStormSchemaColumn read FCodigoMarca;
+    property Preco         : IStormSchemaColumn read FPreco;
+    property Ativo         : IStormSchemaColumn read FAtivo;
+    property DataCriacao   : IStormSchemaColumn read FDataCriacao;
+    property DataAlteracao : IStormSchemaColumn read FDataAlteracao;
 
-
+    constructor Create(); reintroduce;
+    destructor Destroy(); override;
+  end;
 
 implementation
-
-{ TSchemaProduto }
 
 constructor TSchemaProduto.Create;
 begin
   inherited Create('dbo', 'produto', 'Produto');
 end;
 
-
 destructor TSchemaProduto.Destroy;
 begin
-  FCodigo := nil;
   inherited;
 end;
 
 procedure TSchemaProduto.Initialize;
 begin
   inherited;
-  FCodigo := TStormColumnSchema.Create(
+  FCodigoProduto := TStormColumnSchema.Create
+  (
     'codigo_produto',
-    'Codigo',
+    'CodigoProduto',
     TStormInt.Create(),
-    [PrimaryKey, AutoIncrement, NotNull]
+    [PrimaryKey,AutoIncrement,NotNull]
   );
 
-  FDescricao := TStormColumnSchema.Create(
+  FDescricao := TStormColumnSchema.Create
+  (
     'descricao',
     'Descricao',
     TStormVarchar.Create(200),
     []
   );
 
-  FCodigoMarca := TStormColumnSchema.Create(
+  FCodigoMarca := TStormColumnSchema.Create
+  (
     'codigo_marca',
     'CodigoMarca',
-    TStormInt.Create,
+    TStormInt.Create(),
     []
   );
 
-  FPreco:= TStormColumnSchema.Create(
+  FPreco := TStormColumnSchema.Create
+  (
     'preco',
     'Preco',
-    TStormNumeric.Create(18,3),
+    TStormNumeric.Create(18, 3),
     []
   );
 
-  FAtivo:= TStormColumnSchema.Create(
+  FAtivo := TStormColumnSchema.Create
+  (
     'ativo',
     'Ativo',
-    TStormBoolean.Create,
+    TStormBoolean.Create(),
     []
   );
 
-  FDataCriacao:= TStormColumnSchema.Create(
+  FDataCriacao := TStormColumnSchema.Create
+  (
     'data_criacao',
     'DataCriacao',
-    TStormDate.Create,
+    TStormDate.Create(),
     []
   );
 
-  FDataAlteracao:= TStormColumnSchema.Create(
+  FDataAlteracao := TStormColumnSchema.Create
+  (
     'data_alteracao',
     'DataAlteracao',
-    TStormDateTime.Create,
+    TStormDateTime.Create(),
     []
   );
 
-  AddColumn(Codigo);
+  AddColumn(CodigoProduto);
   AddColumn(Descricao);
   AddColumn(CodigoMarca);
   AddColumn(Preco);
@@ -117,3 +120,4 @@ begin
 end;
 
 end.
+
