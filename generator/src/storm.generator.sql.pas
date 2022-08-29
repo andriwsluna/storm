@@ -7,6 +7,7 @@ USes
   System.Generics.Collections,
   DFE.Maybe,
   DFE.Iterator,
+  System.Sysutils,
   storm.generator.utils,
   storm.generator.consts,
   DFe.Result,
@@ -28,6 +29,8 @@ Type
 
     procedure IncIdentyLevel(value : integer = 1);
     procedure DecIdentyLevel(value : integer = 1);
+
+    Function GetEntityFile() : String;
   end;
 
   IDBColumn =  interface['{6E5D6CAF-369D-41D3-B4BB-7315A6DDD156}']
@@ -42,13 +45,16 @@ Type
     Function IsNulable: Boolean;
 
     procedure GenerateEntityFieldDeclaration();
-    procedure GenrateEntityProtectedFieldDeclaration();
+    procedure GenerateEntityProtectedFieldDeclaration();
     procedure GenerateEntityFieldImplementation();
+    procedure GenerateEntityFieldCreation();
+    Procedure GenerateEntityAddStormField();
+
     Function GetFieldType() : String;
   end;
 
 Function NewDbColumn(Dataset : TDataset) : IDBColumn;
-Function NewDbTable() : IDBTable;
+Function NewDbTable(Dataset : TDataset) : IDBTable;
 
 implementation
 
@@ -69,6 +75,7 @@ Type
 
     property IdentyLevel: Integer read GetIdentyLevel write SetIdentyLevel;
     Procedure AddSQL(Const Text : String);
+    Procedure BreakLine();
     Function GetSQL() : String;
   public
     Constructor Create(); Reintroduce; Virtual;
@@ -82,22 +89,41 @@ Type
     FColumns : TList<IDBColumn>;
     FMaxLengthOfcolumns : Integer;
     FIdentyLevel : Integer;
+    FSchema : String;
+    FTableName : string;
+    FName : String;
+
 
     function GetIdentyLevel: Integer;Override;
     procedure SetIdentyLevel(const Value: Integer); Override;
+
+    Procedure GenerateEntityUnit();
+    Procedure GenerateEntityUnit_Interface();
+    Procedure GenerateEntityUnit_TypeDeclaration();
+    Procedure GenerateEntityUnit_Implementation();
+    Procedure GenerateEntityUnit_TypeImplementation();
+    Procedure GenerateEntityUnit_OtherMethodsImplementation();
   public
 
 
 
 
     Constructor Create(); Reintroduce;
+    cONSTRUCTOR FromDataset(Dataset : TDataset);
 
+    Function Schema: String;
+    Function TableName: String;
     Procedure AddColumn(Col : IDBColumn);
     Function GetMaxLengthOfcolumns() : Integer;
     Function Getcolumns : TList<IDBColumn>;
     Function EntityName() : String;
     Function EntityType() : String;
     Function EntityInterface() : String;
+    Function EntitySchemaUnitName() : String;
+
+
+
+    Function GetEntityFile() : String;
 
   end;
 
@@ -138,9 +164,12 @@ Type
     Constructor FromDataset(Dataset : TDataset); Virtual;
 
     Function GetFieldType() : String; Virtual; Abstract;
+    Function GetFieldConcreteType() : String; Virtual; Abstract;
     Procedure GenerateEntityFieldDeclaration(); Virtual;
-    Procedure GenrateEntityProtectedFieldDeclaration(); Virtual;
+    Procedure GenerateEntityProtectedFieldDeclaration(); Virtual;
     Procedure GenerateEntityFieldImplementation();
+    Procedure GenerateEntityFieldCreation();
+    Procedure GenerateEntityAddStormField();
   end;
 
   TVarcharColumn = Class(TDBColumn)
@@ -151,11 +180,13 @@ Type
 
     Constructor FromDataset(Dataset : TDataset); Override;
     Function GetFieldType() : String; Override;
+    Function GetFieldConcreteType() : String; Override;
   end;
 
   TIntegerColumn = Class(TDBColumn)
   public
     Function GetFieldType() : String; Override;
+    Function GetFieldConcreteType() : String; Override;
   end;
 
   TNumericColumn = Class(TDBColumn)
@@ -165,21 +196,25 @@ Type
   public
     Constructor FromDataset(Dataset : TDataset); Override;
     Function GetFieldType() : String; Override;
+    Function GetFieldConcreteType() : String; Override;
   end;
 
   TBooleanColumn = Class(TDBColumn)
   public
     Function GetFieldType() : String; Override;
+    Function GetFieldConcreteType() : String; Override;
   end;
 
   TDateColumn = Class(TDBColumn)
   public
     Function GetFieldType() : String; Override;
+    Function GetFieldConcreteType() : String; Override;
   end;
 
   TDateTimeColumn = Class(TDBColumn)
   public
     Function GetFieldType() : String; Override;
+    Function GetFieldConcreteType() : String; Override;
   end;
 
 
@@ -201,7 +236,7 @@ end;
 
 
 
-procedure TDBColumn.GenerateEntityFieldDeclaration;
+procedure TDBColumn.GenerateEntityProtectedFieldDeclaration;
 begin
   AddSql(
   'F' +
@@ -223,7 +258,20 @@ begin
 
 end;
 
-Procedure TDBColumn.GenrateEntityProtectedFieldDeclaration;
+procedure TDBColumn.GenerateEntityAddStormField;
+begin
+  AddSql('AddStormField(F'+Self.FFieldName+' as IStormField);');
+end;
+
+procedure TDBColumn.GenerateEntityFieldCreation;
+begin
+  AddSql(
+  'F' +
+  CompleteWithBlanks(FieldName,fdbtable.GetMaxLengthOfcolumns) +
+  ' := ' + GetFieldConcreteType() + '.Create('+QuotedStr(Self.FName)+');');
+end;
+
+Procedure TDBColumn.GenerateEntityFieldDeclaration;
 begin
   AddSQL(
   KEYWORD_FUNCTION + ' ' +
@@ -307,6 +355,11 @@ begin
   Self.FMaxLength := Dataset.FieldByName('max_length').AsInteger;
 end;
 
+function TVarcharColumn.GetFieldConcreteType: String;
+begin
+  Result := 'TStormStringField';
+end;
+
 function TVarcharColumn.GetFieldType: String;
 begin
   Result := 'IStringField';
@@ -340,12 +393,22 @@ begin
   END;
 end;
 
+function TNumericColumn.GetFieldConcreteType: String;
+begin
+  Result := 'TStormFloatField';
+end;
+
 function TNumericColumn.GetFieldType: String;
 begin
   Result := 'IFloatField';
 end;
 
 { TIntegerColumn }
+
+function TIntegerColumn.GetFieldConcreteType: String;
+begin
+  Result := 'TStormIntegerField';
+end;
 
 function TIntegerColumn.GetFieldType: String;
 begin
@@ -354,6 +417,11 @@ end;
 
 { TBooleanColumn }
 
+function TBooleanColumn.GetFieldConcreteType: String;
+begin
+  Result := 'TStormBooleanField';
+end;
+
 function TBooleanColumn.GetFieldType: String;
 begin
   Result := 'IBooleanField';
@@ -361,12 +429,22 @@ end;
 
 { TDateColumn }
 
+function TDateColumn.GetFieldConcreteType: String;
+begin
+  Result := 'TStormDateField';
+end;
+
 function TDateColumn.GetFieldType: String;
 begin
   Result := 'IDateField';
 end;
 
 { TDateTimeColumn }
+
+function TDateTimeColumn.GetFieldConcreteType: String;
+begin
+  Result := 'TStormDateTimeField';
+end;
 
 function TDateTimeColumn.GetFieldType: String;
 begin
@@ -400,7 +478,12 @@ end;
 
 function TDBTable.EntityName: String;
 begin
-  Result := 'Produto';
+  Result := FName;
+end;
+
+function TDBTable.EntitySchemaUnitName: String;
+begin
+  Result := 'uSchema' + EntityName;
 end;
 
 function TDBTable.EntityType: String;
@@ -408,9 +491,230 @@ begin
    Result := 'T' + self.EntityName;
 end;
 
+constructor TDBTable.FromDataset(Dataset: TDataset);
+begin
+  Create();
+  if Assigned(Dataset) then
+  begin
+    Self.FSchema := Dataset.FieldByName('schema_name').AsString;
+    Self.FTableName := Dataset.FieldByName('table_name').AsString;
+    Self.FName :=  Capitalize(FTableName);
+  end;
+end;
+
+procedure TDBTable.GenerateEntityUnit;
+begin
+  FIdentyLevel := 0;
+
+  GenerateEntityUnit_Interface();
+  GenerateEntityUnit_TypeDeclaration();
+  GenerateEntityUnit_Implementation();
+  GenerateEntityUnit_TypeImplementation();
+  GenerateEntityUnit_OtherMethodsImplementation();
+end;
+
+procedure TDBTable.GenerateEntityUnit_Implementation;
+begin
+  AddSQL(KEYWORD_IMPLEMENTATION);
+  BreakLine();
+  AddSQL(KEYWORD_USES);
+  IncIdentyLevel();
+  AddSql(EntitySchemaUnitName + ';');
+  DecIdentyLevel();
+  BreakLine();
+  AddSql(KEYWORD_PROCEDURE +' RegisterEntityConstructor;');
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+  AddSql('DependencyRegister.RegisterEntityDependency');
+  AddSql('(');
+  IncIdentyLevel();
+  AddSql(EntityInterface + ',');
+  AddSql('TStormEntityDependency<'+EntityInterface+'>.Create(New'+EntityName+')');
+  DecIdentyLevel();
+  AddSql(');');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+ ';');
+  BreakLine();
+
+end;
+
+procedure TDBTable.GenerateEntityUnit_Interface;
+begin
+  AddSQL(KEYWORD_Unit + ' uEntity'+ self.EntityName +';');
+  BreakLine;
+  AddSQL(KEYWORD_INTERFACE);
+  BreakLine;
+  AddSQL(KEYWORD_USES);
+  IncIdentyLevel();
+  AddSql('DFE.Interfaces,');
+  AddSql('storm.fields.interfaces,');
+  AddSql('storm.dependency.register,');
+  AddSql('storm.entity.interfaces,');
+  AddSql('storm.fields.str,');
+  AddSql('storm.fields.int,');
+  AddSql('storm.fields.float,');
+  AddSql('storm.fields.date,');
+  AddSql('storm.fields.datetime,');
+  AddSql('storm.fields.bool,');
+  AddSql('storm.entity.base;');
+  BreakLine;
+  DecIdentyLevel();
+end;
+
+procedure TDBTable.GenerateEntityUnit_OtherMethodsImplementation;
+VAR
+  col : IDBColumn;
+begin
+  AddSql(KEYWORD_FUNCTION +' '+EntityType+'.Clone(Target: '+EntityInterface+'): Boolean;');
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+  AddSql(KEYWORD_RESULT+' := TStormEntity(self).Clone(Target);');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';');
+  BreakLine;
+
+  AddSql(KEYWORD_CONSTRUCTOR+' '+EntityType+'.Create();');
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+  AddSql('inherited Create(uSchema'+EntityName+'.TSchema'+EntityName+'.Create());');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';');
+  BreakLine;
+
+  AddSql(KEYWORD_PROCEDURE+' '+EntityType+'.Finalize();');
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+  AddSql('inherited;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';');
+  BreakLine;
+
+  AddSql(KEYWORD_PROCEDURE+' '+EntityType+'.Initialize();');
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+  AddSql('inherited;');
+  BreakLine;
+
+  for col in FColumns do
+  begin
+    col.GenerateEntityFieldCreation();
+  end;
+
+  BreakLine;
+
+  for col in FColumns do
+  begin
+    col.GenerateEntityAddStormField();
+  end;
+
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';');
+  BreakLine;
+
+  AddSql(KEYWORD_FUNCTION +' New'+EntityName+'() : '+EntityInterface+';');
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+  AddSql('result := '+EntityType+'.Create;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';');
+  BreakLine;
+
+  AddSql(KEYWORD_FUNCTION+' NewEntity() : IStormEntity;');
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+  AddSql(KEYWORD_RESULT+' := New'+EntityName+';');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';');
+  BreakLine;
+
+  AddSql(KEYWORD_INITIALIZATION);
+  incIdentyLevel();
+  AddSql('RegisterEntityConstructor();');
+  DecIdentyLevel();
+  BreakLine;
+  AddSql(KEYWORD_END+'.');
+
+
+end;
+
+procedure TDBTable.GenerateEntityUnit_TypeDeclaration;
+VAR
+  col : IDBColumn;
+begin
+  AddSql('Type');
+  BreakLine;
+  IncIdentyLevel();
+  AddSql(EntityInterface + ' = interface(IStormEntity)' + NewInterfaceGUID);
+  IncIdentyLevel();
+  for col in FColumns  do
+  begin
+    col.GenerateEntityFieldDeclaration();
+  end;
+
+  AddSql(KEYWORD_FUNCTION + ' Clone(Target : '+ Self.EntityInterface +') : Boolean;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END + ';');
+  DecIdentyLevel();
+  BreakLine;
+
+  AddSql(KEYWORD_FUNCTION + '  New'+ EntityName +'() : '+EntityInterface+';');
+  AddSql(KEYWORD_FUNCTION + '  NewEntity() : IStormEntity;');
+  AddSql(KEYWORD_PROCEDURE+' RegisterEntityConstructor();');
+  BreakLine();
+end;
+
+procedure TDBTable.GenerateEntityUnit_TypeImplementation;
+VAR
+  col : IDbcolumn;
+begin
+  AddSql(KEYWORD_TYPE);
+  BreakLine;
+  IncIdentyLevel();
+  AddSQL(EntityType + ' = class(TStormEntity, IStormEntity, '+ EntityInterface +
+  ', ICloneable<'+EntityInterface+'>)');
+  AddSql(KEYWORD_PRIVATE);
+  BreakLine;
+  AddSql(KEYWORD_PROTECTED);
+  IncIdentyLevel();
+  for col in FColumns do
+  begin
+    col.GenerateEntityProtectedFieldDeclaration();
+  end;
+  BreakLine;
+  AddSql(KEYWORD_PROCEDURE+' Initialize(); '+KEYWORD_override+';');
+  AddSql(KEYWORD_PROCEDURE+' Finalize(); '+KEYWORD_override+';');
+  DecIdentyLevel();
+  AddSql(KEYWORD_PUBLIC);
+  IncIdentyLevel();
+  AddSql(KEYWORD_CONSTRUCTOR + ' Create(); '+KEYWORD_REINTRODUCE+';');
+  BreakLine;
+  for col in FColumns do
+  begin
+    col.GenerateEntityFieldDeclaration();
+  end;
+  BreakLine;
+  AddSql(KEYWORD_FUNCTION+' Clone(Target : '+EntityInterface+'): Boolean;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END + ';');
+  BreakLine;
+  DecIdentyLevel();
+  for col in FColumns do
+  begin
+    col.GenerateEntityFieldImplementation();
+    BreakLine;
+  end;
+
+end;
+
 function TDBTable.Getcolumns: TList<IDBColumn>;
 begin
   Result := Self.FColumns;
+end;
+
+function TDBTable.GetEntityFile: String;
+begin
+  GenerateEntityUnit();
+  Result := getSQL();
 end;
 
 function TDBTable.GetIdentyLevel: Integer;
@@ -423,14 +727,24 @@ begin
   Result := FMaxLengthOfcolumns;
 end;
 
+function TDBTable.Schema: String;
+begin
+  Result := Fschema;
+end;
+
 procedure TDBTable.SetIdentyLevel(const Value: Integer);
 begin
    Self.FIdentyLevel := Value;
 end;
 
-Function NewDbTable() : IDBTable;
+function TDBTable.TableName: String;
 begin
-  Result := TDBTable.Create;
+  Result := FTableName;
+end;
+
+Function NewDbTable(Dataset : TDataset) : IDBTable;
+begin
+  Result := TDBTable.FromDataset(Dataset);
 end;
 
 { TSQLGenerator }
@@ -479,6 +793,11 @@ begin
   i := IdentyLevel;
   INC(i,value);
   IdentyLevel := i;
+end;
+
+procedure TSQLGenerator.BreakLine;
+begin
+  AddSql('');
 end;
 
 end.

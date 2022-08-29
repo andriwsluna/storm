@@ -8,6 +8,8 @@ USES
 
 function Capitalize (const Text: string): string;
 Function CompleteWithBlanks(const Text: string ; TargetLen : Integer) : String;
+function NewInterfaceGUID  : String;
+
 
 
 implementation
@@ -42,12 +44,20 @@ begin
         end
         else
         begin
-          s := s + LowerCase(c);
+          s := s +c;
         end;
 
       end;
     end;
  result := s;
+end;
+
+function NewInterfaceGUID  : String;
+VAR
+  guid : TGUID;
+begin
+  guid := TGUID.NewGuid;
+  Result := '[' + QuotedStr(guid.ToString) + ']';
 end;
 
 end.

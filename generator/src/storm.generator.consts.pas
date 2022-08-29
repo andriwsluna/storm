@@ -5,14 +5,26 @@ interface
 
 Const
   //KEY_WORD
-  KEYWORD_FUNCTION    : String = 'Function';
-  KEYWORD_PROCEDURE   : String = 'Procedure';
-  KEYWORD_INTERFACE   : String = 'Interface';
-  KEYWORD_CLASS       : String = 'Class';
-  KEYWORD_RESULT      : String = 'Result';
-  KEYWORD_BEGIN       : String = 'Begin';
-  KEYWORD_END         : String = 'End';
-  KEYWORD_SELF        : String = 'Self';
+  KEYWORD_FUNCTION        : String = 'function';
+  KEYWORD_PROCEDURE       : String = 'procedure';
+  KEYWORD_INTERFACE       : String = 'interface';
+  KEYWORD_CLASS           : String = 'class';
+  KEYWORD_RESULT          : String = 'result';
+  KEYWORD_BEGIN           : String = 'begin';
+  KEYWORD_END             : String = 'end';
+  KEYWORD_SELF            : String = 'self';
+  KEYWORD_UNIT            : String = 'unit';
+  KEYWORD_USES            : String = 'uses';
+  KEYWORD_TYPE            : String = 'type';
+  KEYWORD_IMPLEMENTATION  : String = 'implementation';
+  KEYWORD_PRIVATE         : String = 'private';
+  KEYWORD_PROTECTED       : String = 'protected';
+  KEYWORD_PUBLIC          : String = 'public';
+  KEYWORD_OVERRIDE        : String = 'override';
+  KEYWORD_REINTRODUCE     : String = 'reintroduce';
+  KEYWORD_CONSTRUCTOR     : String = 'constructor';
+  KEYWORD_INITIALIZATION  : String = 'INITIALIZATION';
+  KEYWORD_FINALIZATION    : String = 'FINALIZATION';
 
 
 

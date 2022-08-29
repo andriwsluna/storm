@@ -1,9 +1,9 @@
 unit uEntityProduto;
 
 interface
-USES
-  DFE.Interfaces,
 
+uses
+  DFE.Interfaces,
   storm.fields.interfaces,
   storm.dependency.register,
   storm.entity.interfaces,
@@ -17,28 +17,27 @@ USES
 
 Type
 
-  IProduto = interface(IStormEntity)['{F266C56E-C11D-442F-8FAF-502E648431F7}']
-    Function CodigoProduto : IIntegerField;
-    Function Descricao     : IStringField;
-    Function CodigoMarca   : IIntegerField;
-    Function Preco         : IFloatField;
-    Function Ativo         : IBooleanField;
-    Function DataCriacao   : IDateField;
-    Function DataAlteracao : IDateTimeField;
-    Function Clone( Target : Iproduto) : Boolean;
+  IProduto = interface(IStormEntity)['{0B875E78-7DEA-43DE-98DC-83B05F749788}']
+    function CodigoProduto : IIntegerField;
+    function Descricao     : IStringField;
+    function CodigoMarca   : IIntegerField;
+    function Preco         : IFloatField;
+    function Ativo         : IBooleanField;
+    function DataCriacao   : IDateField;
+    function DataAlteracao : IDateTimeField;
+    function Clone(Target : IProduto) : Boolean;
   end;
 
-  Function NewProduto() : IProduto;
-  Function NewEntity() : IStormEntity;
-
-  Procedure RegisterEntityConstructor;
+function  NewProduto() : IProduto;
+function  NewEntity() : IStormEntity;
+procedure RegisterEntityConstructor();
 
 implementation
 
-Uses
+uses
   uSchemaProduto;
 
-Procedure RegisterEntityConstructor;
+procedure RegisterEntityConstructor;
 begin
   DependencyRegister.RegisterEntityDependency
   (
@@ -47,7 +46,7 @@ begin
   );
 end;
 
-Type
+type
 
   TProduto = class(TStormEntity, IStormEntity, IProduto, ICloneable<IProduto>)
   private
@@ -62,67 +61,67 @@ Type
     FDataAlteracao : IDateTimeField;
 
     procedure Initialize(); override;
-    procedure Finalize(); Override;
+    procedure Finalize(); override;
   public
-    Constructor Create(); Reintroduce;
+    constructor Create(); reintroduce;
 
-    Function CodigoProduto : IIntegerField;
-    Function Descricao     : IStringField;
-    Function CodigoMarca   : IIntegerField;
-    Function Preco         : IFloatField;
-    Function Ativo         : IBooleanField;
-    Function DataCriacao   : IDateField;
-    Function DataAlteracao : IDateTimeField;
+    function CodigoProduto : IIntegerField;
+    function Descricao     : IStringField;
+    function CodigoMarca   : IIntegerField;
+    function Preco         : IFloatField;
+    function Ativo         : IBooleanField;
+    function DataCriacao   : IDateField;
+    function DataAlteracao : IDateTimeField;
 
-
-    Function Clone( Target : Iproduto) : Boolean;
-
+    function Clone(Target : IProduto): Boolean;
   end;
 
-
-{ TProduto }
-
-function TProduto.Ativo: IBooleanField;
+function TProduto.CodigoProduto(): IIntegerField;
 begin
-  Result := self.FAtivo;
+  result := self.FCodigoProduto;
 end;
 
-function TProduto.Clone(Target: Iproduto): Boolean;
+function TProduto.Descricao(): IStringField;
 begin
-  Result := TStormEntity(self).Clone(Target);
+  result := self.FDescricao;
 end;
 
-function TProduto.CodigoProduto: IIntegerField;
+function TProduto.CodigoMarca(): IIntegerField;
 begin
-  result := FCodigoProduto;
+  result := self.FCodigoMarca;
 end;
 
-function TProduto.CodigoMarca: IIntegerField;
+function TProduto.Preco(): IFloatField;
 begin
-  Result := FCodigoMarca;
+  result := self.FPreco;
 end;
 
-constructor TProduto.Create;
+function TProduto.Ativo(): IBooleanField;
+begin
+  result := self.FAtivo;
+end;
+
+function TProduto.DataCriacao(): IDateField;
+begin
+  result := self.FDataCriacao;
+end;
+
+function TProduto.DataAlteracao(): IDateTimeField;
+begin
+  result := self.FDataAlteracao;
+end;
+
+function TProduto.Clone(Target: IProduto): Boolean;
+begin
+  result := TStormEntity(self).Clone(Target);
+end;
+
+constructor TProduto.Create();
 begin
   inherited Create(uSchemaProduto.TSchemaProduto.Create());
 end;
 
-function TProduto.DataAlteracao: IDateTimeField;
-begin
-  Result := self.FDataAlteracao
-end;
-
-function TProduto.DataCriacao: IDateField;
-begin
-  Result := self.FDataCriacao;
-end;
-
-function TProduto.Descricao: IStringField;
-begin
-  result := FDescricao;
-end;
-
-procedure TProduto.Finalize;
+procedure TProduto.Finalize();
 begin
   inherited;
 end;
@@ -130,13 +129,14 @@ end;
 procedure TProduto.Initialize();
 begin
   inherited;
-  FCodigoProduto     := TStormIntegerField.Create('codigo_produto');
-  FDescricao  := TStormStringField.Create('descricao');
-  FCodigoMarca  := TStormIntegerField.Create('codigo_marca');
-  FPreco  := TStormFloatField.Create('preco');
-  FAtivo  := TStormBooleanField.Create('ativo');
-  FDataCriacao  := TStormDateField.Create('data_criacao');
-  FDataAlteracao  := TStormDateTimeField.Create('data_alteracao');
+
+  FCodigoProduto := TStormIntegerField.Create('codigo_produto');
+  FDescricao     := TStormStringField.Create('descricao');
+  FCodigoMarca   := TStormIntegerField.Create('codigo_marca');
+  FPreco         := TStormFloatField.Create('preco');
+  FAtivo         := TStormBooleanField.Create('ativo');
+  FDataCriacao   := TStormDateField.Create('data_criacao');
+  FDataAlteracao := TStormDateTimeField.Create('data_alteracao');
 
   AddStormField(FCodigoProduto as IStormField);
   AddStormField(FDescricao as IStormField);
@@ -147,25 +147,18 @@ begin
   AddStormField(FDataAlteracao as IStormField);
 end;
 
-
-function TProduto.Preco: IFloatField;
-begin
-  Result := self.FPreco;
-end;
-
-Function NewProduto() : IProduto;
+function NewProduto() : IProduto;
 begin
   result := TProduto.Create;
 end;
 
-Function NewEntity() : IStormEntity;
+function NewEntity() : IStormEntity;
 begin
   result := NewProduto;
 end;
 
-
 INITIALIZATION
   RegisterEntityConstructor();
 
-
 end.
+
