@@ -55,7 +55,7 @@ begin
     QyColumns.Next;
   end;
 
-  SynEdit.Text := table.GetSchemaFile();
+  SynEdit.Text := table.GetORMFile();
 
 
   QyColumns.Close;

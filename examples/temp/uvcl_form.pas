@@ -163,7 +163,7 @@ begin
     .Select
     .AllColumns
     .where
-    .Codigo.IsNotNull
+    .CodigoProduto.IsNotNull
     .Go
     .Open
     .OnSuccess(ShowDataset)
@@ -196,7 +196,7 @@ begin
   Produto_ORM
     .Select
     .Limit(100)
-      .Codigo
+      .CodigoProduto
       .Descricao
       .CodigoMarca
       .Ativo
@@ -205,10 +205,10 @@ begin
       .DataAlteracao
     .From
     .Where
-      .Codigo.IsNotNull
+      .CodigoProduto.IsNotNull
     .Go
     .OrderBy
-      .Codigo.ASC
+      .CodigoProduto.ASC
       .Descricao.DESC
     .Open
       .OnSuccess(ShowDataset)
@@ -227,7 +227,7 @@ begin
     .DataCriacao.SetThisOrNull(GetDataCriacao())
     .DataAlteracao.SetThisOrNull(GetDataAlteracao())
     .Where
-    .Codigo.IsEqualsTo(produtoatual.CodigoProduto.GetValueOrDefault())
+    .CodigoProduto.IsEqualsTo(produtoatual.CodigoProduto.GetValueOrDefault())
     .Go
     .Execute
     .OnSuccess
@@ -264,7 +264,7 @@ begin
     .Delete
     .Where
     .OpenParenthesis
-    .Codigo.IsEqualsTo(getcodigo().GetValueOrDefault(0))
+    .CodigoProduto.IsEqualsTo(getcodigo().GetValueOrDefault(0))
     .CloseParenthesis
     .Go
     .Execute
@@ -291,7 +291,7 @@ VAR
   produto : IProduto;
 begin
   produto := NewProduto();
-  AlimentarProdutoParaInsert(produto);
+  AlimentarProduto(produto);
 
 
   Produto_ORM()
@@ -338,11 +338,11 @@ begin
     .AllColumns
   .Where
     .OpenParenthesis
-      .Codigo.IsNotNull
+      .CodigoProduto.IsNotNull
     .CloseParenthesis
   .Go
   .OrderBy
-    .Codigo.DESC
+    .CodigoProduto.DESC
     .Descricao.ASC
     .Preco.DESC
   .Open
