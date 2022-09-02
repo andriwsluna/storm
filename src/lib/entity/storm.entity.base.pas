@@ -182,7 +182,11 @@ begin
         begin
           if ThisColumnIsAutoIncrement(column) then
           begin
-            Return := field.FromDataset(Value) or Return;
+            if not field.IsAssigned then
+            begin
+              Return := field.FromDataset(Value) or Return;
+            end;
+
           end;
         end
       );

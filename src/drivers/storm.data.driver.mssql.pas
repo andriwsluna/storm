@@ -18,6 +18,7 @@ Type
     Function GetBooleanType : String;
     Procedure ProccessInsertOutput(Var OutPutString : String ; column : IStormSchemaColumn);
     Procedure ProccessInsertSelect(Var InmsertedSelect : String ; column : IStormSchemaColumn);
+    Function GetIDENTITY_INSERT(Const TableName : String) : String;
   end;
 
 implementation
@@ -27,6 +28,11 @@ uses
   System.StrUtils;
 
 { TStormMySqlDriver }
+
+function TStormMSSQlDriver.GetIDENTITY_INSERT(Const TableName : String): String;
+begin
+  Result := 'SET IDENTITY_INSERT '+TableName+' ON;'
+end;
 
 function TStormMSSQlDriver.GetBooleanType: String;
 begin

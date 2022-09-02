@@ -859,12 +859,14 @@ begin
   if nOT Output.IsEmpty then
   BEGIN
     Output := ' OUTPUT ' + StringReplace(Output,', ','',[]) + ' ';
+    AddSQL(SQLDriver.GetIDENTITY_INSERT(self.GetFullTableName));
   END;
 
 
   if Not InsertedSelect.IsEmpty then
   begin
     InsertedSelect := InsertedSelect + ' FROM ' + self.GetFullTableName;
+    AddSQL(SQLDriver.GetIDENTITY_INSERT(self.GetFullTableName));
   end;
 
   AddSQL('INSERT INTO ' + self.GetFullTableName + Columns + Output + ' VALUES' + Values + InsertedSelect);

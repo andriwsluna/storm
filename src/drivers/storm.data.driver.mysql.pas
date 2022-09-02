@@ -16,6 +16,7 @@ Type
     Function GetInitialLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetFinalLimitSyntax(Limit : integer) : Maybe<string>;
     Function GetBooleanType : String;
+    Function GetIDENTITY_INSERT(Const TableName : String) : String;
     Procedure ProccessInsertOutput(Var OutPutString : String ; column : IStormSchemaColumn);
     Procedure ProccessInsertSelect(Var InmsertedSelect : String ; column : IStormSchemaColumn);
   end;
@@ -42,6 +43,11 @@ begin
   Result := Table.GetTableName;
 end;
 
+
+function TStormMySqlDriver.GetIDENTITY_INSERT(const TableName: String): String;
+begin
+  Result := '';
+end;
 
 function TStormMySqlDriver.GetInitialLimitSyntax(Limit: integer): Maybe<string>;
 begin
