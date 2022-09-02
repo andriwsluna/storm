@@ -143,6 +143,14 @@ end;
 
 procedure Tvcl_form.AlimentarProdutoParaInsert(produto: Iproduto);
 begin
+  getCodigo.OnSome
+  (
+    procedure(v : integer)
+    begin
+      produto.CodigoProduto.Value.SetValue(v);
+    end
+  );
+
   produto.Descricao.Value.SetValue(GetDescricao());
   produto.CodigoMarca.Value.SetValue(GetCodigoMarca());
   produto.Preco.Value.SetValue(getpreco());
@@ -272,7 +280,7 @@ begin
     (
       procedure(resultado : IStormDeleteSuccess)
       begin
-        showmessage(resultado.RowsDeleted.ToString);
+        MemoJson.Lines.Add(resultado.RowsDeleted.ToString);
       end
     )
     .OnFail(MostrarErro)
@@ -281,7 +289,7 @@ end;
 procedure Tvcl_form.Button5Click(Sender: TObject);
 begin
   Produto_ORM()
-    .SelectByID(1)
+    .SelectByID(StrToInt(editcodigo.Text))
     .OnSuccess(ProdutoToJson)
     .OnFail(MostrarErro)
 end;
@@ -291,7 +299,7 @@ VAR
   produto : IProduto;
 begin
   produto := NewProduto();
-  AlimentarProduto(produto);
+  AlimentarProdutoParaInsert(produto);
 
 
   Produto_ORM()
@@ -485,13 +493,8 @@ end;
 
 procedure Tvcl_form.MostrarResultadoInsertPositivo(
   resultado: IStormInsertSuccess<IProduto>);
-  VAR
-    cod : string;
 begin
-
-  CarregarProduto(resultado.GetInserted);
-  cod := EditCodigo.Text;
-
+  AtualizarGridAposInsercao(resultado.GetInserted);
 end;
 
 procedure Tvcl_form.ProdutoToJson(produto: IProduto);

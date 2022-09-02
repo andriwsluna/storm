@@ -21,6 +21,7 @@ Const
   KEYWORD_PROTECTED       : String = 'protected';
   KEYWORD_PUBLIC          : String = 'public';
   KEYWORD_OVERRIDE        : String = 'override';
+  KEYWORD_OVERLOAD        : String = 'overload';
   KEYWORD_REINTRODUCE     : String = 'reintroduce';
   KEYWORD_CONSTRUCTOR     : String = 'constructor';
   KEYWORD_DESTRUCTOR      : String = 'destructor';

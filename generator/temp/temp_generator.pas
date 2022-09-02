@@ -39,7 +39,6 @@ implementation
 
 procedure TForm2.Button1Click(Sender: TObject);
 VAR
-  col : IDBColumn;
   table : IDBTable;
 begin
   table := newDbTable(QyTable);

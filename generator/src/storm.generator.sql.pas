@@ -6,6 +6,7 @@ USes
   Data.DB,
   System.Generics.Collections,
   DFE.Maybe,
+  DFE.Interfaces,
   DFE.Iterator,
   System.Sysutils,
   storm.generator.utils,
@@ -70,8 +71,16 @@ Type
     Procedure GenerateORMFieldAssignment();
     Procedure GenerateORMFieldInsertion();
 
+    Procedure GenerateOnInsertedSetValue();
+
 
     Function GetFieldType() : String;
+    Function GetStormPrimitiveType() : String;
+    Function GetPrimitiveType() : String;
+    Function GetValueOrDefault() : String;
+    Function GetPrimtiveDefaultValue() : String;
+    Function GetWhereInterface() : String;
+    Function GetFieldAssignment() : String;
 
   end;
 
@@ -97,6 +106,11 @@ Type
 
     property IdentyLevel: Integer read GetIdentyLevel write SetIdentyLevel;
     Procedure AddSQL(Const Text : String);
+    Procedure AddBegin();
+    Procedure AddOpenParentesis();
+    Procedure AddCloseParentesis(PostSymbol : String = ';');
+    Procedure AddEnd(PostSymbol : string = ';');
+    Procedure AddPublic();
     Procedure BreakLine();
     Function GetSQL() : String;
   public
@@ -106,9 +120,11 @@ Type
 
   TDBTable = class(TSQLGenerator,IDBTable)
   private
-
+    Function FilterPrimaryKeys(col : IDBColumn) : Boolean;
+    Function FilterNotPrimaryKeys(col : IDBColumn) : Boolean;
   protected
-    FColumns : TList<IDBColumn>;
+    FColumns : IIterator<IDBColumn>;
+    FPrimaryKeyColumns : TList<IDBColumn>;
     FMaxLengthOfcolumns : Integer;
     FIdentyLevel : Integer;
     FSchema : String;
@@ -139,11 +155,31 @@ Type
     Procedure GenerateORMUnit_Interface_FieldSelection();
     Procedure GenerateORMUnit_Interface_FieldAssignment();
     Procedure GenerateORMUnit_Interface_FieldInsertion();
-
+    Procedure GenerateORMUnit_Interface_ORMDEclaration();
     Procedure GenerateORMUnit_Implementation();
+    Procedure GenerateORMUnit_Implementation_ORMClass();
+    Procedure GenerateORMUnit_Implementation_FieldsSelection();
+    Procedure GenerateORMUnit_Implementation_OrderBySelection();
+    Procedure GenerateORMUnit_Implementation_WhereSelector();
+    Procedure GenerateORMUnit_Implementation_FieldsAssignment();
+    Procedure GenerateORMUnit_Implementation_FieldsInsertion();
+    Procedure GenerateORMUnit_Implementation_Constructors();
+
+    Procedure GenerateORMUnit_CodeImplementation();
+    Procedure GenerateORMUnit_CodeImplementation_ORMGetter();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_SimpleMethods();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_DeleteEntity();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_Initialize();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_InsertEntity();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_InsertedSetValueTo();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_ProccessSelectSuccess();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_SelectByID();
+    Procedure GenerateORMUnit_CodeImplementation_ORMClass_UpdateEntity();
+    Procedure GenerateORMUnit_CodeImplementation_FieldsSelection();
+    Procedure GenerateORMUnit_CodeImplementation_WhereSelector();
+    Procedure GenerateORMUnit_CodeImplementation_FieldsAssignment();
   public
-
-
 
 
     Constructor Create(); Reintroduce;
@@ -164,15 +200,26 @@ Type
     //ORM
     Function EntityORMUnitName() : String;
     Function EntityORMTypeName() : String;
+    Function EntityORMInterface() : String;
     Function EntityORMEnum() : String;
     Function EntityORMEnumSET() : String;
     Function GetWhereSelectorInterface(): String;
+    Function GetWhereSelectorType(): String;
     Function GetOrderBySelection(): String;
+    Function GetOrderBySelectionType(): String;
     Function GetOrderBySelected(): String;
+    Function GetOrderBySelectedType(): String;
     Function GetFieldSelection(): String;
+    Function GetFieldSelectionType(): String;
     Function GetFieldSelectionWithLimit(): String;
     Function GetFieldsAssignment(): String;
+    Function GetFieldsAssignmentType(): String;
     Function GetFieldsInsertion(): String;
+    Function GetFieldsInsertionType(): String;
+    Function GetORMInterface() : String;
+    Function GetORMType() : String;
+    Procedure GenerateSelectByID(typ : String = '');
+    Procedure GenerateWherePrimaryKeyIsEquals(EqualsToPrimitive : Boolean = False);
 
 
 
@@ -224,9 +271,12 @@ Type
     Function GetSchemaFieldCreation() : String; Virtual;
     Function GetSchemaAttributes(): String; Virtual;
     Function GetStormPrimitiveType() : String; Virtual; Abstract;
+    Function GetPrimitiveType() : String; Virtual; Abstract;
     Function GetWhereInterface() : String; Virtual;
     Function GetFieldAssignment() : String; Virtual;
     Function GetFieldInsertion() : String; Virtual;
+    Function GetPrimtiveDefaultValue() : String; Virtual; Abstract;
+    Function GetValueOrDefault() : String;
 
     Procedure GenerateEntityFieldDeclaration(); Virtual;
     Procedure GenerateEntityProtectedFieldDeclaration(); Virtual;
@@ -245,6 +295,8 @@ Type
     Procedure GenerateORMFieldSelection();
     Procedure GenerateORMFieldAssignment();
     Procedure GenerateORMFieldInsertion();
+
+    Procedure GenerateOnInsertedSetValue();
   end;
 
   TVarcharColumn = Class(TDBColumn)
@@ -260,6 +312,8 @@ Type
     Function GetSchemaType() : String; Override;
     Function GetSchemaFieldCreation() : String; Override;
     Function GetStormPrimitiveType() : String; Override;
+    Function GetPrimitiveType() : String; Override;
+    Function GetPrimtiveDefaultValue() : String; Override;
   end;
 
   TIntegerColumn = Class(TDBColumn)
@@ -270,6 +324,8 @@ Type
     Function GetFieldConcreteType() : String; Override;
     Function GetSchemaType() : String; Override;
     Function GetStormPrimitiveType() : String; Override;
+    Function GetPrimitiveType() : String; Override;
+    Function GetPrimtiveDefaultValue() : String; Override;
   end;
 
   TNumericColumn = Class(TDBColumn)
@@ -283,6 +339,8 @@ Type
     Function GetSchemaType() : String; Override;
     Function GetSchemaFieldCreation() : String; Override;
     Function GetStormPrimitiveType() : String; Override;
+    Function GetPrimitiveType() : String; Override;
+    Function GetPrimtiveDefaultValue() : String; Override;
   end;
 
   TBooleanColumn = Class(TDBColumn)
@@ -291,6 +349,8 @@ Type
     Function GetFieldConcreteType() : String; Override;
     Function GetSchemaType() : String; Override;
     Function GetStormPrimitiveType() : String; Override;
+    Function GetPrimitiveType() : String; Override;
+    Function GetPrimtiveDefaultValue() : String; Override;
   end;
 
   TDateColumn = Class(TDBColumn)
@@ -299,6 +359,8 @@ Type
     Function GetFieldConcreteType() : String; Override;
     Function GetSchemaType() : String; Override;
     Function GetStormPrimitiveType() : String; Override;
+    Function GetPrimitiveType() : String; Override;
+    Function GetPrimtiveDefaultValue() : String; Override;
   end;
 
   TDateTimeColumn = Class(TDBColumn)
@@ -307,6 +369,8 @@ Type
     Function GetFieldConcreteType() : String; Override;
     Function GetSchemaType() : String; Override;
     Function GetStormPrimitiveType() : String; Override;
+    Function GetPrimitiveType() : String; Override;
+    Function GetPrimtiveDefaultValue() : String; Override;
   end;
 
 
@@ -335,6 +399,11 @@ begin
   CompleteWithBlanks(FieldName,fdbtable.GetMaxLengthOfcolumns) +
   ' : ' + GetFieldType() + ';');
 
+end;
+
+procedure TDBColumn.GenerateOnInsertedSetValue;
+begin
+  AddSql(KEYWORD_FUNCTION+' OnInsertedSetValueTo'+Self.FieldName+'(value : Maybe<'+Self.GetPrimitiveType+'>) : Boolean;');
 end;
 
 procedure TDBColumn.GenerateORMFieldAssignment;
@@ -494,6 +563,11 @@ begin
   Result := GetSchemaType + '.Create()';
 end;
 
+function TDBColumn.GetValueOrDefault: String;
+begin
+  Result := FieldName+'.GetValueOrDefault('+GetPrimtiveDefaultValue()+')';
+end;
+
 function TDBColumn.GetWhereInterface: String;
 begin
   if self.IsNulable then
@@ -586,6 +660,16 @@ begin
   Result := 'IStringField';
 end;
 
+function TVarcharColumn.GetPrimitiveType: String;
+begin
+  Result := 'String';
+end;
+
+function TVarcharColumn.GetPrimtiveDefaultValue: String;
+begin
+  Result := QuotedStr('');
+end;
+
 function TVarcharColumn.GetSchemaFieldCreation: String;
 begin
   Result := self.GetSchemaType + '.Create(' +self.FMaxLength.ToString +')';
@@ -640,6 +724,16 @@ begin
   Result := 'IFloatField';
 end;
 
+function TNumericColumn.GetPrimitiveType: String;
+begin
+  Result := 'Extended';
+end;
+
+function TNumericColumn.GetPrimtiveDefaultValue: String;
+begin
+  Result := '0.0';
+end;
+
 function TNumericColumn.GetSchemaFieldCreation: String;
 begin
   Result := GetSchemaType + '.Create('+self.FPrecision.ToString+', '+ self.FScale.ToString+')';
@@ -668,6 +762,16 @@ begin
 end;
 
 
+function TIntegerColumn.GetPrimitiveType: String;
+begin
+  Result := 'Integer';
+end;
+
+function TIntegerColumn.GetPrimtiveDefaultValue: String;
+begin
+  Result := '0';
+end;
+
 function TIntegerColumn.GetSchemaType: String;
 begin
   Result := 'TStormInt';
@@ -692,6 +796,16 @@ begin
 end;
 
 
+function TBooleanColumn.GetPrimitiveType: String;
+begin
+  Result := 'Boolean';
+end;
+
+function TBooleanColumn.GetPrimtiveDefaultValue: String;
+begin
+  Result := 'False';
+end;
+
 function TBooleanColumn.GetSchemaType: String;
 begin
   Result := 'TStormBoolean';
@@ -712,6 +826,16 @@ end;
 function TDateColumn.GetFieldType: String;
 begin
   Result := 'IDateField';
+end;
+
+function TDateColumn.GetPrimitiveType: String;
+begin
+  Result := 'TDate';
+end;
+
+function TDateColumn.GetPrimtiveDefaultValue: String;
+begin
+  Result := '0';
 end;
 
 function TDateColumn.GetSchemaType: String;
@@ -736,6 +860,16 @@ begin
   Result := 'IDateTimeField';
 end;
 
+
+function TDateTimeColumn.GetPrimitiveType: String;
+begin
+  Result := 'TDateTime';
+end;
+
+function TDateTimeColumn.GetPrimtiveDefaultValue: String;
+begin
+  Result := '0.0';
+end;
 
 function TDateTimeColumn.GetSchemaType: String;
 begin
@@ -763,7 +897,7 @@ end;
 constructor TDBTable.Create;
 begin
   inherited;
-  FColumns := Tlist<IDBColumn>.create;
+  FColumns := Titerator<IDBColumn>.create;
   FMaxLengthOfcolumns := 0;
 end;
 
@@ -788,9 +922,14 @@ begin
   Result := 'T'+self.FName+'SETFieldSelection = set of '+self.EntityORMEnum+';';
 end;
 
+function TDBTable.EntityORMInterface: String;
+begin
+  Result := 'I'+Self.FName+'ORM';
+end;
+
 function TDBTable.EntityORMTypeName: String;
 begin
-  //Result := 'uORM'+Self.FName;
+  Result := 'T'+Self.FName+'ORM';
 end;
 
 function TDBTable.EntityORMUnitName: String;
@@ -811,6 +950,16 @@ end;
 function TDBTable.EntityType: String;
 begin
    Result := 'T' + self.EntityName;
+end;
+
+function TDBTable.FilterNotPrimaryKeys(col: IDBColumn): Boolean;
+begin
+  Result := Not col.IsPrimaryKey;
+end;
+
+function TDBTable.FilterPrimaryKeys(col: IDBColumn): Boolean;
+begin
+  Result := col.IsPrimaryKey;
 end;
 
 constructor TDBTable.FromDataset(Dataset: TDataset);
@@ -917,14 +1066,14 @@ begin
   AddSql('inherited;');
   BreakLine;
 
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateEntityFieldCreation();
   end;
 
   BreakLine;
 
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateEntityAddStormField();
   end;
@@ -968,7 +1117,7 @@ begin
   IncIdentyLevel();
   AddSql(EntityInterface + ' = interface(IStormEntity)' + NewInterfaceGUID);
   IncIdentyLevel();
-  for col in FColumns  do
+  for col in Getcolumns  do
   begin
     col.GenerateEntityFieldDeclaration();
   end;
@@ -998,7 +1147,7 @@ begin
   BreakLine;
   AddSql(KEYWORD_PROTECTED);
   IncIdentyLevel();
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateEntityProtectedFieldDeclaration();
   end;
@@ -1010,7 +1159,7 @@ begin
   IncIdentyLevel();
   AddSql(KEYWORD_CONSTRUCTOR + ' Create(); '+KEYWORD_REINTRODUCE+';');
   BreakLine;
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateEntityFieldDeclaration();
   end;
@@ -1020,7 +1169,7 @@ begin
   AddSql(KEYWORD_END + ';');
   BreakLine;
   DecIdentyLevel();
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateEntityFieldImplementation();
     BreakLine;
@@ -1033,12 +1182,718 @@ begin
   self.IdentyLevel := 0;
   GenerateORMUnit_Interface();
   GenerateORMUnit_Implementation();
+  GenerateORMUnit_CodeImplementation();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation;
+begin
+  IdentyLevel := 0;
+  GenerateORMUnit_CodeImplementation_ORMGetter();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_FieldsSelection();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_WhereSelector();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_FieldsAssignment();
+  BreakLine;
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_FieldsAssignment;
+begin
+  AddSql('{ '+GetFieldsAssignmentType+' }');
+  BreakLine;
+  FColumns.ForEach
+  (
+    procedure(col : IDBColumn)
+    begin
+      AddSql(KEYWORD_FUNCTION+' '+GetFieldsAssignmentType+'.'+Col.FieldName+
+      ': '+Col.GetFieldAssignment+'<'+GetFieldsAssignment+'WithWhere>;');
+      AddBegin;
+      AddSql(KEYWORD_RESULT+' := TStorm'+Col.GetStormPrimitiveType+
+      'FieldAssignement<'+Self.GetFieldsAssignment+'WithWhere>.Create'+
+      '(Self, '+Self.GetORMType+'(self.ORM).Schema'+Self.EntityName+'.'+Col.FieldName+');');
+      AddEnd();
+      BreakLine;
+    end
+  );
+
+  AddSql(KEYWORD_FUNCTION+' '+GetFieldsAssignmentType+'.FromEntyity(');
+  AddSql('Entity: '+EntityInterface+'): IStormWherePoint<'+Self.GetWhereSelectorInterface+'<IStormUpdateExecutor>>;');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := TStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>,IStormUpdateExecutor>.Create');
+  AddSql('(');
+  AddSql('Self');
+  FColumns.Filter(FilterNotPrimaryKeys).ForEach
+  (
+    procedure(col : IDBColumn)
+    begin
+      if col.IsNulable then
+      begin
+        AddSql('.'+Col.FieldName+'.SetThisOrNull(Entity.'+Col.FieldName+'.GetValue())');
+      end
+      else
+      begin
+        AddSql('.'+Col.FieldName+'.SetTo(Entity.'+Col.FieldName+'.GetValueOrDefault())');
+      end;
+    end
+  );
+  AddSql('as TStormSqlPartition');
+  AddSql(');');
+  AddEnd();
+  AddSql('');
+  AddSql('procedure '+Self.GetFieldsAssignmentType+'.initialize;');
+  AddBegin;
+  AddSql('inherited;');
+  AddSql('if SQL.IsEmpty then');
+  AddBegin;
+  AddSql('AddUpdate();');
+  AddEnd();
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_FieldsSelection;
+begin
+  AddSql('{ '+GetFieldSelectionType+' }');
+  AddSql('');
+  FColumns.ForEach
+  (
+    procedure(col : IDBColumn)
+    begin
+      AddSql(KEYWORD_FUNCTION+' '+GetFieldSelectionType+'.'+Col.FieldName+': IProdutoFieldsSelection;');
+      AddBegin;
+      AddSql('AddColumn(Integer(T'+EntityName+'PossibleFields.'+Col.FieldName+'));');
+      AddSql(KEYWORD_RESULT+' := Self;');
+      addEnd();
+      breakline();
+    end
+  );
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetFieldSelectionType+'.Limit(');
+  AddSql('Const Count: Integer): '+GetFieldSelection+';');
+  AddBegin;
+  AddSql('AddLimit(Count);');
+  AddSql(KEYWORD_RESULT+' := Self;');
+  AddEnd();
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass;
+begin
+  GenerateORMUnit_CodeImplementation_ORMClass_SimpleMethods();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass_DeleteEntity();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass_Initialize();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass_InsertEntity();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass_InsertedSetValueTo();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass_ProccessSelectSuccess();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass_SelectByID();
+  BreakLine;
+  GenerateORMUnit_CodeImplementation_ORMClass_UpdateEntity();
+  BreakLine;
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_DeleteEntity;
+begin
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.DeleteEntity(Entity: '+EntityInterface+'): IDeleteEntityResult;');
+  AddBegin;
+  AddSql('if VerifyPrimaryKeyFields(Entity) then');
+  AddBegin;
+  AddSql('Result := Delete()');
+  AddSql('.Where');
+  GenerateWherePrimaryKeyIsEquals();
+  AddSql('.Go');
+  AddSql('.Execute');
+  AddSql('.BindTo<IDeleteEntityResult>');
+  AddSql('(');
+  IncIdentyLevel();
+  AddSql(KEYWORD_FUNCTION+'(res : IStormDeleteSuccess) : IDeleteEntityResult');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := Entity;');
+  AddEnd(',');
+  AddSql(KEYWORD_FUNCTION+'(res : IStormExecutionFail) : IDeleteEntityResult');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := res;');
+  AddEnd('');
+  DecIdentyLevel();
+  AddSql(');');
+  AddEnd('');
+  AddSql('else');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),''All Primary key fields must be assigned.'');');
+  AddEnd();
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_Initialize;
+begin
+  AddSql(KEYWORD_PROCEDURE+' '+GetORMType+'.Initialize();');
+  AddBegin;
+  AddSql('inherited;');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetWhereSelectorInterface+'<IStormSelectExecutor<'+EntityInterface+','+GetOrderBySelection+'>>).ToString +');
+  AddSql('TGUID(IStormSelectExecutor<'+EntityInterface+','+Self.GetOrderBySelection+'>).ToString,');
+  AddSql(GetWhereSelectorType+'SelectConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetWhereSelectorInterface+'<IStormUpdateExecutor>).ToString +');
+  AddSql('TGUID(IStormUpdateExecutor).ToString,');
+  AddSql(GetWhereSelectorType+'UpdateConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetWhereSelectorInterface+'<IStormDeleteExecutor>).ToString +');
+  AddSql('TGUID(IStormDeleteExecutor).ToString,');
+  AddSql(GetWhereSelectorType+'DeleteConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID(IStormSelectExecutor<'+EntityInterface+','+GetOrderBySelection+'>).ToString,');
+  AddSql('TSelectExecutorConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetFieldsAssignment+').ToString,');
+  AddSql(GetFieldsAssignmentType+'WithWhereConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetFieldsAssignment+'WithWhere).ToString,');
+  AddSql(GetFieldsAssignmentType+'WithWhereConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetFieldsInsertion+'WithGo).ToString,');
+  AddSql(GetFieldsInsertionType+'WithGoConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+EntityInterface+').ToString,');
+  AddSql('T'+FName+'EntityConstructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetOrderBySelection+').ToString,');
+  AddSql(GetOrderBySelectionType+'Constructor.Create');
+  AddCloseParentesis();
+  AddSql('');
+  AddSql('FClassConstructor.Add');
+  AddOpenParentesis;
+  AddSql('TGUID('+GetOrderBySelected+').ToString,');
+  AddSql(GetOrderBySelectedType+'Constructor.Create');
+  AddCloseParentesis();
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_InsertedSetValueTo;
+begin
+  FColumns.ForEach
+  (
+    procedure(Col : IDBColumn)
+    begin
+      AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.OnInsertedSetValueTo'+Col.FieldName+'(value: Maybe<'+Col.GetPrimitiveType+'>): Boolean;');
+      AddBegin;
+      AddSql(KEYWORD_RESULT+' := InsertedEntity.'+Col.FieldName+'.Value.SetValue(value);');
+      AddEnd;
+      BreakLine;
+    end
+  );
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_InsertEntity;
+begin
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.InsertEntity(Entity: '+EntityInterface+'): IInsertEntityResult;');
+  AddBegin;
+  AddSql('if VerifyPrimaryKeyFields(Entity,True) then');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := Insert()');
+  AddSql('.FromEntyity(Entity)');
+  AddSql('.Execute');
+  AddSql('.BindTo<IInsertEntityResult>');
+  AddSql('(');
+  AddSql(KEYWORD_FUNCTION+'(res : IStormInsertSuccess<'+EntityInterface+'>) : IInsertEntityResult');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := res.GetInserted;');
+  AddEnd(',');
+  AddSql(KEYWORD_FUNCTION+'(res : IStormExecutionFail) : IInsertEntityResult');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := res;');
+  AddEnd('');
+  AddSql(');');
+  AddEnd('');
+  AddSql('else');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),''All Primary key fields must be assigned.'');');
+  AddEnd();
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_ProccessSelectSuccess;
+begin
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.ProccessSelectSuccess(');
+  AddSql('Res: IStormSelectSuccess<'+EntityInterface+'>): ISelectByIDResult;');
+  AddBegin;
+  AddSql('if not res.IsEmpty then');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := res.GetModel.Records[0]');
+  AddEnd('');
+  AddSql('else');
+  AddBegin;
+  AddSql('result := TStormExecutionFail.Create');
+  AddOpenParentesis;
+  AddSql('TStormSelectSuccess<'+EntityInterface+'>(res) , ''Record not found''');
+  AddCloseParentesis();
+  AddEnd();
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_SelectByID;
+begin
+
+  GenerateSelectByID(GetORMType + '.');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' :=');
+  AddSql('Self');
+  AddSql('.Select');
+  AddSql('.AllColumns');
+  AddSql('.Where');
+  GenerateWherePrimaryKeyIsEquals(True);
+  AddSql('.Go');
+  AddSql('.Open');
+  AddSql('.BindTo<ISelectByIDResult>');
+  AddSql('(ProccessSelectSuccess,ProccessSelectFail);');
+  AddSql('');
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_SimpleMethods;
+begin
+  AddSql(KEYWORD_CONSTRUCTOR+' '+GetORMType+'.Create(DbSQLConnecton: IStormSQLConnection);');
+  AddBegin;
+  AddSql('inherited create(DbSQLConnecton, '+Self.EntitySchemaTypeName+'.Create);');
+  AddEnd();
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.Delete: IStormWherePoint<'+GetWhereSelectorInterface+'<IStormDeleteExecutor>>;');
+  AddBegin;
+  AddSql('Result := TStormWherePoint<'+Self.GetWhereSelectorInterface+'<IStormDeleteExecutor>,IStormDeleteExecutor>.Create(self);');
+  AddEnd();
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.GetInsertedEntity<'+EntityInterface+'>: uEntity'+EntityName+'.'+EntityInterface+';');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := self.InsertedEntity;');
+  AddEnd();
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.Insert: '+GetFieldsInsertion+';');
+  AddBegin;
+  AddSql('InsertedEntity := new'+EntityName+'();');
+  AddSql(KEYWORD_RESULT+' := '+Self.GetFieldsInsertionType+'.Create(self);');
+  AddEnd();
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.ProccessSelectFail(');
+  AddSql('Res: IStormExecutionFail): ISelectByIDResult;');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := res;');
+  AddEnd();
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.Select: '+GetFieldSelection+'WithLimit;');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := '+GetFieldSelectionType+'.Create(self);');
+  AddEnd();
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.Schema'+EntityName+': '+EntitySchemaTypeName+';');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := '+KEYWORD_SELF+'.TableSchema as '+EntitySchemaTypeName+';');
+  AddEnd();
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.Update: '+GetFieldsAssignment+';');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := '+GetFieldsAssignmentType+'.Create(self);');
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMClass_UpdateEntity;
+begin
+  AddSql(KEYWORD_FUNCTION+' '+GetORMType+'.UpdateEntity(Entity: '+EntityInterface+'): IUpdateEntityResult;');
+  AddBegin;
+  AddSql('if VerifyPrimaryKeyFields(Entity) then');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := Update()');
+  AddSql('.FromEntyity(Entity)');
+  AddSql('.Where');
+  GenerateWherePrimaryKeyIsEquals();
+  AddSql('.Go');
+  AddSql('.Execute');
+  AddSql('.BindTo<IUpdateEntityResult>');
+  AddOpenParentesis;
+  AddSql(KEYWORD_FUNCTION+'(res : IStormUpdateSuccess) : IUpdateEntityResult');
+  AddBegin;
+  AddSql('if res.RowsUpdated >= 1 then');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := Entity;');
+  AddEnd('');
+  AddSql('else');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := TStormExecutionFail.Create(TStormSqlPartition(res),''Record not found'');');
+  AddEnd();
+  AddEnd(',');
+  AddSql(KEYWORD_FUNCTION+'(res : IStormExecutionFail) : IUpdateEntityResult');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := res;');
+  AddEnd('');
+  AddCloseParentesis();
+  AddEnd('');
+  AddSql('else');
+  AddBegin;
+  AddSql('Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),''All Primary key fields must be assigned.'');');
+  AddEnd();
+  AddEnd();
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_ORMGetter;
+begin
+  AddSql(KEYWORD_FUNCTION+' '+EntityName+'_ORM(DbSQLConnecton: IStormSQLConnection) : '+GetORMInterface+';');
+  AddBegin;
+  AddSql(KEYWORD_RESULT+' := '+Self.GetORMType+'.Create(DbSQLConnecton);');
+  AddEnd;
+  AddSql('');
+  AddSql(KEYWORD_FUNCTION+' '+EntityName+'_ORM() : '+GetORMInterface+';');
+  AddBegin;
+  AddSql('Result :=');
+  AddSql('storm.dependency.register.DependencyRegister.GetSQLConnectionInstance.');
+  AddSql('BindTo<'+Self.EntityORMInterface+'>');
+  AddSql('(');
+  IncIdentyLevel();
+  AddSql(EntityName+'_ORM,');
+  AddSql('Function : '+GetORMInterface+'');
+  AddBegin;
+  AddSql('Result := nil;');
+  AddEnd('');
+  DecIdentyLevel();
+  AddSql(');');
+  AddEnd;
+
+end;
+
+procedure TDBTable.GenerateORMUnit_CodeImplementation_WhereSelector;
+begin
+  AddSql('{ '+Self.GetWhereSelectorType+'<Executor> }');
+  FColumns.ForEach
+  (
+    procedure(col : IDBColumn)
+    begin
+      AddSql(KEYWORD_FUNCTION+' '+GetWhereSelectorType+'<Executor>.'+Col.FieldName+
+      ': '+Col.GetWhereInterface+'<'+GetWhereSelectorInterface+'<Executor>, Executor>;');
+      AddBegin;
+      AddSql(KEYWORD_RESULT+' := TStorm'+Col.GetStormPrimitiveType+'Where<'+
+      Self.GetWhereSelectorInterface+'<Executor>, Executor>.Create(self, '+
+      Self.GetORMType+'(self.ORM).Schema'+EntityName+'.'+Col.FieldName+');');
+      AddEnd();
+      BreakLine();
+
+    end
+  );
+
+  AddSql(KEYWORD_FUNCTION+' '+GetWhereSelectorType+'<Executor>.OpenParenthesis: '+
+  GetWhereSelectorInterface+'<Executor>;');
+  AddBegin;
+  AddSql('AddOpenParenthesis;');
+  AddSql(KEYWORD_RESULT+' := Self;');
+  AddEnd();
+
 
 end;
 
 procedure TDBTable.GenerateORMUnit_Implementation;
 begin
+  AddSQL(KEYWORD_IMPLEMENTATION);
+  BreakLine;
+  AddSql(KEYWORD_USES);
+  IncIdentyLevel();
+  AddSql('storm.schema.interfaces,');
+  AddSql('storm.dependency.register,');
+  AddSql('storm.orm.update,');
+  AddSql(Self.EntitySchemaUnitName+',');
+  AddSql('System.Sysutils,');
+  AddSql('storm.orm.where,');
+  AddSql('storm.orm.insert,');
+  AddSql('storm.orm.base;');
+  BreakLine;
+  DecIdentyLevel();
+  AddSQL(KEYWORD_TYPE);
+  IncIdentyLevel();
+  GenerateORMUnit_Implementation_ORMClass();
+  BreakLine;
+  GenerateORMUnit_Implementation_FieldsSelection();
+  BreakLine;
+  GenerateORMUnit_Implementation_OrderBySelection();
+  BreakLine;
+  GenerateORMUnit_Implementation_WhereSelector();
+  BreakLine;
+  GenerateORMUnit_Implementation_FieldsAssignment();
+  BreakLine;
+  GenerateORMUnit_Implementation_FieldsInsertion();
+  BreakLine;
+  GenerateORMUnit_Implementation_Constructors();
+  BreakLine;
 
+end;
+
+procedure TDBTable.GenerateORMUnit_Implementation_Constructors;
+begin
+  AddSql(Self.GetWhereSelectorType+'SelectConstructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+GetWhereSelectorInterface
+  +'<IStormSelectExecutor<'+EntityInterface+','+GetOrderBySelection+'>>>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+GetWhereSelectorInterface
+  +'<IStormSelectExecutor<'+EntityInterface+','+GetOrderBySelection+'>>;');
+  AddEnd;
+  AddSql('');
+  AddSql(GetWhereSelectorType+'UpdateConstructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+GetWhereSelectorInterface+'<IStormUpdateExecutor>>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+
+  GetWhereSelectorInterface+'<IStormUpdateExecutor>;');
+  AddEnd;
+  AddSql('');
+  AddSql(GetWhereSelectorType+'DeleteConstructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+GetWhereSelectorInterface+'<IStormDeleteExecutor>>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+
+  GetWhereSelectorInterface+'<IStormDeleteExecutor>;');
+  AddEnd;
+  AddSql('');
+  AddSql('TSelectExecutorConstructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<IStormSelectExecutor<'+
+  EntityInterface+', '+GetOrderBySelection+'>>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+
+  'IStormSelectExecutor<'+EntityInterface+', '+GetOrderBySelection+'>;');
+  AddEnd;
+  AddSql('');
+  AddSql(Self.GetFieldsAssignmentType+'WithWhereConstructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+GetFieldsAssignment+'WithWhere>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+
+  GetFieldsAssignment+'WithWhere;');
+  AddEnd;
+  AddSql('');
+  AddSql(Self.GetFieldsInsertionType+'WithGoConstructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+GetFieldsInsertion+'WithGo>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+GetFieldsInsertion+'WithGo;');
+  AddEnd;
+  AddSql('');
+  AddSql('T'+EntityName+'EntityConstructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+EntityInterface+'>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+EntityInterface+';');
+  AddEnd;
+  AddSql('');
+  AddSql(Self.GetOrderBySelectionType+'Constructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+GetOrderBySelection+'>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+GetOrderBySelection+';');
+  AddEnd;
+  AddSql('');
+  AddSql(GetOrderBySelectedType+'Constructor');
+  AddSql('= Class(TInterfacedObject, IStormGenericReturn<'+GetOrderBySelected+'>)');
+  AddPublic;
+  AddSql(KEYWORD_FUNCTION+' GetGenericInstance(Owner : TStormSQLPartition) : '+GetOrderBySelected+';');
+  AddEnd;
+
+end;
+
+procedure TDBTable.GenerateORMUnit_Implementation_FieldsAssignment;
+begin
+  AddSql(GetFieldsAssignmentType+' = Class');
+  AddSql('(');
+  IncIdentyLevel();
+  AddSql('TStormWherePoint<'+GetWhereSelectorInterface+'<IStormUpdateExecutor>,');
+  AddSql('IStormUpdateExecutor>,');
+  AddSql(GetFieldsAssignment+',');
+  AddSql(GetFieldsAssignment+'WithWhere');
+  DecIdentyLevel();
+  AddSql(')');
+  AddSql('protected');
+  IncIdentyLevel();
+  AddSql('procedure Initialize; Override;');
+  DecIdentyLevel();
+  AddSql('public');
+  IncIdentyLevel();
+
+  FColumns.ForEach
+  (
+    procedure(col : IDbColumn)
+    begin
+      col.GenerateORMFieldAssignment();
+    end
+  );
+
+  AddSql(KEYWORD_FUNCTION+' FromEntyity(Entity : '+EntityInterface+
+  ') : IStormWherePoint<'+GetWhereSelectorInterface+'<IStormUpdateExecutor>>;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END + ';');
+
+
+end;
+
+procedure TDBTable.GenerateORMUnit_Implementation_FieldsInsertion;
+begin
+  AddSql(GetFieldsInsertionType+' = class');
+  AddSql('(');
+  IncIdentyLevel();
+  AddSql('TStormSqlPartition,');
+  AddSql(GetFieldsInsertion+',');
+  AddSql(GetFieldsInsertion+'WithGo');
+  DecIdentyLevel();
+  AddSql(')');
+  AddSql('Public');
+  IncIdentyLevel();
+
+  FColumns.ForEach
+  (
+    procedure(col : IDbColumn)
+    begin
+      col.GenerateORMFieldInsertion();
+    end
+  );
+
+  AddSql(KEYWORD_FUNCTION+' Go : IStormInsertExecutor<'+EntityInterface+'>;');
+  AddSql(KEYWORD_FUNCTION+' FromEntyity(Entity : '+EntityInterface
+  +') : IStormInsertExecutor<'+EntityInterface+'>;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END + ';');
+
+end;
+
+procedure TDBTable.GenerateORMUnit_Implementation_FieldsSelection;
+begin
+  AddSql(Self.GetFieldSelectionType+' = Class');
+  AddSql('(');
+  IncIdentyLevel();
+  AddSql('TStormFieldsSelection<'+Self.GetWhereSelectorInterface
+  +'<IStormSelectExecutor<'+EntityInterface+', '+EntityInterface
+  +'OrderBySelection>>, IStormSelectExecutor<'+EntityInterface+','+EntityInterface+'OrderBySelection>>,');
+  AddSql(GetFieldSelection+',');
+  AddSql(GetFieldSelection+ 'WithLimit');
+  DecIdentyLevel();
+  AddSql(')');
+  IncIdentyLevel();
+  AddSql(KEYWORD_FUNCTION+' Limit(Const Count : Integer) : '+Self.GetFieldSelection+';');
+  FColumns.ForEach
+  (
+    procedure(col : IDbColumn)
+    begin
+      col.GenerateORMFieldSelection();
+    end
+  );
+  DecIdentyLevel();
+  AddSql(KEYWORD_END + ';');
+
+end;
+
+procedure TDBTable.GenerateORMUnit_Implementation_OrderBySelection;
+begin
+  AddSql(GetOrderBySelectionType+' = Class(TStormSqlPartition,'+GetOrderBySelection+','+GetOrderBySelected+')');
+  AddSql(KEYWORD_PUBLIC);
+  IncIdentyLevel();
+  FColumns.ForEach
+  (
+    procedure(col : IDbColumn)
+    begin
+      col.GenerateORMOrderBySelector();
+    end
+  );
+  AddSql(KEYWORD_FUNCTION+' Open() : TResult<IStormSelectSuccess<'+EntityInterface+'>,IStormExecutionFail>;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END + ';');
+end;
+
+procedure TDBTable.GenerateORMUnit_Implementation_ORMClass;
+begin
+  AddSql(Self.EntityORMTypeName+' = Class(TStormORM, '+Self.EntityORMInterface+')');
+  AddSql(KEYWORD_PRIVATE);
+  IncIdentyLevel();
+  AddSql(KEYWORD_FUNCTION+' Schema'+EntityName+' : '+Self.EntitySchemaTypeName+';');
+  BreakLine;
+  AddSql(KEYWORD_FUNCTION+' ProccessSelectSuccess(Res : IStormSelectSuccess<'+EntityInterface+'>) : ISelectByIDResult;');
+  AddSql(KEYWORD_FUNCTION+' ProccessSelectFail(Res : IStormExecutionFail) : ISelectByIDResult;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_PROTECTED);
+  IncIdentyLevel();
+  AddSql('InsertedEntity : '+EntityInterface+';');
+  BreakLine;
+  AddSql('procedure Initialize; override;');
+  AddSql('Function GetInsertedEntity<'+EntityInterface+'>() : uEntity'+FName+'.'+EntityInterface+'; Reintroduce;');
+  BreakLine;
+  FColumns.ForEach
+  (
+    procedure(col : IDBColumn)
+    begin
+      col.GenerateOnInsertedSetValue();
+    end
+  );
+  DecIdentyLevel();
+  AddSQL(KEYWORD_PUBLIC);
+  IncIdentyLevel();
+  AddSql(KEYWORD_CONSTRUCTOR+' Create(DbSQLConnecton : IStormSQLConnection);');
+  BreakLine;
+  AddSql(KEYWORD_FUNCTION+' Select() : '+Self.GetFieldSelection+'WithLimit;');
+  AddSql(KEYWORD_FUNCTION+' Update() : '+Self.GetFieldsAssignment+';');
+  AddSql(KEYWORD_FUNCTION+' Insert() : '+Self.GetFieldsInsertion+';');
+  AddSql(KEYWORD_FUNCTION+' Delete() : IStormWherePoint<'+Self.GetWhereSelectorInterface+'<IStormDeleteExecutor>>;');
+  BreakLine;
+  GenerateSelectByID();
+  AddSql(KEYWORD_FUNCTION+' UpdateEntity(Entity : '+EntityInterface+') : IUpdateEntityResult;');
+  AddSql(KEYWORD_FUNCTION+' InsertEntity(Entity : '+EntityInterface+') : IInsertEntityResult;');
+  AddSql(KEYWORD_FUNCTION+' DeleteEntity(Entity : '+EntityInterface+') : IDeleteEntityResult;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';')
+
+end;
+
+procedure TDBTable.GenerateORMUnit_Implementation_WhereSelector;
+begin
+  AddSql(Self.GetWhereSelectorType+'<Executor : IInterface> = class(TStormSqlPartition, '+
+  GetWhereSelectorInterface +'<Executor>)');
+  AddSql(KEYWORD_PUBLIC);
+  IncIdentyLevel();
+  FColumns.ForEach
+  (
+    procedure(col : IDBColumn)
+    begin
+      col.GenerateORMWhereSelector;
+    end
+  );
+  AddSql('Function OpenParenthesis : '+GetWhereSelectorInterface+'<Executor>;');
+  DecIdentyLevel();
+  AddSql('end;');
 end;
 
 procedure TDBTable.GenerateORMUnit_Interface;
@@ -1054,7 +1909,7 @@ begin
   AddSql('storm.data.interfaces,');
   AddSql('storm.orm.interfaces,');
   AddSql('storm.entity.interfaces,');
-  AddSql('uEntityProduto;');
+  AddSql('uEntity'+EntityName+';');
   BreakLine;
   DecIdentyLevel();
   AddSQL(KEYWORD_TYPE);
@@ -1079,6 +1934,9 @@ begin
   BreakLine;
   GenerateORMUnit_Interface_FieldInsertion();
   BreakLine;
+  GenerateORMUnit_Interface_ORMDEclaration();
+  BreakLine;
+  DecIdentyLevel();
 
 end;
 
@@ -1091,7 +1949,7 @@ begin
   Addsql('(');
   IncIdentyLevel();
 
-  for I := 0 to self.FColumns.Count-1 do
+  for I := 0 to self.Getcolumns.Count-1 do
   begin
     if i > 0 then
     begin
@@ -1101,7 +1959,7 @@ begin
     begin
       s := ' ';
     end;
-    s := s + (CompleteWithBlanks(self.FColumns[i].FieldName,self.FMaxLengthOfcolumns) + ' = ' + i.ToString);
+    s := s + (CompleteWithBlanks(self.Getcolumns[i].FieldName,self.FMaxLengthOfcolumns) + ' = ' + i.ToString);
     AddSql(s);
   end;
   DecIdentyLevel();
@@ -1120,7 +1978,7 @@ begin
 
   IncIdentyLevel();
 
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateORMFieldAssignment;
   end;
@@ -1153,7 +2011,7 @@ begin
 
   IncIdentyLevel();
 
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateORMFieldInsertion;
   end;
@@ -1169,7 +2027,7 @@ begin
   AddSql(self.GetFieldsInsertion+' = interface('+GetFieldsInsertion+'Base)' + NewInterfaceGUID());
   IncIdentyLevel();
   AddSql(KEYWORD_FUNCTION+' FromEntyity(Entity : '+Self.EntityInterface+
-  ') : IStormInsertExecutor<'+EntityInterface+'>');
+  ') : IStormInsertExecutor<'+EntityInterface+'>;');
   DecIdentyLevel();
   AddSQL(KEYWORD_END + ';');
 
@@ -1183,7 +2041,7 @@ begin
   AddSQL(self.GetFieldSelection+' = interface' + NewInterfaceGUID());
   IncIdentyLevel();
 
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     col.GenerateORMFieldSelection;
   end;
@@ -1210,7 +2068,7 @@ Var
 begin
   AddSql(GetWhereSelectorInterface+'<Executor : IInterface> = interface' + NewInterfaceGUID);
   IncIdentyLevel();
-  for col in FColumns do
+  for col in Getcolumns do
   begin
     Col.GenerateORMWhereSelector();
   end;
@@ -1227,7 +2085,7 @@ begin
   AddSQL(self.GetOrderBySelection+' = interface' + NewInterfaceGUID());
   IncIdentyLevel();
 
-  for col in FColumns do
+  for col in GetColumns do
   begin
     col.GenerateORMOrderBySelector;
   end;
@@ -1240,6 +2098,28 @@ begin
   DecIdentyLevel();
   AddSQL(KEYWORD_END + ';');
 
+
+end;
+
+procedure TDBTable.GenerateORMUnit_Interface_ORMDEclaration;
+begin
+  AddSql(GetORMInterface+' = interface(IStormORM)' + NewInterfaceGUID);
+  IncIdentyLevel();
+
+  AddSql(KEYWORD_FUNCTION+' Select() : '+GetFieldSelectionWithLimit+';');
+  AddSql(KEYWORD_FUNCTION+' Update() : '+GetFieldsAssignment+';');
+  AddSql(KEYWORD_FUNCTION+' Insert() : '+GetFieldsInsertion+';');
+  AddSql(KEYWORD_FUNCTION+' Delete() : IStormWherePoint<'+Self.GetWhereSelectorInterface+'<IStormDeleteExecutor>>;');
+  BreakLine;
+  GenerateSelectByID();
+  AddSql(KEYWORD_FUNCTION+' UpdateEntity(Entity : '+EntityInterface+') : IUpdateEntityResult;');
+  AddSql(KEYWORD_FUNCTION+' InsertEntity(Entity : '+EntityInterface+') : IInsertEntityResult;');
+  AddSql(KEYWORD_FUNCTION+' DeleteEntity(Entity : '+EntityInterface+') : IDeleteEntityResult;');
+  DecIdentyLevel();
+  AddSql(KEYWORD_END+';');
+  BreakLine;
+  AddSql(KEYWORD_FUNCTION+' '+EntityName+'_ORM(DbSQLConnecton: IStormSQLConnection): '+EntityORMInterface+';  '+KEYWORD_OVERLOAD+';');
+  AddSql(KEYWORD_FUNCTION+' '+EntityName+'_ORM() : '+EntityORMInterface+'; '+KEYWORD_OVERLOAD+';');
 
 end;
 
@@ -1279,13 +2159,13 @@ begin
   IncIdentyLevel();
   AddSql('inherited;');
 
-  for col in FColumns do
+  for col in GetColumns do
   begin
     col.GenerateSchemaFieldCreation();
     BreakLine;
   end;
 
-  for col in FColumns do
+  for col in GetColumns do
   begin
     col.GenerateSchemaAddField();
 
@@ -1324,7 +2204,7 @@ begin
   addSql(KEYWORD_PRIVATE);
   IncIdentyLevel();
 
-  for col in FColumns do
+  for col in GetColumns do
   begin
     col.GenerateSchemaFieldDeclaration();
   end;
@@ -1339,7 +2219,7 @@ begin
   addSql(KEYWORD_PUBLIC);
   IncIdentyLevel();
 
-  for col in FColumns do
+  for col in GetColumns do
   begin
     col.GenerateSchemaPropertyDeclaration();
   end;
@@ -1355,7 +2235,7 @@ end;
 
 function TDBTable.Getcolumns: TList<IDBColumn>;
 begin
-  Result := Self.FColumns;
+  Result := Self.FColumns.Items;
 end;
 
 function TDBTable.GetEntityFile: String;
@@ -1369,6 +2249,11 @@ begin
   Result := 'I'+self.FName+'FieldsSelection';
 end;
 
+function TDBTable.GetFieldSelectionType: String;
+begin
+  Result := 'T'+self.FName+'FieldsSelection';
+end;
+
 function TDBTable.GetFieldSelectionWithLimit: String;
 begin
   Result := GetFieldSelection + 'WithLimit';
@@ -1377,6 +2262,11 @@ end;
 function TDBTable.GetFieldsInsertion: String;
 begin
   Result := 'I'+FName+'FieldsInsertion';
+end;
+
+function TDBTable.GetFieldsInsertionType: String;
+begin
+  Result := 'T'+FName+'FieldsInsertion';
 end;
 
 function TDBTable.GetIdentyLevel: Integer;
@@ -1389,6 +2279,11 @@ begin
   Result := 'I'+FName+'FieldsAssignment';
 end;
 
+function TDBTable.GetFieldsAssignmentType: String;
+begin
+  Result := 'T'+FName+'FieldsAssignment';
+end;
+
 function TDBTable.GetMaxLengthOfcolumns: Integer;
 begin
   Result := FMaxLengthOfcolumns;
@@ -1399,9 +2294,19 @@ begin
   Result := 'I'+self.FName+'OrderBySelected';
 end;
 
+function TDBTable.GetOrderBySelectedType: String;
+begin
+  Result := 'T'+self.FName+'OrderBySelected';
+end;
+
 function TDBTable.GetOrderBySelection: String;
 begin
   Result := 'I'+self.FName+'OrderBySelection';
+end;
+
+function TDBTable.GetOrderBySelectionType: String;
+begin
+  Result := 'T'+self.FName+'OrderBySelection';
 end;
 
 function TDBTable.GetORMFile: String;
@@ -1410,15 +2315,74 @@ begin
   Result := getSQL();
 end;
 
+function TDBTable.GetORMInterface: String;
+begin
+  Result := 'I'+Self.FName+'ORM';
+end;
+
+function TDBTable.GetORMType: String;
+begin
+  Result := 'T'+Self.FName+'ORM';
+end;
+
 function TDBTable.GetSchemaFile: String;
 begin
   GenerateSchemaUnit();
   Result := getSQL();
 end;
 
+procedure TDBTable.GenerateSelectByID(typ : String);
+var
+  col : IDBColumn;
+  s : string;
+begin
+
+
+  for col in  FColumns.Filter(FilterPrimaryKeys).Items do
+  begin
+    s := 'Const ' + col.FieldName + ' : ' + col.GetPrimitiveType() + ';' + #13;
+  end;
+
+  s := copy(s,1,length(s)-2);
+
+
+
+  AddSql(KEYWORD_FUNCTION+' '+typ+'SelectByID');
+  AddSql('(');
+  IncIdentyLevel();
+  AddSql(s);
+  DecIdentyLevel();
+  AddSql('): ISelectByIDResult;');
+
+end;
+
+procedure TDBTable.GenerateWherePrimaryKeyIsEquals(EqualsToPrimitive : Boolean);
+begin
+  FColumns.Filter(FilterPrimaryKeys).ForEach
+  (
+    procedure(col : IDBColumn)
+    begin
+      if EqualsToPrimitive then
+      begin
+        AddSql('.'+col.FieldName+'.IsEqualsTo('+col.FieldName+')');
+      end
+      else
+      begin
+        AddSql('.'+col.FieldName+'.IsEqualsTo(Entity.'+col.FieldName+'.GetValueOrDefault())');
+      end;
+
+    end
+  )
+end;
+
 function TDBTable.GetWhereSelectorInterface: String;
 begin
   Result := 'I'+Self.FName+'WhereSelector';
+end;
+
+function TDBTable.GetWhereSelectorType: String;
+begin
+  Result := 'T'+Self.FName+'WhereSelector';
 end;
 
 function TDBTable.Schema: String;
@@ -1442,6 +2406,36 @@ begin
 end;
 
 { TSQLGenerator }
+
+procedure TSQLGenerator.AddBegin;
+begin
+  AddSql(KEYWORD_BEGIN);
+  IncIdentyLevel();
+end;
+
+procedure TSQLGenerator.AddCloseParentesis(PostSymbol : String);
+begin
+  DecIdentyLevel();
+  AddSql(')' + PostSymbol);
+end;
+
+procedure TSQLGenerator.AddEnd(PostSymbol : String);
+begin
+  DecIdentyLevel();
+  AddSql(KEYWORD_END + PostSymbol);
+end;
+
+procedure TSQLGenerator.AddOpenParentesis;
+begin
+  AddSql('(');
+  IncIdentyLevel();
+end;
+
+procedure TSQLGenerator.AddPublic;
+begin
+  AddSql(KEYWORD_PUBLIC);
+  IncIdentyLevel();
+end;
 
 procedure TSQLGenerator.AddSQL(const Text: String);
 begin

@@ -30,7 +30,7 @@ type
   IInsertEntityResult = TResult<IProduto, IStormExecutionFail>;
   IDeleteEntityResult = TResult<IProduto, IStormExecutionFail>;
 
-  IProdutoWhereSelector<Executor : IInterface> = interface['{C3088765-277C-4B03-8F09-9F1DDDA02B13}']
+  IProdutoWhereSelector<Executor : IInterface> = interface['{1F6F9E2D-F83D-43B2-B6D0-1ED9811CDE6F}']
     function CodigoProduto : IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
     function Descricao     : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     function CodigoMarca   : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -44,7 +44,7 @@ type
 
   IProdutoOrderBySelected = interface;
 
-  IProdutoOrderBySelection = interface['{74A5E92C-8300-45D9-8329-A6373AA31C7B}']
+  IProdutoOrderBySelection = interface['{4476C1CA-7149-43F2-95BD-A83B21A19954}']
     function CodigoProduto : IStormOrderBySelector<IProdutoOrderBySelected>;
     function Descricao     : IStormOrderBySelector<IProdutoOrderBySelected>;
     function CodigoMarca   : IStormOrderBySelector<IProdutoOrderBySelected>;
@@ -54,11 +54,11 @@ type
     function DataAlteracao : IStormOrderBySelector<IProdutoOrderBySelected>;
   end;
 
-  IProdutoOrderBySelected = interface(IProdutoOrderBySelection)['{95C7D617-155C-4F65-A426-3179F966014F}']
+  IProdutoOrderBySelected = interface(IProdutoOrderBySelection)['{A452B53C-DEBF-42F4-9CFA-4140B686D992}']
     function Open() : TResult<IStormSelectSuccess<IProduto>,IStormExecutionFail>;
   end;
 
-  IProdutoFieldsSelection = interface['{88322807-5451-4632-8D57-0C1ECFA4E701}']
+  IProdutoFieldsSelection = interface['{84D38119-877D-4643-B1FD-DFCCC8090B8F}']
     function CodigoProduto : IProdutoFieldsSelection;
     function Descricao     : IProdutoFieldsSelection;
     function CodigoMarca   : IProdutoFieldsSelection;
@@ -70,13 +70,13 @@ type
     function From : IStormWherePoint<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>;
   end;
 
-  IProdutoFieldsSelectionWithLimit = interface(IProdutoFieldsSelection)['{26844A55-58B1-4FC2-AF3B-25E9D3EDA4BC}']
+  IProdutoFieldsSelectionWithLimit = interface(IProdutoFieldsSelection)['{4DEAF3FE-1AC2-4484-93E1-2137620DD061}']
     function Limit(Const Count : Integer) : IProdutoFieldsSelection;
   end;
 
   IProdutoFieldsAssignmentWithWhere = interface;
 
-  IProdutoFieldsAssignmentBase = interface['{B8BD6F8A-5058-474B-BC42-88087DBEC188}']
+  IProdutoFieldsAssignmentBase = interface['{08681C0B-FFB7-4857-92EE-101E7EAB37BB}']
     function CodigoProduto : IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     function Descricao     : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
     function CodigoMarca   : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
@@ -86,17 +86,17 @@ type
     function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
   end;
 
-  IProdutoFieldsAssignmentWithWhere = interface(IProdutoFieldsAssignmentBase)['{C1F27958-79E3-45F7-91D7-B8C752EF2F51}']
+  IProdutoFieldsAssignmentWithWhere = interface(IProdutoFieldsAssignmentBase)['{0932613F-E12A-44A0-9C8A-187B63B0BB93}']
     function Where : IProdutoWhereSelector<IStormUpdateExecutor>;
   end;
 
-  IProdutoFieldsAssignment = interface(IProdutoFieldsAssignmentBase)['{C3DF9CBA-CC5E-4416-A848-C2817486AA33}']
+  IProdutoFieldsAssignment = interface(IProdutoFieldsAssignmentBase)['{89C01BB9-5C63-4607-A337-C8575CC84F4F}']
     function FromEntyity(Entity : IProduto) : IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
   end;
 
   IProdutoFieldsInsertionWithGo = interface;
 
-  IProdutoFieldsInsertionBase = interface['{CBA959E2-DAB2-4CE5-BFDA-2C4FD64818C1}']
+  IProdutoFieldsInsertionBase = interface['{8A22A2B5-D9C0-4055-8A8C-6C2AFBF5B75C}']
     function CodigoProduto : IStormIntegerFieldInsertion<IProdutoFieldsInsertionWithGo>;
     function Descricao     : IStormStringNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
     function CodigoMarca   : IStormIntegerNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
@@ -106,33 +106,35 @@ type
     function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
   end;
 
-  IProdutoFieldsInsertionWithGo = interface(IProdutoFieldsInsertionBase)['{B2298872-04A0-4CFC-ABD8-E739FB311842}']
+  IProdutoFieldsInsertionWithGo = interface(IProdutoFieldsInsertionBase)['{2E65D998-067E-4625-922D-07AAADA2C896}']
     function Go : IStormInsertExecutor<IProduto>;
   end;
 
-  IProdutoFieldsInsertion = interface(IProdutoFieldsInsertionBase)['{37B8DDA9-250C-48EB-B4B8-CE201E4D122B}']
+  IProdutoFieldsInsertion = interface(IProdutoFieldsInsertionBase)['{8399ADCE-18B0-4E5A-88B3-6E5F7C624573}']
     function FromEntyity(Entity : IProduto) : IStormInsertExecutor<IProduto>;
   end;
 
-  IProdutoORM = interface(IStormORM)['{E6255D1D-30FE-400A-8355-DD8CC1E62CB4}']
-    Function Select() : IProdutoFieldsSelectionWithLimit;
-    Function Update() : IProdutoFieldsAssignment;
-    Function Insert() : IProdutoFieldsInsertion;
-    Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
+  IProdutoORM = interface(IStormORM)['{09A16F8E-B86B-447D-B5CA-480EFCF6FA4C}']
+    function Select() : IProdutoFieldsSelectionWithLimit;
+    function Update() : IProdutoFieldsAssignment;
+    function Insert() : IProdutoFieldsInsertion;
+    function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
-    Function SelectByID(Const Codigo : Integer) : ISelectByIDResult;
-    Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
-    Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
-    Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
+    function SelectByID
+    (
+      Const CodigoProduto : Integer
+    ): ISelectByIDResult;
+    function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
+    function InsertEntity(Entity : IProduto) : IInsertEntityResult;
+    function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
   end;
 
-
-  function Produto_ORM(DbSQLConnecton: IStormSQLConnection): IProdutoORM;  Overload;
-  Function Produto_ORM() : IProdutoORM; Overload;
+  function Produto_ORM(DbSQLConnecton: IStormSQLConnection): IProdutoORM;  overload;
+  function Produto_ORM() : IProdutoORM; overload;
 
 implementation
 
-Uses
+uses
   storm.schema.interfaces,
   storm.dependency.register,
   storm.orm.update,
@@ -142,42 +144,42 @@ Uses
   storm.orm.insert,
   storm.orm.base;
 
-Type
+type
   TProdutoORM = Class(TStormORM, IProdutoORM)
   private
-    Function SchemaProduto : TSchemaProduto;
+    function SchemaProduto : TSchemaProduto;
 
-    function ProccessSelectSuccess(Res : IStormSelectSuccess<Iproduto>) : ISelectByIDResult;
+    function ProccessSelectSuccess(Res : IStormSelectSuccess<IProduto>) : ISelectByIDResult;
     function ProccessSelectFail(Res : IStormExecutionFail) : ISelectByIDResult;
-
   protected
     InsertedEntity : IProduto;
+
     procedure Initialize; override;
     Function GetInsertedEntity<IProduto>() : uEntityProduto.IProduto; Reintroduce;
 
-    function OnInsertedSetValueToCodigo(value : Maybe<Integer>) : Boolean;
+    function OnInsertedSetValueToCodigoProduto(value : Maybe<Integer>) : Boolean;
     function OnInsertedSetValueToDescricao(value : Maybe<String>) : Boolean;
     function OnInsertedSetValueToCodigoMarca(value : Maybe<Integer>) : Boolean;
     function OnInsertedSetValueToPreco(value : Maybe<Extended>) : Boolean;
     function OnInsertedSetValueToAtivo(value : Maybe<Boolean>) : Boolean;
     function OnInsertedSetValueToDataCriacao(value : Maybe<TDate>) : Boolean;
     function OnInsertedSetValueToDataAlteracao(value : Maybe<TDateTime>) : Boolean;
-
-
   public
-    Constructor Create(DbSQLConnecton : IStormSQLConnection);
-  public
-    Function Select() : IProdutoFieldsSelectionWithLimit;
-    Function Update() : IProdutoFieldsAssignment;
-    Function Insert() : IProdutoFieldsInsertion;
-    Function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
+    constructor Create(DbSQLConnecton : IStormSQLConnection);
 
-    Function SelectByID(Const Codigo : Integer) : ISelectByIDResult;
-    Function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
-    Function InsertEntity(Entity : IProduto) : IInsertEntityResult;
-    Function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
-  End;
+    function Select() : IProdutoFieldsSelectionWithLimit;
+    function Update() : IProdutoFieldsAssignment;
+    function Insert() : IProdutoFieldsInsertion;
+    function Delete() : IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 
+    function SelectByID
+    (
+      Const CodigoProduto : Integer
+    ): ISelectByIDResult;
+    function UpdateEntity(Entity : IProduto) : IUpdateEntityResult;
+    function InsertEntity(Entity : IProduto) : IInsertEntityResult;
+    function DeleteEntity(Entity : IProduto) : IDeleteEntityResult;
+  end;
 
   TProdutoFieldsSelection = Class
   (
@@ -185,131 +187,138 @@ Type
     IProdutoFieldsSelection,
     IProdutoFieldsSelectionWithLimit
   )
-    Function Limit(Const Count : Integer) : IProdutoFieldsSelection;
-    Function CodigoProduto() : IProdutoFieldsSelection;
-    Function Descricao() : IProdutoFieldsSelection;
-    Function CodigoMarca() : IProdutoFieldsSelection;
-    Function Preco() : IProdutoFieldsSelection;
-    Function Ativo() : IProdutoFieldsSelection;
-    Function DataCriacao() : IProdutoFieldsSelection;
-    Function DataAlteracao() : IProdutoFieldsSelection;
+    function Limit(Const Count : Integer) : IProdutoFieldsSelection;
+    function CodigoProduto : IProdutoFieldsSelection;
+    function Descricao     : IProdutoFieldsSelection;
+    function CodigoMarca   : IProdutoFieldsSelection;
+    function Preco         : IProdutoFieldsSelection;
+    function Ativo         : IProdutoFieldsSelection;
+    function DataCriacao   : IProdutoFieldsSelection;
+    function DataAlteracao : IProdutoFieldsSelection;
   end;
 
   TProdutoOrderBySelection = Class(TStormSqlPartition,IProdutoOrderBySelection,IProdutoOrderBySelected)
   public
-    Function CodigoProduto : IStormOrderBySelector<IProdutoOrderBySelected>;
-    Function Descricao : IStormOrderBySelector<IProdutoOrderBySelected>;
-    Function CodigoMarca : IStormOrderBySelector<IProdutoOrderBySelected>;
-    Function Preco : IStormOrderBySelector<IProdutoOrderBySelected>;
-    Function Ativo : IStormOrderBySelector<IProdutoOrderBySelected>;
-    Function DataCriacao : IStormOrderBySelector<IProdutoOrderBySelected>;
-    Function DataAlteracao : IStormOrderBySelector<IProdutoOrderBySelected>;
-    Function Open() : TResult<IStormSelectSuccess<Iproduto>,IStormExecutionFail>;
-  End;
+    function CodigoProduto : IStormOrderBySelector<IProdutoOrderBySelected>;
+    function Descricao     : IStormOrderBySelector<IProdutoOrderBySelected>;
+    function CodigoMarca   : IStormOrderBySelector<IProdutoOrderBySelected>;
+    function Preco         : IStormOrderBySelector<IProdutoOrderBySelected>;
+    function Ativo         : IStormOrderBySelector<IProdutoOrderBySelected>;
+    function DataCriacao   : IStormOrderBySelector<IProdutoOrderBySelected>;
+    function DataAlteracao : IStormOrderBySelector<IProdutoOrderBySelected>;
+    function Open() : TResult<IStormSelectSuccess<IProduto>,IStormExecutionFail>;
+  end;
 
   TProdutoWhereSelector<Executor : IInterface> = class(TStormSqlPartition, IProdutoWhereSelector<Executor>)
-    Function CodigoProduto : IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
-    Function Descricao : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-    Function CodigoMarca : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-    Function Preco : IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-    Function Ativo : IStormBooleanNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-    Function DataCriacao : IStormDateNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-    Function DataAlteracao : IStormDateTimeNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+  public
+    function CodigoProduto : IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
+    function Descricao     : IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    function CodigoMarca   : IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    function Preco         : IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    function Ativo         : IStormBooleanNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    function DataCriacao   : IStormDateNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+    function DataAlteracao : IStormDateTimeNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
     Function OpenParenthesis : IProdutoWhereSelector<Executor>;
   end;
 
-  TProdutoFieldsAssignment
-  = Class(TStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>,IStormUpdateExecutor>, IProdutoFieldsAssignment,IProdutoFieldsAssignmentWithWhere)
+  TProdutoFieldsAssignment = Class
+  (
+    TStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>,
+    IStormUpdateExecutor>,
+    IProdutoFieldsAssignment,
+    IProdutoFieldsAssignmentWithWhere
+  )
   protected
     procedure Initialize; Override;
   public
-    Function CodigoProduto : IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-    Function Descricao : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-    Function CodigoMarca : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-    Function Preco : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-    Function Ativo : IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-    Function DataCriacao : IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-    Function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-    Function FromEntyity(Entity : IProduto) : IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
+    function CodigoProduto : IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    function Descricao     : IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    function CodigoMarca   : IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    function Preco         : IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    function Ativo         : IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    function DataCriacao   : IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    function DataAlteracao : IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+    function FromEntyity(Entity : IProduto) : IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
   end;
 
-  TProdutoFieldsInsertion = class(TStormSqlPartition, IProdutoFieldsInsertion, IProdutoFieldsInsertionWithGo)
-    Function CodigoProduto : IStormIntegerFieldInsertion<IProdutoFieldsInsertionWithGo>;
-    Function Descricao : IStormStringNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
-    Function CodigoMarca : IStormIntegerNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
-    Function Preco : IStormFloatNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
-    Function Ativo : IStormBooleanNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
-    Function DataCriacao : IStormDateNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
-    Function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
-    Function Go : IStormInsertExecutor<IProduto>;
-    Function FromEntyity(Entity : IProduto) : IStormInsertExecutor<IProduto>;
+  TProdutoFieldsInsertion = class
+  (
+    TStormSqlPartition,
+    IProdutoFieldsInsertion,
+    IProdutoFieldsInsertionWithGo
+  )
+  Public
+    function CodigoProduto : IStormIntegerFieldInsertion<IProdutoFieldsInsertionWithGo>;
+    function Descricao     : IStormStringNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
+    function CodigoMarca   : IStormIntegerNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
+    function Preco         : IStormFloatNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
+    function Ativo         : IStormBooleanNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
+    function DataCriacao   : IStormDateNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
+    function DataAlteracao : IStormDateTimeNullableFieldInsertion<IProdutoFieldsInsertionWithGo>;
+    function Go : IStormInsertExecutor<IProduto>;
+    function FromEntyity(Entity : IProduto) : IStormInsertExecutor<IProduto>;
   end;
 
-
-  {-----------Constructores -----}
   TProdutoWhereSelectorSelectConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>;
+  end;
 
   TProdutoWhereSelectorUpdateConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormUpdateExecutor>>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormUpdateExecutor>;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormUpdateExecutor>;
+  end;
 
   TProdutoWhereSelectorDeleteConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoWhereSelector<IStormDeleteExecutor>>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormDeleteExecutor>;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoWhereSelector<IStormDeleteExecutor>;
+  end;
 
   TSelectExecutorConstructor
-  = Class(TInterfacedObject, IStormGenericReturn<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>)
+  = Class(TInterfacedObject, IStormGenericReturn<IStormSelectExecutor<IProduto, IProdutoOrderBySelection>>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IStormSelectExecutor<IProduto,IProdutoOrderBySelection>;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IStormSelectExecutor<IProduto, IProdutoOrderBySelection>;
+  end;
 
   TProdutoFieldsAssignmentWithWhereConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoFieldsAssignmentWithWhere>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldsAssignmentWithWhere;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldsAssignmentWithWhere;
+  end;
 
-  TProdutoFinalFieldsInsertionConstructor
+  TProdutoFieldsInsertionWithGoConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoFieldsInsertionWithGo>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldsInsertionWithGo;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoFieldsInsertionWithGo;
+  end;
 
   TProdutoEntityConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProduto>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProduto;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProduto;
+  end;
 
   TProdutoOrderBySelectionConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoOrderBySelection>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoOrderBySelection;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoOrderBySelection;
+  end;
 
-  TIProdutoOrderBySelectedConstructor
+  TProdutoOrderBySelectedConstructor
   = Class(TInterfacedObject, IStormGenericReturn<IProdutoOrderBySelected>)
   public
-    Function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoOrderBySelected;
-  End;
+    function GetGenericInstance(Owner : TStormSQLPartition) : IProdutoOrderBySelected;
+  end;
 
-
-
-
-Function Produto_ORM(DbSQLConnecton: IStormSQLConnection) : IProdutoORM;
+function Produto_ORM(DbSQLConnecton: IStormSQLConnection) : IProdutoORM;
 begin
-  Result := TProdutoORM.Create(DbSQLConnecton);
+  result := TProdutoORM.Create(DbSQLConnecton);
 end;
 
-Function Produto_ORM() : IProdutoORM;
+function Produto_ORM() : IProdutoORM;
 begin
   Result :=
   storm.dependency.register.DependencyRegister.GetSQLConnectionInstance.
@@ -323,19 +332,46 @@ begin
   );
 end;
 
-
-
-{ TProdutoORM }
-
 constructor TProdutoORM.Create(DbSQLConnecton: IStormSQLConnection);
 begin
   inherited create(DbSQLConnecton, TSchemaProduto.Create);
 end;
 
-
 function TProdutoORM.Delete: IStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>>;
 begin
   Result := TStormWherePoint<IProdutoWhereSelector<IStormDeleteExecutor>,IStormDeleteExecutor>.Create(self);
+end;
+
+function TProdutoORM.GetInsertedEntity<IProduto>: uEntityProduto.IProduto;
+begin
+  result := self.InsertedEntity;
+end;
+
+function TProdutoORM.Insert: IProdutoFieldsInsertion;
+begin
+  InsertedEntity := newProduto();
+  result := TProdutoFieldsInsertion.Create(self);
+end;
+
+function TProdutoORM.ProccessSelectFail(
+Res: IStormExecutionFail): ISelectByIDResult;
+begin
+  result := res;
+end;
+
+function TProdutoORM.Select: IProdutoFieldsSelectionWithLimit;
+begin
+  result := TProdutoFieldsSelection.Create(self);
+end;
+
+function TProdutoORM.SchemaProduto: TSchemaProduto;
+begin
+  result := self.TableSchema as TSchemaProduto;
+end;
+
+function TProdutoORM.Update: IProdutoFieldsAssignment;
+begin
+  result := TProdutoFieldsAssignment.Create(self);
 end;
 
 function TProdutoORM.DeleteEntity(Entity: IProduto): IDeleteEntityResult;
@@ -355,23 +391,17 @@ begin
       end,
       function(res : IStormExecutionFail) : IDeleteEntityResult
       begin
-        Result := res;
+        result := res;
       end
     );
   end
   else
   begin
-    Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
+    result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
   end;
 end;
 
-
-function TProdutoORM.GetInsertedEntity<IProduto>: uEntityProduto.IProduto;
-begin
-  Result := self.InsertedEntity;
-end;
-
-procedure TProdutoORM.Initialize;
+procedure TProdutoORM.Initialize();
 begin
   inherited;
   FClassConstructor.Add
@@ -417,7 +447,7 @@ begin
   FClassConstructor.Add
   (
     TGUID(IProdutoFieldsInsertionWithGo).ToString,
-    TProdutoFinalFieldsInsertionConstructor.Create
+    TProdutoFieldsInsertionWithGoConstructor.Create
   );
 
   FClassConstructor.Add
@@ -435,90 +465,73 @@ begin
   FClassConstructor.Add
   (
     TGUID(IProdutoOrderBySelected).ToString,
-    TIProdutoOrderBySelectedConstructor.Create
+    TProdutoOrderBySelectedConstructor.Create
   );
-
-
-end;
-
-
-function TProdutoORM.Insert: IProdutoFieldsInsertion;
-begin
-  InsertedEntity := newProduto();
-  Result := TProdutoFieldsInsertion.Create(self);
 end;
 
 function TProdutoORM.InsertEntity(Entity: IProduto): IInsertEntityResult;
 begin
   if VerifyPrimaryKeyFields(Entity,True) then
   begin
-    Result := Insert()
+    result := Insert()
     .FromEntyity(Entity)
     .Execute
     .BindTo<IInsertEntityResult>
     (
-      function(res : IStormInsertSuccess<Iproduto>) : IInsertEntityResult
-      begin
-        result := Entity;
-      end,
-      function(res : IStormExecutionFail) : IInsertEntityResult
-      begin
-        Result := res;
-      end
+    function(res : IStormInsertSuccess<IProduto>) : IInsertEntityResult
+    begin
+      result := res.GetInserted;
+    end,
+    function(res : IStormExecutionFail) : IInsertEntityResult
+    begin
+      result := res;
+    end
     );
   end
   else
   begin
-    Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
+    result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
   end;
 end;
 
-function TProdutoORM.OnInsertedSetValueToAtivo(value: Maybe<Boolean>): Boolean;
+function TProdutoORM.OnInsertedSetValueToCodigoProduto(value: Maybe<Integer>): Boolean;
 begin
-  Result := InsertedEntity.Ativo.Value.SetValue(value);
-end;
-
-function TProdutoORM.OnInsertedSetValueToCodigo(value: Maybe<Integer>): Boolean;
-begin
-  Result := InsertedEntity.CodigoProduto.Value.SetValue(value);
-end;
-
-function TProdutoORM.OnInsertedSetValueToCodigoMarca(
-  value: Maybe<Integer>): Boolean;
-begin
-  Result := InsertedEntity.CodigoMarca.Value.SetValue(value);
-end;
-
-function TProdutoORM.OnInsertedSetValueToDataAlteracao(
-  value: Maybe<TDateTime>): Boolean;
-begin
-  Result := InsertedEntity.DataAlteracao.Value.SetValue(value);
-end;
-
-function TProdutoORM.OnInsertedSetValueToDataCriacao(
-  value: Maybe<TDate>): Boolean;
-begin
-  Result := InsertedEntity.DataCriacao.Value.SetValue(value);
+  result := InsertedEntity.CodigoProduto.Value.SetValue(value);
 end;
 
 function TProdutoORM.OnInsertedSetValueToDescricao(value: Maybe<String>): Boolean;
 begin
-  Result := InsertedEntity.Descricao.Value.SetValue(value);
+  result := InsertedEntity.Descricao.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToCodigoMarca(value: Maybe<Integer>): Boolean;
+begin
+  result := InsertedEntity.CodigoMarca.Value.SetValue(value);
 end;
 
 function TProdutoORM.OnInsertedSetValueToPreco(value: Maybe<Extended>): Boolean;
 begin
-  Result := InsertedEntity.Preco.Value.SetValue(value);
+  result := InsertedEntity.Preco.Value.SetValue(value);
 end;
 
-function TProdutoORM.ProccessSelectFail(
-  Res: IStormExecutionFail): ISelectByIDResult;
+function TProdutoORM.OnInsertedSetValueToAtivo(value: Maybe<Boolean>): Boolean;
 begin
-  Result := res;
+  result := InsertedEntity.Ativo.Value.SetValue(value);
 end;
+
+function TProdutoORM.OnInsertedSetValueToDataCriacao(value: Maybe<TDate>): Boolean;
+begin
+  result := InsertedEntity.DataCriacao.Value.SetValue(value);
+end;
+
+function TProdutoORM.OnInsertedSetValueToDataAlteracao(value: Maybe<TDateTime>): Boolean;
+begin
+  result := InsertedEntity.DataAlteracao.Value.SetValue(value);
+end;
+
 
 function TProdutoORM.ProccessSelectSuccess(
-  Res: IStormSelectSuccess<Iproduto>): ISelectByIDResult;
+Res: IStormSelectSuccess<IProduto>): ISelectByIDResult;
 begin
   if not res.IsEmpty then
   begin
@@ -528,39 +541,28 @@ begin
   begin
     result := TStormExecutionFail.Create
     (
-      TStormSelectSuccess<Iproduto>(res) , 'Record not found'
+      TStormSelectSuccess<IProduto>(res) , 'Record not found'
     );
   end;
 end;
 
 
-function TProdutoORM.SchemaProduto: TSchemaProduto;
-begin
-  Result := self.TableSchema as TSchemaProduto;
-end;
 
-
-
-
-
-function TProdutoORM.Select: IProdutoFieldsSelectionWithLimit;
-begin
-  Result := TProdutoFieldsSelection.Create(self);
-end;
-
-function TProdutoORM.SelectByID(
-  const Codigo: Integer): TResult<IProduto, IStormExecutionFail>;
+function TProdutoORM.SelectByID
+(
+  Const CodigoProduto : Integer
+): ISelectByIDResult;
 begin
   result :=
   Self
-    .Select
-    .AllColumns
-    .Where
-    .CodigoProduto.IsEqualsTo(Codigo)
-    .Go
-    .Open
-    .BindTo<ISelectByIDResult>
-      (ProccessSelectSuccess,ProccessSelectFail);
+  .Select
+  .AllColumns
+  .Where
+  .CodigoProduto.IsEqualsTo(CodigoProduto)
+  .Go
+  .Open
+  .BindTo<ISelectByIDResult>
+  (ProccessSelectSuccess,ProccessSelectFail);
 
 end;
 
@@ -568,10 +570,10 @@ function TProdutoORM.UpdateEntity(Entity: IProduto): IUpdateEntityResult;
 begin
   if VerifyPrimaryKeyFields(Entity) then
   begin
-    Result := Update()
+    result := Update()
     .FromEntyity(Entity)
     .Where
-    .CodigoProduto.IsEqualsTo(Entity.CodigoProduto.GetValue.GetValueOrDefault(0))
+    .CodigoProduto.IsEqualsTo(Entity.CodigoProduto.GetValueOrDefault())
     .Go
     .Execute
     .BindTo<IUpdateEntityResult>
@@ -584,12 +586,12 @@ begin
         end
         else
         begin
-          Result := TStormExecutionFail.Create(TStormSqlPartition(res),'Record not found');
+          result := TStormExecutionFail.Create(TStormSqlPartition(res),'Record not found');
         end;
       end,
       function(res : IStormExecutionFail) : IUpdateEntityResult
       begin
-        Result := res;
+        result := res;
       end
     );
   end
@@ -597,103 +599,64 @@ begin
   begin
     Result := TStormExecutionFail.Create(TStormSqlPartition.Create(Self),'All Primary key fields must be assigned.');
   end;
-
-
-
-end;
-
-function TProdutoORM.Update: IProdutoFieldsAssignment;
-begin
-  Result := TProdutoFieldsAssignment.Create(self);
 end;
 
 { TProdutoFieldsSelection }
 
-function TProdutoFieldsSelection.Ativo: IProdutoFieldsSelection;
-begin
-  AddColumn(Integer(TProdutoPossibleFields.Ativo));
-  Result := Self;
-end;
-
 function TProdutoFieldsSelection.CodigoProduto: IProdutoFieldsSelection;
 begin
   AddColumn(Integer(TProdutoPossibleFields.CodigoProduto));
-  Result := Self;
-end;
-
-function TProdutoFieldsSelection.CodigoMarca: IProdutoFieldsSelection;
-begin
-  AddColumn(Integer(TProdutoPossibleFields.CodigoMarca));
-  Result := Self;
-end;
-
-function TProdutoFieldsSelection.DataAlteracao: IProdutoFieldsSelection;
-begin
-  AddColumn(Integer(TProdutoPossibleFields.DataAlteracao));
-  Result := Self;
-end;
-
-function TProdutoFieldsSelection.DataCriacao: IProdutoFieldsSelection;
-begin
-  AddColumn(Integer(TProdutoPossibleFields.DataCriacao));
-  Result := Self;
+  result := Self;
 end;
 
 function TProdutoFieldsSelection.Descricao: IProdutoFieldsSelection;
 begin
   AddColumn(Integer(TProdutoPossibleFields.Descricao));
-  Result := Self;
+  result := Self;
 end;
 
-
-function TProdutoFieldsSelection.Limit(
-  const Count: Integer): IProdutoFieldsSelection;
+function TProdutoFieldsSelection.CodigoMarca: IProdutoFieldsSelection;
 begin
-  AddLimit(Count);
-  Result := Self;
+  AddColumn(Integer(TProdutoPossibleFields.CodigoMarca));
+  result := Self;
 end;
-
-
 
 function TProdutoFieldsSelection.Preco: IProdutoFieldsSelection;
 begin
   AddColumn(Integer(TProdutoPossibleFields.Preco));
-  Result := Self;
+  result := Self;
 end;
 
-{ TProdutoWhereSelectorSelectConstructor }
-
-function TProdutoWhereSelectorSelectConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>;
+function TProdutoFieldsSelection.Ativo: IProdutoFieldsSelection;
 begin
-  Result := TProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>.Create(Owner);
+  AddColumn(Integer(TProdutoPossibleFields.Ativo));
+  result := Self;
+end;
+
+function TProdutoFieldsSelection.DataCriacao: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.DataCriacao));
+  result := Self;
+end;
+
+function TProdutoFieldsSelection.DataAlteracao: IProdutoFieldsSelection;
+begin
+  AddColumn(Integer(TProdutoPossibleFields.DataAlteracao));
+  result := Self;
+end;
+
+
+function TProdutoFieldsSelection.Limit(
+Const Count: Integer): IProdutoFieldsSelection;
+begin
+  AddLimit(Count);
+  result := Self;
 end;
 
 { TProdutoWhereSelector<Executor> }
-
-function TProdutoWhereSelector<Executor>.Ativo: IStormBooleanNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-begin
-  Result := TStormBooleanWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
-end;
-
 function TProdutoWhereSelector<Executor>.CodigoProduto: IStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
   result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.CodigoProduto);
-end;
-
-function TProdutoWhereSelector<Executor>.CodigoMarca: IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-begin
-  Result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
-end;
-
-function TProdutoWhereSelector<Executor>.DataAlteracao: IStormDateTimeNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-begin
-  Result := TStormDateTimeWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.DataAlteracao);
-end;
-
-function TProdutoWhereSelector<Executor>.DataCriacao: IStormDateNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
-begin
-  Result := TStormDateWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.DataCriacao);
 end;
 
 function TProdutoWhereSelector<Executor>.Descricao: IStormStringNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
@@ -701,70 +664,89 @@ begin
   result := TStormStringWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Descricao);
 end;
 
-function TProdutoWhereSelector<Executor>.OpenParenthesis: IProdutoWhereSelector<Executor>;
+function TProdutoWhereSelector<Executor>.CodigoMarca: IStormIntegerNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
-  AddOpenParenthesis;
-  Result := Self;
+  result := TStormIntegerWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
 end;
 
 function TProdutoWhereSelector<Executor>.Preco: IStormFloatNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
-  Result := TStormFloatWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Preco);
+  result := TStormFloatWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Preco);
 end;
 
-{ TSelectExecutorConstructor }
-
-function TSelectExecutorConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IStormSelectExecutor<IProduto,IProdutoOrderBySelection>;
+function TProdutoWhereSelector<Executor>.Ativo: IStormBooleanNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
 begin
-  Result := TStormSelectExecutor<IProduto,IProdutoOrderBySelection>.Create(Owner);
+  result := TStormBooleanWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
 end;
+
+function TProdutoWhereSelector<Executor>.DataCriacao: IStormDateNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  result := TStormDateWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.DataCriacao);
+end;
+
+function TProdutoWhereSelector<Executor>.DataAlteracao: IStormDateTimeNullableWhere<IProdutoWhereSelector<Executor>, Executor>;
+begin
+  result := TStormDateTimeWhere<IProdutoWhereSelector<Executor>, Executor>.Create(self, TProdutoORM(self.ORM).SchemaProduto.DataAlteracao);
+end;
+
+function TProdutoWhereSelector<Executor>.OpenParenthesis: IProdutoWhereSelector<Executor>;
+begin
+  AddOpenParenthesis;
+  result := Self;
+end;
+
+
 
 { TProdutoFieldsAssignment }
 
-function TProdutoFieldsAssignment.Ativo: IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-begin
-  Result := TStormBooleanFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
-end;
-
 function TProdutoFieldsAssignment.CodigoProduto: IStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
-  Result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.CodigoProduto);
-end;
-
-function TProdutoFieldsAssignment.CodigoMarca: IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-begin
-  Result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
-end;
-
-function TProdutoFieldsAssignment.DataAlteracao: IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-begin
-  Result := TStormDateTimeFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.DataAlteracao);
-end;
-
-function TProdutoFieldsAssignment.DataCriacao: IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-begin
-  Result := TStormDateFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.DataCriacao);
+  result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.CodigoProduto);
 end;
 
 function TProdutoFieldsAssignment.Descricao: IStormStringNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
 begin
-  Result := TStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Descricao);
+  result := TStormStringFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Descricao);
+end;
+
+function TProdutoFieldsAssignment.CodigoMarca: IStormIntegerNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  result := TStormIntegerFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.CodigoMarca);
+end;
+
+function TProdutoFieldsAssignment.Preco: IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  result := TStormFloatFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Preco);
+end;
+
+function TProdutoFieldsAssignment.Ativo: IStormBooleanNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  result := TStormBooleanFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Ativo);
+end;
+
+function TProdutoFieldsAssignment.DataCriacao: IStormDateNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  result := TStormDateFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.DataCriacao);
+end;
+
+function TProdutoFieldsAssignment.DataAlteracao: IStormDateTimeNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
+begin
+  result := TStormDateTimeFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.DataAlteracao);
 end;
 
 function TProdutoFieldsAssignment.FromEntyity(
-  Entity: IProduto): IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
+Entity: IProduto): IStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>>;
 begin
-  Result := TStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>,IStormUpdateExecutor>.Create
+  result := TStormWherePoint<IProdutoWhereSelector<IStormUpdateExecutor>,IStormUpdateExecutor>.Create
   (
-    Self
-    .Descricao.SetThisOrNull(Entity.Descricao.GetValue())
-    .CodigoMarca.SetThisOrNull(Entity.CodigoMarca.GetValue())
-    .Preco.SetThisOrNull(Entity.Preco.GetValue())
-    .Ativo.SetThisOrNull(Entity.Ativo.GetValue())
-    .DataCriacao.SetThisOrNull(Entity.DataCriacao.GetValue())
-    .DataAlteracao.SetThisOrNull(Entity.DataAlteracao.GetValue())
-    as TStormSqlPartition
+  Self
+  .Descricao.SetThisOrNull(Entity.Descricao.GetValue())
+  .CodigoMarca.SetThisOrNull(Entity.CodigoMarca.GetValue())
+  .Preco.SetThisOrNull(Entity.Preco.GetValue())
+  .Ativo.SetThisOrNull(Entity.Ativo.GetValue())
+  .DataCriacao.SetThisOrNull(Entity.DataCriacao.GetValue())
+  .DataAlteracao.SetThisOrNull(Entity.DataAlteracao.GetValue())
+  as TStormSqlPartition
   );
 end;
 
@@ -777,26 +759,7 @@ begin
   end;
 end;
 
-function TProdutoFieldsAssignment.Preco: IStormFloatNullableFieldAssignement<IProdutoFieldsAssignmentWithWhere>;
-begin
-  Result := TStormFloatFieldAssignement<IProdutoFieldsAssignmentWithWhere>.Create(Self, TProdutoORM(self.ORM).SchemaProduto.Preco);
-end;
 
-{ TProdutoFieldsAssignmentWithWhereConstructor }
-
-function TProdutoFieldsAssignmentWithWhereConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IProdutoFieldsAssignmentWithWhere;
-begin
-  Result := TProdutoFieldsAssignment.Create(Owner);
-end;
-
-{ TProdutoWhereSelectorUpdateConstructor }
-
-function TProdutoWhereSelectorUpdateConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormUpdateExecutor>;
-begin
-  Result :=  TProdutoWhereSelector<IStormUpdateExecutor>.Create(owner);
-end;
 
 { TProdutoFieldsInsertion }
 
@@ -816,7 +779,7 @@ begin
   (
     Self,
     TSchemaProduto(Self.TableSchema).CodigoProduto,
-    TProdutoORM(Self.ORM).OnInsertedSetValueToCodigo
+    TProdutoORM(Self.ORM).OnInsertedSetValueToCodigoProduto
   );
 end;
 
@@ -901,29 +864,7 @@ begin
   );
 end;
 
-{ TProdutoFinalFieldsInsertionConstructor }
 
-function TProdutoFinalFieldsInsertionConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IProdutoFieldsInsertionWithGo;
-begin
-  Result := TProdutoFieldsInsertion.Create(Owner);
-end;
-
-{ TProdutoEntityConstructor }
-
-function TProdutoEntityConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IProduto;
-begin
-  Result := NewProduto();
-end;
-
-{ TProdutoWhereSelectorDeleteConstructor }
-
-function TProdutoWhereSelectorDeleteConstructor.GetGenericInstance(
-  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormDeleteExecutor>;
-begin
-  Result :=  TProdutoWhereSelector<IStormDeleteExecutor>.Create(owner);
-end;
 
 { TProdutoOrderBySelection }
 
@@ -978,10 +919,66 @@ end;
 
 { TIProdutoOrderBySelectedConstructor }
 
-function TIProdutoOrderBySelectedConstructor.GetGenericInstance(
+function TProdutoOrderBySelectedConstructor.GetGenericInstance(
   Owner: TStormSQLPartition): IProdutoOrderBySelected;
 begin
   Result := TProdutoOrderBySelection.Create(Owner);
+end;
+
+
+{ TProdutoWhereSelectorSelectConstructor }
+
+function TProdutoWhereSelectorSelectConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>;
+begin
+  Result := TProdutoWhereSelector<IStormSelectExecutor<IProduto,IProdutoOrderBySelection>>.Create(Owner);
+end;
+
+
+function TSelectExecutorConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IStormSelectExecutor<IProduto,IProdutoOrderBySelection>;
+begin
+  Result := TStormSelectExecutor<IProduto,IProdutoOrderBySelection>.Create(Owner);
+end;
+
+{ TProdutoFieldsAssignmentWithWhereConstructor }
+
+function TProdutoFieldsAssignmentWithWhereConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoFieldsAssignmentWithWhere;
+begin
+  Result := TProdutoFieldsAssignment.Create(Owner);
+end;
+
+{ TProdutoWhereSelectorUpdateConstructor }
+
+function TProdutoWhereSelectorUpdateConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormUpdateExecutor>;
+begin
+  Result :=  TProdutoWhereSelector<IStormUpdateExecutor>.Create(owner);
+end;
+
+{ TProdutoFieldsInsertionWithGoConstructor }
+
+function TProdutoFieldsInsertionWithGoConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoFieldsInsertionWithGo;
+begin
+  Result := TProdutoFieldsInsertion.Create(Owner);
+end;
+
+{ TProdutoEntityConstructor }
+
+function TProdutoEntityConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProduto;
+begin
+  Result := NewProduto();
+end;
+
+{ TProdutoWhereSelectorDeleteConstructor }
+
+function TProdutoWhereSelectorDeleteConstructor.GetGenericInstance(
+  Owner: TStormSQLPartition): IProdutoWhereSelector<IStormDeleteExecutor>;
+begin
+  Result :=  TProdutoWhereSelector<IStormDeleteExecutor>.Create(owner);
 end;
 
 end.

@@ -113,10 +113,10 @@ object Form2: TForm2
   object ADOConnection1: TADOConnection
     ConnectionString = 
       'Provider=SQLOLEDB.1;Password=S@geBr.2014;Persist Security Info=T' +
-      'rue;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=192.168' +
-      '.1.102;Use Procedure for Prepare=1;Auto Translate=True;Packet Si' +
-      'ze=4096;Workstation ID=LO-0197-NB;Use Encryption for Data=False;' +
-      'Tag with column collation when possible=False'
+      'rue;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mssql;U' +
+      'se Procedure for Prepare=1;Auto Translate=True;Packet Size=4096;' +
+      'Workstation ID=LO-0197-NB;Use Encryption for Data=False;Tag with' +
+      ' column collation when possible=False'
     LoginPrompt = False
     Provider = 'SQLOLEDB.1'
     Left = 1168
