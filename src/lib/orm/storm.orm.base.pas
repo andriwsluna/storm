@@ -40,7 +40,7 @@ Type
   TStormSQLPartition= class(TStormChild, IStormSQLPartition)
   protected
     Owner : IStormSQLPartition;
-    SQL : String;
+    Protected_SQL : String;
     QueryParameters : IStormQueryParameters;
     SelectLimit : Maybe<integer>;
     Procedure AddSQL(const  content : string);
@@ -421,13 +421,13 @@ end;
 
 procedure TStormSQLPartition.AddSQL(const content: string);
 begin
-  if Not self.sql.IsEmpty then
+  if Not self.Protected_SQL.IsEmpty then
   begin
-    self.SQL := self.SQL + ' ' + content;
+    self.Protected_SQL := self.Protected_SQL + ' ' + content;
   end
   else
   begin
-    self.SQL := self.SQL + content;
+    self.Protected_SQL := self.Protected_SQL + content;
   end;
 end;
 
@@ -447,7 +447,7 @@ begin
   if assigned(Owner) then
   begin
     Self.Owner := Owner;
-    Self.SQL := Owner.SQL;
+    Self.Protected_SQL := Owner.Protected_SQL;
     Self.SelectLimit := Owner.SelectLimit;
   end;
   inherited Create(ORM);
@@ -513,7 +513,7 @@ end;
 
 procedure TStormSQLPartition.RemoveLastSqlCharacter;
 begin
-  self.SQL := copy(sql,1,length(sql)-1);
+  self.Protected_SQL := copy(Protected_SQL,1,length(Protected_SQL)-1);
 end;
 
 procedure TStormSQLPartition.ResolveFinalLimit;
@@ -621,7 +621,7 @@ function TStormSelectExecutor<EntityType,OrderSelection>.Open: TResult<IStormSel
 begin
   ResolveFinalLimit();
   DbSQLConnecton.Clear();
-  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.SetSQL(Protected_SQL);
   
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
@@ -703,7 +703,7 @@ end;
 
 function TStormExecutionFail.GetExecutedCommand: String;
 begin
-  Result := self.SQL;
+  Result := self.Protected_SQL;
 end;
 
 procedure TStormFieldsSelection<WhereSelector, Executor>.Initialize;
@@ -714,9 +714,9 @@ end;
 
 procedure TStormFieldsSelection<WhereSelector, Executor>.RemoveLastComma;
 begin
-  if self.SQL[Length(self.SQL)] = ',' then
+  if self.Protected_SQL[Length(self.Protected_SQL)] = ',' then
   begin
-    self.SQL := copy(self.SQL,1,Length(self.SQL)-1);
+    self.Protected_SQL := copy(self.Protected_SQL,1,Length(self.Protected_SQL)-1);
   end;
 
 
@@ -749,7 +749,7 @@ end;
 function TStormUpdateExecutor.Execute: TResult<IStormUpdateSuccess, IStormExecutionFail>;
 begin
   DbSQLConnecton.Clear();
-  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.SetSQL(Protected_SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
     DbSQLConnecton.Execute;
@@ -769,7 +769,7 @@ procedure TStormUpdateExecutor.initialize;
 begin
   inherited;
 
-  SELF.SQL := stringreplace(self.SQL,' ,','',[])
+  SELF.Protected_SQL := stringreplace(self.Protected_SQL,' ,','',[])
 
 end;
 
@@ -788,7 +788,7 @@ var
   DS : TDataset;
 begin
   DbSQLConnecton.Clear();
-  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.SetSQL(Protected_SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
 
@@ -814,7 +814,7 @@ end;
 procedure TStormInsertExecutor<EntityType>.Initialize;
 begin
   inherited;
-  if self.SQL.IsEmpty then
+  if self.Protected_SQL.IsEmpty then
   begin
     PrepareSQL();
   end;
@@ -894,7 +894,7 @@ end;
 function TStormDeleteExecutor.Execute: TResult<IStormDeleteSuccess, IStormExecutionFail>;
 begin
   DbSQLConnecton.Clear();
-  DbSQLConnecton.SetSQL(SQL);
+  DbSQLConnecton.SetSQL(Protected_SQL);
   DbSQLConnecton.LoadParameters(QueryParameters.Items);
   try
     DbSQLConnecton.Execute;
@@ -913,7 +913,7 @@ end;
 procedure TStormDeleteExecutor.Initialize;
 begin
   inherited;
-  self.SQL := 'DELETE FROM ' + SELF.GetFullTableName  + ' ' + SELF.SQL;
+  self.Protected_SQL := 'DELETE FROM ' + SELF.GetFullTableName  + ' ' + SELF.Protected_SQL;
 end;
 
 { TDeleteExecutorConstructor }

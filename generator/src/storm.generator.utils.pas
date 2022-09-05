@@ -32,7 +32,7 @@ begin
 
       for c in Text do
       begin
-        if (c = ' ') or (c = '_') then
+        if (c = ' ') then
         begin
           Upper := True;
         end
