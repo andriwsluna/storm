@@ -3,6 +3,7 @@ unit temp_generator;
 interface
 
 uses
+  storm.generator,
   System.Generics.Collections,
   storm.generator.sql,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
@@ -22,8 +23,10 @@ type
     Panel1: TPanel;
     DBGrid1: TDBGrid;
     Button2: TButton;
+    Button3: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
 
   public
@@ -46,14 +49,7 @@ begin
   QyColumns.Parameters.ParamByName('table').Value := QyTable.FieldByName('table_name').value;
   QyColumns.Open();
 
-
-
-  while not QyColumns.Eof do
-  begin
-    table.AddColumn(NewDbColumn(QyColumns));
-    QyColumns.Next;
-  end;
-
+  table.LoadColumsFromDataset(QyColumns);
   SynEdit.Text := table.GetORMFile();
 
 
@@ -65,6 +61,24 @@ end;
 procedure TForm2.Button2Click(Sender: TObject);
 begin
   QyTable.Open();
+end;
+
+procedure TForm2.Button3Click(Sender: TObject);
+VAR
+  config : storm.generator.TDbConfig;
+begin
+  config.Database := 'BancoDeTestes';
+  config.DatabaseType := dbMSSQL;
+  config.Server := 'mssql';
+  config.UserName := 'sa';
+  config.Password := 'S@geBr.2014';
+  storm.generator.GerateStormFilesFromModel
+  (
+    config,
+    'D:\componentes\storm\examples\temp\src\storm'
+    //,['LanSaida']
+  );
+
 end;
 
 end.

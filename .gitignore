@@ -74,3 +74,5 @@ test/Reports/
 !CodeCoverage.exe
 test/TestInsightSettings.ini
 test/dunitx-results.xml
+generator/temp/
+generator/teste/

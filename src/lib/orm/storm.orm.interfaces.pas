@@ -14,6 +14,12 @@ uses
   System.Sysutils, System.Classes;
 
 Type
+  IStormConditionner = interface['{7CC1B23A-691E-43E3-A3D3-A1C9A6EBDA29}']
+    Function GetCondition : Boolean;
+    Function GetConditioned : Boolean;
+    Procedure SetConditioned(Value : Boolean);
+  end;
+
   IStormSQLPartition = interface['{33498F09-501C-47E4-91D6-809FE2E87005}']
   end;
 
@@ -21,18 +27,30 @@ Type
     Function Where : WhereSelector;
   end;
 
+
+
   IStormWhereCompositor<WhereSelector, Executor : IInterface> = interface['{FD7EA70F-837A-44AA-9817-B266322C4085}']
     Function And_()             : WhereSelector;
     Function Or_()              : WhereSelector;
     Function OpenParenthesis()  : WhereSelector;
     Function CloseParenthesis() : IStormWhereCompositor<WhereSelector, Executor>;
     Function Go()               : Executor;
+    function IFTHEN(Condition : Boolean) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function ENDIF() : IStormWhereCompositor<WhereSelector, Executor>;
   end;
+
+  IStormWhereSelector<WhereSelector, Executor : IInterface> = interface['{8F11C796-DEB1-4DED-9974-AF771E43C2AE}']
+    function IFTHEN(Condition : Boolean) : IStormWhereCompositor<WhereSelector, Executor>;
+    Function ENDIF() : IStormWhereCompositor<WhereSelector, Executor>;
+  end;
+
+
 
   IStormSelectSuccess<EntityType: IStormEntity> = interface['{9CA7139A-020A-4CB7-A1F8-39D705A78E7B}']
     Function IsEmpty : Boolean;
     Function GetDataset : TDataset;
     Function GetModel : IStormModel<EntityType>;
+    Function GetSql : String;
   end;
 
   IStormExecutionFail = interface['{88155F63-E8ED-4C11-ABC2-15DC92042821}']

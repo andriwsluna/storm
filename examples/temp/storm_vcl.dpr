@@ -3,13 +3,10 @@ program storm_vcl;
 uses
   Vcl.Forms,
   uvcl_form in 'uvcl_form.pas' {vcl_form},
-  uEntityProduto in 'src\uEntityProduto.pas',
   storm.schema.table in '..\..\src\lib\schema\storm.schema.table.pas',
   storm.schema.column in '..\..\src\lib\schema\storm.schema.column.pas',
   storm.schema.types in '..\..\src\lib\schema\storm.schema.types.pas',
   storm.schema.interfaces in '..\..\src\lib\schema\storm.schema.interfaces.pas',
-  uSchemaProduto in 'src\uSchemaProduto.pas',
-  uORMProduto in 'src\uORMProduto.pas',
   storm.data.driver.ado in '..\..\src\drivers\storm.data.driver.ado.pas',
   storm.data.driver.firedac in '..\..\src\drivers\storm.data.driver.firedac.pas',
   storm.data.driver.mysql in '..\..\src\drivers\storm.data.driver.mysql.pas',
@@ -46,7 +43,10 @@ uses
   storm.entity.base in '..\..\src\lib\entity\storm.entity.base.pas',
   storm.entity.interfaces in '..\..\src\lib\entity\storm.entity.interfaces.pas',
   storm.data.interfaces in '..\..\src\lib\data\storm.data.interfaces.pas',
-  storm.dependency.register in '..\..\src\lib\utils\storm.dependency.register.pas';
+  storm.dependency.register in '..\..\src\lib\utils\storm.dependency.register.pas',
+  uEntityProduto in 'src\storm\entities\uEntityProduto.pas',
+  uORMProduto in 'src\storm\orms\uORMProduto.pas',
+  uSchemaProduto in 'src\storm\schemas\uSchemaProduto.pas';
 
 {$R *.res}
 

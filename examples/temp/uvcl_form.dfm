@@ -1,7 +1,7 @@
 object vcl_form: Tvcl_form
   Left = 0
   Top = 0
-  Caption = '||'
+  Caption = 'p'
   ClientHeight = 661
   ClientWidth = 1100
   Color = clBtnFace
@@ -335,6 +335,22 @@ object vcl_form: Tvcl_form
     Caption = 'Select Order BY'
     TabOrder = 22
     OnClick = Button9Click
+  end
+  object CheckBoxEmpty: TCheckBox
+    Left = 608
+    Top = 288
+    Width = 201
+    Height = 17
+    Caption = 'Retirar produtos com descri'#231#227'o vazia'
+    TabOrder = 23
+  end
+  object CheckBoxA: TCheckBox
+    Left = 608
+    Top = 311
+    Width = 201
+    Height = 17
+    Caption = 'Produtos que come'#231'am com A'
+    TabOrder = 24
   end
   object ADOConnection1: TADOConnection
     ConnectionString = 

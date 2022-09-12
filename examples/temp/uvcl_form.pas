@@ -78,6 +78,8 @@ type
     Button9: TButton;
     EditLimit: TEdit;
     Button10: TButton;
+    CheckBoxEmpty: TCheckBox;
+    CheckBoxA: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -136,7 +138,7 @@ end;
 
 procedure Tvcl_form.AlimentarProduto(produto: Iproduto);
 begin
-  produto.CodigoProduto.Value.SetValue(getCodigo());
+  produto.Codigo_produto.Value.SetValue(getCodigo());
   AlimentarProdutoParainsert(produto);
 
 end;
@@ -147,21 +149,21 @@ begin
   (
     procedure(v : integer)
     begin
-      produto.CodigoProduto.Value.SetValue(v);
+      produto.Codigo_produto.Value.SetValue(v);
     end
   );
 
   produto.Descricao.Value.SetValue(GetDescricao());
-  produto.CodigoMarca.Value.SetValue(GetCodigoMarca());
+  produto.Codigo_marca.Value.SetValue(GetCodigoMarca());
   produto.Preco.Value.SetValue(getpreco());
   produto.Ativo.Value.SetValue(GetAtivo());
-  produto.DataCriacao.Value.SetValue(GetDataCriacao());
-  produto.DataAlteracao.Value.SetValue(GetDataAlteracao());
+  produto.Data_criacao.Value.SetValue(GetDataCriacao());
+  produto.Data_alteracao.Value.SetValue(GetDataAlteracao());
 end;
 
 procedure Tvcl_form.AtualizarGridAposExclusao(produto: IProduto);
 begin
-  FDMemTable1.Locate('codigo_produto',produto.CodigoProduto.GetValueOrDefault());
+  FDMemTable1.Locate('codigo_produto',produto.Codigo_produto.GetValueOrDefault());
   FDMemTable1.Delete;
 end;
 
@@ -171,13 +173,13 @@ begin
     .Select
     .AllColumns
     .where
-    .CodigoProduto.IsNotNull
+    .Codigo_produto.IsNotNull
     .Go
     .Open
     .OnSuccess(ShowDataset)
     .OnFail(MostrarErro);
 
-    FDMemTable1.Locate('codigo_produto',produto.CodigoProduto.GetValueOrDefault());
+    FDMemTable1.Locate('codigo_produto',produto.Codigo_produto.GetValueOrDefault());
 end;
 
 procedure Tvcl_form.AtualizarGridDoProduto(produto: IProduto);
@@ -204,19 +206,27 @@ begin
   Produto_ORM
     .Select
     .Limit(100)
-      .CodigoProduto
+      .Codigo_produto
       .Descricao
-      .CodigoMarca
+      .Codigo_Marca
       .Ativo
       .Preco
-      .DataCriacao
-      .DataAlteracao
+      .Data_Criacao
+      .Data_Alteracao
     .From
     .Where
-      .CodigoProduto.IsNotNull
+      .IFTHEN(CheckBoxEmpty.Checked)
+        .Descricao.IsNotEmpty
+        .And_
+        .IFTHEN(CheckBoxA.Checked)
+          .Descricao.BeginsWith('A')
+          .And_
+        .ENDIF
+      .ENDIF
+      .Codigo_marca.IsNotNull
     .Go
     .OrderBy
-      .CodigoProduto.ASC
+      .Codigo_Produto.ASC
       .Descricao.DESC
     .Open
       .OnSuccess(ShowDataset)
@@ -229,13 +239,13 @@ begin
   Produto_ORM()
     .Update
     .Descricao.SetThisOrNull(GetDescricao())
-    .CodigoMarca.SetThisOrNull(GetCodigoMarca())
+    .Codigo_Marca.SetThisOrNull(GetCodigoMarca())
     .Preco.SetThisOrNull(GetPreco())
     .Ativo.SetThisOrNull(GetAtivo())
-    .DataCriacao.SetThisOrNull(GetDataCriacao())
-    .DataAlteracao.SetThisOrNull(GetDataAlteracao())
+    .Data_Criacao.SetThisOrNull(GetDataCriacao())
+    .Data_Alteracao.SetThisOrNull(GetDataAlteracao())
     .Where
-    .CodigoProduto.IsEqualsTo(produtoatual.CodigoProduto.GetValueOrDefault())
+    .Codigo_Produto.IsEqualsTo(produtoatual.Codigo_Produto.GetValueOrDefault())
     .Go
     .Execute
     .OnSuccess
@@ -253,12 +263,12 @@ procedure Tvcl_form.Button3Click(Sender: TObject);
 begin
   Produto_ORM()
     .Insert
-    .Descricao.SetValue('meu código')
-    .CodigoMarca.SetValue(3)
-    .Preco.SetValue(12.18)
+    .Descricao.SetValue(GetDescricao.GetValueOrDefault(''))
+    .Codigo_Marca.SetValue(GetCodigoMarca.GetValueOrDefault(-1))
+    .Preco.SetValue(GetPreco().GetValueOrDefault(0))
     .Ativo.SetValue(false)
-    .DataCriacao.SetValue(now)
-    .DataAlteracao.SetValue(now)
+    .Data_Criacao.SetValue(now)
+    .Data_Alteracao.SetValue(now)
     .Go
     .Execute
     .OnSuccess(MostrarResultadoInsertPositivo)
@@ -272,7 +282,7 @@ begin
     .Delete
     .Where
     .OpenParenthesis
-    .CodigoProduto.IsEqualsTo(getcodigo().GetValueOrDefault(0))
+    .Codigo_Produto.IsEqualsTo(getcodigo().GetValueOrDefault(0))
     .CloseParenthesis
     .Go
     .Execute
@@ -339,32 +349,45 @@ begin
 end;
 
 procedure Tvcl_form.Button9Click(Sender: TObject);
+
+var
+  sql : variant;
 begin
+
+
   Produto_ORM()
   .Select
     .Limit(StrToInt(EditLimit.Text))
     .AllColumns
   .Where
-    .OpenParenthesis
-      .CodigoProduto.IsNotNull
-    .CloseParenthesis
+    .Codigo_produto.IsNotNull
+    .IFTHEN(CheckBoxEmpty.Checked)
+      .And_
+      .Ativo.IsTrue
+      .IFTHEN()
+    .ENDIF
+    .IFTHEN(CheckBoxEmpty.Checked)
+      .And_
+      .Preco.IsGreaterThan(10)
+    .ENDIF
   .Go
   .OrderBy
-    .CodigoProduto.DESC
+    .Codigo_Produto.DESC
     .Descricao.ASC
     .Preco.DESC
   .Open
   .OnSuccess(ShowDataset)
   .OnFail(MostrarErro);
 
+
 end;
 
 procedure Tvcl_form.CarregarProduto(produto : Iproduto);
 begin
 
-    EditCodigo.Text := produto.CodigoProduto.GetValueOrDefault().ToString;
+    EditCodigo.Text := produto.Codigo_Produto.GetValueOrDefault().ToString;
     EditDescricao.Text := produto.Descricao.GetValueOrDefault();
-    ComboBoxMarca.Text := produto.CodigoMarca.GetValueOrDefault().ToString;
+    ComboBoxMarca.Text := produto.Codigo_Marca.GetValueOrDefault().ToString;
     EditPreco.Text := produto.Preco.GetValueOrDefault().ToString;
 end;
 
@@ -506,6 +529,8 @@ procedure Tvcl_form.ShowDataset(resultado: IStormSelectSuccess<IProduto>);
 VAR
   ds : tdataset;
 begin
+  memosql.text := resultado.GetSql;
+
   ds :=  resultado.GetDataset;
   FDMemTable1.CopyDataSet(ds,[coStructure,coAppend,coRestart]);
   ds.Free;

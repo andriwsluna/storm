@@ -43,7 +43,7 @@ Type
     Protected_SQL : String;
     QueryParameters : IStormQueryParameters;
     SelectLimit : Maybe<integer>;
-    Procedure AddSQL(const  content : string);
+    Procedure AddSQL(const  content : string); Virtual;
     Procedure AddOpenParenthesis();
     Procedure AddCloseParenthesis();
     Procedure AddAnd();
@@ -129,13 +129,15 @@ Type
 
   TStormSelectSuccess<EntityType : IStormEntity> = class(TStormSQLPartition, IStormSelectSuccess<EntityType>)
   protected
+    SQL : string;
     Dataset : TDataset;
     Procedure Finalize; Override;
   public
-    Constructor Create(Owner : TStormSQLPartition ; Dataset : TDataset); Reintroduce;
+    Constructor Create(Owner : TStormSQLPartition ; Dataset : TDataset ; SQL : String); Reintroduce;
     Function GetDataset : TDataset;
     Function GetModel : IStormModel<EntityType>;
     Function IsEmpty : Boolean;
+    Function GetSQL() : String;
   end;
 
   TStormExecutionFail = class(TStormSQLPartition, IStormExecutionFail)
@@ -628,7 +630,7 @@ begin
     DbSQLConnecton.Open;
 //    if Not DbSQLConnecton.IsEmpty then
 //    begin
-      result := TStormSelectSuccess<EntityType>.Create(self, DbSQLConnecton.Dataset);
+      result := TStormSelectSuccess<EntityType>.Create(self, DbSQLConnecton.Dataset, Protected_SQL);
 //    end
 //    else
 //    begin
@@ -654,9 +656,10 @@ end;
 { TStormSelectSuccess<EntityType> }
 
 constructor TStormSelectSuccess<EntityType>.Create(Owner: TStormSQLPartition;
-  Dataset: TDataset);
+  Dataset: TDataset; SQL : String);
 begin
   Self.Dataset := Dataset;
+  SElf.SQL := sql;
   inherited create(Owner);
 
 end;
@@ -680,6 +683,11 @@ end;
 function TStormSelectSuccess<EntityType>.GetModel: IStormModel<EntityType>;
 begin
   Result := TStormModel<EntityType>.FromDataset(Self.Dataset);
+end;
+
+function TStormSelectSuccess<EntityType>.GetSQL: String;
+begin
+  Result := SQL;
 end;
 
 function TStormSelectSuccess<EntityType>.IsEmpty: Boolean;

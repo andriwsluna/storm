@@ -109,14 +109,24 @@ object Form2: TForm2
       TabOrder = 2
       OnClick = Button2Click
     end
+    object Button3: TButton
+      Left = 56
+      Top = 72
+      Width = 75
+      Height = 25
+      Caption = 'Button3'
+      TabOrder = 3
+      OnClick = Button3Click
+    end
   end
   object ADOConnection1: TADOConnection
+    Connected = True
     ConnectionString = 
       'Provider=SQLOLEDB.1;Password=S@geBr.2014;Persist Security Info=T' +
-      'rue;User ID=sa;Initial Catalog=BancoDeTestes;Data Source=mssql;U' +
-      'se Procedure for Prepare=1;Auto Translate=True;Packet Size=4096;' +
-      'Workstation ID=LO-0197-NB;Use Encryption for Data=False;Tag with' +
-      ' column collation when possible=False'
+      'rue;User ID=sa;Initial Catalog=Minha_Gestao_Contabil;Data Source' +
+      '=mssql;Use Procedure for Prepare=1;Auto Translate=True;Packet Si' +
+      'ze=4096;Workstation ID=LO-0197-NB;Use Encryption for Data=False;' +
+      'Tag with column collation when possible=False'
     LoginPrompt = False
     Provider = 'SQLOLEDB.1'
     Left = 1168
@@ -196,7 +206,8 @@ object Form2: TForm2
       'FROM sys.tables t '
       'join sys.schemas s '
       'on t.schema_id = s.schema_id '
-      'order by s.name, t.name ')
+      'order by s.name, t.name '
+      '')
     Left = 1112
     Top = 280
   end

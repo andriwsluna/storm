@@ -106,13 +106,10 @@
         <DCCReference Include="uvcl_form.pas">
             <Form>vcl_form</Form>
         </DCCReference>
-        <DCCReference Include="src\uEntityProduto.pas"/>
         <DCCReference Include="..\..\src\lib\schema\storm.schema.table.pas"/>
         <DCCReference Include="..\..\src\lib\schema\storm.schema.column.pas"/>
         <DCCReference Include="..\..\src\lib\schema\storm.schema.types.pas"/>
         <DCCReference Include="..\..\src\lib\schema\storm.schema.interfaces.pas"/>
-        <DCCReference Include="src\uSchemaProduto.pas"/>
-        <DCCReference Include="src\uORMProduto.pas"/>
         <DCCReference Include="..\..\src\drivers\storm.data.driver.ado.pas"/>
         <DCCReference Include="..\..\src\drivers\storm.data.driver.firedac.pas"/>
         <DCCReference Include="..\..\src\drivers\storm.data.driver.mysql.pas"/>
@@ -150,6 +147,9 @@
         <DCCReference Include="..\..\src\lib\entity\storm.entity.interfaces.pas"/>
         <DCCReference Include="..\..\src\lib\data\storm.data.interfaces.pas"/>
         <DCCReference Include="..\..\src\lib\utils\storm.dependency.register.pas"/>
+        <DCCReference Include="src\storm\entities\uEntityProduto.pas"/>
+        <DCCReference Include="src\storm\orms\uORMProduto.pas"/>
+        <DCCReference Include="src\storm\schemas\uSchemaProduto.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

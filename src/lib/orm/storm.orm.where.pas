@@ -12,23 +12,41 @@ Uses
   System.Sysutils, System.Generics.Collections,System.Classes;
 
 Type
+
+
   TStormWhereCompositor<WhereSelector, Executor : IInterface> =
-  class(TStormSqlPartition ,IStormWhereCompositor<WhereSelector, Executor>)
+  class(TStormSqlPartition ,IStormWhereCompositor<WhereSelector, Executor>, IStormConditionner)
+  protected
+    Conditionner : IStormConditionner;
+    Procedure AddSQL(const  content : string); Override;
+  public
+
+    Conditioned : Boolean;
+    Condition : Boolean;
     Function And_()             : WhereSelector;
     Function Or_()              : WhereSelector;
     Function OpenParenthesis()  : WhereSelector;
     Function CloseParenthesis() : IStormWhereCompositor<WhereSelector, Executor>;
     Function Go()               : Executor;
+    function IFTHEN(Condition : Boolean) : IStormWhereCompositor<WhereSelector, Executor>;
+    function ENDIF : IStormWhereCompositor<WhereSelector, Executor>;
+    Function GetCondition : Boolean;
+    Function GetConditioned : Boolean;
+    Procedure SetConditioned(Value : Boolean);
+    Constructor Create(Const Owner : TStormSQLPartition ; Conditionner : IStormConditionner); Reintroduce;
   end;
 
   TStormGenericWhere<WhereSelector, Executor : IInterface> = class( TStormColumnSQLPartition)
   protected
+    Conditionner : IStormConditionner;
     Function GetGroupString(values : TArray<variant>) : string;
     Function GetResult() : IStormWhereCompositor<WhereSelector, Executor>;
     Procedure AddOperation(op : String ; Value : Variant);
+    Procedure AddSQL(const  content : string); Override;
 
 
   public
+    Constructor Create(Owner : TStormSQLPartition ; Const ColumnSchema : IStormSchemaColumn); Reintroduce;
     Function IsEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
     Function IsNotEqualsTo(Const Value : variant) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
     Function IsIn(value : TArray<variant>) : IStormWhereCompositor<WhereSelector, Executor>; Virtual;
@@ -328,15 +346,56 @@ begin
   Result := Self;
 end;
 
+constructor TStormWhereCompositor<WhereSelector, Executor>.Create(
+  const Owner: TStormSQLPartition;
+  Conditionner: IStormConditionner);
+begin
+  inherited create(Owner);
+  Self.Conditionner := Conditionner;
+end;
+
+function TStormWhereCompositor<WhereSelector, Executor>.ENDIF(): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  SetConditioned(False);
+  Result := self;
+end;
+
+function TStormWhereCompositor<WhereSelector, Executor>.GetCondition: Boolean;
+begin
+  Result :=((Not assigned(Conditionner))or (Not Conditionner.GetConditioned) or Conditionner.GetCondition) AND ((Not Conditioned) or Condition);
+end;
+
+function TStormWhereCompositor<WhereSelector, Executor>.GetConditioned: Boolean;
+begin
+  Result := ((Not assigned(Conditionner))or (Conditionner.GetConditioned)) or self.Conditioned;
+end;
+
 function TStormWhereCompositor<WhereSelector, Executor>.Go: Executor;
 begin
   Result := self.GetReturnInstance<Executor>();
+end;
+
+function TStormWhereCompositor<WhereSelector, Executor>.IFTHEN(
+  Condition: Boolean): IStormWhereCompositor<WhereSelector, Executor>;
+begin
+  SetConditioned(True);
+  Self.Condition := Condition;
+  Result := self;
 end;
 
 function TStormWhereCompositor<WhereSelector, Executor>.OpenParenthesis: WhereSelector;
 begin
   AddOpenParenthesis;
   Result := self.GetReturnInstance2<WhereSelector, Executor>();
+end;
+
+procedure TStormWhereCompositor<WhereSelector, Executor>.AddSQL(
+  const content: string);
+begin
+  if GetCondition then
+  begin
+    inherited;
+  end;
 end;
 
 function TStormWhereCompositor<WhereSelector, Executor>.And_: WhereSelector;
@@ -349,6 +408,35 @@ function TStormWhereCompositor<WhereSelector, Executor>.Or_: WhereSelector;
 begin
   AddOr;
   Result := self.GetReturnInstance2<WhereSelector, Executor>();
+end;
+
+procedure TStormWhereCompositor<WhereSelector, Executor>.SetConditioned(
+  Value: Boolean);
+begin
+  if (Not Value) then
+  begin
+    if self.Conditioned then
+    begin
+      self.Conditioned := False
+    end
+    else
+    if Assigned(Conditionner) then
+    begin
+      Conditionner.SetConditioned(Value);
+    end;
+  end
+  else
+  begin
+    if Not self.Conditioned then
+    begin
+      self.Conditioned := True
+    end
+    else
+    if Assigned(Conditionner) then
+    begin
+      Conditionner.SetConditioned(Value);
+    end;
+  end;
 end;
 
 { TStormGenericWhere<WhereSelector, Executor> }
@@ -366,6 +454,32 @@ begin
 end;
 
 { TStormGenericWhere<WhereSelector, Executor> }
+
+procedure TStormGenericWhere<WhereSelector, Executor>.AddSQL(
+  const content: string);
+begin
+  if (Not Assigned(Conditionner)) or (Conditionner.GetCondition) then
+  begin
+    inherited;
+  end;
+end;
+
+constructor TStormGenericWhere<WhereSelector, Executor>.Create(
+  Owner: TStormSQLPartition; const ColumnSchema: IStormSchemaColumn);
+begin
+  inherited;
+
+  if Supports (Owner,IStormConditionner) then
+  begin
+    Self.Conditionner :=  Owner as IStormConditionner;
+  end
+  else
+  if Supports (Owner.GetOwner,IStormConditionner) then
+  begin
+    Self.Conditionner :=  Owner.GetOwner as IStormConditionner;
+  end
+
+end;
 
 function TStormGenericWhere<WhereSelector, Executor>.GetGroupString(
   values: TArray<variant>): string;
@@ -448,12 +562,16 @@ end;
 procedure TStormGenericWhere<WhereSelector, Executor>.AddOperation(
   op: String; Value: Variant);
 begin
-  AddSQL(self.GetColumnName + ' ' + op + ' '  + AddParameter(Value));
+  if (Not Assigned(Conditionner)) or (Conditionner.GetCondition) then
+  begin
+    AddSQL(self.GetColumnName + ' ' + op + ' '  + AddParameter(Value));
+  end;
+
 end;
 
 function TStormGenericWhere<WhereSelector, Executor>.GetResult: IStormWhereCompositor<WhereSelector, Executor>;
 begin
-  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self);
+  Result := TStormWhereCompositor<WhereSelector, Executor>.create(self,Conditionner);
 end;
 
 { TStormIntegerWhere<WhereSelector, Executor> }
@@ -780,6 +898,7 @@ function TStormDateTimeWhere<WhereSelector, Executor>.IsNotIn(
 begin
    result := inherited  IsNotIn(self.ConvertoToArrayOfVariant(value));
 end;
+
 
 
 
